@@ -1,0 +1,3065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midnight & Mixology: The Nimman Edit | Chiang Mai Feb 6-8, 2026</title>
+    <meta name="description" content="The definitive strategy for boutique stays and world-champion coffee mixology in Nimman, Chiang Mai during the Flower Festival Weekend.">
+    
+    <!-- Favicon: Dark Roasted Coffee Bean SVG -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='beanGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%234a3728'/%3E%3Cstop offset='50%25' style='stop-color:%232d1f14'/%3E%3Cstop offset='100%25' style='stop-color:%231a110a'/%3E%3C/linearGradient%3E%3ClinearGradient id='shineGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23ffffff;stop-opacity:0.3'/%3E%3Cstop offset='100%25' style='stop-color:%23ffffff;stop-opacity:0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx='32' cy='32' rx='24' ry='28' fill='url(%23beanGrad)' transform='rotate(-15 32 32)'/%3E%3Cpath d='M32 8 Q28 32 32 56' stroke='%231a0f08' stroke-width='3' fill='none' stroke-linecap='round' transform='rotate(-15 32 32)'/%3E%3Cellipse cx='26' cy='24' rx='8' ry='12' fill='url(%23shineGrad)' transform='rotate(-30 26 24)'/%3E%3C/svg%3E">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js & D3.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+
+    <style>
+        /* ══════════════════════════════════════════════════════════════════════
+           CSS CUSTOM PROPERTIES & DESIGN TOKENS
+           ══════════════════════════════════════════════════════════════════════ */
+        :root {
+            /* Boutique Coffee Palette */
+            --espresso-void: #0d0a08;
+            --espresso-deep: #1a1512;
+            --espresso-surface: #231e1a;
+            --espresso-elevated: #2d2621;
+            
+            /* Warm Neutrals */
+            --cream-primary: #f5f0e8;
+            --cream-muted: #d4ccc0;
+            --cream-subtle: #a89f94;
+            --stone-warm: #6b6259;
+            
+            /* Accent Colors */
+            --copper-bright: #c8956c;
+            --copper-muted: #a67c52;
+            --rose-gold: #b4846c;
+            --terracotta: #c76d4e;
+            --deep-gold: #D4AF37;
+            
+            /* Functional Colors */
+            --success-sage: #7a9e7e;
+            --warning-amber: #d4a84b;
+            --alert-rose: #c75c5c;
+            --info-slate: #7a8b9a;
+            
+            /* Glass Effects */
+            --glass-light: rgba(245, 240, 232, 0.05);
+            --glass-border: rgba(200, 149, 108, 0.15);
+            --glass-glow: rgba(200, 149, 108, 0.08);
+            
+            /* Typography */
+            --font-display: 'Playfair Display', serif;
+            --font-elegant: 'Cormorant Garamond', serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-thai: 'Sarabun', sans-serif;
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            
+            /* Animation */
+            --ease-elegant: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --duration-fast: 200ms;
+            --duration-normal: 400ms;
+            --duration-slow: 800ms;
+            
+            /* Borders */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           BASE RESET & GLOBAL STYLES
+           ══════════════════════════════════════════════════════════════════════ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background: var(--espresso-void);
+            color: var(--cream-primary);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Language Toggle */
+        [lang="th"] { display: none; font-family: var(--font-thai); }
+        body[data-lang="th"] [lang="en"] { display: none; }
+        body[data-lang="th"] [lang="th"] { display: block; }
+
+        /* Selection */
+        ::selection {
+            background: var(--copper-bright);
+            color: var(--espresso-void);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--espresso-deep);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--copper-muted), var(--rose-gold));
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--copper-bright);
+        }
+
+        /* Focus States */
+        :focus-visible {
+            outline: 2px solid var(--copper-bright);
+            outline-offset: 2px;
+        }
+
+        /* Links */
+        a {
+            color: var(--copper-bright);
+            text-decoration: none;
+            transition: color var(--duration-fast) var(--ease-elegant);
+        }
+        a:hover {
+            color: var(--cream-primary);
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           LAYOUT UTILITIES
+           ══════════════════════════════════════════════════════════════════════ */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        .section {
+            padding: var(--space-3xl) 0;
+            position: relative;
+        }
+
+        .grid {
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+        @media (max-width: 1024px) {
+            .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .container { padding: 0 var(--space-md); }
+            .section { padding: var(--space-2xl) 0; }
+        }
+
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-sm { gap: var(--space-sm); }
+        .gap-md { gap: var(--space-md); }
+        .gap-lg { gap: var(--space-lg); }
+        .gap-xl { gap: var(--space-xl); }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           ALERT BAR
+           ══════════════════════════════════════════════════════════════════════ */
+        .alert-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: linear-gradient(90deg, var(--terracotta), var(--alert-rose));
+            color: var(--cream-primary);
+            padding: var(--space-sm) var(--space-lg);
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .alert-bar svg {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: var(--space-xs);
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(199, 92, 92, 0.4); }
+            50% { box-shadow: 0 0 20px 0 rgba(199, 92, 92, 0.2); }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           NAVIGATION
+           ══════════════════════════════════════════════════════════════════════ */
+        .nav {
+            position: fixed;
+            top: 40px;
+            left: 0;
+            right: 0;
+            z-index: 900;
+            padding: var(--space-md) 0;
+            background: rgba(13, 10, 8, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all var(--duration-normal) var(--ease-elegant);
+        }
+        .nav.scrolled {
+            top: 0;
+            padding: var(--space-sm) 0;
+        }
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--cream-primary);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        .nav-logo span {
+            color: var(--copper-bright);
+        }
+        .nav-links {
+            display: flex;
+            gap: var(--space-xl);
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--cream-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--copper-bright);
+            transition: width var(--duration-normal) var(--ease-elegant);
+        }
+        .nav-links a:hover { color: var(--cream-primary); }
+        .nav-links a:hover::after { width: 100%; }
+
+        .nav-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           BUTTONS
+           ══════════════════════════════════════════════════════════════════════ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-elegant);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--copper-bright), var(--rose-gold));
+            color: var(--espresso-void);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(200, 149, 108, 0.3);
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--cream-muted);
+            border: 1px solid var(--glass-border);
+        }
+        .btn-ghost:hover {
+            background: var(--glass-light);
+            color: var(--cream-primary);
+            border-color: var(--copper-muted);
+        }
+        .btn-sm {
+            padding: var(--space-xs) var(--space-md);
+            font-size: 0.75rem;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           GLASS PANEL
+           ══════════════════════════════════════════════════════════════════════ */
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(35, 30, 26, 0.8), rgba(26, 21, 18, 0.9));
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: 
+                0 4px 24px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           HERO SECTION
+           ══════════════════════════════════════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding-top: 120px;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+        }
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(200, 149, 108, 0.08), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(180, 132, 108, 0.06), transparent);
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 0%, var(--espresso-void) 100%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--copper-bright);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-xl);
+        }
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.02em;
+        }
+        .hero-title em {
+            font-style: italic;
+            color: var(--copper-bright);
+        }
+        .hero-subtitle {
+            font-family: var(--font-elegant);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--cream-muted);
+            margin-bottom: var(--space-xl);
+            font-weight: 400;
+        }
+        .hero-dates {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-xl);
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-2xl);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .hero-dates .divider {
+            width: 1px;
+            height: 24px;
+            background: var(--glass-border);
+        }
+        .hero-cta {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        /* Hero Stats Grid */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-2xl);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .hero-stat {
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            text-align: center;
+        }
+        .hero-stat-icon {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+        }
+        .hero-stat-value {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--copper-bright);
+            margin-bottom: var(--space-xs);
+        }
+        .hero-stat-label {
+            font-size: 0.75rem;
+            color: var(--cream-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @media (max-width: 768px) {
+            .hero-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           SECTION HEADERS
+           ══════════════════════════════════════════════════════════════════════ */
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+        .section-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--copper-bright);
+            margin-bottom: var(--space-md);
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 400;
+            margin-bottom: var(--space-md);
+        }
+        .section-desc {
+            font-family: var(--font-elegant);
+            font-size: 1.15rem;
+            color: var(--cream-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           EXECUTIVE SUMMARY
+           ══════════════════════════════════════════════════════════════════════ */
+        .executive-summary {
+            background: linear-gradient(135deg, var(--espresso-surface), var(--espresso-deep));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            margin-bottom: var(--space-2xl);
+        }
+        .executive-summary-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .executive-summary-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--copper-bright), var(--rose-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .executive-summary-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+        }
+        .executive-summary-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--cream-muted);
+        }
+        .executive-summary-content strong {
+            color: var(--cream-primary);
+        }
+        .executive-summary-content .highlight {
+            color: var(--copper-bright);
+            font-weight: 600;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           COFFEE ANCHOR SECTION
+           ══════════════════════════════════════════════════════════════════════ */
+        .coffee-anchor-card {
+            background: linear-gradient(135deg, var(--espresso-elevated), var(--espresso-surface));
+            border: 2px solid var(--copper-bright);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+            position: relative;
+            overflow: hidden;
+        }
+        .coffee-anchor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(200, 149, 108, 0.1), transparent);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+        }
+        .coffee-anchor-badge {
+            position: absolute;
+            top: var(--space-lg);
+            right: var(--space-lg);
+            background: linear-gradient(135deg, var(--copper-bright), var(--terracotta));
+            color: var(--espresso-void);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .coffee-anchor-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--copper-bright);
+            margin-bottom: var(--space-sm);
+        }
+        .coffee-anchor-subtitle {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--cream-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-lg);
+        }
+        .coffee-anchor-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--cream-muted);
+            margin-bottom: var(--space-xl);
+        }
+        .coffee-anchor-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+        }
+        .coffee-anchor-feature {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.9rem;
+            color: var(--cream-primary);
+        }
+        .coffee-anchor-feature-icon {
+            color: var(--copper-bright);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           PERSONA SELECTOR
+           ══════════════════════════════════════════════════════════════════════ */
+        .persona-selector {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            margin-bottom: var(--space-2xl);
+            flex-wrap: wrap;
+        }
+        .persona-btn {
+            flex: 1;
+            max-width: 320px;
+            min-width: 280px;
+            padding: var(--space-xl);
+            background: var(--espresso-surface);
+            border: 2px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-elegant);
+            text-align: left;
+        }
+        .persona-btn:hover {
+            border-color: var(--copper-muted);
+            transform: translateY(-4px);
+        }
+        .persona-btn.active {
+            border-color: var(--copper-bright);
+            background: linear-gradient(135deg, var(--espresso-elevated), var(--espresso-surface));
+            box-shadow: 0 8px 32px rgba(200, 149, 108, 0.15);
+        }
+        .persona-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--space-md);
+        }
+        .persona-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            margin-bottom: var(--space-sm);
+            color: var(--cream-primary);
+        }
+        .persona-desc {
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+            line-height: 1.6;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           CONTENT PANELS
+           ══════════════════════════════════════════════════════════════════════ */
+        .content-panel {
+            display: none;
+            animation: fadeSlideIn var(--duration-slow) var(--ease-elegant);
+        }
+        .content-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           CARDS
+           ══════════════════════════════════════════════════════════════════════ */
+        .card {
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--duration-normal) var(--ease-elegant);
+        }
+        .card:hover {
+            border-color: var(--copper-muted);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+        .card.highlighted {
+            border-color: var(--copper-bright);
+            box-shadow: 0 0 0 2px var(--copper-bright), 0 16px 48px rgba(200, 149, 108, 0.2);
+            transform: scale(1.02);
+        }
+        .card-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .card-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 50%, var(--espresso-surface) 100%);
+        }
+        .card-badge {
+            position: absolute;
+            top: var(--space-md);
+            left: var(--space-md);
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--espresso-void);
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            z-index: 1;
+        }
+        .card-badge.top-pick {
+            background: linear-gradient(135deg, var(--copper-bright), var(--terracotta));
+            color: var(--espresso-void);
+        }
+        .card-badge.value {
+            background: var(--success-sage);
+            color: var(--espresso-void);
+        }
+        .card-badge.design {
+            background: #8b5cf6;
+            color: white;
+        }
+        .card-content {
+            padding: var(--space-lg);
+        }
+        .card-type {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--copper-bright);
+            margin-bottom: var(--space-xs);
+        }
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            margin-bottom: var(--space-sm);
+        }
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+            margin-bottom: var(--space-md);
+            line-height: 1.6;
+        }
+        .card-meta {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: var(--cream-subtle);
+        }
+        .card-meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+        .card-meta-item svg {
+            width: 14px;
+            height: 14px;
+            color: var(--copper-muted);
+        }
+
+        /* Card Rating */
+        .card-rating {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-sm);
+        }
+        .card-rating-stars {
+            color: var(--deep-gold);
+        }
+        .card-rating-value {
+            font-weight: 600;
+            color: var(--cream-primary);
+        }
+
+        /* Card Tags */
+        .card-tags {
+            display: flex;
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+            margin-top: var(--space-md);
+        }
+        .card-tag {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 8px;
+            background: var(--espresso-elevated);
+            border-radius: var(--radius-sm);
+            color: var(--cream-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           COFFEE ORDER CARDS
+           ══════════════════════════════════════════════════════════════════════ */
+        .coffee-card {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            background: var(--espresso-elevated);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-sm);
+            transition: all var(--duration-fast);
+        }
+        .coffee-card:hover {
+            border-color: var(--copper-muted);
+            background: var(--espresso-surface);
+        }
+        .coffee-emoji {
+            font-size: 2rem;
+        }
+        .coffee-name {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+        .coffee-desc {
+            font-size: 0.8rem;
+            color: var(--cream-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           INTERACTIVE FILTER CONTROLS
+           ══════════════════════════════════════════════════════════════════════ */
+        .filter-controls {
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+        }
+        .filter-header {
+            margin-bottom: var(--space-lg);
+        }
+        .filter-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+        }
+        .filter-subtitle {
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+        }
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-xl);
+            margin-bottom: var(--space-xl);
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        .filter-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filter-label-text {
+            font-weight: 600;
+            color: var(--cream-primary);
+        }
+        .filter-label-value {
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            color: var(--copper-bright);
+            font-weight: 700;
+        }
+        .filter-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--espresso-elevated);
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+        .filter-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--copper-bright), var(--rose-gold));
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: transform var(--duration-fast);
+        }
+        .filter-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+        .filter-range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--cream-subtle);
+            margin-top: var(--space-xs);
+        }
+
+        /* Filter Stats */
+        .filter-stats {
+            display: flex;
+            gap: var(--space-lg);
+            padding-top: var(--space-lg);
+            border-top: 1px solid var(--glass-border);
+            flex-wrap: wrap;
+        }
+        .filter-stat {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        .filter-stat-count {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--copper-bright);
+        }
+        .filter-stat-label {
+            font-size: 0.85rem;
+            color: var(--cream-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           CHART CONTAINER
+           ══════════════════════════════════════════════════════════════════════ */
+        .chart-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-2xl);
+        }
+        @media (max-width: 1024px) {
+            .chart-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        .chart-container {
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            position: relative;
+            height: 400px;
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+        .chart-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+        }
+        .chart-badge {
+            font-size: 0.7rem;
+            background: var(--espresso-elevated);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            color: var(--cream-muted);
+        }
+        .chart-canvas-wrapper {
+            height: calc(100% - 60px);
+        }
+        .chart-note {
+            font-size: 0.75rem;
+            color: var(--cream-subtle);
+            text-align: center;
+            margin-top: var(--space-sm);
+        }
+
+        /* Recommendation Panel */
+        .recommendation-panel {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        .recommendation-card {
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            flex: 1;
+        }
+        .recommendation-card.highlight {
+            background: linear-gradient(135deg, var(--espresso-elevated), var(--espresso-surface));
+            border-color: var(--copper-muted);
+        }
+        .recommendation-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            margin-bottom: var(--space-sm);
+            color: var(--copper-bright);
+        }
+        .recommendation-text {
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+            line-height: 1.6;
+        }
+        .recommendation-text strong {
+            color: var(--cream-primary);
+        }
+
+        /* Match Counter */
+        .match-counter {
+            background: linear-gradient(135deg, var(--copper-bright), var(--rose-gold));
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            text-align: center;
+            color: var(--espresso-void);
+        }
+        .match-counter-value {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+        }
+        .match-counter-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           HOTEL GRID
+           ══════════════════════════════════════════════════════════════════════ */
+        .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--space-lg);
+        }
+        .hotel-card {
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            transition: all var(--duration-normal) var(--ease-elegant);
+        }
+        .hotel-card:hover {
+            border-color: var(--copper-muted);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+        }
+        .hotel-card.highlighted {
+            border-color: var(--copper-bright);
+            box-shadow: 0 0 0 2px var(--copper-bright), 0 16px 48px rgba(200, 149, 108, 0.2);
+            transform: scale(1.02);
+        }
+        .hotel-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+        }
+        .hotel-card-name {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            margin-bottom: var(--space-xs);
+        }
+        .hotel-card-vibe {
+            font-size: 0.85rem;
+            color: var(--copper-bright);
+        }
+        .hotel-card-price {
+            text-align: right;
+        }
+        .hotel-card-price-value {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--cream-primary);
+        }
+        .hotel-card-price-label {
+            font-size: 0.7rem;
+            color: var(--cream-subtle);
+        }
+        .hotel-card-progress {
+            margin-bottom: var(--space-md);
+        }
+        .hotel-card-progress-bar {
+            height: 6px;
+            background: var(--espresso-elevated);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: var(--space-xs);
+        }
+        .hotel-card-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--copper-bright), var(--rose-gold));
+            border-radius: 3px;
+            transition: width var(--duration-normal);
+        }
+        .hotel-card-progress-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+        }
+        .hotel-card-progress-distance {
+            color: var(--cream-primary);
+            font-weight: 600;
+        }
+        .hotel-card-progress-checkin {
+            color: var(--success-sage);
+        }
+        .hotel-card-desc {
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+            line-height: 1.6;
+            margin-bottom: var(--space-md);
+        }
+        .hotel-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .hotel-card-tags {
+            display: flex;
+            gap: var(--space-xs);
+            flex-wrap: wrap;
+        }
+        .hotel-card-tag {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 8px;
+            background: var(--espresso-elevated);
+            border-radius: var(--radius-sm);
+            color: var(--cream-muted);
+        }
+        .hotel-card-select {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--copper-bright);
+            cursor: pointer;
+            border-bottom: 1px solid var(--copper-bright);
+            padding-bottom: 2px;
+            transition: all var(--duration-fast);
+        }
+        .hotel-card-select:hover {
+            color: var(--cream-primary);
+            border-color: var(--cream-primary);
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: var(--space-3xl);
+            color: var(--cream-muted);
+        }
+        .no-results-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+        }
+        .no-results-btn {
+            margin-top: var(--space-lg);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           DATA TABLE
+           ══════════════════════════════════════════════════════════════════════ */
+        .data-table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--glass-border);
+            background: var(--espresso-surface);
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .data-table thead {
+            background: var(--espresso-elevated);
+        }
+        .data-table th {
+            padding: var(--space-md) var(--space-lg);
+            text-align: left;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--copper-bright);
+            border-bottom: 1px solid var(--glass-border);
+            white-space: nowrap;
+        }
+        .data-table td {
+            padding: var(--space-md) var(--space-lg);
+            border-bottom: 1px solid var(--glass-border);
+            vertical-align: middle;
+        }
+        .data-table tbody tr {
+            transition: background var(--duration-fast);
+        }
+        .data-table tbody tr:hover {
+            background: var(--glass-light);
+        }
+        .data-table .hotel-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--cream-primary);
+        }
+        .data-table .cluster-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .cluster-south { background: rgba(199, 109, 78, 0.2); color: var(--terracotta); }
+        .cluster-north { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .cluster-central { background: rgba(122, 158, 126, 0.2); color: var(--success-sage); }
+
+        .safety-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+        .safety-very-high { background: rgba(122, 158, 126, 0.2); color: var(--success-sage); }
+        .safety-high { background: rgba(212, 168, 75, 0.2); color: var(--warning-amber); }
+
+        .price-cell {
+            font-family: var(--font-mono);
+            color: var(--copper-bright);
+            font-weight: 600;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           PROTOCOL SECTION
+           ══════════════════════════════════════════════════════════════════════ */
+        .protocol-card {
+            padding: var(--space-xl);
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            transition: all var(--duration-fast);
+        }
+        .protocol-card:hover {
+            border-color: var(--copper-muted);
+        }
+        .protocol-card.warning {
+            border-color: var(--terracotta);
+        }
+        .protocol-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .protocol-icon {
+            font-size: 1.5rem;
+        }
+        .protocol-title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+        }
+        .protocol-content {
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+            line-height: 1.7;
+        }
+        .protocol-content p {
+            margin-bottom: var(--space-md);
+        }
+        .protocol-content strong {
+            color: var(--cream-primary);
+        }
+        .protocol-content ul {
+            margin-left: var(--space-lg);
+            margin-top: var(--space-sm);
+        }
+        .protocol-content li {
+            margin-bottom: var(--space-sm);
+        }
+
+        /* Script Box */
+        .script-box {
+            padding: var(--space-lg);
+            background: var(--espresso-void);
+            border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--copper-bright);
+            border-radius: var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.7;
+            position: relative;
+            margin-top: var(--space-md);
+        }
+        .script-box .copy-btn {
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-sm);
+            padding: var(--space-xs) var(--space-sm);
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            color: var(--cream-muted);
+            cursor: pointer;
+            transition: all var(--duration-fast);
+        }
+        .script-box .copy-btn:hover {
+            background: var(--copper-muted);
+            color: var(--espresso-void);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           COFFEE MIXOLOGY TABLE
+           ══════════════════════════════════════════════════════════════════════ */
+        .mixology-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-lg);
+        }
+        .mixology-table th,
+        .mixology-table td {
+            padding: var(--space-md);
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .mixology-table th {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--copper-bright);
+            background: var(--espresso-elevated);
+        }
+        .mixology-table td {
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+        }
+        .mixology-table .venue-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--cream-primary);
+        }
+        .mixology-table .signature-drinks {
+            font-size: 0.85rem;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           MAP SECTION
+           ══════════════════════════════════════════════════════════════════════ */
+        .map-container {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            height: 500px;
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: saturate(0.8) contrast(1.1);
+        }
+        .map-legend {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            margin-top: var(--space-lg);
+            flex-wrap: wrap;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.85rem;
+            color: var(--cream-muted);
+        }
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .legend-dot.hotel { background: var(--copper-bright); }
+        .legend-dot.coffee { background: var(--terracotta); }
+        .legend-dot.food { background: var(--success-sage); }
+
+        /* Location Cards */
+        .location-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+            margin-top: var(--space-xl);
+        }
+        @media (max-width: 768px) {
+            .location-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+        .location-card {
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+        }
+        .location-card-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            color: var(--copper-bright);
+            margin-bottom: var(--space-md);
+        }
+        .location-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-md);
+            background: var(--espresso-elevated);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-sm);
+            transition: all var(--duration-fast);
+            font-size: 0.9rem;
+        }
+        .location-link:hover {
+            border-color: var(--copper-bright);
+            transform: translateX(4px);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           TIMELINE / HISTORY SECTION
+           ══════════════════════════════════════════════════════════════════════ */
+        .history-section {
+            background: linear-gradient(135deg, var(--espresso-deep), var(--espresso-surface));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: var(--space-2xl);
+        }
+        .history-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-2xl);
+        }
+        @media (max-width: 768px) {
+            .history-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        .history-text {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--cream-muted);
+        }
+        .history-text p {
+            margin-bottom: var(--space-lg);
+        }
+        .history-text strong {
+            color: var(--cream-primary);
+        }
+        .history-text .highlight {
+            color: var(--copper-bright);
+        }
+        .history-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-md);
+        }
+        .history-stat {
+            background: var(--espresso-elevated);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            text-align: center;
+        }
+        .history-stat-value {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--copper-bright);
+            margin-bottom: var(--space-xs);
+        }
+        .history-stat-label {
+            font-size: 0.8rem;
+            color: var(--cream-muted);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           FOOTER
+           ══════════════════════════════════════════════════════════════════════ */
+        .footer {
+            padding: var(--space-3xl) 0 var(--space-xl);
+            background: var(--espresso-deep);
+            border-top: 1px solid var(--glass-border);
+        }
+        .footer-cta {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+        .footer-cta-title {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            margin-bottom: var(--space-md);
+        }
+        .footer-cta-desc {
+            color: var(--cream-muted);
+            margin-bottom: var(--space-lg);
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-xl);
+            flex-wrap: wrap;
+        }
+        .footer-link {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl);
+            background: var(--espresso-surface);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            transition: all var(--duration-fast);
+        }
+        .footer-link:hover {
+            border-color: var(--copper-bright);
+            transform: translateY(-2px);
+        }
+        .footer-bottom {
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--cream-subtle);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           AMBIENT CANVAS
+           ══════════════════════════════════════════════════════════════════════ */
+        #ambient-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           UTILITY CLASSES
+           ══════════════════════════════════════════════════════════════════════ */
+        .text-center { text-align: center; }
+        .text-muted { color: var(--cream-muted); }
+        .text-copper { color: var(--copper-bright); }
+        .font-display { font-family: var(--font-display); }
+        .font-mono { font-family: var(--font-mono); }
+        .uppercase { text-transform: uppercase; }
+        .tracking-wide { letter-spacing: 0.05em; }
+        
+        .mb-sm { margin-bottom: var(--space-sm); }
+        .mb-md { margin-bottom: var(--space-md); }
+        .mb-lg { margin-bottom: var(--space-lg); }
+        .mb-xl { margin-bottom: var(--space-xl); }
+        .mb-2xl { margin-bottom: var(--space-2xl); }
+        
+        .mt-md { margin-top: var(--space-md); }
+        .mt-lg { margin-top: var(--space-lg); }
+        .mt-xl { margin-top: var(--space-xl); }
+
+        .p-md { padding: var(--space-md); }
+        .p-lg { padding: var(--space-lg); }
+        .p-xl { padding: var(--space-xl); }
+
+        .hidden { display: none !important; }
+
+        /* Animation Classes */
+        .animate-fade-in {
+            animation: fadeSlideIn var(--duration-slow) var(--ease-elegant) both;
+        }
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body data-lang="en">
+    <!-- Ambient Background Canvas -->
+    <canvas id="ambient-canvas"></canvas>
+
+    <!-- Alert Bar -->
+    <div class="alert-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span lang="en"><strong>High Demand Alert:</strong> Chiang Mai Flower Festival (Feb 6-8, 2026) — Book immediately for best availability</span>
+        <span lang="th"><strong>แจ้งเตือน:</strong> เทศกาลดอกไม้เชียงใหม่ (6-8 ก.พ. 2569) — จองทันทีเพื่อห้องพักที่ดีที่สุด</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="main-nav">
+        <div class="container nav-inner">
+            <div class="nav-logo">
+                ☕ Midnight <span>&</span> Mixology
+            </div>
+            <ul class="nav-links">
+                <li><a href="#executive" lang="en">Summary</a><a href="#executive" lang="th">สรุป</a></li>
+                <li><a href="#coffee-anchor" lang="en">Coffee</a><a href="#coffee-anchor" lang="th">กาแฟ</a></li>
+                <li><a href="#stays" lang="en">Stays</a><a href="#stays" lang="th">ที่พัก</a></li>
+                <li><a href="#protocol" lang="en">Protocol</a><a href="#protocol" lang="th">คู่มือ</a></li>
+                <li><a href="#map" lang="en">Map</a><a href="#map" lang="th">แผนที่</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn btn-ghost btn-sm" onclick="APP.toggleLang()">EN / TH</button>
+                <a href="#book" class="btn btn-primary btn-sm" lang="en">Book Now</a>
+                <a href="#book" class="btn btn-primary btn-sm" lang="th">จองเลย</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content animate-fade-in">
+                <div class="hero-badge">
+                    <span lang="en">Nimman District • Chiang Mai • Fourth Wave Coffee</span>
+                    <span lang="th">ย่านนิมมาน • เชียงใหม่ • กาแฟคลื่นลูกที่สี่</span>
+                </div>
+                <h1 class="hero-title">
+                    <span lang="en">Touch Down at <em>Midnight</em>.<br>Wake Up to <em>World Champions</em>.</span>
+                    <span lang="th">ลงจอด<em>เที่ยงคืน</em>.<br>ตื่นมาพบ<em>แชมป์โลก</em>.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    <span lang="en">The definitive strategy for boutique stays and innovative coffee mixology<br>during the Flower Festival Weekend — where espresso meets alchemy.</span>
+                    <span lang="th">กลยุทธ์ที่ครบถ้วนสำหรับบูทีคโฮเทลและกาแฟมิกซ์โซโลยีสร้างสรรค์<br>ช่วงเทศกาลดอกไม้เชียงใหม่ — ที่ซึ่งเอสเพรสโซ่พบกับการเล่นแร่แปรธาตุ</span>
+                </p>
+                <div class="hero-dates">
+                    <span>📅 Feb 6–8, 2026</span>
+                    <span class="divider"></span>
+                    <span>🌸 Flower Festival</span>
+                    <span class="divider"></span>
+                    <span>🕛 Midnight Arrival</span>
+                    <span class="divider"></span>
+                    <span>🏆 World Champions</span>
+                </div>
+                <div class="hero-cta">
+                    <a href="#coffee-anchor" class="btn btn-primary">
+                        <span lang="en">Discover the Anchor</span>
+                        <span lang="th">ค้นพบจุดหมาย</span>
+                        →
+                    </a>
+                    <a href="#stays" class="btn btn-ghost">
+                        📍
+                        <span lang="en">Find Your Stay</span>
+                        <span lang="th">หาที่พัก</span>
+                    </a>
+                </div>
+
+                <!-- Hero Stats -->
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">🏨</div>
+                        <div class="hero-stat-value">8</div>
+                        <div class="hero-stat-label" lang="en">Curated Hotels</div>
+                        <div class="hero-stat-label" lang="th">โรงแรมคัดสรร</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">☕</div>
+                        <div class="hero-stat-value">4</div>
+                        <div class="hero-stat-label" lang="en">Coffee Anchors</div>
+                        <div class="hero-stat-label" lang="th">ร้านกาแฟหลัก</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">🚶</div>
+                        <div class="hero-stat-value"><10</div>
+                        <div class="hero-stat-label" lang="en">Min Walk</div>
+                        <div class="hero-stat-label" lang="th">นาทีเดิน</div>
+                    </div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-icon">🌙</div>
+                        <div class="hero-stat-value">24h</div>
+                        <div class="hero-stat-label" lang="en">Reception</div>
+                        <div class="hero-stat-label" lang="th">รีเซฟชั่น</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Executive Summary Section -->
+    <section class="section" id="executive">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" lang="en">// Executive Summary</span>
+                <span class="section-tag" lang="th">// สรุปผู้บริหาร</span>
+                <h2 class="section-title">
+                    <span lang="en">The Strategic Overview</span>
+                    <span lang="th">ภาพรวมเชิงกลยุทธ์</span>
+                </h2>
+            </div>
+
+            <div class="executive-summary">
+                <div class="executive-summary-header">
+                    <div class="executive-summary-icon">💡</div>
+                    <h3 class="executive-summary-title">
+                        <span lang="en">Primary Recommendation</span>
+                        <span lang="th">คำแนะนำหลัก</span>
+                    </h3>
+                </div>
+                <div class="executive-summary-content">
+                    <p lang="en">
+                        <strong>BED Nimman</strong> or <strong>The Nimman Hotel</strong> emerge as optimal solutions for travelers seeking boutique accommodation near Nimmanhemin Road with late-night arrival requirements. Both are located on <span class="highlight">Soi 17</span>—the unofficial "Coffee Street"—placing you within a <span class="highlight">2-minute walk</span> of <strong>Roast8ry Flagship Store</strong>, founded by the <span class="highlight">2017 World Latte Art Champion</span>.
+                    </p>
+                    <p lang="th">
+                        <strong>BED Nimman</strong> หรือ <strong>The Nimman Hotel</strong> เป็นทางเลือกที่ดีที่สุดสำหรับนักเดินทางที่ต้องการที่พักบูทีคใกล้ถนนนิมมานเหมินท์พร้อมรองรับการเช็คอินดึก ทั้งสองแห่งตั้งอยู่บน <span class="highlight">ซอย 17</span>—"ถนนกาแฟ" อย่างไม่เป็นทางการ—ทำให้คุณอยู่ห่างจาก <strong>Roast8ry Flagship Store</strong> เพียง <span class="highlight">2 นาทีเดิน</span> ก่อตั้งโดย <span class="highlight">แชมป์โลกลาเต้อาร์ต 2017</span>
+                    </p>
+                    <p lang="en" style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--glass-border);">
+                        <strong>⚠️ Critical Timeline:</strong> February 6–8, 2026 coincides with the <span class="highlight">Chiang Mai Flower Festival</span>. Expect <span class="highlight">30–50% price surges</span> and rapid inventory depletion. Properties with fewer than 30 keys (Hotel Noir, G Nimman) often sell out by October 2025. <strong>Immediate booking is essential.</strong>
+                    </p>
+                    <p lang="th" style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--glass-border);">
+                        <strong>⚠️ ไทม์ไลน์สำคัญ:</strong> 6–8 กุมภาพันธ์ 2569 ตรงกับ <span class="highlight">เทศกาลดอกไม้เชียงใหม่</span> คาดว่าราคาจะ <span class="highlight">เพิ่มขึ้น 30–50%</span> และห้องพักจะหมดเร็ว โรงแรมที่มีห้องน้อยกว่า 30 ห้อง (Hotel Noir, G Nimman) มักเต็มภายในตุลาคม 2568 <strong>ต้องจองทันที</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coffee Anchor Section -->
+    <section class="section" id="coffee-anchor" style="background: var(--espresso-deep);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" lang="en">// The Coffee Anchor</span>
+                <span class="section-tag" lang="th">// จุดหมายกาแฟ</span>
+                <h2 class="section-title">
+                    <span lang="en">Fourth Wave Mixology Destinations</span>
+                    <span lang="th">จุดหมายมิกซ์โซโลยีคลื่นลูกที่สี่</span>
+                </h2>
+                <p class="section-desc">
+                    <span lang="en">In Nimman, coffee is treated with the structural complexity of a fine spirit—nitrogen infusion, botanical balancing, and culinary construction that challenges the palate.</span>
+                    <span lang="th">ในนิมมาน กาแฟถูกปฏิบัติด้วยความซับซ้อนเชิงโครงสร้างเหมือนสุราชั้นดี—การอัดไนโตรเจน การสมดุลพฤกษศาสตร์ และการสร้างสรรค์เชิงอาหารที่ท้าทายรสชาติ</span>
+                </p>
+            </div>
+
+            <!-- Primary Anchor: Roast8ry -->
+            <div class="coffee-anchor-card mb-2xl">
+                <div class="coffee-anchor-badge">
+                    <span lang="en">Primary Anchor</span>
+                    <span lang="th">จุดหมายหลัก</span>
+                </div>
+                <h3 class="coffee-anchor-title">Roast8ry Coffee Flagship Store</h3>
+                <p class="coffee-anchor-subtitle">Nimmanhaemin Soi 17 • World Champion Territory</p>
+                <p class="coffee-anchor-description" lang="en">
+                    Founded by <strong>Arnon "Tong" Thitiprasert</strong>, the 2017 World Latte Art Champion with three consecutive Thailand National Championship victories (2015-2017). The Roast8ry concept integrates expertise from <strong>five distinct world coffee championship disciplines</strong>: latte art, barista competition, coffee in good spirits, brewers cup, and roasting. This is not coffee for the faint of heart—it is technical mastery served in a glass.
+                </p>
+                <p class="coffee-anchor-description" lang="th">
+                    ก่อตั้งโดย <strong>อานนท์ "ต้อง" ฐิติประเสริฐ</strong> แชมป์โลกลาเต้อาร์ต 2017 พร้อมชัยชนะแชมป์ประเทศไทยติดต่อกันสามปี (2015-2017) แนวคิด Roast8ry ผสมผสานความเชี่ยวชาญจาก <strong>ห้าสาขาการแข่งขันกาแฟโลก</strong>: ลาเต้อาร์ต, บาริสต้า, กาแฟในสุรา, บรูว์เวอร์สคัพ, และการคั่ว นี่ไม่ใช่กาแฟสำหรับคนใจอ่อน—มันคือความเชี่ยวชาญทางเทคนิคที่เสิร์ฟในแก้ว
+                </p>
+                <div class="coffee-anchor-features">
+                    <div class="coffee-anchor-feature">
+                        <span class="coffee-anchor-feature-icon">🏆</span>
+                        <span lang="en">World Champion Founder</span>
+                        <span lang="th">ผู้ก่อตั้งแชมป์โลก</span>
+                    </div>
+                    <div class="coffee-anchor-feature">
+                        <span class="coffee-anchor-feature-icon">🧪</span>
+                        <span lang="en">Laboratory-Industrial Vibe</span>
+                        <span lang="th">บรรยากาศแล็บอุตสาหกรรม</span>
+                    </div>
+                    <div class="coffee-anchor-feature">
+                        <span class="coffee-anchor-feature-icon">🍸</span>
+                        <span lang="en">Coffee Cocktails Specialty</span>
+                        <span lang="th">เชี่ยวชาญค็อกเทลกาแฟ</span>
+                    </div>
+                    <div class="coffee-anchor-feature">
+                        <span class="coffee-anchor-feature-icon">⏰</span>
+                        <span>8:00 AM - 6:00 PM</span>
+                    </div>
+                </div>
+
+                <!-- Signature Drinks -->
+                <div style="margin-top: var(--space-xl);">
+                    <h4 style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--copper-bright); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-md);">
+                        <span lang="en">Signature Creations</span>
+                        <span lang="th">เมนูซิกเนเจอร์</span>
+                    </h4>
+                    <div class="grid grid-3">
+                        <div class="coffee-card">
+                            <div class="coffee-emoji">💀</div>
+                            <div>
+                                <div class="coffee-name">Satan Latte</div>
+                                <div class="coffee-desc" lang="en">Served in a skull glass — theatrical and bold</div>
+                                <div class="coffee-desc" lang="th">เสิร์ฟในแก้วหัวกะโหลก — ดราม่าและเข้มข้น</div>
+                            </div>
+                        </div>
+                        <div class="coffee-card">
+                            <div class="coffee-emoji">🥃</div>
+                            <div>
+                                <div class="coffee-name">Dirty White Russian</div>
+                                <div class="coffee-desc" lang="en">Coffee cocktail with cream layers</div>
+                                <div class="coffee-desc" lang="th">ค็อกเทลกาแฟกับครีมเป็นชั้น</div>
+                            </div>
+                        </div>
+                        <div class="coffee-card">
+                            <div class="coffee-emoji">🍸</div>
+                            <div>
+                                <div class="coffee-name">Black Martini</div>
+                                <div class="coffee-desc" lang="en">Espresso-forward, sophisticated edge</div>
+                                <div class="coffee-desc" lang="th">เอสเพรสโซ่เข้มข้น สไตล์หรูหรา</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Coffee Destinations -->
+            <h3 class="font-display text-center mb-lg" style="font-size: 1.5rem;">
+                <span lang="en">Secondary Mixology Destinations</span>
+                <span lang="th">จุดหมายมิกซ์โซโลยีรอง</span>
+            </h3>
+
+            <div class="grid grid-3 gap-lg">
+                <!-- GRAPH -->
+                <div class="glass-panel p-xl">
+                    <div style="font-size: 2rem; margin-bottom: var(--space-md);">⬛</div>
+                    <h4 class="font-display text-copper mb-sm" style="font-size: 1.25rem;">GRAPH One Nimman</h4>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="en">
+                        Dark, moody, gothic-industrial. Specializes in nitrogen-infused cold brews with botanical infusions—charcoal, rose water, and lychee.
+                    </p>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="th">
+                        มืด ลึกลับ กอธิค-อินดัสเทรียล เชี่ยวชาญโคลด์บรูว์อัดไนโตรเจนกับสมุนไพร—ถ่าน น้ำกุหลาบ และลิ้นจี่
+                    </p>
+                    <div style="font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);">
+                        <span lang="en">Must Try:</span>
+                        <span lang="th">ต้องลอง:</span>
+                    </div>
+                    <div class="coffee-card">
+                        <div class="coffee-emoji">🌹</div>
+                        <div>
+                            <div class="coffee-name">Lost Garden</div>
+                            <div class="coffee-desc">Nitro + Rose water + Lychee</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ristr8to -->
+                <div class="glass-panel p-xl">
+                    <div style="font-size: 2rem; margin-bottom: var(--space-md);">🏅</div>
+                    <h4 class="font-display text-copper mb-sm" style="font-size: 1.25rem;">Ristr8to Original</h4>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="en">
+                        The OG specialty coffee pioneer. Multiple international awards, consistent quality, central location on the main road. "Loud" and "bustling" atmosphere.
+                    </p>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="th">
+                        ผู้บุกเบิกกาแฟสเปเชียลตี้ดั้งเดิม รางวัลนานาชาติมากมาย คุณภาพสม่ำเสมอ ทำเลกลางถนนใหญ่ บรรยากาศ "คึกคัก"
+                    </p>
+                    <div style="font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);">
+                        <span lang="en">Must Try:</span>
+                        <span lang="th">ต้องลอง:</span>
+                    </div>
+                    <div class="coffee-card">
+                        <div class="coffee-emoji">🎨</div>
+                        <div>
+                            <div class="coffee-name">Award-Winning Latte Art</div>
+                            <div class="coffee-desc">Precision brewing excellence</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The Baristro -->
+                <div class="glass-panel p-xl">
+                    <div style="font-size: 2rem; margin-bottom: var(--space-md);">🥥</div>
+                    <h4 class="font-display text-copper mb-sm" style="font-size: 1.25rem;">The Baristro at Nimman</h4>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="en">
+                        Hybrid hospitality model with "Baristotel" branding. Instagram-optimized environment with white marble and floral accents. Refreshing hybrids.
+                    </p>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="th">
+                        โมเดลการบริการแบบไฮบริดกับแบรนด์ "Baristotel" สภาพแวดล้อมเหมาะกับ Instagram หินอ่อนขาวและดอกไม้ เครื่องดื่มไฮบริดสดชื่น
+                    </p>
+                    <div style="font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);">
+                        <span lang="en">Must Try:</span>
+                        <span lang="th">ต้องลอง:</span>
+                    </div>
+                    <div class="coffee-card">
+                        <div class="coffee-emoji">🥥</div>
+                        <div>
+                            <div class="coffee-name">Black Coconut</div>
+                            <div class="coffee-desc">Espresso over fresh coconut water</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mixology Comparison Table -->
+            <div class="glass-panel p-xl mt-2xl">
+                <h4 class="font-display mb-lg" style="font-size: 1.25rem;">
+                    <span lang="en">Coffee Mixology Comparison Matrix</span>
+                    <span lang="th">ตารางเปรียบเทียบมิกซ์โซโลยีกาแฟ</span>
+                </h4>
+                <div style="overflow-x: auto;">
+                    <table class="mixology-table">
+                        <thead>
+                            <tr>
+                                <th lang="en">Venue</th>
+                                <th lang="th">ร้าน</th>
+                                <th lang="en">Primary Focus</th>
+                                <th lang="th">จุดเน้น</th>
+                                <th lang="en">Signature Creations</th>
+                                <th lang="th">เมนูซิกเนเจอร์</th>
+                                <th lang="en">Vibe</th>
+                                <th lang="th">บรรยากาศ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="venue-name">Roast8ry Flagship</td>
+                                <td>Technical mastery & "Coffee in Good Spirits"</td>
+                                <td>Satan Latte, Dirty White Russian, Black Martini</td>
+                                <td>Laboratory-Industrial</td>
+                            </tr>
+                            <tr>
+                                <td class="venue-name">GRAPH One Nimman</td>
+                                <td>Experimental cold brews & visual storytelling</td>
+                                <td>Monochrome, Lost Garden, Boy with Girlfriend</td>
+                                <td>Gothic-Industrial</td>
+                            </tr>
+                            <tr>
+                                <td class="venue-name">Ristr8to Original</td>
+                                <td>Award-winning latte art & precision brewing</td>
+                                <td>Classic espresso-driven drinks</td>
+                                <td>Bustling & Energetic</td>
+                            </tr>
+                            <tr>
+                                <td class="venue-name">The Baristro</td>
+                                <td>Minimalist aesthetics & refreshing hybrids</td>
+                                <td>Black Coconut, Charcoal Latte</td>
+                                <td>Instagram-Optimized</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Stays Section -->
+    <section class="section" id="stays">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" lang="en">// Curated Accommodations</span>
+                <span class="section-tag" lang="th">// ที่พักคัดสรร</span>
+                <h2 class="section-title">
+                    <span lang="en">Find Your Perfect Stay</span>
+                    <span lang="th">ค้นหาที่พักที่สมบูรณ์แบบ</span>
+                </h2>
+                <p class="section-desc">
+                    <span lang="en">All properties confirmed with 24-hour staffed reception for midnight arrivals. Filter by your constraints to find the optimal match.</span>
+                    <span lang="th">โรงแรมทั้งหมดยืนยันมีพนักงานรีเซฟชั่น 24 ชม. รองรับการเช็คอินเที่ยงคืน กรองตามข้อจำกัดของคุณเพื่อหาที่พักที่เหมาะสมที่สุด</span>
+                </p>
+            </div>
+
+            <!-- Interactive Filter Controls -->
+            <div class="filter-controls">
+                <div class="filter-header">
+                    <h3 class="filter-title">
+                        <span lang="en">Filter Your Experience</span>
+                        <span lang="th">กรองประสบการณ์ของคุณ</span>
+                    </h3>
+                    <p class="filter-subtitle">
+                        <span lang="en">Adjust the sliders to narrow down the perfect boutique hotel within your constraints.</span>
+                        <span lang="th">ปรับสไลเดอร์เพื่อจำกัดโรงแรมบูทีคที่สมบูรณ์แบบตามข้อจำกัดของคุณ</span>
+                    </p>
+                </div>
+
+                <div class="filter-grid">
+                    <!-- Budget Slider -->
+                    <div class="filter-group">
+                        <div class="filter-label">
+                            <span class="filter-label-text" lang="en">Max Budget (per night)</span>
+                            <span class="filter-label-text" lang="th">งบประมาณสูงสุด (ต่อคืน)</span>
+                            <span class="filter-label-value" id="budgetDisplay">฿3,000</span>
+                        </div>
+                        <input type="range" id="budgetSlider" class="filter-slider" min="1000" max="3500" step="100" value="3000">
+                        <div class="filter-range-labels">
+                            <span>฿1,000</span>
+                            <span>฿3,500+</span>
+                        </div>
+                    </div>
+
+                    <!-- Distance Slider -->
+                    <div class="filter-group">
+                        <div class="filter-label">
+                            <span class="filter-label-text" lang="en">Max Walking Distance</span>
+                            <span class="filter-label-text" lang="th">ระยะเดินสูงสุด</span>
+                            <span class="filter-label-value" id="distanceDisplay">10 min</span>
+                        </div>
+                        <input type="range" id="distanceSlider" class="filter-slider" min="1" max="15" step="1" value="10">
+                        <div class="filter-range-labels">
+                            <span>1 min</span>
+                            <span>15 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-stats">
+                    <div class="filter-stat">
+                        <span class="filter-stat-count" id="matchCount">8</span>
+                        <span class="filter-stat-label" lang="en">Matches Found</span>
+                        <span class="filter-stat-label" lang="th">ผลลัพธ์ที่พบ</span>
+                    </div>
+                    <div class="filter-stat">
+                        <span class="filter-stat-count" id="avgPrice">฿2,100</span>
+                        <span class="filter-stat-label" lang="en">Avg. Price</span>
+                        <span class="filter-stat-label" lang="th">ราคาเฉลี่ย</span>
+                    </div>
+                    <div class="filter-stat">
+                        <span class="filter-stat-count" id="avgDistance">5</span>
+                        <span class="filter-stat-label" lang="en">Avg. Walk (min)</span>
+                        <span class="filter-stat-label" lang="th">เดินเฉลี่ย (นาที)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Section -->
+            <div class="chart-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h4 class="chart-title">
+                            <span lang="en">Price vs. Proximity Analysis</span>
+                            <span lang="th">การวิเคราะห์ราคา vs ความใกล้</span>
+                        </h4>
+                        <span class="chart-badge">
+                            <span lang="en">Interactive Chart</span>
+                            <span lang="th">แผนภูมิโต้ตอบ</span>
+                        </span>
+                    </div>
+                    <div class="chart-canvas-wrapper">
+                        <canvas id="scatterChart"></canvas>
+                    </div>
+                    <p class="chart-note">
+                        <span lang="en">Bubble size represents rating. Click a bubble to highlight the hotel below.</span>
+                        <span lang="th">ขนาดฟองแสดงคะแนน คลิกฟองเพื่อไฮไลท์โรงแรมด้านล่าง</span>
+                    </p>
+                </div>
+
+                <div class="recommendation-panel">
+                    <div class="recommendation-card highlight">
+                        <h4 class="recommendation-title">
+                            <span lang="en">🎯 Top Location Pick</span>
+                            <span lang="th">🎯 ทำเลดีที่สุด</span>
+                        </h4>
+                        <p class="recommendation-text" id="locationPick">
+                            <span lang="en">Loading...</span>
+                            <span lang="th">กำลังโหลด...</span>
+                        </p>
+                    </div>
+                    <div class="recommendation-card">
+                        <h4 class="recommendation-title">
+                            <span lang="en">💰 Value Pick</span>
+                            <span lang="th">💰 คุ้มค่าที่สุด</span>
+                        </h4>
+                        <p class="recommendation-text" id="valuePick">
+                            <span lang="en">Loading...</span>
+                            <span lang="th">กำลังโหลด...</span>
+                        </p>
+                    </div>
+                    <div class="match-counter">
+                        <div class="match-counter-value" id="matchCounterLarge">8</div>
+                        <div class="match-counter-label">
+                            <span lang="en">Matches</span>
+                            <span lang="th">ผลลัพธ์</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hotel Grid -->
+            <div id="hotelGrid" class="hotel-grid">
+                <!-- Cards injected via JS -->
+            </div>
+
+            <div id="noResults" class="no-results hidden">
+                <h4 class="no-results-title">
+                    <span lang="en">No accommodations found within these criteria</span>
+                    <span lang="th">ไม่พบที่พักตามเกณฑ์เหล่านี้</span>
+                </h4>
+                <p class="text-muted">
+                    <span lang="en">Try increasing your budget or walking distance tolerance.</span>
+                    <span lang="th">ลองเพิ่มงบประมาณหรือระยะเดินที่ยอมรับได้</span>
+                </p>
+                <button class="btn btn-primary no-results-btn" onclick="APP.resetFilters()">
+                    <span lang="en">Reset Filters</span>
+                    <span lang="th">รีเซ็ตตัวกรอง</span>
+                </button>
+            </div>
+
+            <!-- Comprehensive Data Table -->
+            <div class="mt-2xl">
+                <h3 class="font-display text-center mb-lg" style="font-size: 1.5rem;">
+                    <span lang="en">Complete Hotel Intelligence Matrix</span>
+                    <span lang="th">ตารางข้อมูลโรงแรมฉบับสมบูรณ์</span>
+                </h3>
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Hotel</th>
+                                <th>Cluster</th>
+                                <th>Vibe</th>
+                                <th>Walk to Coffee</th>
+                                <th>Midnight Safety</th>
+                                <th>Est. Rate (Feb)</th>
+                                <th>Rating</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="hotel-name">BED Nimman</td>
+                                <td><span class="cluster-badge cluster-south">South / Soi 17</span></td>
+                                <td>Social / Adults-only</td>
+                                <td>2 min → Roast8ry</td>
+                                <td><span class="safety-badge safety-very-high">✓ Very High</span></td>
+                                <td class="price-cell">฿2,100–฿3,100</td>
+                                <td>4.9/5</td>
+                            </tr>
+                            <tr>
+                                <td class="hotel-name">The Nimman Hotel</td>
+                                <td><span class="cluster-badge cluster-south">South / Soi 17</span></td>
+                                <td>Value / SHA Plus</td>
+                                <td>2–5 min → Roast8ry</td>
+                                <td><span class="safety-badge safety-very-high">✓ Very High</span></td>
+                                <td class="price-cell">฿790–฿1,600</td>
+                                <td>8.2/10</td>
+                            </tr>
+                            <tr>
+                                <td class="hotel-name">Hotel Noir</td>
+                                <td><span class="cluster-badge cluster-north">North / Soi 5</span></td>
+                                <td>Dark / Moody</td>
+                                <td>2 min → GRAPH</td>
+                                <td><span class="safety-badge safety-very-high">✓ Very High</span></td>
+                                <td class="price-cell">฿1,800–฿2,400</td>
+                                <td>4.5/5</td>
+                            </tr>
+                            <tr>
+                                <td class="hotel-name">G Nimman</td>
+                                <td><span class="cluster-badge cluster-south">South / Soi 17</span></td>
+                                <td>Ultra Modern / Pool</td>
+                                <td>7 min → Roast8ry</td>
+                                <td><span class="safety-badge safety-high">✓ High</span></td>
+                                <td class="price-cell">฿2,900–฿3,500</td>
+                                <td>4.8/5</td>
+                            </tr>
+                            <tr>
+                                <td class="hotel-name">NORN Boutique</td>
+                                <td><span class="cluster-badge cluster-central">Central</span></td>
+                                <td>Modern / Pool</td>
+                                <td>1.2 min → Ristr8to</td>
+                                <td><span class="safety-badge safety-high">✓ High</span></td>
+                                <td class="price-cell">฿2,000–฿2,400</td>
+                                <td>4.3/5</td>
+                            </tr>
+                            <tr>
+                                <td class="hotel-name">Yesterday Hotel</td>
+                                <td><span class="cluster-badge cluster-central">Central</span></td>
+                                <td>Vintage / Heritage</td>
+                                <td>3 min → Baristro</td>
+                                <td><span class="safety-badge safety-very-high">✓ Very High</span></td>
+                                <td class="price-cell">฿1,050–฿1,800</td>
+                                <td>4.4/5</td>
+                            </tr>
+                            <tr>
+                                <td class="hotel-name">Nimman Mai Design</td>
+                                <td><span class="cluster-badge cluster-north">North / Soi 2</span></td>
+                                <td>Silk Road Theme</td>
+                                <td>3 min → GRAPH</td>
+                                <td><span class="safety-badge safety-very-high">✓ Very High</span></td>
+                                <td class="price-cell">฿850–฿2,100</td>
+                                <td>4.2/5</td>
+                            </tr>
+                            <tr>
+                                <td class="hotel-name">L Nimman Boutique</td>
+                                <td><span class="cluster-badge cluster-south">South / Soi 17</span></td>
+                                <td>Modern / Reliable</td>
+                                <td>5–10 min → Roast8ry</td>
+                                <td><span class="safety-badge safety-high">✓ High</span></td>
+                                <td class="price-cell">฿1,200–฿2,500</td>
+                                <td>8.5/10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- History / Context Section -->
+    <section class="section" style="background: var(--espresso-deep);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" lang="en">// From Opium to Arabica</span>
+                <span class="section-tag" lang="th">// จากฝิ่นสู่อาราบิก้า</span>
+                <h2 class="section-title">
+                    <span lang="en">The Impactful Backstory</span>
+                    <span lang="th">เรื่องราวที่มีผลกระทบ</span>
+                </h2>
+            </div>
+
+            <div class="history-section">
+                <div class="history-content">
+                    <div class="history-text">
+                        <p lang="en">
+                            The liquid art in your cup is the result of a profound <strong>geopolitical shift</strong>. Historically, these northern highlands were part of the infamous <span class="highlight">"Golden Triangle" opium trade</span>. This was dismantled by the <strong>Royal Project Initiative</strong>, spearheaded by King Bhumibol Adulyadej, who successfully incentivized hill tribes to pivot to high-altitude Arabica cultivation.
+                        </p>
+                        <p lang="th">
+                            ศิลปะของเหลวในถ้วยของคุณเป็นผลจาก <strong>การเปลี่ยนแปลงทางภูมิรัฐศาสตร์</strong> ที่ลึกซึ้ง ในอดีต ที่ราบสูงทางเหนือเหล่านี้เป็นส่วนหนึ่งของ <span class="highlight">การค้าฝิ่น "สามเหลี่ยมทองคำ"</span> ที่ฉาวโฉ่ สิ่งนี้ถูกรื้อถอนโดย <strong>โครงการหลวง</strong> นำโดยพระบาทสมเด็จพระเจ้าอยู่หัวภูมิพลอดุลยเดช ผู้ทรงสร้างแรงจูงใจให้ชาวเขาหันมาปลูกอาราบิก้าบนที่สูง
+                        </p>
+                        <p lang="en">
+                            Today, beans from districts like <strong>Doi Chang</strong> and <strong>Mae Jan Tai</strong> consistently achieve specialty-grade <span class="highlight">SCA scores of 80+</span>. This local supply chain allows Chiang Mai baristas to use world-class beans for experimental recipes—pairing espresso with tamarind or milk-washing their brews—at a fraction of the cost found in Singapore or London.
+                        </p>
+                        <p lang="th">
+                            ปัจจุบัน เมล็ดกาแฟจากอำเภอเช่น <strong>ดอยช้าง</strong> และ <strong>แม่จันใต้</strong> ได้คะแนน <span class="highlight">SCA 80+</span> ระดับสเปเชียลตี้อย่างสม่ำเสมอ ห่วงโซ่อุปทานท้องถิ่นนี้ทำให้บาริสต้าเชียงใหม่ใช้เมล็ดกาแฟระดับโลกสำหรับสูตรทดลอง—จับคู่เอสเพรสโซ่กับมะขามหรือล้างนมกาแฟ—ในราคาเพียงเศษเสี้ยวของสิงคโปร์หรือลอนดอน
+                        </p>
+                    </div>
+                    <div class="history-stats">
+                        <div class="history-stat">
+                            <div class="history-stat-value">80+</div>
+                            <div class="history-stat-label">SCA Score</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="history-stat-value">1969</div>
+                            <div class="history-stat-label">Royal Project Start</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="history-stat-value">5</div>
+                            <div class="history-stat-label">Championship Disciplines</div>
+                        </div>
+                        <div class="history-stat">
+                            <div class="history-stat-value">2017</div>
+                            <div class="history-stat-label">World Champion Year</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Midnight Protocol Section -->
+    <section class="section" id="protocol">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" lang="en">// The Midnight Protocol</span>
+                <span class="section-tag" lang="th">// คู่มือเที่ยงคืน</span>
+                <h2 class="section-title">
+                    <span lang="en">Logistics Toolkit</span>
+                    <span lang="th">ชุดเครื่องมือเดินทาง</span>
+                </h2>
+                <p class="section-desc">
+                    <span lang="en">Everything you need for a frictionless midnight arrival on Friday, February 6th.</span>
+                    <span lang="th">ทุกสิ่งที่คุณต้องการสำหรับการมาถึงเที่ยงคืนวันศุกร์ที่ 6 กุมภาพันธ์</span>
+                </p>
+            </div>
+
+            <div class="grid grid-2 gap-lg">
+                <!-- Booking Script -->
+                <div class="protocol-card">
+                    <div class="protocol-header">
+                        <span class="protocol-icon">📋</span>
+                        <h3 class="protocol-title">
+                            <span lang="en">The Booking Script</span>
+                            <span lang="th">ข้อความจอง</span>
+                        </h3>
+                    </div>
+                    <div class="protocol-content">
+                        <p lang="en">Copy-paste this message when booking to ensure your late arrival is handled:</p>
+                        <p lang="th">คัดลอกข้อความนี้เมื่อจองเพื่อให้แน่ใจว่าการมาถึงดึกของคุณได้รับการดูแล:</p>
+                        <div class="script-box">
+                            <button class="copy-btn" onclick="APP.copyScript()">
+                                <span lang="en">Copy</span>
+                                <span lang="th">คัดลอก</span>
+                            </button>
+                            <span id="booking-script">Inquiry: Feb 6–7, 2026, 2 guests, 1 room. Request: availability + confirm 11:30 PM check-in on Feb 6 within your midnight policy. Flight arrives 10:30 PM CNX. Please reply with confirmation. Thank you.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transport Intel -->
+                <div class="protocol-card">
+                    <div class="protocol-header">
+                        <span class="protocol-icon">🚗</span>
+                        <h3 class="protocol-title">
+                            <span lang="en">Transport Intel</span>
+                            <span lang="th">ข้อมูลการเดินทาง</span>
+                        </h3>
+                    </div>
+                    <div class="protocol-content">
+                        <p><strong lang="en">⚠️ Avoid:</strong><strong lang="th">⚠️ หลีกเลี่ยง:</strong> <span lang="en">RTC City Bus (stops at 10–11 PM)</span><span lang="th">รถบัส RTC (หยุดให้บริการ 22:00-23:00)</span></p>
+                        <p><strong lang="en">✅ Recommended:</strong><strong lang="th">✅ แนะนำ:</strong></p>
+                        <ul>
+                            <li><strong>Grab/Bolt:</strong> <span lang="en">~฿150-250 to Nimman (gold standard)</span><span lang="th">~฿150-250 ไปนิมมาน (มาตรฐานทอง)</span></li>
+                            <li><strong lang="en">Airport Taxi:</strong><strong lang="th">แท็กซี่สนามบิน:</strong> <span lang="en">Flat rate ~฿250-300 (counter inside arrivals)</span><span lang="th">อัตราคงที่ ~฿250-300 (เคาน์เตอร์ในห้องรับกระเป๋า)</span></li>
+                        </ul>
+                        <p class="mt-md"><strong lang="en">🕐 Estimated Time:</strong><strong lang="th">🕐 เวลาโดยประมาณ:</strong> <span lang="en">15-20 minutes to Nimman</span><span lang="th">15-20 นาทีไปนิมมาน</span></p>
+                    </div>
+                </div>
+
+                <!-- Late Night Eats -->
+                <div class="protocol-card">
+                    <div class="protocol-header">
+                        <span class="protocol-icon">🍜</span>
+                        <h3 class="protocol-title">
+                            <span lang="en">Late Night Eats</span>
+                            <span lang="th">อาหารดึก</span>
+                        </h3>
+                    </div>
+                    <div class="protocol-content">
+                        <p><strong lang="en">⚠️ Note:</strong><strong lang="th">⚠️ หมายเหตุ:</strong> <span lang="en">Most kitchens close at 10 PM during weekdays.</span><span lang="th">ร้านอาหารส่วนใหญ่ปิดครัว 22:00 ในวันธรรมดา</span></p>
+                        <p class="mt-md"><strong lang="en">🏪 Recommendations:</strong><strong lang="th">🏪 แนะนำ:</strong></p>
+                        <ul>
+                            <li lang="en">7-Eleven at Soi 6 — legendary toasties (24h)</li>
+                            <li lang="th">7-Eleven ซอย 6 — โทสต์ตำนาน (24 ชม.)</li>
+                            <li lang="en">Midnight Fried Chicken stalls near Maya</li>
+                            <li lang="th">แผงไก่ทอดเที่ยงคืนใกล้ Maya</li>
+                            <li lang="en">Hotel Noir 24-hour snack room (guests only)</li>
+                            <li lang="th">ห้องขนมขบเคี้ยว 24 ชม. Hotel Noir (เฉพาะแขก)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Flower Festival Warning -->
+                <div class="protocol-card warning">
+                    <div class="protocol-header">
+                        <span class="protocol-icon">🌸</span>
+                        <h3 class="protocol-title" style="color: var(--terracotta);">
+                            <span lang="en">Flower Festival Alert</span>
+                            <span lang="th">แจ้งเตือนเทศกาลดอกไม้</span>
+                        </h3>
+                    </div>
+                    <div class="protocol-content">
+                        <p><strong lang="en">🌸 Feb 6–8, 2026 is peak season.</strong><strong lang="th">🌸 6-8 ก.พ. 2569 เป็นช่วงพีค</strong></p>
+                        <ul style="margin-top: var(--space-md);">
+                            <li lang="en">Hotel prices will surge <strong style="color: var(--terracotta);">30–50%</strong></li>
+                            <li lang="th">ราคาโรงแรมจะเพิ่มขึ้น <strong style="color: var(--terracotta);">30-50%</strong></li>
+                            <li lang="en">Boutique inventory (under 30 keys) depletes by October 2025</li>
+                            <li lang="th">ห้องบูทีค (น้อยกว่า 30 ห้อง) หมดภายในตุลาคม 2568</li>
+                            <li lang="en">Traffic around Nimman will be heavy with floral floats</li>
+                            <li lang="th">การจราจรรอบนิมมานจะหนาแน่นกับขบวนรถดอกไม้</li>
+                            <li lang="en"><strong style="color: var(--terracotta);">Immediate booking is essential</strong></li>
+                            <li lang="th"><strong style="color: var(--terracotta);">ต้องจองทันที</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Protocol -->
+            <div class="glass-panel p-xl mt-2xl">
+                <h3 class="font-display mb-lg" style="font-size: 1.5rem;">
+                    <span lang="en">Priority Contact Protocol</span>
+                    <span lang="th">ลำดับการติดต่อ</span>
+                </h3>
+                <div class="grid grid-3 gap-lg">
+                    <div>
+                        <h4 class="text-copper mb-md font-display">The Nimman Hotel</h4>
+                        <ul style="font-size: 0.9rem; color: var(--cream-muted); list-style: none;">
+                            <li style="margin-bottom: var(--space-sm);">📱 Line: @thenimmanofficial</li>
+                            <li style="margin-bottom: var(--space-sm);">📞 +66 53-222-638</li>
+                            <li>✉️ thenimmanhotel@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-copper mb-md font-display">BED Nimman</h4>
+                        <ul style="font-size: 0.9rem; color: var(--cream-muted); list-style: none;">
+                            <li style="margin-bottom: var(--space-sm);">📱 Direct booking preferred</li>
+                            <li style="margin-bottom: var(--space-sm);">📞 +66 52-005-999</li>
+                            <li>🌐 bednimman.com</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-copper mb-md font-display">Hotel Noir</h4>
+                        <ul style="font-size: 0.9rem; color: var(--cream-muted); list-style: none;">
+                            <li style="margin-bottom: var(--space-sm);">📱 24-hour front desk</li>
+                            <li style="margin-bottom: var(--space-sm);">📞 +66 52-005-111</li>
+                            <li>🌐 hotelnoir.co.th</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section" id="map" style="background: var(--espresso-deep);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" lang="en">// Location Intelligence</span>
+                <span class="section-tag" lang="th">// ข้อมูลสถานที่</span>
+                <h2 class="section-title">
+                    <span lang="en">The Nimman Map</span>
+                    <span lang="th">แผนที่นิมมาน</span>
+                </h2>
+                <p class="section-desc">
+                    <span lang="en">All boutique hotels, coffee anchors, and late-night essentials pinned for your convenience.</span>
+                    <span lang="th">โรงแรมบูทีค ร้านกาแฟ และร้านเปิดดึกทั้งหมดปักหมุดไว้ให้คุณแล้ว</span>
+                </p>
+            </div>
+
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3777.0!2d98.967!3d18.796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTjCsDQ3JzQ1LjYiTiA5OMKwNTgnMDEuMiJF!5e0!3m2!1sen!2sth!4v1234567890"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Nimman District Map">
+                </iframe>
+            </div>
+
+            <div class="map-legend">
+                <div class="legend-item">
+                    <span class="legend-dot hotel"></span>
+                    <span lang="en">Boutique Hotels</span>
+                    <span lang="th">โรงแรมบูทีค</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot coffee"></span>
+                    <span lang="en">Coffee Anchors</span>
+                    <span lang="th">ร้านกาแฟ</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot food"></span>
+                    <span lang="en">Late Night Eats</span>
+                    <span lang="th">อาหารดึก</span>
+                </div>
+            </div>
+
+            <!-- Location Cards -->
+            <div class="location-cards">
+                <div class="location-card">
+                    <h4 class="location-card-title">
+                        <span lang="en">☕ Coffee Anchors</span>
+                        <span lang="th">☕ ร้านกาแฟหลัก</span>
+                    </h4>
+                    <a href="https://maps.google.com/?q=Roast8ry+Lab+Nimman+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 Roast8ry Flagship
+                    </a>
+                    <a href="https://maps.google.com/?q=GRAPH+Cafe+One+Nimman+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 GRAPH One Nimman
+                    </a>
+                    <a href="https://maps.google.com/?q=Ristr8to+Nimmanhaemin+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 Ristr8to Original
+                    </a>
+                </div>
+
+                <div class="location-card">
+                    <h4 class="location-card-title">
+                        <span lang="en">🏨 South Cluster (Soi 17)</span>
+                        <span lang="th">🏨 โซนใต้ (ซอย 17)</span>
+                    </h4>
+                    <a href="https://maps.google.com/?q=BED+Nimman+Hotel+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 BED Nimman
+                    </a>
+                    <a href="https://maps.google.com/?q=The+Nimman+Hotel+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 The Nimman Hotel
+                    </a>
+                    <a href="https://maps.google.com/?q=G+Nimman+Hotel+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 G Nimman
+                    </a>
+                </div>
+
+                <div class="location-card">
+                    <h4 class="location-card-title">
+                        <span lang="en">🏨 North Cluster</span>
+                        <span lang="th">🏨 โซนเหนือ</span>
+                    </h4>
+                    <a href="https://maps.google.com/?q=Hotel+Noir+Nimman+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 Hotel Noir
+                    </a>
+                    <a href="https://maps.google.com/?q=Nimman+Mai+Design+Hotel+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 Nimman Mai Design
+                    </a>
+                    <a href="https://maps.google.com/?q=NORN+Boutique+Hotel+Chiang+Mai" target="_blank" rel="noopener" class="location-link">
+                        📍 NORN Boutique
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / CTA Section -->
+    <footer class="footer" id="book">
+        <div class="container">
+            <div class="footer-cta">
+                <h2 class="footer-cta-title">
+                    <span lang="en">Ready for Midnight?</span>
+                    <span lang="th">พร้อมสำหรับเที่ยงคืน?</span>
+                </h2>
+                <p class="footer-cta-desc">
+                    <span lang="en">Book immediately to secure your stay during the Chiang Mai Flower Festival. The window is closing.</span>
+                    <span lang="th">จองทันทีเพื่อรับประกันที่พักช่วงเทศกาลดอกไม้เชียงใหม่ เวลากำลังหมดลง</span>
+                </p>
+                <div class="footer-links">
+                    <a href="https://www.agoda.com/search?city=2588&checkIn=2026-02-06&checkOut=2026-02-08&rooms=1&adults=2" target="_blank" rel="noopener" class="footer-link">
+                        🔗
+                        <span lang="en">Check Agoda</span>
+                        <span lang="th">เช็ค Agoda</span>
+                    </a>
+                    <a href="https://www.booking.com/searchresults.html?ss=Nimman%2C+Chiang+Mai&checkin=2026-02-06&checkout=2026-02-08&group_adults=2&no_rooms=1" target="_blank" rel="noopener" class="footer-link">
+                        🔗
+                        <span lang="en">Check Booking.com</span>
+                        <span lang="th">เช็ค Booking.com</span>
+                    </a>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=Nimman+Chiang+Mai&travelmode=driving" target="_blank" rel="noopener" class="footer-link">
+                        📍
+                        <span lang="en">Get Directions</span>
+                        <span lang="th">นำทาง</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    <span lang="en">Midnight & Mixology: The Nimman Edit — Curated for Feb 6–8, 2026</span>
+                    <span lang="th">Midnight & Mixology: The Nimman Edit — คัดสรรสำหรับ 6-8 ก.พ. 2569</span>
+                </p>
+                <p class="mt-md" style="font-size: 0.75rem;">
+                    <span lang="en">Prices are estimates and may vary. Always confirm rates directly with properties. Analysis based on verified property data and guest reviews.</span>
+                    <span lang="th">ราคาเป็นการประมาณและอาจเปลี่ยนแปลง กรุณายืนยันราคากับโรงแรมโดยตรง การวิเคราะห์อ้างอิงจากข้อมูลโรงแรมและรีวิวแขกที่ยืนยันแล้ว</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // ══════════════════════════════════════════════════════════════════════
+        // DATA STORE
+        // ══════════════════════════════════════════════════════════════════════
+        const hotels = [
+            {
+                id: 1,
+                name: "BED Nimman",
+                price: 2600,
+                distance: 2,
+                rating: 4.9,
+                lateCheckIn: true,
+                vibe: "Social / Adults-only",
+                description: "Adults-only sanctuary on Soi 17. Large outdoor pool, unlimited espresso/water 24/7, minimalist design. Steps from Roast8ry.",
+                tags: ["Top Pick", "Adults Only", "Pool"],
+                cluster: "south"
+            },
+            {
+                id: 2,
+                name: "The Nimman Hotel",
+                price: 1200,
+                distance: 3,
+                rating: 4.1,
+                lateCheckIn: true,
+                vibe: "Value / SHA Plus",
+                description: "Budget-friendly on Soi 17 with SHA Plus certification. 49 rooms, greenery-surrounded, outdoor pool. Same lane as Roast8ry.",
+                tags: ["Value", "SHA Plus"],
+                cluster: "south"
+            },
+            {
+                id: 3,
+                name: "Hotel Noir",
+                price: 2100,
+                distance: 2,
+                rating: 4.5,
+                lateCheckIn: true,
+                vibe: "Dark / Moody",
+                description: "Atmospheric sanctuary with dark, sophisticated aesthetic. 24-hour front desk and snack room. Perfect for the 'suave' requirement.",
+                tags: ["Design", "24h Snacks"],
+                cluster: "north"
+            },
+            {
+                id: 4,
+                name: "G Nimman",
+                price: 3200,
+                distance: 7,
+                rating: 4.8,
+                lateCheckIn: true,
+                vibe: "Ultra Modern / Pool",
+                description: "Stunning circular architecture and pool. Minimalist white theme. Very hyped. High-tech concierge service.",
+                tags: ["Luxury", "Instagram", "Pool"],
+                cluster: "south"
+            },
+            {
+                id: 5,
+                name: "NORN Boutique",
+                price: 2200,
+                distance: 1,
+                rating: 4.3,
+                lateCheckIn: true,
+                vibe: "Modern / Pool",
+                description: "Just 92m from Ristr8to Original. Modern styling, 24-hour front desk, pool access. Perfect for the undecided explorer.",
+                tags: ["Closest", "Pool"],
+                cluster: "central"
+            },
+            {
+                id: 6,
+                name: "Yesterday Hotel",
+                price: 1400,
+                distance: 3,
+                rating: 4.4,
+                lateCheckIn: true,
+                vibe: "Vintage / Heritage",
+                description: "Thai '80s heritage theme with antique furnishings. Guest-verified late check-in support. Free bicycles.",
+                tags: ["Heritage", "Value"],
+                cluster: "central"
+            },
+            {
+                id: 7,
+                name: "Nimman Mai Design",
+                price: 1500,
+                distance: 3,
+                rating: 4.2,
+                lateCheckIn: true,
+                vibe: "Silk Road Theme",
+                description: "Each floor themed after a different Silk Road country. 56 rooms, rooftop jacuzzi pool. Explicitly 24/7 front desk.",
+                tags: ["Design", "Unique"],
+                cluster: "north"
+            },
+            {
+                id: 8,
+                name: "L Nimman Boutique",
+                price: 1850,
+                distance: 8,
+                rating: 4.3,
+                lateCheckIn: true,
+                vibe: "Modern / Reliable",
+                description: "78 rooms, peaceful ambiance, city views. 24-hour receptionist and security. Highly rated for reliability.",
+                tags: ["Reliable"],
+                cluster: "south"
+            }
+        ];
+
+        // ══════════════════════════════════════════════════════════════════════
+        // APPLICATION STATE
+        // ══════════════════════════════════════════════════════════════════════
+        const APP = {
+            lang: 'en',
+            state: {
+                maxBudget: 3000,
+                maxDistance: 10,
+                highlightedId: null
+            },
+            scatterChart: null,
+
+            // Initialize Application
+            init() {
+                this.initAmbientBackground();
+                this.initNavScroll();
+                this.initSmoothScroll();
+                this.initChart();
+                this.bindFilterEvents();
+                this.updateDisplay();
+                console.log('[Midnight & Mixology] System initialized');
+            },
+
+            // Toggle Language
+            toggleLang() {
+                this.lang = this.lang === 'en' ? 'th' : 'en';
+                document.body.dataset.lang = this.lang;
+            },
+
+            // Copy Booking Script
+            copyScript() {
+                const script = document.getElementById('booking-script').textContent;
+                navigator.clipboard.writeText(script).then(() => {
+                    const btn = document.querySelector('.script-box .copy-btn');
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '✓ Copied!';
+                    btn.style.background = 'var(--success-sage)';
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style.background = '';
+                    }, 2000);
+                });
+            },
+
+            // Reset Filters
+            resetFilters() {
+                document.getElementById('budgetSlider').value = 3000;
+                document.getElementById('distanceSlider').value = 10;
+                this.state.maxBudget = 3000;
+                this.state.maxDistance = 10;
+                this.updateDisplay();
+            },
+
+            // Bind Filter Events
+            bindFilterEvents() {
+                document.getElementById('budgetSlider').addEventListener('input', (e) => {
+                    this.state.maxBudget = parseInt(e.target.value);
+                    this.updateDisplay();
+                });
+                document.getElementById('distanceSlider').addEventListener('input', (e) => {
+                    this.state.maxDistance = parseInt(e.target.value);
+                    this.updateDisplay();
+                });
+            },
+
+            // Update Display
+            updateDisplay() {
+                const filtered = hotels.filter(h => 
+                    h.price <= this.state.maxBudget && 
+                    h.distance <= this.state.maxDistance
+                );
+
+                // Update filter displays
+                document.getElementById('budgetDisplay').textContent = `฿${this.state.maxBudget.toLocaleString()}`;
+                document.getElementById('distanceDisplay').textContent = `${this.state.maxDistance} min`;
+                document.getElementById('matchCount').textContent = filtered.length;
+                document.getElementById('matchCounterLarge').textContent = filtered.length;
+
+                // Calculate averages
+                if (filtered.length > 0) {
+                    const avgPrice = Math.round(filtered.reduce((sum, h) => sum + h.price, 0) / filtered.length);
+                    const avgDist = Math.round(filtered.reduce((sum, h) => sum + h.distance, 0) / filtered.length);
+                    document.getElementById('avgPrice').textContent = `฿${avgPrice.toLocaleString()}`;
+                    document.getElementById('avgDistance').textContent = avgDist;
+                }
+
+                // Update chart
+                this.updateChart(filtered);
+
+                // Update recommendations
+                this.updateRecommendations(filtered);
+
+                // Render hotel grid
+                this.renderHotelGrid(filtered);
+            },
+
+            // Initialize Chart
+            initChart() {
+                const ctx = document.getElementById('scatterChart').getContext('2d');
+                
+                this.scatterChart = new Chart(ctx, {
+                    type: 'bubble',
+                    data: {
+                        datasets: [{
+                            label: 'Hotels',
+                            data: [],
+                            backgroundColor: (context) => {
+                                const val = context.raw;
+                                if (val && val.id === this.state.highlightedId) return '#c8956c';
+                                return 'rgba(200, 149, 108, 0.6)';
+                            },
+                            borderColor: '#3E3B36',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        onClick: (e, activeEls) => {
+                            if (activeEls.length > 0) {
+                                const dataIndex = activeEls[0].index;
+                                const hotelId = this.scatterChart.data.datasets[0].data[dataIndex].id;
+                                this.highlightHotel(hotelId);
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                backgroundColor: '#231e1a',
+                                titleColor: '#f5f0e8',
+                                bodyColor: '#d4ccc0',
+                                borderColor: '#c8956c',
+                                borderWidth: 1,
+                                callbacks: {
+                                    label: (context) => {
+                                        return `${context.raw.name}: ฿${context.raw.y.toLocaleString()} | ${context.raw.x} min walk`;
+                                    }
+                                }
+                            },
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                title: { 
+                                    display: true, 
+                                    text: 'Walking Distance (Minutes)',
+                                    color: '#a89f94'
+                                },
+                                min: 0,
+                                max: 15,
+                                grid: { color: 'rgba(200, 149, 108, 0.1)' },
+                                ticks: { color: '#a89f94' }
+                            },
+                            y: {
+                                title: { 
+                                    display: true, 
+                                    text: 'Price per Night (THB)',
+                                    color: '#a89f94'
+                                },
+                                min: 800,
+                                max: 3500,
+                                grid: { color: 'rgba(200, 149, 108, 0.1)' },
+                                ticks: { color: '#a89f94' }
+                            }
+                        }
+                    }
+                });
+            },
+
+            // Update Chart
+            updateChart(filtered) {
+                const chartData = filtered.map(h => ({
+                    x: h.distance,
+                    y: h.price,
+                    r: (h.rating - 3) * 8,
+                    name: h.name,
+                    id: h.id
+                }));
+                
+                if (this.scatterChart) {
+                    this.scatterChart.data.datasets[0].data = chartData;
+                    this.scatterChart.update();
+                }
+            },
+
+            // Update Recommendations
+            updateRecommendations(filtered) {
+                const locationPick = document.getElementById('locationPick');
+                const valuePick = document.getElementById('valuePick');
+
+                if (filtered.length === 0) {
+                    locationPick.innerHTML = '<span lang="en">No matches found. Try adjusting filters.</span><span lang="th">ไม่พบผลลัพธ์ ลองปรับตัวกรอง</span>';
+                    valuePick.innerHTML = '<span lang="en">No matches found.</span><span lang="th">ไม่พบผลลัพธ์</span>';
+                    return;
+                }
+
+                const closest = filtered.reduce((prev, curr) => prev.distance < curr.distance ? prev : curr);
+                const bestValue = filtered.reduce((prev, curr) => (prev.price / prev.rating) < (curr.price / curr.rating) ? prev : curr);
+
+                locationPick.innerHTML = `<strong>${closest.name}</strong> is only <span style="color: var(--copper-bright)">${closest.distance} min</span> walk from the anchor cafe.`;
+                valuePick.innerHTML = `<strong>${bestValue.name}</strong> offers the best price-to-quality ratio at <span style="color: var(--copper-bright)">฿${bestValue.price.toLocaleString()}</span>.`;
+            },
+
+            // Highlight Hotel
+            highlightHotel(id) {
+                this.state.highlightedId = (this.state.highlightedId === id) ? null : id;
+                this.updateDisplay();
+                
+                if (window.innerWidth < 768 && this.state.highlightedId) {
+                    document.getElementById('hotelGrid').scrollIntoView({ behavior: 'smooth' });
+                }
+            },
+
+            // Render Hotel Grid
+            renderHotelGrid(filtered) {
+                const grid = document.getElementById('hotelGrid');
+                const noResults = document.getElementById('noResults');
+                grid.innerHTML = '';
+
+                if (filtered.length === 0) {
+                    noResults.classList.remove('hidden');
+                    return;
+                } else {
+                    noResults.classList.add('hidden');
+                }
+
+                filtered.sort((a, b) => a.distance - b.distance);
+
+                filtered.forEach(h => {
+                    const isHighlight = this.state.highlightedId === h.id;
+                    const tagsHtml = h.tags.map(t => `<span class="hotel-card-tag">${t}</span>`).join('');
+                    
+                    const card = document.createElement('div');
+                    card.className = `hotel-card ${isHighlight ? 'highlighted' : ''}`;
+                    
+                    card.innerHTML = `
+                        <div class="hotel-card-header">
+                            <div>
+                                <h4 class="hotel-card-name">${h.name}</h4>
+                                <div class="hotel-card-vibe">${h.vibe}</div>
+                            </div>
+                            <div class="hotel-card-price">
+                                <div class="hotel-card-price-value">฿${h.price.toLocaleString()}</div>
+                                <div class="hotel-card-price-label">/night</div>
+                            </div>
+                        </div>
+                        
+                        <div class="hotel-card-progress">
+                            <div class="hotel-card-progress-bar">
+                                <div class="hotel-card-progress-fill" style="width: ${(h.distance / 15) * 100}%"></div>
+                            </div>
+                            <div class="hotel-card-progress-labels">
+                                <span class="hotel-card-progress-distance">🚶 ${h.distance} min to Cafe</span>
+                                <span class="hotel-card-progress-checkin">${h.lateCheckIn ? '✓ Late Check-in OK' : 'Check hours'}</span>
+                            </div>
+                        </div>
+
+                        <p class="hotel-card-desc">${h.description}</p>
+                        
+                        <div class="hotel-card-footer">
+                            <div class="hotel-card-tags">${tagsHtml}</div>
+                            <span class="hotel-card-select" onclick="APP.highlightHotel(${h.id})">${isHighlight ? 'Selected' : 'Select'}</span>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            },
+
+            // Navigation Scroll Effect
+            initNavScroll() {
+                const nav = document.getElementById('main-nav');
+                window.addEventListener('scroll', () => {
+                    if (window.pageYOffset > 100) {
+                        nav.classList.add('scrolled');
+                    } else {
+                        nav.classList.remove('scrolled');
+                    }
+                });
+            },
+
+            // Smooth Scroll
+            initSmoothScroll() {
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            const offset = 120;
+                            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+            },
+
+            // Ambient Background
+            initAmbientBackground() {
+                const canvas = document.getElementById('ambient-canvas');
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                let time = 0;
+
+                const resize = () => {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    createParticles();
+                };
+
+                const createParticles = () => {
+                    const count = Math.min(60, Math.floor((canvas.width * canvas.height) / 20000));
+                    particles = [];
+                    for (let i = 0; i < count; i++) {
+                        particles.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            vx: 0,
+                            vy: 0,
+                            size: Math.random() * 2 + 0.5,
+                            alpha: Math.random() * 0.3 + 0.1,
+                            hue: Math.random() * 30 + 20
+                        });
+                    }
+                };
+
+                const animate = () => {
+                    ctx.fillStyle = 'rgba(13, 10, 8, 0.1)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    
+                    time += 0.002;
+                    
+                    particles.forEach((p, i) => {
+                        const angle = Math.sin(p.x * 0.003 + time) * Math.PI * 2;
+                        p.vx += Math.cos(angle) * 0.03;
+                        p.vy += Math.sin(angle) * 0.03;
+                        p.vx *= 0.98;
+                        p.vy *= 0.98;
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        
+                        if (p.x < 0) p.x = canvas.width;
+                        if (p.x > canvas.width) p.x = 0;
+                        if (p.y < 0) p.y = canvas.height;
+                        if (p.y > canvas.height) p.y = 0;
+                        
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fillStyle = `hsla(${p.hue}, 50%, 60%, ${p.alpha})`;
+                        ctx.fill();
+                        
+                        for (let j = i + 1; j < particles.length; j++) {
+                            const p2 = particles[j];
+                            const dx = p2.x - p.x;
+                            const dy = p2.y - p.y;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            
+                            if (dist < 80) {
+                                ctx.beginPath();
+                                ctx.moveTo(p.x, p.y);
+                                ctx.lineTo(p2.x, p2.y);
+                                ctx.strokeStyle = `hsla(30, 40%, 50%, ${(1 - dist / 80) * 0.08})`;
+                                ctx.stroke();
+                            }
+                        }
+                    });
+                    
+                    requestAnimationFrame(animate);
+                };
+
+                window.addEventListener('resize', resize);
+                resize();
+                animate();
+            }
+        };
+
+        // Initialize on DOM ready
+        document.addEventListener('DOMContentLoaded', () => APP.init());
+    </script>
+</body>
+</html>
