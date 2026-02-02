@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nimman Coffee & Stay Curator | Feb 6-7</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Chosen Palette: Warm Neutrals & Deep Espresso */
+        :root {
+            --color-bg: #F9F8F6; /* Off-white/Cream */
+            --color-card: #FFFFFF;
+            --color-primary: #3E3B36; /* Dark Espresso */
+            --color-accent: #C5A880; /* Latte Art/Gold */
+            --color-text: #2D2D2D;
+            --color-text-light: #6B7280;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+        }
+
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            height: 350px;
+            max-height: 400px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            cursor: pointer;
+        }
+    </style>
+    <!-- 
+    Application Structure Plan:
+    1. Hero Section: Sets the context (Chiang Mai, Date, Mood) and introduces the "Coffee Anchor" (the center point of the search).
+    2. The Coffee Anchor: Details the identified cafe (Roast8ry) to confirm it matches the user's "suave/mixology" request.
+    3. Control Center (Filters): Comparison tools for Budget and Distance. This drives the interactivity.
+    4. Data Visualization:
+       - Scatter Plot: Price vs. Proximity. Helps the user find the "sweet spot".
+       - Interactive List: Cards showing hotel details, confirming 24hr check-in capability.
+    5. Detailed Analysis: Textual breakdown of top picks based on specific user personas (Budget vs. Experience).
+    
+    Why this structure?
+    It follows the user's mental model: "Here is where I want to go (Coffee)" -> "What are my constraints? (Budget/Walk)" -> "Show me the options".
+    -->
+
+    <!-- 
+    Visualization & Content Choices:
+    1. Report Info: Identified "Roast8ry" as the target.
+       - Goal: Establish location context.
+       - Viz: Contextual Text Block with styled "Target" card.
+    2. Report Info: Hotel Prices vs. Distance.
+       - Goal: Compare options.
+       - Viz: Chart.js Scatter Plot.
+       - Interaction: Clicking a point filters the list below.
+       - Justification: Scatter plots are best for finding trade-offs between two variables (Price/Distance).
+    3. Report Info: Hotel Attributes (Late check-in, Vibe).
+       - Goal: Inform and Organize.
+       - Viz: Flex/Grid Cards with dynamic filtering.
+       - Interaction: Sliders for live filtering.
+       - Confirming NO SVG/Mermaid.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar / Header -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl font-bold serif text-[#3E3B36]">Nimman Stay Curator</span>
+            </div>
+            <div class="text-sm text-gray-500 font-medium">
+                Feb 6 - Feb 7 • Chiang Mai
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow pb-12">
+        
+        <!-- Hero / Introduction -->
+        <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-4">
+                    <h1 class="text-4xl sm:text-5xl font-bold text-[#3E3B36] leading-tight">
+                        The Search for <br/> <span class="text-[#C5A880]">Coffee & Comfort</span>
+                    </h1>
+                    <p class="text-lg text-gray-600 max-w-2xl leading-relaxed">
+                        We have analyzed accommodations for your trip to Nimmanhemin. 
+                        The focus is on boutique stays allowing late check-in (approx. midnight), 
+                        centered around the "Coffee Anchor"—the specific cafe matching your suave, mixology-focused request.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <span class="bg-[#3E3B36] text-white px-3 py-1 rounded-full text-sm">Budget: ฿1k-3k</span>
+                        <span class="bg-[#E5E7EB] text-gray-700 px-3 py-1 rounded-full text-sm">Walk: &lt;10 min</span>
+                        <span class="bg-[#E5E7EB] text-gray-700 px-3 py-1 rounded-full text-sm">Late Check-in: Required</span>
+                    </div>
+                </div>
+                
+                <!-- The Anchor Card -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-[#C5A880] text-white text-xs font-bold px-3 py-1 rounded-bl-lg">THE ANCHOR</div>
+                    <h3 class="text-xl font-bold text-gray-900 serif mb-2">Roast8ry Lab / Flagship</h3>
+                    <p class="text-sm text-gray-500 mb-4 uppercase tracking-wider font-semibold">Nimman Soi 3</p>
+                    <p class="text-sm text-gray-600 mb-4">
+                        Based on your description ("suave", "hyped", "innovative mixology"), this is the target. 
+                        Home of World Latte Art Champions and famous for coffee cocktails (Satan Latte, Nikka Macchiato).
+                    </p>
+                    <div class="mt-auto pt-4 border-t border-gray-100 flex justify-between items-center text-sm">
+                        <span class="text-gray-500">Rating: 4.8/5.0</span>
+                        <span class="text-[#3E3B36] font-semibold">📍 Center Point</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Control Center -->
+        <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+            <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-gray-100">
+                
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-[#3E3B36] serif mb-2">Filter Your Experience</h2>
+                    <p class="text-gray-500 text-sm">Adjust the sliders to narrow down the perfect boutique hotel within your constraints.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <!-- Budget Slider -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <label class="font-semibold text-gray-700">Max Budget (per night)</label>
+                            <span id="budgetDisplay" class="text-[#C5A880] font-bold text-lg">฿3,000</span>
+                        </div>
+                        <input type="range" id="budgetSlider" min="1000" max="3500" step="100" value="3000" class="range-slider w-full h-2 bg-gray-200 rounded-lg appearance-none">
+                        <div class="flex justify-between text-xs text-gray-400">
+                            <span>฿1,000</span>
+                            <span>฿3,500+</span>
+                        </div>
+                    </div>
+
+                    <!-- Distance Slider -->
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <label class="font-semibold text-gray-700">Max Walking Distance</label>
+                            <span id="distanceDisplay" class="text-[#C5A880] font-bold text-lg">10 min</span>
+                        </div>
+                        <input type="range" id="distanceSlider" min="1" max="15" step="1" value="10" class="range-slider w-full h-2 bg-gray-200 rounded-lg appearance-none">
+                        <div class="flex justify-between text-xs text-gray-400">
+                            <span>1 min</span>
+                            <span>15 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization: Scatter Plot -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-semibold text-gray-800">Price vs. Proximity Analysis</h3>
+                            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">Interactive Chart</span>
+                        </div>
+                        <div class="chart-container bg-gray-50 rounded-xl border border-gray-100 p-2">
+                            <canvas id="scatterChart"></canvas>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-2 text-center">Bubble size represents 'Vibe Rating'. Click a bubble to highlight the hotel below.</p>
+                    </div>
+                    
+                    <!-- Quick Stats Panel -->
+                    <div class="flex flex-col gap-4">
+                        <div class="bg-[#F9F8F6] p-5 rounded-xl border border-gray-200 h-full">
+                            <h3 class="font-semibold text-[#3E3B36] mb-3">Recommendation Engine</h3>
+                            <div id="recommendationText" class="text-sm text-gray-600 space-y-3">
+                                <!-- Dynamic JS content will load here -->
+                                <p>Loading analysis...</p>
+                            </div>
+                        </div>
+                        <div class="bg-[#3E3B36] text-white p-5 rounded-xl h-full flex flex-col justify-center items-center text-center">
+                            <span id="matchCount" class="text-4xl font-bold text-[#C5A880] mb-1">0</span>
+                            <span class="text-sm opacity-80">Matches Found</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Grid -->
+        <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-3 mb-6">
+                <h2 class="text-2xl font-bold text-[#3E3B36] serif">Curated Accommodations</h2>
+                <span class="h-px bg-gray-200 flex-grow"></span>
+            </div>
+            
+            <div id="hotelGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards injected via JS -->
+            </div>
+            
+            <div id="noResults" class="hidden text-center py-12">
+                <p class="text-gray-500 text-lg">No accommodations found within these strict criteria.</p>
+                <button onclick="resetFilters()" class="mt-4 text-[#C5A880] font-semibold hover:underline">Reset Filters</button>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-50 border-t border-gray-200 py-8 mt-8">
+        <div class="max-w-6xl mx-auto px-4 text-center text-sm text-gray-500">
+            <p>&copy; 2026 Nimman Trip Planner. Generated from source research.</p>
+        </div>
+    </footer>
+
+    <!-- Data and Logic -->
+    <script>
+        // --- 1. Data Store ---
+        // Based on real boutique hotels near Nimman Soi 3 (Roast8ry location)
+        // Prices are estimates for High Season (Feb).
+        const hotels = [
+            {
+                id: 1,
+                name: "Art Mai Gallery Hotel",
+                price: 2600,
+                distance: 1, // Minutes walk to Roast8ry
+                rating: 4.7,
+                lateCheckIn: true,
+                vibe: "Artsy & Suave",
+                description: "Dedicated art-themed rooms. Directly on Soi 3. The closest possible option to the cafe anchor.",
+                tags: ["Top Pick", "Design"]
+            },
+            {
+                id: 2,
+                name: "Hotel Noir",
+                price: 1800,
+                distance: 3,
+                rating: 4.5,
+                lateCheckIn: true,
+                vibe: "Dark & Moody",
+                description: "A boutique hotel with a dark, sophisticated aesthetic. Perfect for the 'suave' requirement. Located on Soi 5.",
+                tags: ["Value", "Aesthetic"]
+            },
+            {
+                id: 3,
+                name: "G Nimman",
+                price: 2900,
+                distance: 7,
+                rating: 4.8,
+                lateCheckIn: true,
+                vibe: "Ultra Modern",
+                description: "Stunning circular architecture and pool. Minimalist white theme. Very hyped. Located on Soi 17.",
+                tags: ["Luxury", "Instagram"]
+            },
+            {
+                id: 4,
+                name: "Bed Nimman",
+                price: 2400,
+                distance: 8,
+                rating: 4.9,
+                lateCheckIn: true,
+                vibe: "Social & Crisp",
+                description: "Adults only. Includes an incredible breakfast. Modern, black and white design. Very reliable service.",
+                tags: ["Adults Only", "Service"]
+            },
+            {
+                id: 5,
+                name: "Yesterday Hotel",
+                price: 2100,
+                distance: 5,
+                rating: 4.4,
+                lateCheckIn: true,
+                vibe: "Vintage Colonial",
+                description: "Step back in time. Classic architecture with modern comforts. Located on the main road, easy walk to Soi 3.",
+                tags: ["Classic"]
+            },
+            {
+                id: 6,
+                name: "S17 @ Nimman",
+                price: 1500,
+                distance: 6,
+                rating: 4.3,
+                lateCheckIn: true,
+                vibe: "Clean Minimalist",
+                description: "Great value option. Clean, simple, concrete aesthetics. Good location for walking to both ends of Nimman.",
+                tags: ["Budget", "Clean"]
+            },
+            {
+                id: 7,
+                name: "Kokotel Chiang Mai",
+                price: 1300,
+                distance: 9,
+                rating: 4.2,
+                lateCheckIn: true,
+                vibe: "Fun & Family",
+                description: "Japanese designed, playful sheep theme. Very budget friendly but high quality standards.",
+                tags: ["Budget"]
+            },
+            {
+                id: 8,
+                name: "Cherlock Hotel",
+                price: 2000,
+                distance: 7,
+                rating: 4.6,
+                lateCheckIn: true,
+                vibe: "Green Hideaway",
+                description: "Hidden in Soi 15. Lush garden feel in the middle of the city. Quiet and private.",
+                tags: ["Nature"]
+            }
+        ];
+
+        // --- 2. State Management ---
+        let state = {
+            maxBudget: 3000,
+            maxDistance: 10,
+            highlightedId: null
+        };
+
+        // --- 3. Chart Initialization ---
+        let scatterChart;
+
+        function initChart() {
+            const ctx = document.getElementById('scatterChart').getContext('2d');
+            
+            // Chart.js Configuration
+            scatterChart = new Chart(ctx, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: 'Hotels',
+                        data: [], // Populated by updateChart()
+                        backgroundColor: (context) => {
+                            const val = context.raw;
+                            if(val && val.id === state.highlightedId) return '#3E3B36'; // Highlight color
+                            return 'rgba(197, 168, 128, 0.7)'; // Default Gold
+                        },
+                        borderColor: '#3E3B36',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, activeEls) => {
+                        if(activeEls.length > 0) {
+                            const dataIndex = activeEls[0].index;
+                            const hotelId = scatterChart.data.datasets[0].data[dataIndex].id;
+                            highlightHotel(hotelId);
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.raw.name}: ฿${context.raw.y} | ${context.raw.x} min walk`;
+                                }
+                            }
+                        },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Walking Distance (Minutes)' },
+                            min: 0,
+                            max: 15
+                        },
+                        y: {
+                            title: { display: true, text: 'Price per Night (THB)' },
+                            min: 1000,
+                            max: 3500
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- 4. Logic & Interactions ---
+
+        function updateDisplay() {
+            // Filter Data
+            const filteredHotels = hotels.filter(h => 
+                h.price <= state.maxBudget && 
+                h.distance <= state.maxDistance
+            );
+
+            // Update Counts
+            document.getElementById('matchCount').innerText = filteredHotels.length;
+            document.getElementById('budgetDisplay').innerText = `฿${parseInt(state.maxBudget).toLocaleString()}`;
+            document.getElementById('distanceDisplay').innerText = `${state.maxDistance} min`;
+
+            // Update Chart Data
+            const chartData = filteredHotels.map(h => ({
+                x: h.distance,
+                y: h.price,
+                r: (h.rating - 3) * 5, // Bubble radius based on rating
+                name: h.name,
+                id: h.id
+            }));
+            
+            if(scatterChart) {
+                scatterChart.data.datasets[0].data = chartData;
+                scatterChart.update();
+            }
+
+            // Update Analysis Text
+            updateAnalysis(filteredHotels);
+
+            // Render Grid
+            renderGrid(filteredHotels);
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('hotelGrid');
+            const noResults = document.getElementById('noResults');
+            grid.innerHTML = '';
+
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            data.sort((a,b) => a.distance - b.distance); // Sort by proximity
+
+            data.forEach(h => {
+                const isHighlight = state.highlightedId === h.id;
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-xl p-5 border transition-all duration-300 ${isHighlight ? 'border-[#3E3B36] shadow-xl scale-105 ring-1 ring-[#3E3B36]' : 'border-gray-100 shadow-sm hover:shadow-md'}`;
+                
+                // Tags HTML
+                const tagsHtml = h.tags.map(t => `<span class="text-[10px] uppercase font-bold tracking-wide bg-gray-100 text-gray-600 px-2 py-1 rounded-sm">${t}</span>`).join('');
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <h3 class="font-bold text-lg text-[#3E3B36]">${h.name}</h3>
+                            <div class="flex items-center gap-1 text-sm text-[#C5A880]">
+                                <span>★</span><span>${h.rating}</span>
+                                <span class="text-gray-300 mx-1">|</span>
+                                <span class="text-gray-500 font-medium">${h.vibe}</span>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-lg">฿${h.price.toLocaleString()}</div>
+                            <div class="text-xs text-gray-400">/night</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="w-full bg-gray-100 rounded-full h-1.5 mb-2">
+                            <div class="bg-[#3E3B36] h-1.5 rounded-full" style="width: ${(h.distance / 15) * 100}%"></div>
+                        </div>
+                        <div class="flex justify-between text-xs font-medium">
+                            <span class="text-[#3E3B36]">🚶 ${h.distance} min to Cafe</span>
+                            <span class="text-green-600">${h.lateCheckIn ? 'Late Check-in OK' : 'Check hours'}</span>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-600 mb-4 line-clamp-2">${h.description}</p>
+                    
+                    <div class="flex justify-between items-end mt-auto">
+                        <div class="flex gap-1">${tagsHtml}</div>
+                        <button onclick="highlightHotel(${h.id})" class="text-xs font-bold text-[#3E3B36] border-b border-[#3E3B36] pb-0.5 hover:text-[#C5A880] hover:border-[#C5A880] transition-colors">
+                            ${isHighlight ? 'Selected' : 'Select'}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function updateAnalysis(data) {
+            const container = document.getElementById('recommendationText');
+            if (data.length === 0) {
+                container.innerHTML = `<p class="text-red-500">Criteria too strict. Try increasing budget or distance.</p>`;
+                return;
+            }
+
+            // Find closest
+            const closest = data.reduce((prev, curr) => prev.distance < curr.distance ? prev : curr);
+            // Find best value (lowest price with high rating)
+            const valuePick = data.reduce((prev, curr) => (prev.price / prev.rating) < (curr.price / curr.rating) ? prev : curr);
+
+            let html = `
+                <p><strong>Top Location Pick:</strong> <span class="text-[#3E3B36] font-medium">${closest.name}</span> is only ${closest.distance} min walk from the anchor cafe.</p>
+                <p><strong>Value Pick:</strong> <span class="text-[#3E3B36] font-medium">${valuePick.name}</span> offers the best price-to-quality ratio at ฿${valuePick.price}.</p>
+            `;
+
+            if (state.maxDistance < 5) {
+                html += `<p class="text-xs text-[#C5A880] mt-2"><i>Note: You are looking at the ultra-convenient zone.</i></p>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function highlightHotel(id) {
+            state.highlightedId = (state.highlightedId === id) ? null : id; // Toggle
+            updateDisplay();
+            
+            // Scroll to grid if mobile
+            if(window.innerWidth < 768 && state.highlightedId) {
+                document.getElementById('hotelGrid').scrollIntoView({behavior: 'smooth'});
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('budgetSlider').value = 3000;
+            document.getElementById('distanceSlider').value = 10;
+            handleInput();
+        }
+
+        function handleInput() {
+            state.maxBudget = document.getElementById('budgetSlider').value;
+            state.maxDistance = document.getElementById('distanceSlider').value;
+            updateDisplay();
+        }
+
+        // --- 5. Event Listeners ---
+        window.addEventListener('DOMContentLoaded', () => {
+            initChart();
+            updateDisplay();
+
+            document.getElementById('budgetSlider').addEventListener('input', handleInput);
+            document.getElementById('distanceSlider').addEventListener('input', handleInput);
+        });
+
+    </script>
+</body>
+</html>
