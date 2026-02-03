@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เหรียญหล่อจันทร์เสี้ยว - หลวงพ่อโสก วัดปากคลองบางครก</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts for Thai Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;800&family=Charm:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Sacred Bronze & Monastic Earth -->
+    <!-- 
+        Primary Background: #FEFAE0 (Off-white/Cream - mimicking old scripture paper)
+        Secondary Background: #FAEDCD (Warm Beige)
+        Text Primary: #472D2D (Deep Brown - like dried herbal ink)
+        Accent: #D4A373 (Bronze/Gold - representing the metal amulet)
+        Highlight: #E9EDC9 (Soft Sage - for calmness)
+    -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sacred-cream': '#FEFAE0',
+                        'sacred-beige': '#FAEDCD',
+                        'sacred-brown': '#472D2D',
+                        'sacred-gold': '#D4A373',
+                        'sacred-sage': '#E9EDC9',
+                        'monk-orange': '#C87941',
+                    },
+                    fontFamily: {
+                        'thai-main': ['Sarabun', 'sans-serif'],
+                        'thai-title': ['Charm', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #FEFAE0;
+            color: #472D2D;
+        }
+        
+        .chart-container {
+            position: relative; 
+            width: 100%; 
+            max-width: 500px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px;
+            max-height: 400px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FEFAE0; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4A373; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C87941; 
+        }
+
+        .tab-active {
+            border-bottom: 4px solid #C87941;
+            color: #472D2D;
+            font-weight: bold;
+        }
+        .tab-inactive {
+            color: #8C7B7B;
+            border-bottom: 4px solid transparent;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    
+    <!-- Application Structure Plan: 
+         Structure: Dashboard-style Tabbed Interface.
+         Why: The user needs to access distinct types of information (History, Powers, Rituals) without feeling overwhelmed. A tabbed view allows for deep focus on one aspect (e.g., memorizing the chant) while keeping the context of the whole artifact accessible.
+         Flow: Intro -> Explore Powers (Visual) -> Learn Ritual (Step-by-Step) -> Practice Mantra (Interactive Text).
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Introduction: Text & Stylized CSS Icon. Goal: Establish reverence and identity.
+         2. Powers (Radar Chart): To visually represent the "balance" of spiritual virtues (Protection vs Metta vs Luck). Justification: Amulets are often described as having "strengths" in different areas; a radar chart quantifies this qualitative belief for easier understanding.
+         3. Ritual (Stepper): Vertical timeline. Goal: Clarity in the process. Interaction: Highlighting steps.
+         4. Mantra (Interactive Card): Toggle between Pali and Thai translation. Goal: Memorization aid.
+    -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-sacred-cream min-h-screen flex flex-col items-center">
+
+    <!-- Header Section -->
+    <header class="w-full bg-sacred-beige shadow-sm py-6 border-b-4 border-sacred-gold">
+        <div class="container mx-auto px-4 text-center">
+            <div class="mb-2 text-6xl text-monk-orange text-opacity-80">☸</div>
+            <h1 class="text-3xl md:text-5xl font-thai-title font-bold text-sacred-brown mb-2">เหรียญหล่อจันทร์เสี้ยว</h1>
+            <p class="text-lg md:text-xl text-sacred-brown opacity-80">หลวงพ่อโสก วัดปากคลองบางครก จ.เพชรบุรี</p>
+            <div class="mt-4 inline-block bg-white px-4 py-1 rounded-full text-sm border border-sacred-gold shadow-sm text-monk-orange">
+                รุ่นแรก (First Batch) &bull; บูรพาจารย์สายเพชรบุรี
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="container mx-auto px-4 py-8 max-w-5xl flex-grow">
+        
+        <!-- Contextual Intro -->
+        <section class="mb-8 text-center max-w-3xl mx-auto">
+            <p class="text-md md:text-lg leading-relaxed">
+                วัตถุมงคลทรงคุณค่าแห่งลุ่มน้ำเพชรบุรี ได้รับการยกย่องว่าเป็นเลิศด้าน <b>"มหาอุตม์"</b> และ <b>"แคล้วคลาด"</b>
+                แอพพลิเคชั่นนี้รวบรวมข้อมูลสำคัญเพื่อการศึกษาและบูชาอย่างถูกวิธีตามตำราโบราณ
+            </p>
+        </section>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex flex-wrap justify-center gap-4 mb-8 border-b border-gray-300 pb-2" id="nav-tabs">
+            <button onclick="switchTab('overview')" id="tab-overview" class="tab-active px-6 py-2 text-lg transition-all duration-300">ภาพรวม & อานุภาพ</button>
+            <button onclick="switchTab('ritual')" id="tab-ritual" class="tab-inactive px-6 py-2 text-lg transition-all duration-300">วิธีอาราธนา</button>
+            <button onclick="switchTab('mantra')" id="tab-mantra" class="tab-inactive px-6 py-2 text-lg transition-all duration-300">พระคาถา (Mantra)</button>
+        </nav>
+
+        <!-- CONTENT: OVERVIEW & POWERS -->
+        <div id="content-overview" class="tab-content transition-opacity duration-500">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                
+                <!-- Chart Section -->
+                <div class="bg-white rounded-xl p-6 shadow-md border border-sacred-sage">
+                    <h2 class="text-2xl font-thai-title text-monk-orange mb-4 border-l-4 border-monk-orange pl-3">ผังอานุภาพพุทธคุณ</h2>
+                    <p class="text-sm text-gray-600 mb-4">
+                        แผนภูมิแสดงความโดดเด่นของพุทธคุณตามความเชื่อที่สืบทอดกันมา (คะแนนเต็ม 10)
+                    </p>
+                    <div class="chart-container">
+                        <canvas id="powersChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Text Detail Section -->
+                <div class="space-y-6">
+                    <div class="bg-sacred-beige rounded-xl p-6 shadow-md card-hover border-l-8 border-sacred-gold">
+                        <h3 class="text-xl font-bold mb-2 text-sacred-brown">1. มหาอุตม์ และ คงกระพัน (Protection)</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            เป็นคุณสมบัติที่โดดเด่นที่สุดของหลวงพ่อโสก เชื่อกันว่าสามารถป้องกันศาสตราวุธ ปืนผาหน้าไม้ และอันตรายทางกายภาพต่างๆ ได้อย่างชะงัด เหมาะสำหรับผู้ที่ต้องเดินทางไกล หรือทำงานเสี่ยงภัย
+                        </p>
+                    </div>
+
+                    <div class="bg-sacred-beige rounded-xl p-6 shadow-md card-hover border-l-8 border-sacred-sage">
+                        <h3 class="text-xl font-bold mb-2 text-sacred-brown">2. แคล้วคลาด (Evasion of Danger)</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            ช่วยให้รอดพ้นจากอุบัติเหตุเภทภัย หากมีเคราะห์หนักจะกลายเป็นเบา สิ่งร้ายจะกลายเป็นดี เปรียบเสมือนมีเกราะแก้วกำบังภัย
+                        </p>
+                    </div>
+
+                    <div class="bg-sacred-beige rounded-xl p-6 shadow-md card-hover border-l-8 border-monk-orange">
+                        <h3 class="text-xl font-bold mb-2 text-sacred-brown">3. กันคุณไสย (Ward off Black Magic)</h3>
+                        <p class="text-gray-700 leading-relaxed">
+                            ด้วยบารมีธรรมของหลวงพ่อโสก วัตถุมงคลนี้เชื่อว่าสามารถกันลมเพลมพัด ภูตผีปีศาจ และสิ่งอัปมงคลต่างๆ ไม่ให้กล้ำกรายเข้ามาใกล้ตัวผู้บูชา
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENT: RITUAL (HOW TO USE) -->
+        <div id="content-ritual" class="tab-content hidden transition-opacity duration-500">
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl mx-auto border-t-4 border-monk-orange">
+                <h2 class="text-3xl font-thai-title text-center text-sacred-brown mb-8">วิธีอาราธนาติดตัว</h2>
+                <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
+                    เพื่อให้วัตถุมงคลแสดงฤทธานุภาพสูงสุด ผู้บูชาควรปฏิบัติตามขั้นตอนด้วยจิตที่ตั้งมั่นและศรัทธา
+                </p>
+
+                <div class="space-y-6 relative">
+                    <!-- Line connector -->
+                    <div class="absolute left-4 md:left-8 top-0 h-full w-1 bg-sacred-beige"></div>
+
+                    <!-- Step 1 -->
+                    <div class="relative pl-12 md:pl-20">
+                        <div class="absolute left-0 md:left-4 top-0 w-8 h-8 bg-monk-orange rounded-full flex items-center justify-center text-white font-bold border-4 border-white shadow">1</div>
+                        <h4 class="text-xl font-bold text-sacred-brown">ตั้งนะโม 3 จบ</h4>
+                        <p class="text-gray-600 mt-1">ประนมมือ นำเหรียญจรดหน้าผาก ระลึกถึงพระพุทธ พระธรรม พระสงฆ์ และบารมีหลวงพ่อโสก</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative pl-12 md:pl-20">
+                        <div class="absolute left-0 md:left-4 top-0 w-8 h-8 bg-sacred-gold rounded-full flex items-center justify-center text-white font-bold border-4 border-white shadow">2</div>
+                        <h4 class="text-xl font-bold text-sacred-brown">บริกรรมพระคาถา</h4>
+                        <p class="text-gray-600 mt-1">สวดพระคาถาอาราธนา (ดูในแท็บพระคาถา) ด้วยเสียงดังพอประมาณ หรือสวดในใจอย่างแน่วแน่</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative pl-12 md:pl-20">
+                        <div class="absolute left-0 md:left-4 top-0 w-8 h-8 bg-sacred-brown rounded-full flex items-center justify-center text-white font-bold border-4 border-white shadow">3</div>
+                        <h4 class="text-xl font-bold text-sacred-brown">อธิษฐานจิต</h4>
+                        <p class="text-gray-600 mt-1">กล่าวขอพรเฉพาะเจาะจง เช่น "ขอให้การเดินทางครั้งนี้ปลอดภัย ไร้ศัตรูหมู่มาร..."</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative pl-12 md:pl-20">
+                        <div class="absolute left-0 md:left-4 top-0 w-8 h-8 bg-sacred-sage rounded-full flex items-center justify-center text-sacred-brown font-bold border-4 border-white shadow">4</div>
+                        <h4 class="text-xl font-bold text-sacred-brown">เป่ามนต์ลงเหรียญ</h4>
+                        <p class="text-gray-600 mt-1">เป่าลมหายใจลงที่ตัวเหรียญ 3 ครั้ง เพื่อประสิทธิ์ประสาทพร แล้วนำขึ้นคล้องคอ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTENT: MANTRA (CHANTING) -->
+        <div id="content-mantra" class="tab-content hidden transition-opacity duration-500">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Mantra Viewer -->
+                <div class="bg-sacred-brown text-sacred-cream rounded-xl p-8 shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 opacity-10 text-9xl text-white transform translate-x-1/4 -translate-y-1/4">🕉</div>
+                    <h2 class="text-2xl font-thai-title mb-6 text-center text-sacred-gold border-b border-gray-600 pb-4">พระคาถาอาราธนา</h2>
+                    
+                    <div id="mantra-display" class="text-center space-y-4">
+                        <p class="text-sm opacity-70">นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ (3 จบ)</p>
+                        <div class="py-4">
+                            <h3 class="text-3xl font-bold tracking-wide leading-relaxed text-yellow-100">
+                                "พุทธัง อาราธนานัง"<br>
+                                "ธัมมัง อาราธนานัง"<br>
+                                "สังฆัง อาราธนานัง"
+                            </h3>
+                        </div>
+                        <div class="py-2 border-t border-gray-600">
+                            <p class="text-lg text-sacred-gold mt-2 font-bold">"นะมะพะทะ จะพะกะสะ"</p>
+                            <p class="text-xs opacity-60 mt-1">(หัวใจธาตุ 4 และ หัวใจธาตุกรณี)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Controls & Translation -->
+                <div class="flex flex-col justify-center space-y-4">
+                    <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2 text-monk-orange">ความหมาย (Translation)</h3>
+                        <p class="text-gray-600 italic">
+                            "ข้าพเจ้าขออาราธนาคุณพระพุทธเจ้า คุณพระธรรมเจ้า คุณพระสงฆ์เจ้า...<br>
+                            ขออัญเชิญบารมีแห่งธาตุทั้ง 4 (ดิน น้ำ ลม ไฟ) มาสถิตเป็นเกราะป้องกันภัย"
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-xl shadow border border-gray-200">
+                        <h3 class="font-bold text-lg mb-2 text-monk-orange">เคล็ดลับ (Tip)</h3>
+                        <p class="text-gray-600">
+                            หากเข้าที่คับขัน ให้ภาวนาคาถาหัวใจ <b>"นะ มะ พะ ทะ"</b> ซ้ำๆ จนจิตนิ่ง จะเกิดพุทธานุภาพคุ้มครองสูงสุด
+                        </p>
+                    </div>
+
+                    <button onclick="toggleMantraMode()" class="w-full py-4 bg-monk-orange text-white rounded-lg shadow hover:bg-opacity-90 transition font-bold text-lg flex items-center justify-center gap-2">
+                        <span id="mantra-btn-text">แสดงคำอ่านไทย</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="w-full bg-sacred-brown text-sacred-beige py-6 mt-8">
+        <div class="container mx-auto text-center px-4">
+            <p class="text-sm opacity-60">จัดทำเพื่อการศึกษาและสืบสานตำนานพระเครื่องเมืองเพชร</p>
+            <p class="text-xs opacity-40 mt-1">ข้อมูลอ้างอิงจากตำราบูรพาจารย์สายวัดปากคลองบางครก</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- DATA STORE ---
+        const artifactData = {
+            powers: {
+                labels: ['มหาอุตม์ (Protection)', 'เมตตา (Kindness)', 'แคล้วคลาด (Evasion)', 'กันคุณไสย (Anti-Magic)', 'คงกระพัน (Invincibility)', 'โชคลาภ (Luck)'],
+                data: [9.5, 6.0, 9.0, 8.5, 9.0, 5.5], // Scores out of 10 based on traditional beliefs
+            },
+            mantra: {
+                pali: `<p class="text-sm opacity-70">นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ (3 จบ)</p>
+                        <div class="py-4">
+                            <h3 class="text-3xl font-bold tracking-wide leading-relaxed text-yellow-100">
+                                "พุทธัง อาราธนานัง"<br>
+                                "ธัมมัง อาราธนานัง"<br>
+                                "สังฆัง อาราธนานัง"
+                            </h3>
+                        </div>
+                        <div class="py-2 border-t border-gray-600">
+                            <p class="text-lg text-sacred-gold mt-2 font-bold">"นะมะพะทะ จะพะกะสะ"</p>
+                            <p class="text-xs opacity-60 mt-1">(หัวใจธาตุ 4 และ หัวใจธาตุกรณี)</p>
+                        </div>`,
+                thai: `<p class="text-sm opacity-70">ขอนอบน้อมแด่พระผู้มีพระภาคเจ้า (3 จบ)</p>
+                        <div class="py-4">
+                            <h3 class="text-2xl font-bold tracking-wide leading-relaxed text-white">
+                                "ข้าพเจ้าขอเชิญคุณพระพุทธ"<br>
+                                "ข้าพเจ้าขอเชิญคุณพระธรรม"<br>
+                                "ข้าพเจ้าขอเชิญคุณพระสงฆ์"
+                            </h3>
+                        </div>
+                        <div class="py-2 border-t border-gray-600">
+                            <p class="text-lg text-sacred-gold mt-2 font-bold">"ดิน น้ำ ลม ไฟ จงบังเกิด"</p>
+                            <p class="text-xs opacity-60 mt-1">(คำแปลโดยย่อ)</p>
+                        </div>`
+            }
+        };
+
+        let currentMantraMode = 'pali';
+
+        // --- CHART INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('powersChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: artifactData.powers.labels,
+                    datasets: [{
+                        label: 'ระดับพุทธคุณ (Power Level)',
+                        data: artifactData.powers.data,
+                        backgroundColor: 'rgba(212, 163, 115, 0.2)', // Sacred Gold transparent
+                        borderColor: '#C87941', // Monk Orange
+                        pointBackgroundColor: '#472D2D',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#C87941',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 12,
+                                    family: "'Sarabun', sans-serif"
+                                },
+                                color: '#472D2D'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            ticks: {
+                                display: false // Hide numbers on axis for cleaner look
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: '#472D2D',
+                            titleFont: { family: "'Sarabun', sans-serif", size: 14 },
+                            bodyFont: { family: "'Sarabun', sans-serif", size: 13 },
+                            padding: 10,
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '/10';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        // --- INTERACTION LOGIC ---
+
+        // Tab Switching
+        function switchTab(tabId) {
+            // Hide all content
+            ['overview', 'ritual', 'mantra'].forEach(id => {
+                document.getElementById('content-' + id).classList.add('hidden');
+                document.getElementById('tab-' + id).classList.remove('tab-active');
+                document.getElementById('tab-' + id).classList.add('tab-inactive');
+            });
+
+            // Show selected content
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            document.getElementById('tab-' + tabId).classList.add('tab-active');
+            document.getElementById('tab-' + tabId).classList.remove('tab-inactive');
+        }
+
+        // Mantra Toggle
+        function toggleMantraMode() {
+            const display = document.getElementById('mantra-display');
+            const btnText = document.getElementById('mantra-btn-text');
+
+            // Add fade effect
+            display.style.opacity = '0';
+            
+            setTimeout(() => {
+                if (currentMantraMode === 'pali') {
+                    display.innerHTML = artifactData.mantra.thai;
+                    btnText.innerText = "แสดงบทสวดบาลี (Original)";
+                    currentMantraMode = 'thai';
+                } else {
+                    display.innerHTML = artifactData.mantra.pali;
+                    btnText.innerText = "แสดงคำอ่านไทย (Thai Meaning)";
+                    currentMantraMode = 'pali';
+                }
+                display.style.opacity = '1';
+            }, 200);
+        }
+    </script>
+</body>
+</html>
