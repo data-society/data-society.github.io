@@ -1,0 +1,1421 @@
+<!DOCTYPE html><html lang="th"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>เหรียญหล่อจันทร์เสี้ยว รุ่นแรก หลวงพ่อโสก: อานุภาพ วิธีอาราธนา และพระคาถา</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #8B4513;
+            --secondary: #DAA520;
+            --accent: #CD853F;
+            --neutral: #F5F5DC;
+            --base-100: #FEFEFE;
+            --base-200: #F8F6F0;
+            --base-300: #E8E6E0;
+        }
+        
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, 
+                rgba(139, 69, 19, 0.1) 0%, 
+                rgba(218, 165, 32, 0.05) 50%, 
+                rgba(205, 133, 63, 0.08) 100%);
+        }
+        
+        .ancient-pattern {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(218, 165, 32, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(139, 69, 19, 0.02) 0%, transparent 50%);
+        }
+        
+        .toc-fixed {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            width: 280px;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            z-index: 40;
+            background: rgba(254, 254, 254, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 69, 19, 0.1);
+        }
+        
+        .content-main {
+            margin-left: 320px;
+            max-width: calc(100% - 360px);
+        }
+        
+        .citation-link {
+            color: var(--primary);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--primary);
+            transition: all 0.2s ease;
+        }
+        
+        .citation-link:hover {
+            background-color: rgba(139, 69, 19, 0.1);
+            border-bottom-style: solid;
+        }
+        
+        /* Mermaid chart styling */
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            min-height: 300px;
+            max-height: 800px;
+            background: linear-gradient(135deg, #FEFEFE 0%, #F8F6F0 100%);
+            border: 2px solid rgba(139, 69, 19, 0.15);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mermaid-container .mermaid {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none; /* ป้องกันการสัมผัสบนมือถือ */
+            -webkit-user-select: none; /* ป้องกันการเลือกข้อความ */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        .mermaid-container .mermaid svg {
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+        
+        .mermaid-container.zoomed .mermaid {
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+        
+        .mermaid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mermaid-control-btn {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            font-size: 14px;
+            min-width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .mermaid-control-btn:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+        }
+        
+        .mermaid-control-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Responsive adjustments for mermaid controls */
+        @media (max-width: 1024px) {
+            .mermaid-control-btn:not(.reset-zoom) {
+                display: none;
+            }
+            .mermaid-controls {
+                top: auto;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* Additional adjustments for small screens */
+        @media (max-width: 768px) {
+            .toc-fixed {
+                display: none;
+            }
+            .content-main {
+                margin-left: 0;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-gradient h1 {
+                font-size: 2.5rem;
+            }
+            .hero-gradient {
+                padding: 1rem;
+            }
+            .hero-gradient .grid {
+                gap: 1rem;
+            }
+            .mermaid-container {
+                padding: 15px;
+            }
+        }
+    </style>
+  <base target="_blank">
+</head>
+
+  <body class="bg-base-100 font-body text-gray-800 ancient-pattern">
+
+    <!-- Fixed Table of Contents -->
+    <nav class="toc-fixed rounded-lg shadow-lg p-6">
+      <h3 class="font-display text-lg font-semibold text-primary mb-4 border-b border-primary/20 pb-2">
+        <i class="fas fa-list-ul mr-2"></i>สารบัญ
+      </h3>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="#section-1" class="block py-1 px-2 rounded hover:bg-primary/10 transition-colors">1. ข้อมูลทั่วไปของวัตถุมงคล</a>
+        </li>
+        <li>
+          <a href="#section-2" class="block py-1 px-2 rounded hover:bg-primary/10 transition-colors">2. อานุภาพของเหรียญหล่อจันทร์เสี้ยว</a>
+        </li>
+        <li>
+          <a href="#section-3" class="block py-1 px-2 rounded hover:bg-primary/10 transition-colors">3. วิธีอาราธนาเหรียญหล่อจันทร์เสี้ยว</a>
+        </li>
+        <li>
+          <a href="#section-4" class="block py-1 px-2 rounded hover:bg-primary/10 transition-colors">4. พระคาถาอาราธนา</a>
+        </li>
+        <li>
+          <a href="#section-5" class="block py-1 px-2 rounded hover:bg-primary/10 transition-colors">5. บริบททางประวัติศาสตร์</a>
+        </li>
+        <li>
+          <a href="#section-6" class="block py-1 px-2 rounded hover:bg-primary/10 transition-colors">6. การพิสูจน์และการยอมรับ</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content-main px-8 py-12">
+
+      <!-- Hero Section -->
+      <section class="hero-gradient rounded-2xl p-12 mb-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+          <img src="https://kimi-web-img.moonshot.cn/img/placeholder-0620/图片15.png" alt="Moon crescent amulet with ancient Thai script" class="w-full h-full object-cover" size="medium" aspect="wide" color="brown" style="photo" query="Moon crescent amulet ancient Thai script" referrerpolicy="no-referrer" data-modified="1"/>
+        </div>
+
+        <div class="relative z-10">
+          <div class="grid grid-cols-12 gap-8 items-center">
+            <!-- Title Section -->
+            <div class="col-span-8">
+              <h1 class="font-display text-5xl font-bold text-primary mb-6 leading-tight">
+                เหรียญหล่อจันทร์เสี้ยว
+                <br/>
+                <span class="italic text-4xl text-secondary">รุ่นแรก หลวงพ่อโสก</span>
+              </h1>
+              <p class="text-xl text-gray-700 mb-8 leading-relaxed">
+                วัตถุมงคลหายากที่สุดของหลวงพ่อโสก วัดปากคลองบางครก
+                <br/>
+                สร้าง พ.ศ. 2465 ด้วยพุทธคุณครอบจักรวาล
+              </p>
+
+              <div class="flex items-center space-x-6 text-sm text-gray-600">
+                <span><i class="fas fa-calendar-alt mr-2"></i>พ.ศ. 2465</span>
+                <span><i class="fas fa-map-marker-alt mr-2"></i>วัดปากคลองบางครก</span>
+                <span><i class="fas fa-gem mr-2"></i>เนื้อโลหะผสม</span>
+              </div>
+            </div>
+
+            <!-- Key Highlights -->
+            <div class="col-span-4">
+              <div class="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg">
+                <h3 class="font-display text-lg font-semibold text-primary mb-4">
+                  <i class="fas fa-star mr-2"></i>อานุภาพหลัก
+                </h3>
+                <ul class="space-y-2 text-sm">
+                  <li class="flex items-center"><i class="fas fa-shield-alt text-secondary mr-2"></i>คงกระพันชาตรี</li>
+                  <li class="flex items-center"><i class="fas fa-moon text-secondary mr-2"></i>พุทธคุณครอบจักรวาล</li>
+                  <li class="flex items-center"><i class="fas fa-eye text-secondary mr-2"></i>แคล้วคลาดปลอดภัย</li>
+                  <li class="flex items-center"><i class="fas fa-hands text-secondary mr-2"></i>ป้องกันภัยทั้งปวง</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Executive Summary -->
+      <section class="bg-gradient-to-r from-neutral/30 to-secondary/10 rounded-xl p-8 mb-12">
+        <div class="flex items-start space-x-4">
+          <div class="flex-shrink-0">
+            <i class="fas fa-scroll text-3xl text-primary"></i>
+          </div>
+          <div>
+            <h2 class="font-display text-2xl font-semibold text-primary mb-4">สรุปสาระสำคัญ</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">
+              <strong>เหรียญหล่อจันทร์เสี้ยว รุ่นแรก</strong> ของหลวงพ่อโสก วัดปากคลองบางครก สร้าง พ.ศ. 2465 เป็นวัตถุมงคลหายากที่สุดของท่าน
+              มีอานุภาพด้านการคุ้มครองป้องกันเป็นหลัก ได้แก่ <strong>พุทธคุณครอบจักรวาล</strong> (ดีทั้งกลางวัน-กลางคืน ดีทั้งขึ้น-ลง),
+              <strong>คงกระพันชาตรี</strong> (ความไม่ตาย), <strong>แคล้วคลาด</strong> (หลบหลีกภัย), และ <strong>ป้องกันภัยจากเทวดา มนุษย์ ผู้ไม่ประสงค์ดี</strong>
+              วิธีอาราธนาเน้นการตั้งนะโม ระลึกถึงคุณพระรัตนตรัยและหลวงพ่อโสก สวดคาถา &#34;สัตถา เทวะ มนุสสานัง&#34; และคาถามหาเสน่ห์ฉบับเต็ม
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 1: ข้อมูลทั่วไป -->
+      <section id="section-1" class="mb-16">
+        <div class="flex items-center mb-8">
+          <div class="w-1 h-12 bg-primary mr-4"></div>
+          <h2 class="font-display text-3xl font-bold text-primary">1. ข้อมูลทั่วไปของวัตถุมงคล</h2>
+        </div>
+
+        <div class="grid grid-cols-2 gap-8 mb-12">
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">ชื่อวัตถุมงคล</h3>
+            <div class="space-y-4">
+              <div class="flex items-center">
+                <i class="fas fa-certificate text-secondary mr-3"></i>
+                <span class="font-medium">เหรียญหล่อโบราณ พระจันทร์เสี้ยว รุ่นแรก</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-tag text-secondary mr-3"></i>
+                <span class="font-medium">เหรียญหล่อพระจันทร์ครึ่งเสี้ยว</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-tag text-secondary mr-3"></i>
+                <span class="font-medium">เหรียญอุโองการ</span>
+              </div>
+            </div>
+            <p class="text-gray-600 mt-4 text-sm leading-relaxed">
+              ชื่อเหล่านี้สะท้อนลักษณะเด่นของเหรียญที่มียันต์อุโองการอยู่ตรงกลาง ล้อมรอบด้วยช่อรวงข้าว
+              บนพื้นหลังรูปจันทร์เสี้ยว ซึ่งเป็นสัญลักษณ์ของพลังแห่งความอุดมสมบูรณ์และการคุ้มครองที่ไร้ขีดจำกัด
+              <a href="http://www.tabtimsiam.com/product/4607/" class="citation-link">[1]</a>
+            </p>
+          </div>
+
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">ข้อมูลผู้สร้าง</h3>
+            <div class="space-y-4">
+              <div class="border-l-4 border-secondary pl-4">
+                <h4 class="font-semibold text-primary">พระครูอโศกธรรมสาร</h4>
+                <p class="text-sm text-gray-600">(หลวงพ่อโสก สุวัณโณ)</p>
+              </div>
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span class="font-medium text-gray-700">เกิด:</span>
+                  <span class="text-gray-600"> พ.ศ. 2415 (ค.ศ. 1872)</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-700">มรณภาพ:</span>
+                  <span class="text-gray-600"> พ.ศ. 2482</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-700">อุปสมบท:</span>
+                  <span class="text-gray-600"> พ.ศ. 2435</span>
+                </div>
+                <div>
+                  <span class="font-medium text-gray-700">สมณศักดิ์:</span>
+                  <span class="text-gray-600"> พ.ศ. 2478</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600 mt-4 text-sm leading-relaxed">
+              หลวงพ่อโสกท่านเป็นพระเถระที่มีความเชี่ยวชาญทางด้านวิชาการแพทย์แผนโบราณเป็นอย่างมาก
+              <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link">[4]</a>
+              <a href="https://www.madoopra.com/product.php?catid=8&amp;catsubid=275&amp;id=798" class="citation-link">[8]</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Historical Timeline -->
+        <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10 mb-8">
+          <h3 class="font-display text-xl font-semibold text-primary mb-6">ไทม์ไลน์ประวัติศาสตร์</h3>
+          <div class="mermaid-container">
+            <div class="mermaid-controls">
+              <button class="mermaid-control-btn zoom-in" title="Zoom In">
+                <i class="fas fa-search-plus"></i>
+              </button>
+              <button class="mermaid-control-btn zoom-out" title="Zoom Out">
+                <i class="fas fa-search-minus"></i>
+              </button>
+              <button class="mermaid-control-btn reset-zoom" title="Reset">
+                <i class="fas fa-expand-arrows-alt"></i>
+              </button>
+              <button class="mermaid-control-btn fullscreen" title="Fullscreen">
+                <i class="fas fa-expand"></i>
+              </button>
+            </div>
+            <div class="mermaid">
+              timeline
+              title &#34;ประวัติศาสตร์เหรียญหล่อจันทร์เสี้ยว&#34;
+
+              2415 : &#34;หลวงพ่อโสกเกิด&#34;
+              2435 : &#34;อุปสมบท&#34;
+              2465 : &#34;สร้างเหรียญหล่อจันทร์เสี้ยว รุ่นแรก&#34;
+              : &#34;ได้รับแต่งตั้งเป็นพระอุปัชฌาย์&#34;
+              2478 : &#34;ได้รับสมณศักดิ์&#34;
+              2482 : &#34;หลวงพ่อโสกมรณภาพ&#34;
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-xl p-8">
+          <h3 class="font-display text-xl font-semibold text-primary mb-6">ลักษณะเด่นและความหายาก</h3>
+          <div class="grid grid-cols-3 gap-6">
+            <div class="text-center">
+              <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-gem text-2xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">วัตถุมงคลหายาก</h4>
+              <p class="text-sm text-gray-600">หายากที่สุดชิ้นหนึ่งของหลวงพ่อโสก</p>
+            </div>
+            <div class="text-center">
+              <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-palette text-2xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">สวยคลาสสิก</h4>
+              <p class="text-sm text-gray-600">มีความโบราณและงดงามตามธรรมชาติ</p>
+            </div>
+            <div class="text-center">
+              <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-chart-line text-2xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">เป็นที่ต้องการ</h4>
+              <p class="text-sm text-gray-600">Sought-after ของนักสะสมทั่วโลก</p>
+            </div>
+          </div>
+          <a href="http://www.tabtimsiam.com/product/4607/" class="citation-link text-sm">[1]</a>
+          <a href="https://www.madoopra.com/product.php?catid=8&amp;catsubid=275&amp;id=798" class="citation-link text-sm">[8]</a>
+          <a href="https://www.khaosod.co.th/newspaper-column/amulets/news_2878934" class="citation-link text-sm">[16, 17]</a>
+        </div>
+      </section>
+
+      <!-- Section 2: อานุภาพ -->
+      <section id="section-2" class="mb-16">
+        <div class="flex items-center mb-8">
+          <div class="w-1 h-12 bg-primary mr-4"></div>
+          <h2 class="font-display text-3xl font-bold text-primary">2. อานุภาพของเหรียญหล่อจันทร์เสี้ยว รุ่นแรก</h2>
+        </div>
+
+        <div class="bg-gradient-to-r from-secondary/10 to-primary/5 rounded-xl p-8 mb-12">
+          <div class="flex items-center mb-6">
+            <i class="fas fa-shield-alt text-3xl text-secondary mr-4"></i>
+            <h3 class="font-display text-2xl font-semibold text-primary">2.1 อานุภาพด้านการคุ้มครองป้องกัน (เน้นหนัก)</h3>
+          </div>
+
+          <div class="grid grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg p-6 shadow-md">
+              <h4 class="font-display text-lg font-semibold text-primary mb-4">
+                <i class="fas fa-infinity mr-2 text-secondary"></i>พุทธคุณครอบจักรวาล
+              </h4>
+              <div class="space-y-3 text-sm">
+                <div class="flex items-start">
+                  <i class="fas fa-sun text-secondary mr-2 mt-1"></i>
+                  <div>
+                    <strong>ดีทั้งกลางวันและกลางคืน</strong>
+                    <p class="text-gray-600">มีพลังคุ้มครองตลอด 24 ชั่วโมง</p>
+                  </div>
+                </div>
+                <div class="flex items-start">
+                  <i class="fas fa-chart-line text-secondary mr-2 mt-1"></i>
+                  <div>
+                    <strong>ดีทั้งขึ้นและลง</strong>
+                    <p class="text-gray-600">ครอบคลุมทุกสถานการณ์ของชีวิต</p>
+                  </div>
+                </div>
+              </div>
+              <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+              <a href="https://www.khaosod.co.th/newspaper-column/amulets/news_2878934" class="citation-link text-xs">[16]</a>
+              <a href="https://www.thaprachan.com/amulet_detail/SE04021986" class="citation-link text-xs">[24]</a>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 shadow-md">
+              <h4 class="font-display text-lg font-semibold text-primary mb-4">
+                <i class="fas fa-shield mr-2 text-secondary"></i>คงกระพันชาตรี
+              </h4>
+              <div class="space-y-3 text-sm">
+                <div class="bg-primary/5 rounded p-3">
+                  <strong class="text-primary">ความไม่ตาย อัตตะภาพ</strong>
+                  <p class="text-gray-600 mt-1">การมีเกราะที่มั่นคงต่ออาวุธ มีชีวิตรอดจากสถานการณ์อันตราย</p>
+                </div>
+                <ul class="text-gray-600 space-y-1">
+                  <li>• ป้องกันการถูกยิง</li>
+                  <li>• ป้องกันการถูกแทง</li>
+                  <li>• ป้องกันการถูกทุบตี</li>
+                  <li>• รอดจากอุบัติเหตุร้ายแรง</li>
+                </ul>
+              </div>
+              <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+              <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=335&amp;product-id=28085" class="citation-link text-xs">[27]</a>
+            </div>
+          </div>
+
+          <div class="mt-8 grid grid-cols-3 gap-6">
+            <div class="bg-white rounded-lg p-6 shadow-md">
+              <h4 class="font-display text-lg font-semibold text-primary mb-4">
+                <i class="fas fa-eye mr-2 text-secondary"></i>แคล้วคลาด
+              </h4>
+              <p class="text-gray-600 text-sm mb-3">การหลบหลีกภัยพิบัติ หลีกเลี่ยงอันตรายก่อนที่จะเกิด</p>
+              <div class="text-xs text-gray-500">
+                <div>• ภัยธรรมชาติ</div>
+                <div>• ภัยจากมนุษย์</div>
+                <div>• อุบัติเหตุ</div>
+              </div>
+              <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+              <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=335&amp;product-id=28085" class="citation-link text-xs">[27]</a>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 shadow-md">
+              <h4 class="font-display text-lg font-semibold text-primary mb-4">
+                <i class="fas fa-hands mr-2 text-secondary"></i>ป้องกันภัยจากสิ่งลี้ลับ
+              </h4>
+              <p class="text-gray-600 text-sm mb-3">สยบภูตผีปีศาจ เสนียดจัญไร</p>
+              <div class="text-xs text-gray-500">
+                <div>• ถอดถอนแก้อาถรรพ์</div>
+                <div>• คุ้มครองจากไสยศาสตร์</div>
+                <div>• แก้ไขดวงชะตา</div>
+              </div>
+              <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+              <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=335&amp;product-id=28085" class="citation-link text-xs">[27]</a>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 shadow-md">
+              <h4 class="font-display text-lg font-semibold text-primary mb-4">
+                <i class="fas fa-ban mr-2 text-secondary"></i>มลายหายสิ้น
+              </h4>
+              <p class="text-gray-600 text-sm mb-3">ทำให้ภัยอันตรายมลายหายสิ้นไปจากชีวิต</p>
+              <div class="text-xs text-gray-500">
+                <div>• ไม่ใช่แค่ป้องกัน</div>
+                <div>• แต่เป็นการกำจัดภัย</div>
+                <div>• เปลี่ยนแปลงกรรม</div>
+              </div>
+              <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+              <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=335&amp;product-id=28085" class="citation-link text-xs">[27]</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10">
+          <h3 class="font-display text-xl font-semibold text-primary mb-6">2.2 อานุภาพด้านอื่นๆ</h3>
+          <div class="grid grid-cols-3 gap-6">
+            <div class="text-center">
+              <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-coins text-2xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">มหาอุด</h4>
+              <p class="text-sm text-gray-600">ความเจริญรุ่งเรือง โชคลาภ และการงาน</p>
+            </div>
+            <div class="text-center">
+              <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-crown text-2xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">มหาอำนาจ</h4>
+              <p class="text-sm text-gray-600">อำนาจบารมี และความเชื่อมั่นในตนเอง</p>
+            </div>
+            <div class="text-center">
+              <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-star text-2xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">เสริมยศเสริมดวง</h4>
+              <p class="text-sm text-gray-600">ความก้าวหน้าในหน้าที่การงาน</p>
+            </div>
+          </div>
+          <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-sm">[4]</a>
+        </div>
+      </section>
+
+      <!-- Section 3: วิธีอาราธนา -->
+      <section id="section-3" class="mb-16">
+        <div class="flex items-center mb-8">
+          <div class="w-1 h-12 bg-primary mr-4"></div>
+          <h2 class="font-display text-3xl font-bold text-primary">3. วิธีอาราธนาเหรียญหล่อจันทร์เสี้ยว</h2>
+        </div>
+
+        <div class="grid grid-cols-2 gap-8 mb-12">
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-pray mr-2 text-secondary"></i>3.1 หลักการอาราธนาทั่วไป
+            </h3>
+            <div class="space-y-6">
+              <div class="border-l-4 border-secondary pl-4">
+                <h4 class="font-semibold text-primary mb-2">การตั้งนะโม 3 จบ</h4>
+                <div class="bg-gray-50 rounded p-3 text-sm font-mono mb-2">
+                  &#34;นะโม ตัสสะ ภะคะวะโต อะระะหะโต สัมมาสัมพุทธัสสะ&#34;
+                </div>
+                <p class="text-sm text-gray-600">ข้าพเจ้าขอนอบน้อมแด่พระผู้มีพระภาคเจ้า ผู้เป็นพระอรหันต์ ผู้ตรัสรู้โดยชอบด้วยพระองค์เอง</p>
+              </div>
+
+              <div class="border-l-4 border-secondary pl-4">
+                <h4 class="font-semibold text-primary mb-2">การระลึกถึงคุณพระรัตนตรัย</h4>
+                <ul class="text-sm text-gray-600 space-y-1">
+                  <li>• <strong>พระพุทธคุณ:</strong> คุณของพระพุทธเจ้า ผู้ตรัสรู้</li>
+                  <li>• <strong>พระธรรมคุณ:</strong> คุณของพระธรรมคำสั่งสอน</li>
+                  <li>• <strong>พระสังฆคุณ:</strong> คุณของพระสงฆ์ผู้ปฏิบัติดี</li>
+                </ul>
+              </div>
+
+              <div class="border-l-4 border-secondary pl-4">
+                <h4 class="font-semibold text-primary mb-2">การระลึกถึงคุณหลวงพ่อโสก</h4>
+                <p class="text-sm text-gray-600">นึกถึงพระคุณของท่านที่สร้างเหรียญนี้ขึ้นมาเพื่อเป็นที่พึ่งของศิษยานุศิษย์</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-history mr-2 text-secondary"></i>3.2 วิธีอาราธนาตามประวัติศาสตร์
+            </h3>
+            <div class="space-y-6">
+              <div class="bg-primary/5 rounded-lg p-4">
+                <h4 class="font-semibold text-primary mb-2">การบูชาด้วยใจบริสุทธิ์</h4>
+                <p class="text-sm text-gray-600">มุ่งหวังให้วัตถุมงคลเป็นที่พึ่งทางใจ เครื่องเตือนสติ และกำลังใจในการเผชิญความยากลำบาก</p>
+              </div>
+
+              <div class="bg-primary/5 rounded-lg p-4">
+                <h4 class="font-semibold text-primary mb-2">การพกพาติดตัวอย่างสม่ำเสมอ</h4>
+                <p class="text-sm text-gray-600">รักษาความเชื่อมโยงระหว่างผู้บูชากับพลังแห่งเหรียญอย่างต่อเนื่อง</p>
+              </div>
+
+              <div class="bg-primary/5 rounded-lg p-4">
+                <h4 class="font-semibold text-primary mb-2">การปฏิบัติตนตามหลักธรรม</h4>
+                <p class="text-sm text-gray-600">ประพฤติปฏิบัติตนในทางที่ชอบ รักษาศีล มุ่งมั่นในการทำความดี</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-secondary/10 to-primary/5 rounded-xl p-8">
+          <h3 class="font-display text-xl font-semibold text-primary mb-6">
+            <i class="fas fa-meditation mr-2 text-secondary"></i>3.3 วิธีอาราธนาตามที่ปฏิบัติกันในปัจจุบัน
+          </h3>
+          <div class="grid grid-cols-3 gap-6">
+            <div class="bg-white rounded-lg p-6 shadow-md">
+              <h4 class="font-semibold text-primary mb-3">
+                <i class="fas fa-chant mr-2 text-secondary"></i>การสวดคาถาก่อนการใช้งานสำคัญ
+              </h4>
+              <ul class="text-sm text-gray-600 space-y-2">
+                <li>• ก่อนเดินทางไกล</li>
+                <li>• ก่อนเข้าประชุมสำคัญ</li>
+                <li>• ก่อนเผชิญภัย</li>
+              </ul>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 shadow-md">
+              <h4 class="font-semibold text-primary mb-3">
+                <i class="fas fa-heart mr-2 text-secondary"></i>การระลึกถึงพระคุณหลวงพ่อโสก
+              </h4>
+              <p class="text-sm text-gray-600">หลับตา นึกถึงรูปลักษณ์ของหลวงพ่อโสก ระลึกถึงคุณงามความดีของท่าน</p>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 shadow-md">
+              <h4 class="font-semibold text-primary mb-3">
+                <i class="fas fa-recycle mr-2 text-secondary"></i>การสวดคาถาประจำวัน
+              </h4>
+              <p class="text-sm text-gray-600 mb-2">เสริมพลังให้แก่เหรียญและตนเอง</p>
+              <div class="text-xs text-gray-500">
+                <div>• สวดทุกเช้า</div>
+                <div>• สวดก่อนนอน</div>
+                <div>• สวดเมื่อรู้สึกกังวล</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: พระคาถา -->
+      <section id="section-4" class="mb-16">
+        <div class="flex items-center mb-8">
+          <div class="w-1 h-12 bg-primary mr-4"></div>
+          <h2 class="font-display text-3xl font-bold text-primary">4. พระคาถาอาราธนา</h2>
+        </div>
+
+        <div class="grid grid-cols-2 gap-8 mb-12">
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-scroll mr-2 text-secondary"></i>4.1 คาถาหลวงพ่อโสก (ประวัติศาสตร์)
+            </h3>
+
+            <div class="space-y-6">
+              <div class="bg-primary/5 rounded-lg p-6">
+                <h4 class="font-semibold text-primary mb-4">คาถาบูชาหลวงพ่อโสก</h4>
+                <div class="bg-white rounded p-4 text-center font-mono text-lg mb-4">
+                  &#34;สัตถา เทวะ มนุสสานัง
+                  <br/>
+                  พุทโธ ภะคะวาติ มะ อะ อุ&#34;
+                </div>
+                <div class="text-sm text-gray-600">
+                  <strong>ความหมาย:</strong> การระลึกถึงพระพุทธเจ้า เทวดา และมนุษย์ทั้งหลาย เป็นการเปิดช่องพลังงานให้เชื่อมโยงกับสิ่งศักดิ์สิทธิ์ทั้งสามภพ
+                </div>
+              </div>
+
+              <div class="bg-secondary/5 rounded-lg p-6">
+                <h4 class="font-semibold text-primary mb-4">คาถามหาเสน่ห์หลวงพ่อโสก (ฉบับเต็ม)</h4>
+                <div class="bg-white rounded p-4 text-center font-mono text-sm mb-4 leading-relaxed">
+                  &#34;อักโขหะมัสสามิ โลกัสสะ อิติ ปาระมิตตะติงสา
+                  <br/>
+                  อิติสัปปัญญู มาคะตา อิติโปติ มนุปปัตโต
+                  <br/>
+                  อิติปิโส ชะเต นโม อะระหัง ลาโป พุทโธ ลาปัง นะชา
+                  <br/>
+                  ลิติ นะ มะ ปะ ตะ สัปเปจะนา ปะหู จะนา ราชา ปุริโส
+                  <br/>
+                  อิตถิโย มาปัง เอหิ จิตตัง ปิยัง มะมะ เอหิ มาเร โสมามา
+                  <br/>
+                  อากัจฉายะ อากัจฉาหิ&#34;
+                </div>
+                <div class="text-sm text-gray-600">
+                  <strong>ความหมายรวม:</strong> การขอพรให้บรรลุปารมี มีปัญญา และความสำเร็จในทุกด้าน ทั้งการงาน การเงิน และความรัก
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-magic mr-2 text-secondary"></i>4.2 คาถาที่ใช้ในปัจจุบัน
+            </h3>
+
+            <div class="space-y-6">
+              <div class="bg-primary/5 rounded-lg p-6">
+                <h4 class="font-semibold text-primary mb-4">คาถาทั่วไปสำหรับพระเครื่องหลวงพ่อโสก</h4>
+                <div class="space-y-4">
+                  <div class="bg-white rounded p-4 font-mono text-sm">
+                    &#34;นะโม ตัสสะ ภะคะวะโต อะระะหะโต สัมมาสัมพุทธัสสะ
+                    <br/>
+                    นะโมหลวงพ่อโสก วัดปากคลองบางครก
+                    <br/>
+                    ขอความคุ้มครอง แคล้วคลาด คงกระพันชาตรี&#34;
+                  </div>
+                  <p class="text-sm text-gray-600">การดัดแปลงจากคาถาดั้งเดิมให้เข้าใจง่ายขึ้น</p>
+                </div>
+              </div>
+
+              <div class="space-y-4">
+                <h4 class="font-semibold text-primary">คาถาเฉพาะกิจ</h4>
+
+                <div class="bg-gray-50 rounded p-4">
+                  <h5 class="font-medium text-gray-800 mb-2">ก่อนเดินทาง:</h5>
+                  <div class="font-mono text-sm mb-2">
+                    &#34;สัตถา เทวะ มนุสสานัง พุทโธ ภะคะวา
+                    <br/>
+                    ขอหลวงพ่อโสกคุ้มครอง แคล้วคลาด ปลอดภัยในทุกเส้นทาง&#34;
+                  </div>
+                  <p class="text-xs text-gray-600">สวด 3 จบ แล้วตั้งจิตอธิษฐาน</p>
+                </div>
+
+                <div class="bg-gray-50 rounded p-4">
+                  <h5 class="font-medium text-gray-800 mb-2">เมื่อเผชิญอันตราย:</h5>
+                  <div class="font-mono text-sm mb-2">
+                    &#34;มะ อะ อุ หลวงพ่อโสก คงกระพันชาตรี
+                    <br/>
+                    แคล้วคลาด ภัยพิบัติทั้งปวง มลายหายสิ้น&#34;
+                  </div>
+                  <p class="text-xs text-gray-600">สวดอย่างตั้งใจ ระลึกถึงหลวงพ่อโสก</p>
+                </div>
+
+                <div class="bg-gray-50 rounded p-4">
+                  <h5 class="font-medium text-gray-800 mb-2">เพื่อความก้าวหน้าในการงาน:</h5>
+                  <div class="font-mono text-sm mb-2">
+                    &#34;อิติ ปาระมิตตะติงสา อิติสัปปัญญู
+                    <br/>
+                    ขอบารมีและปัญญาจงบังเกิด ความก้าวหน้าสำเร็จสมปรารถนา&#34;
+                  </div>
+                  <p class="text-xs text-gray-600">สวดก่อนเข้าประชุมสำคัญ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-r from-secondary/10 to-primary/5 rounded-xl p-8">
+          <h3 class="font-display text-xl font-semibold text-primary mb-6">
+            <i class="fas fa-key mr-2 text-secondary"></i>4.3 หลักการใช้คาถาให้ได้ผล
+          </h3>
+          <div class="grid grid-cols-3 gap-6">
+            <div class="text-center">
+              <div class="w-20 h-20 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-heart text-3xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">ความศรัทธาและความเชื่อมั่น</h4>
+              <p class="text-sm text-gray-600">เชื่อมั่นในพลังของคาถาและพระคุณของหลวงพ่อโสกอย่างแน่วแน่</p>
+            </div>
+            <div class="text-center">
+              <div class="w-20 h-20 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-meditation text-3xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">การสวดด้วยสมาธิจิต</h4>
+              <p class="text-sm text-gray-600">ทำด้วยสมาธิจิตที่ตั้งมั่น กำหนดลมหายใจ นึกถึงความหมาย</p>
+            </div>
+            <div class="text-center">
+              <div class="w-20 h-20 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-balance-scale text-3xl text-secondary"></i>
+              </div>
+              <h4 class="font-semibold text-primary mb-2">ประพฤติปฏิบัติในทางที่ชอบ</h4>
+              <p class="text-sm text-gray-600">รักษาศีล ฝึกสมาธิ ศึกษาธรรมะ มีเมตตาต่อสรรพสัตว์</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: บริบททางประวัติศาสตร์ -->
+      <section id="section-5" class="mb-16">
+        <div class="flex items-center mb-8">
+          <div class="w-1 h-12 bg-primary mr-4"></div>
+          <h2 class="font-display text-3xl font-bold text-primary">5. บริบททางประวัติศาสตร์และวัฒนธรรม</h2>
+        </div>
+
+        <div class="mb-12">
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10 mb-8">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-monument mr-2 text-secondary"></i>5.1 ประวัติหลวงพ่อโสก
+            </h3>
+
+            <div class="grid grid-cols-2 gap-8">
+              <div class="space-y-6">
+                <div class="bg-primary/5 rounded-lg p-6">
+                  <h4 class="font-semibold text-primary mb-3">ชาติภูมิ</h4>
+                  <div class="flex items-center mb-2">
+                    <i class="fas fa-birthday-cake text-secondary mr-2"></i>
+                    <span class="font-medium">เกิด: พ.ศ. 2415 (ค.ศ. 1872)</span>
+                  </div>
+                  <p class="text-sm text-gray-600">ที่บ้านแควใหญ่ ตำบลบางครก อำเภอบ้านแหลม จังหวัดเพชรบุรี</p>
+                  <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+                  <a href="https://www.madoopra.com/product.php?catid=8&amp;catsubid=275&amp;id=798" class="citation-link text-xs">[8]</a>
+                </div>
+
+                <div class="bg-secondary/5 rounded-lg p-6">
+                  <h4 class="font-semibold text-primary mb-3">มรณภาพ</h4>
+                  <div class="flex items-center mb-2">
+                    <i class="fas fa-cross text-secondary mr-2"></i>
+                    <span class="font-medium">มรณภาพ: 11 กุมภาพันธ์ พ.ศ. 2482</span>
+                  </div>
+                  <p class="text-sm text-gray-600">สิริอายุ 67 ปี พรรษาที่ 47</p>
+                  <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+                  <a href="https://www.madoopra.com/product.php?catid=8&amp;catsubid=275&amp;id=798" class="citation-link text-xs">[8]</a>
+                </div>
+              </div>
+
+              <div class="space-y-6">
+                <div class="bg-white border border-primary/20 rounded-lg p-6">
+                  <h4 class="font-semibold text-primary mb-3">ครูบาอาจารย์</h4>
+                  <div class="space-y-3">
+                    <div class="flex items-center">
+                      <i class="fas fa-user-graduate text-secondary mr-2"></i>
+                      <span class="text-sm">หลวงพ่อมี วัดพระทรง</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="fas fa-user-graduate text-secondary mr-2"></i>
+                      <span class="text-sm">หลวงพ่อฤทธิ์ วัดพลับพลาชัย</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="fas fa-user-graduate text-secondary mr-2"></i>
+                      <span class="text-sm">ครูผึ้ง กรุงเก่า</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="fas fa-user-graduate text-secondary mr-2"></i>
+                      <span class="text-sm">หลวงพ่อคล้าย วัดพระทรง</span>
+                    </div>
+                  </div>
+                  <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+                  <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=335&amp;product-id=28085" class="citation-link text-xs">[27]</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10 mb-8">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-gem mr-2 text-secondary"></i>5.2 วัตถุมงคลอื่นของหลวงพ่อโสก
+            </h3>
+
+            <div class="grid grid-cols-3 gap-6">
+              <div class="bg-primary/5 rounded-lg p-6 text-center">
+                <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-sword text-2xl text-secondary"></i>
+                </div>
+                <h4 class="font-semibold text-primary mb-3">พระขรรค์</h4>
+                <p class="text-sm text-gray-600 mb-2">แกะจากเขาควายเผือก</p>
+                <p class="text-xs text-gray-500">มีชื่อเสียงในด้านคงกระพันชาตรีและแคล้วคลาด</p>
+                <a href="https://www.samakomphra.com/page/home/views/w4e254g4i5e5e4h4c2e494r2h2c444e2b4y2b4x2b4l2o3h4n5m4y534q5m5a2b4j264m2p2p2g2w4/" class="citation-link text-xs">[4]</a>
+                <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=335&amp;product-id=28085" class="citation-link text-xs">[27]</a>
+              </div>
+
+              <div class="bg-secondary/5 rounded-lg p-6 text-center">
+                <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-magic text-2xl text-primary"></i>
+                </div>
+                <h4 class="font-semibold text-primary mb-3">ปลัดขิก</h4>
+                <p class="text-sm text-gray-600 mb-2">สร้างจากวิชาครูผึ้ง</p>
+                <p class="text-xs text-gray-500">มีพลังด้านมหาเสน่ห์และเมตตามหานิยม</p>
+                <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=335&amp;product-id=28085" class="citation-link text-xs">[27]</a>
+              </div>
+
+              <div class="bg-neutral/30 rounded-lg p-6 text-center">
+                <div class="w-16 h-16 bg-secondary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-coins text-2xl text-secondary"></i>
+                </div>
+                <h4 class="font-semibold text-primary mb-3">เหรียญรูปแบบอื่นๆ</h4>
+                <p class="text-sm text-gray-600 mb-2">หลายรุ่นสร้าง</p>
+                <p class="text-xs text-gray-500">แต่เหรียญจันทร์เสี้ยวรุ่นแรกเป็นที่นิยมและหายากที่สุด</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-secondary/10 to-primary/5 rounded-xl p-8">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-users mr-2 text-secondary"></i>5.3 ความเชื่อและประสบการณ์ของศิษยานุศิษย์
+            </h3>
+
+            <div class="grid grid-cols-2 gap-8">
+              <div>
+                <h4 class="font-semibold text-primary mb-4">ประสบการณ์ปาฏิหาริย์ที่บันทึกไว้</h4>
+                <div class="space-y-3">
+                  <div class="flex items-start">
+                    <i class="fas fa-shield-alt text-secondary mr-2 mt-1"></i>
+                    <div>
+                      <strong class="text-sm">รอดจากการถูกยิง</strong>
+                      <p class="text-xs text-gray-600">กระสุนไม่เข้า หรือเข้าแต่ไม่ทำอันตรายร้ายแรง</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-car text-secondary mr-2 mt-1"></i>
+                    <div>
+                      <strong class="text-sm">รอดจากอุบัติเหตุรถยนต์</strong>
+                      <p class="text-xs text-gray-600">ประสบอุบัติเหตุรุนแรงแต่ไม่ได้รับบาดเจ็บสาหัส</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-eye text-secondary mr-2 mt-1"></i>
+                    <div>
+                      <strong class="text-sm">หลบหลีกภัยพิบัติ</strong>
+                      <p class="text-xs text-gray-600">รู้สึกเตือนภัยล่วงหน้า หรือเหตุการณ์ไม่สำเร็จ</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <i class="fas fa-star text-secondary mr-2 mt-1"></i>
+                    <div>
+                      <strong class="text-sm">แก้ไขดวงชะตา</strong>
+                      <p class="text-xs text-gray-600">ชีวิตที่ตกต่ำกลับมารุ่งเรืองหลังบูชาเหรียญ</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-semibold text-primary mb-4">การสืบทอดความเชื่อรุ่นสู่รุ่น</h4>
+                <div class="bg-white rounded-lg p-6 shadow-sm">
+                  <div class="space-y-4">
+                    <div class="flex items-center">
+                      <i class="fas fa-family text-secondary mr-3"></i>
+                      <span class="text-sm">การเล่าขานประสบการณ์ในครอบครัว</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="fas fa-graduation-cap text-secondary mr-3"></i>
+                      <span class="text-sm">การถ่ายทอดวิธีอาราธนาจากรุ่นสู่รุ่น</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="fas fa-book text-secondary mr-3"></i>
+                      <span class="text-sm">การบันทึกไว้ในหนังสือและเอกสาร</span>
+                    </div>
+                    <div class="flex items-center">
+                      <i class="fas fa-wifi text-secondary mr-3"></i>
+                      <span class="text-sm">การเผยแพร่ผ่านสื่อออนไลน์ในปัจจุบัน</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 6: การพิสูจน์ -->
+        <section id="section-6" class="mb-16">
+          <div class="flex items-center mb-8">
+            <div class="w-1 h-12 bg-primary mr-4"></div>
+            <h2 class="font-display text-3xl font-bold text-primary">6. การพิสูจน์และการยอมรับในวงการพระเครื่อง</h2>
+          </div>
+
+          <div class="bg-white rounded-xl p-8 shadow-lg border border-primary/10 mb-8">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-search mr-2 text-secondary"></i>6.1 หลักการพิจารณาความแท้
+            </h3>
+
+            <div class="grid grid-cols-3 gap-6">
+              <div class="bg-primary/5 rounded-lg p-6">
+                <h4 class="font-semibold text-primary mb-4">
+                  <i class="fas fa-gem mr-2 text-secondary"></i>ลักษณะเนื้อโลหะ
+                </h4>
+                <div class="space-y-3 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-700">สีผิว:</span>
+                    <span class="text-gray-600">น้ำตาลแดง เขียว ถึงดำ</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-700">สนิม:</span>
+                    <span class="text-gray-600">เกิดตามธรรมชาติ นุ่มนวล</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-700">ความหนาแน่น:</span>
+                    <span class="text-gray-600">หนาแน่น น้ำหนักมือ</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-secondary/5 rounded-lg p-6">
+                <h4 class="font-semibold text-primary mb-4">
+                  <i class="fas fa-cogs mr-2 text-secondary"></i>การหล่อและรูปแบบ
+                </h4>
+                <div class="space-y-3 text-sm">
+                  <div class="text-gray-600">
+                    <strong>การหล่อ:</strong> ประกบหน้าหลัง มีหูปลิงในตัว
+                  </div>
+                  <div class="text-gray-600">
+                    <strong>รายละเอียดยันต์:</strong> คมชัด ลึก สมดุล
+                  </div>
+                  <div class="text-gray-600">
+                    <strong>ขอบเหรียญ:</strong> โค้งมนตามธรรมชาติ
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-neutral/30 rounded-lg p-6">
+                <h4 class="font-semibold text-primary mb-4">
+                  <i class="fas fa-clock mr-2 text-secondary"></i>ความเก่าและสนิม
+                </h4>
+                <div class="space-y-3 text-sm text-gray-600">
+                  <div>• มีสีหลากหลายในชิ้นเดียวกัน</div>
+                  <div>• เกิดเป็นระดับชั้น ไม่สม่ำเสมอ</div>
+                  <div>• สัมผัสแล้วรู้สึกนุ่มนวล ไม่คม</div>
+                  <div>• มีความลึกซึ้ง ไม่ผิวเผิน</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-secondary/10 to-primary/5 rounded-xl p-8">
+            <h3 class="font-display text-xl font-semibold text-primary mb-6">
+              <i class="fas fa-certificate mr-2 text-secondary"></i>6.2 แหล่งอ้างอิงที่เชื่อถือได้
+            </h3>
+
+            <div class="grid grid-cols-3 gap-6">
+              <div class="bg-white rounded-lg p-6 shadow-md">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-building text-secondary mr-2"></i>
+                  <h4 class="font-semibold text-primary">สมาคมผู้นิยมพระเครื่อง</h4>
+                </div>
+                <p class="text-sm text-gray-600">องค์กรที่มีความน่าเชื่อถือในการรับรองความแท้ของพระเครื่อง</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-6 shadow-md">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-user-tie text-secondary mr-2"></i>
+                  <h4 class="font-semibold text-primary">นักสะสมและผู้เชี่ยวชาญ</h4>
+                </div>
+                <p class="text-sm text-gray-600">ผู้มีความรู้ความเข้าใจในวัตถุมงคลของหลวงพ่อโสก</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-6 shadow-md">
+                <div class="flex items-center mb-4">
+                  <i class="fas fa-book-open text-secondary mr-2"></i>
+                  <h4 class="font-semibold text-primary">เอกสารและหนังสืออ้างอิง</h4>
+                </div>
+                <p class="text-sm text-gray-600">หนังสือพระเครื่องเมืองเพชร เอกสารประวัติวัด บันทึกนักสะสมรุ่นเก่า</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section class="bg-gradient-to-r from-primary/10 to-secondary/5 rounded-2xl p-12 mb-16">
+          <div class="text-center mb-8">
+            <h2 class="font-display text-3xl font-bold text-primary mb-4">สรุปสาระสำคัญ</h2>
+            <div class="w-24 h-1 bg-secondary mx-auto"></div>
+          </div>
+
+          <div class="max-w-4xl mx-auto">
+            <p class="text-gray-700 leading-relaxed mb-6 text-lg">
+              <strong>เหรียญหล่อจันทร์เสี้ยว รุ่นแรก</strong> ของหลวงพ่อโสก วัดปากคลองบางครก เป็นวัตถุมงคลที่มีความสำคัญทางประวัติศาสตร์ พุทธศาสนา และศิลปะอย่างยิ่ง สร้างขึ้นในปี <strong>พ.ศ. 2465</strong> ด้วยเนื้อโลหะผสม มีลักษณะรูปทรงจันทร์เสี้ยวที่เป็นเอกลักษณ์ไม่เหมือนใคร
+            </p>
+
+            <div class="grid grid-cols-2 gap-8 mb-8">
+              <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h3 class="font-display text-lg font-semibold text-primary mb-4">
+                  <i class="fas fa-shield-alt mr-2 text-secondary"></i>อานุภาพหลัก
+                </h3>
+                <ul class="space-y-2 text-sm text-gray-600">
+                  <li>• พุทธคุณครอบจักรวาล (ดีทั้งกลางวัน-กลางคืน)</li>
+                  <li>• คงกระพันชาตรี (ความไม่ตาย)</li>
+                  <li>• แคล้วคลาด (หลบหลีกภัย)</li>
+                  <li>• ป้องกันภัยจากเทวดา มนุษย์ และผู้ไม่ประสงค์ดี</li>
+                </ul>
+              </div>
+
+              <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h3 class="font-display text-lg font-semibold text-primary mb-4">
+                  <i class="fas fa-pray mr-2 text-secondary"></i>วิธีอาราธนา
+                </h3>
+                <ul class="space-y-2 text-sm text-gray-600">
+                  <li>• การตั้งนะโม 3 จบ</li>
+                  <li>• ระลึกถึงคุณพระรัตนตรัยและหลวงพ่อโสก</li>
+                  <li>• การพกพาติดตัวอย่างสม่ำเสมอ</li>
+                  <li>• ประพฤติปฏิบัติตนตามหลักธรรม</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-6 shadow-sm mb-6">
+              <h3 class="font-display text-lg font-semibold text-primary mb-4">
+                <i class="fas fa-scroll mr-2 text-secondary"></i>พระคาถาที่ใช้
+              </h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <strong class="text-primary">คาถาประวัติศาสตร์:</strong>
+                  <div class="bg-gray-50 rounded p-2 font-mono text-xs mt-2">
+                    &#34;สัตถา เทวะ มนุสสานัง
+                    <br/>
+                    พุทโธ ภะคะวาติ มะ อะ อุ&#34;
+                  </div>
+                </div>
+                <div>
+                  <strong class="text-primary">คาถามหาเสน่ห์:</strong>
+                  <div class="bg-gray-50 rounded p-2 font-mono text-xs mt-2">
+                    &#34;อักโขหะมัสสามิ โลกัสสะ...&#34;
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p class="text-gray-700 leading-relaxed">
+              ความหายากและความต้องการสูงในตลาดพระเครื่อง ทำให้เหรียญหล่อจันทร์เสี้ยว รุ่นแรก กลายเป็นหนึ่งในวัตถุมงคลที่มีมูลค่าทางการลงทุนและคุณค่าทางจิตวิญญาณสูงยิ่ง ผู้ที่ต้องการครอบครองควรศึกษาหลักการพิจารณาความแท้อย่างละเอียด และปฏิบัติตนตามวิธีอาราธนาที่ถูกต้อง เพื่อให้ได้รับประโยชน์จากพุทธคุณของเหรียญนี้อย่างเต็มที่
+            </p>
+          </div>
+        </section>
+
+        <!-- Final Image Gallery -->
+        <section class="mb-16">
+          <div class="grid grid-cols-3 gap-6">
+            <div class="relative rounded-lg overflow-hidden shadow-lg">
+              <img src="https://kimi-web-img.moonshot.cn/img/www.encirclephotos.com/b56be8c56a2eb506dea693c85fbbfc807ab2c52d.jpg" alt="Ancient Thai temple with golden chedi" class="w-full h-64 object-cover" size="medium" aspect="wide" color="yellow" style="photo" query="Ancient Thai temple golden chedi" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div class="absolute bottom-4 left-4 text-white">
+                <h4 class="font-display font-semibold">วัดปากคลองบางครก</h4>
+                <p class="text-sm opacity-90">สถานที่สร้างเหรียญ</p>
+              </div>
+            </div>
+
+            <div class="relative rounded-lg overflow-hidden shadow-lg">
+              <img src="https://kimi-web-img.moonshot.cn/img/placeholder-0620/%E5%9B%BE%E7%89%8723.png" alt="Phra Khru Asok Dhammasara, also known as Luang Phor Sork" class="w-full h-64 object-cover" size="medium" aspect="tall" color="brown" style="photo" query="Luang Phor Sork Buddhist monk portrait" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div class="absolute bottom-4 left-4 text-white">
+                <h4 class="font-display font-semibold">หลวงพ่อโสก</h4>
+                <p class="text-sm opacity-90">ผู้สร้างวัตถุมงคล</p>
+              </div>
+            </div>
+
+            <div class="relative rounded-lg overflow-hidden shadow-lg">
+              <img src="https://kimi-web-img.moonshot.cn/img/placeholder-0620/图片7.png" alt="Ancient Thai amulet with sacred inscriptions" class="w-full h-64 object-cover" size="medium" aspect="wide" color="brown" style="photo" query="Ancient Thai amulet sacred inscription" referrerpolicy="no-referrer" data-modified="1"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+              <div class="absolute bottom-4 left-4 text-white">
+                <h4 class="font-display font-semibold">ยันต์อุโองการ</h4>
+                <p class="text-sm opacity-90">ประจำเหรียญ</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+    </section></main>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#FEFEFE',
+                primaryTextColor: '#1F2937',
+                primaryBorderColor: '#8B4513',
+                lineColor: '#8B4513',
+                sectionBkgColor: '#FEFEFE',
+                altSectionBkgColor: '#F8F6F0',
+                gridColor: '#E5E7EB',
+                secondaryColor: '#DAA520',
+                tertiaryColor: '#CD853F',
+                background: '#FEFEFE',
+                mainBkg: '#FEFEFE',
+                secondBkg: '#F8F6F0',
+                tertiaryBkg: '#E8E6E0',
+                // Timeline specific colors
+                cScale0: '#8B4513',
+                cScale1: '#DAA520',
+                cScale2: '#CD853F',
+                cScale3: '#A0522D',
+                // Text colors for better contrast
+                taskTextColor: '#1F2937',
+                taskTextOutsideColor: '#1F2937',
+                activeTaskTextColor: '#1F2937',
+                // Section colors
+                section0: '#FEFEFE',
+                section1: '#F8F6F0',
+                section2: '#E8E6E0',
+                section3: '#DAA520'
+            },
+            timeline: {
+                numberSectionStyles: 4,
+                axisFormat: '%Y',
+                useMaxWidth: true,
+                padding: 20
+            },
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '14px'
+        });
+
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+                const mermaidElement = container.querySelector('.mermaid');
+                let scale = 1;
+                let isDragging = false;
+                let startX, startY, translateX = 0, translateY = 0;
+
+                // ฟังก์ชันสำหรับอัพเดทการแสปรียงแบบของ mermaid
+                function updateTransform() {
+                    mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                    if (scale > 1) {
+                        container.classList.add('zoomed');
+                    } else {
+                        container.classList.remove('zoomed');
+                    }
+
+                    mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+                }
+
+                // Zoom controls
+                const zoomInBtn = container.querySelector('.zoom-in');
+                const zoomOutBtn = container.querySelector('.zoom-out');
+                const resetBtn = container.querySelector('.reset-zoom');
+                const fullscreenBtn = container.querySelector('.fullscreen');
+
+                if (zoomInBtn) {
+                    zoomInBtn.addEventListener('click', () => {
+                        scale = Math.min(scale * 1.25, 4);
+                        updateTransform();
+                    });
+                }
+
+                if (zoomOutBtn) {
+                    zoomOutBtn.addEventListener('click', () => {
+                        scale = Math.max(scale / 1.25, 0.3);
+                        if (scale <= 1) {
+                            translateX = 0;
+                            translateY = 0;
+                        }
+                        updateTransform();
+                    });
+                }
+
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', () => {
+                        scale = 1;
+                        translateX = 0;
+                        translateY = 0;
+                        updateTransform();
+                    });
+                }
+
+                if (fullscreenBtn) {
+                    fullscreenBtn.addEventListener('click', () => {
+                        if (container.requestFullscreen) {
+                            container.requestFullscreen();
+                        } else if (container.webkitRequestFullscreen) {
+                            container.webkitRequestFullscreen();
+                        } else if (container.msRequestFullscreen) {
+                            container.msRequestFullscreen();
+                        }
+                    });
+                }
+
+                // Mouse Events
+                mermaidElement.addEventListener('mousedown', (e) => {
+                    isDragging = true;
+                    startX = e.clientX - translateX;
+                    startY = e.clientY - translateY;
+                    mermaidElement.style.cursor = 'grabbing';
+                    updateTransform();
+                    e.preventDefault();
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    translateX = e.clientX - startX;
+                    translateY = e.clientY - startY;
+                    updateTransform();
+                });
+
+                document.addEventListener('mouseup', () => {
+                    if (isDragging) {
+                        isDragging = false;
+                        mermaidElement.style.cursor = 'grab';
+                        updateTransform();
+                    }
+                });
+
+                document.addEventListener('mouseleave', () => {
+                    if (isDragging) {
+                        isDragging = false;
+                        mermaidElement.style.cursor = 'grab';
+                        updateTransform();
+                    }
+                });
+
+                // การซูมด้วยเมาส์
+                container.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const rect = container.getBoundingClientRect();
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+
+                    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                    const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                    // Adjust translation to zoom towards center
+                    if (newScale !== scale) {
+                        const scaleDiff = newScale / scale;
+                        translateX = translateX * scaleDiff;
+                        translateY = translateY * scaleDiff;
+                        scale = newScale;
+
+                        if (scale <= 1) {
+                            translateX = 0;
+                            translateY = 0;
+                        }
+
+                        updateTransform();
+                    }
+                });
+
+                // Touch Events - การสัมผัสบนมือถือ
+                mermaidElement.addEventListener('touchstart', (e) => {
+                    if (e.touches.length === 1) {
+                        isDragging = true;
+                        const touch = e.touches[0];
+                        startX = touch.clientX - translateX;
+                        startY = touch.clientY - translateY;
+                    }
+                    e.preventDefault();
+                });
+
+                mermaidElement.addEventListener('touchmove', (e) => {
+                    if (!isDragging || e.touches.length !== 1) return;
+                    const touch = e.touches[0];
+                    translateX = touch.clientX - startX;
+                    translateY = touch.clientY - startY;
+                    updateTransform();
+                });
+
+                mermaidElement.addEventListener('touchend', () => {
+                    isDragging = false;
+                });
+
+                // Enhanced wheel zoom with better center point handling
+                container.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                    const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                    if (newScale !== scale) {
+                        // Adjust translation to zoom towards center
+                        const scaleDiff = newScale / scale;
+                        translateX = translateX * scaleDiff;
+                        translateY = translateY * scaleDiff;
+                        scale = newScale;
+
+                        if (scale <= 1) {
+                            translateX = 0;
+                            translateY = 0;
+                        }
+
+                        updateTransform();
+                    }
+                });
+
+                // Initialize display
+                updateTransform();
+            });
+        }
+
+        // Initialize the mermaid controls
+        initializeMermaidControls();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in TOC
+        const sections = document.querySelectorAll('section[id^="section-"]');
+        const tocLinks = document.querySelectorAll('.toc-fixed a[href^="#section-"]');
+
+        function updateActiveTocLink() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('bg-primary/20', 'text-primary', 'font-semibold');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('bg-primary/20', 'text-primary', 'font-semibold');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveTocLink);
+        updateActiveTocLink(); // Initial call
+    </script>
+  
+
+</body></html>
