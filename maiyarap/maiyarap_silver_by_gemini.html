@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silver Maiyarap Research Framework</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* Cool grey background */
+            color: #1f2937;
+        }
+        .thai-font {
+            font-family: 'Sarabun', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .active-nav {
+            background-color: #e5e7eb;
+            border-left: 4px solid #4b5563;
+            font-weight: 600;
+        }
+        /* Custom scrollbar for content areas */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+    <!-- Chosen Palette: Silver/Lunar - A monochromatic scale of cool greys, silver, and slate blue to reflect the "Lunar/Silver" nature of the subject. Warmth is minimized to emphasize the "Cooling" (Yen) aspect. -->
+    
+    <!-- Application Structure Plan: 
+         1. Sidebar Navigation: persistent access to key research dimensions (Metaphysics, Societal, Identification, Methodology).
+         2. Dynamic Content Area: Switches views based on selection.
+         3. Metaphysics View: Uses a Radar Chart to visualize the "Elemental Profile" (Moon vs Mars vs Saturn).
+         4. Societal View: Uses interactive cards to contrast the "Soldier" vs "Merchant" intent.
+         5. Methodology View: Lists sources and constraints.
+         This structure is chosen to break down the dense "Research Plan" into digestible, thematic modules.
+    -->
+
+    <!-- Visualization & Content Choices:
+         1. Radar Chart (Chart.js): To hypothesize the "Spiritual Stat Block" of the Silver Takrud vs standard versions. Justification: Shows multi-dimensional differences (Metta vs Kong Krapan) at a glance.
+         2. Interactive Cards: For "Hypotheses". Clicking reveals the specific research questions. Justification: Progressive disclosure keeps the interface clean.
+         3. Checklist UI: For "Physical Identification". Justification: Practical utility for the collector context.
+    -->
+
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md flex-shrink-0 flex flex-col z-10 hidden md:flex">
+        <div class="p-6 border-b border-gray-100">
+            <h1 class="text-xl font-bold text-gray-800">Project Lunar</h1>
+            <p class="text-xs text-gray-500 mt-1 uppercase tracking-wide">Research Framework</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4">
+            <ul class="space-y-1">
+                <li>
+                    <button onclick="updateView('overview')" id="nav-overview" class="w-full text-left px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors active-nav">
+                        Overview & Scope
+                    </button>
+                </li>
+                <li>
+                    <button onclick="updateView('metaphysics')" id="nav-metaphysics" class="w-full text-left px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        Metaphysics (Lunar)
+                    </button>
+                </li>
+                <li>
+                    <button onclick="updateView('societal')" id="nav-societal" class="w-full text-left px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        Societal Intent (Authority)
+                    </button>
+                </li>
+                <li>
+                    <button onclick="updateView('physical')" id="nav-physical" class="w-full text-left px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        Physical Identification
+                    </button>
+                </li>
+                <li>
+                    <button onclick="updateView('sources')" id="nav-sources" class="w-full text-left px-6 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">
+                        Sources & Constraints
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="p-4 border-t border-gray-100">
+            <div class="text-xs text-gray-400">
+                Subject: <span class="thai-font">ตะกรุดไมยราพณ์สะกดทัพ</span><br>
+                Material: <span class="font-semibold text-gray-600">Silver (Nuea Ngern)</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <div class="md:hidden fixed top-0 w-full bg-white shadow-sm z-20 flex justify-between items-center p-4">
+        <span class="font-bold text-gray-800">Project Lunar</span>
+        <select onchange="updateView(this.value)" class="bg-gray-50 border border-gray-200 text-sm rounded-lg p-2 focus:ring-gray-500 focus:border-gray-500">
+            <option value="overview">Overview</option>
+            <option value="metaphysics">Metaphysics</option>
+            <option value="societal">Societal Intent</option>
+            <option value="physical">Identification</option>
+            <option value="sources">Sources</option>
+        </select>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 pt-16 md:pt-0" id="main-content">
+        <!-- Content injected via JS -->
+    </main>
+
+    <script>
+        // Data Store
+        const appData = {
+            currentView: 'overview',
+            content: {
+                overview: {
+                    title: "Research Scope: The Silver Maiyarap",
+                    thaiTitle: "ตะกรุดไมยราพณ์สะกดทัพ (เนื้อเงิน)",
+                    description: "This research project focuses exclusively on the Silver (Nuea Ngern) variant of the legendary Takrud by Luang Phor Kun. Unlike the common Lead (absorption) or Copper (fire) versions, the Silver version presents a unique metaphysical profile linked to the Moon, Purity, and Elite Status.",
+                    objectives: [
+                        "Analyze the 'Lunar Affinity' and 'Cooling' properties of Silver.",
+                        "Determine if Silver embodies the 'Maha Amnaj' (Authority) intent for the wealthy.",
+                        "Establish physical identification markers for collectors.",
+                        "Catalog all known batches/years of the Silver variant."
+                    ]
+                },
+                metaphysics: {
+                    title: "The Metaphysics of Silver",
+                    subtitle: "Lunar Affinity & The 'Cooling' Sleep",
+                    intro: "Traditional Thai Occultism (Saiyasart) associates Silver with the Moon (Chantra) and 'Cooling' (Yen). This section hypothesizes how these properties interact with the 'Army Hypnotism' (Sakod Thap) spell.",
+                    hypotheses: [
+                        {
+                            id: "h1",
+                            title: "The Lunar Connection (Chantrapen)",
+                            text: "Is the Silver version the true embodiment of 'Takrud Chantrapen' (Full Moon Takrud)? Does it create a 'gentle/enchanting' sleep compared to the 'heavy/comatose' sleep of Lead?"
+                        },
+                        {
+                            id: "h2",
+                            title: "Suppression vs. Purity",
+                            text: "Silver is chemically antimicrobial. In 'Maha Rangap' (Great Suppression), does it prioritize purifying bad luck rather than aggressively reflecting conflict like Copper?"
+                        }
+                    ]
+                },
+                societal: {
+                    title: "Societal Intent & Authority",
+                    subtitle: "From Soldier to Khahabodi (Wealthy Elite)",
+                    intro: "Silver was a material reserved for the wealthy. This suggests the consecration intent differed from the standard battlefield takrud.",
+                    comparisons: [
+                        {
+                            role: "The Soldier",
+                            material: "Lead / Copper",
+                            primaryPower: "Kong Krapan (Invulnerability)",
+                            energy: "Heavy / Fire"
+                        },
+                        {
+                            role: "The Khahabodi (Elite)",
+                            material: "Silver (Nuea Ngern)",
+                            primaryPower: "Maha Amnaj (Authority) & Metta",
+                            energy: "Cooling / Purity"
+                        }
+                    ]
+                },
+                physical: {
+                    title: "Physical Identification",
+                    subtitle: "Decoding the Core under Lacquer",
+                    intro: "Since most Takruds are covered in lacquer (Rak) and cord, identifying the Silver core without damage is the primary challenge for collectors.",
+                    methods: [
+                        "Weight/Density Analysis (Silver vs Lead)",
+                        "X-Ray Imaging (Internal Structure)",
+                        "Lacquer Aging Patterns (Reaction to Silver oxide)",
+                        "Provenance & Batch Documentation"
+                    ]
+                },
+                sources: {
+                    title: "Research Sources & Protocol",
+                    subtitle: "Prioritized Communities",
+                    intro: "The research will strictly follow the input from specific expert communities, prioritizing deep knowledge over general market chatter.",
+                    list: [
+                        { name: "Watthakhanun.com", priority: "High", type: "Primary Lineage Source" },
+                        { name: "Ajarn Spencer Littlewood", priority: "High", type: "English Language Expert" },
+                        { name: "Palad Khik Amulet Association", priority: "Medium", type: "Specialized Group" },
+                        { name: "Samakom Phra Kruang", priority: "Medium", type: "Certification Database" }
+                    ]
+                }
+            }
+        };
+
+        // Navigation Logic
+        function updateView(viewName) {
+            appData.currentView = viewName;
+            
+            // Update UI State
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('active-nav');
+            });
+            const activeBtn = document.getElementById(`nav-${viewName}`);
+            if(activeBtn) activeBtn.classList.add('active-nav');
+
+            renderContent();
+        }
+
+        // Render Logic
+        function renderContent() {
+            const container = document.getElementById('main-content');
+            const data = appData.content[appData.currentView];
+
+            let html = '';
+
+            if (appData.currentView === 'overview') {
+                html = `
+                    <div class="p-8 max-w-5xl mx-auto animate-fade-in">
+                        <header class="mb-8 border-b border-gray-200 pb-6">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                            <h3 class="text-xl text-gray-500 thai-font">${data.thaiTitle}</h3>
+                        </header>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div class="lg:col-span-2 space-y-6">
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                    <h4 class="font-semibold text-gray-700 mb-4 flex items-center">
+                                        <span class="bg-gray-200 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
+                                        Project Context
+                                    </h4>
+                                    <p class="text-gray-600 leading-relaxed">${data.description}</p>
+                                </div>
+
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                    <h4 class="font-semibold text-gray-700 mb-4 flex items-center">
+                                        <span class="bg-gray-200 text-gray-600 rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
+                                        Key Research Objectives
+                                    </h4>
+                                    <ul class="space-y-3">
+                                        ${data.objectives.map(obj => `
+                                            <li class="flex items-start">
+                                                <span class="text-blue-500 mr-2">✦</span>
+                                                <span class="text-gray-600">${obj}</span>
+                                            </li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="lg:col-span-1">
+                                <div class="bg-slate-800 text-white p-6 rounded-xl shadow-lg">
+                                    <h4 class="font-bold text-lg mb-4">Research Constraints</h4>
+                                    <div class="space-y-4 text-sm text-slate-300">
+                                        <div class="flex items-center">
+                                            <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+                                            <span>Strictly Silver Version</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+                                            <span>Luang Phor Kun Only</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
+                                            <span>No Cross-Lineage Comparisons</span>
+                                        </div>
+                                        <div class="mt-6 pt-6 border-t border-slate-700">
+                                            <p class="italic">"I am seeking comparison strictly based on spiritual potency... focus solely on the Silver variant."</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (appData.currentView === 'metaphysics') {
+                html = `
+                    <div class="p-8 max-w-5xl mx-auto animate-fade-in">
+                        <header class="mb-8">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                            <p class="text-gray-600 max-w-2xl">${data.intro}</p>
+                        </header>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                            <!-- Chart Section -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                                <h4 class="font-semibold text-gray-700 mb-6 text-center w-full">Hypothesized Spiritual Profile</h4>
+                                <div class="chart-container">
+                                    <canvas id="metaphysicsChart"></canvas>
+                                </div>
+                                <p class="text-xs text-center text-gray-400 mt-4">Hypothetical values based on Saiyasart elemental theory.</p>
+                            </div>
+
+                            <!-- Questions Section -->
+                            <div class="space-y-4">
+                                ${data.hypotheses.map(h => `
+                                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-slate-400 hover:border-slate-600 transition-colors">
+                                        <h4 class="font-bold text-gray-800 mb-2">${h.title}</h4>
+                                        <p class="text-gray-600 text-sm leading-relaxed">${h.text}</p>
+                                        <div class="mt-4 flex gap-2">
+                                            <span class="px-2 py-1 bg-blue-50 text-blue-700 text-xs rounded">Moon</span>
+                                            <span class="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">Cooling</span>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (appData.currentView === 'societal') {
+                html = `
+                    <div class="p-8 max-w-5xl mx-auto animate-fade-in">
+                        <header class="mb-8">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                            <p class="text-gray-600">${data.subtitle}</p>
+                        </header>
+
+                        <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 mb-8">
+                            <p class="text-gray-700 mb-6 font-medium text-lg">${data.intro}</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Standard Card -->
+                                <div class="border border-gray-200 rounded-lg p-6 bg-gray-50 opacity-75">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h4 class="font-bold text-gray-600">The Common Versions</h4>
+                                        <span class="text-xs font-bold px-2 py-1 bg-gray-200 rounded text-gray-600">Baseline</span>
+                                    </div>
+                                    <div class="space-y-3 text-sm">
+                                        <div class="flex justify-between border-b border-gray-200 pb-2">
+                                            <span class="text-gray-500">Material</span>
+                                            <span class="font-medium text-gray-800">Lead / Copper</span>
+                                        </div>
+                                        <div class="flex justify-between border-b border-gray-200 pb-2">
+                                            <span class="text-gray-500">Archetype</span>
+                                            <span class="font-medium text-gray-800">Soldier / Warrior</span>
+                                        </div>
+                                        <div class="flex justify-between border-b border-gray-200 pb-2">
+                                            <span class="text-gray-500">Key Power</span>
+                                            <span class="font-medium text-gray-800">Kong Krapan</span>
+                                        </div>
+                                        <div class="mt-4 pt-2">
+                                            <span class="block text-xs text-gray-400 mb-1">Function</span>
+                                            <p class="text-gray-600 italic">"Heavy sleep for enemies, protection from blades."</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Silver Card -->
+                                <div class="border-2 border-slate-400 rounded-lg p-6 bg-white shadow-lg relative overflow-hidden">
+                                    <div class="absolute top-0 right-0 bg-slate-500 text-white text-xs px-3 py-1 rounded-bl">Focus of Study</div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <h4 class="font-bold text-slate-800 text-xl">The Silver Version</h4>
+                                    </div>
+                                    <div class="space-y-3 text-sm">
+                                        <div class="flex justify-between border-b border-gray-100 pb-2">
+                                            <span class="text-gray-500">Material</span>
+                                            <span class="font-bold text-slate-700">Nuea Ngern</span>
+                                        </div>
+                                        <div class="flex justify-between border-b border-gray-100 pb-2">
+                                            <span class="text-gray-500">Archetype</span>
+                                            <span class="font-bold text-slate-700">Khahabodi (Merchant/Ruler)</span>
+                                        </div>
+                                        <div class="flex justify-between border-b border-gray-100 pb-2">
+                                            <span class="text-gray-500">Key Power</span>
+                                            <span class="font-bold text-slate-700">Maha Amnaj & Metta</span>
+                                        </div>
+                                        <div class="mt-4 pt-2">
+                                            <span class="block text-xs text-gray-400 mb-1">Hypothesized Function</span>
+                                            <p class="text-slate-700 italic">"Cooling of conflict, command over others, attraction of wealth."</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (appData.currentView === 'physical') {
+                html = `
+                    <div class="p-8 max-w-5xl mx-auto animate-fade-in">
+                        <header class="mb-8">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                            <p class="text-gray-600">${data.intro}</p>
+                        </header>
+
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                            <div class="p-6 bg-slate-50 border-b border-gray-100">
+                                <h3 class="font-bold text-gray-700">Identification Protocol</h3>
+                            </div>
+                            <div class="divide-y divide-gray-100">
+                                ${data.methods.map((method, index) => `
+                                    <div class="p-6 flex items-start hover:bg-slate-50 transition-colors cursor-pointer group">
+                                        <div class="flex-shrink-0 mr-4">
+                                            <div class="w-10 h-10 rounded-full bg-white border-2 border-slate-200 flex items-center justify-center text-slate-400 font-bold group-hover:border-slate-500 group-hover:text-slate-600 transition-all">
+                                                ${index + 1}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-800 mb-1 group-hover:text-slate-700">${method}</h4>
+                                            <p class="text-sm text-gray-500">Research into this method is required to establish a baseline for authentication. How does the Rak (lacquer) interact chemically with Silver oxide compared to Lead?</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 p-6 bg-yellow-50 border border-yellow-100 rounded-lg text-yellow-800 text-sm">
+                            <strong>Note for Research:</strong> Pay close attention to the "Weight" variable. Lead is significantly denser than Silver. A non-invasive specific gravity test might be the key determinant for coated Takruds.
+                        </div>
+                    </div>
+                `;
+            } else if (appData.currentView === 'sources') {
+                html = `
+                    <div class="p-8 max-w-5xl mx-auto animate-fade-in">
+                        <header class="mb-8">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-2">${data.title}</h2>
+                            <p class="text-gray-600">${data.subtitle}</p>
+                        </header>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            ${data.list.map(source => `
+                                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-start mb-2">
+                                            <h3 class="font-bold text-lg text-gray-800">${source.name}</h3>
+                                            <span class="text-xs px-2 py-1 rounded ${source.priority === 'High' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}">${source.priority} Priority</span>
+                                        </div>
+                                        <p class="text-gray-500 text-sm mb-4">${source.type}</p>
+                                    </div>
+                                    <button class="w-full mt-4 py-2 border border-slate-200 text-slate-600 rounded hover:bg-slate-50 transition-colors text-sm font-medium">
+                                        Log Data from Source
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div class="mt-8">
+                            <h3 class="font-bold text-gray-800 mb-4">Required Data Points</h3>
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                <ul class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <li class="flex items-center text-sm text-gray-600">
+                                        <input type="checkbox" disabled class="mr-3 rounded text-slate-600">
+                                        All known edition years
+                                    </li>
+                                    <li class="flex items-center text-sm text-gray-600">
+                                        <input type="checkbox" disabled class="mr-3 rounded text-slate-600">
+                                        Total production numbers (approx)
+                                    </li>
+                                    <li class="flex items-center text-sm text-gray-600">
+                                        <input type="checkbox" disabled class="mr-3 rounded text-slate-600">
+                                        Consecration ceremony details
+                                    </li>
+                                    <li class="flex items-center text-sm text-gray-600">
+                                        <input type="checkbox" disabled class="mr-3 rounded text-slate-600">
+                                        Variations in cord wrapping (if any)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+
+            // Initialize Charts if on relevant view
+            if (appData.currentView === 'metaphysics') {
+                initMetaphysicsChart();
+            }
+        }
+
+        function initMetaphysicsChart() {
+            const ctx = document.getElementById('metaphysicsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Cooling (Yen)', 'Authority (Maha Amnaj)', 'Heaviness (Saturn)', 'Fire (Mars)', 'Wealth (Pokasap)'],
+                    datasets: [{
+                        label: 'Silver (Hypothesis)',
+                        data: [90, 85, 40, 30, 95],
+                        backgroundColor: 'rgba(148, 163, 184, 0.4)', // Slate blue/silver
+                        borderColor: 'rgba(71, 85, 105, 1)',
+                        pointBackgroundColor: 'rgba(71, 85, 105, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'Lead/Copper (Traditional)',
+                        data: [40, 60, 90, 85, 50],
+                        backgroundColor: 'rgba(203, 213, 225, 0.2)',
+                        borderColor: 'rgba(203, 213, 225, 1)',
+                        pointBackgroundColor: 'rgba(203, 213, 225, 1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5]
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0,0,0,0.1)' },
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            pointLabels: {
+                                font: { size: 12, family: "'Inter', sans-serif" },
+                                color: '#4b5563'
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                            titleColor: '#1f2937',
+                            bodyColor: '#4b5563',
+                            borderColor: '#e5e7eb',
+                            borderWidth: 1,
+                            padding: 10
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderContent();
+        });
+
+    </script>
+</body>
+</html>
