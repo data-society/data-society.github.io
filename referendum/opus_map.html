@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiang Mai Trip Plan — Feb 6–8, 2026</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #0c0f14;
+            --bg-card: #161a23;
+            --bg-card-hover: #1c2029;
+            --border: rgba(255,255,255,0.06);
+            --border-active: rgba(255,255,255,0.15);
+            --text: #e8e6e3;
+            --text-muted: #787a80;
+            --text-dim: #4a4c52;
+            --accent-gold: #d4a853;
+            --accent-temple: #e8a849;
+            --accent-food: #e05a4f;
+            --accent-coffee: #b07d56;
+            --accent-hotel: #5a8fd4;
+            --accent-civic: #8b6cc1;
+            --accent-airport: #5db882;
+            --day-fri: #5a8fd4;
+            --day-sat: #e8a849;
+            --day-sun: #8b6cc1;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background: var(--bg-deep);
+            color: var(--text);
+            font-family: 'DM Sans', 'Noto Sans Thai', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+
+        /* HEADER */
+        header {
+            padding: 2.5rem 0 1.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        header h1 span { color: var(--accent-gold); }
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+            font-weight: 300;
+        }
+
+        /* MAP */
+        #map-wrap {
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        #map { height: 480px; width: 100%; background: var(--bg-card); }
+        .map-legend {
+            position: absolute; bottom: 12px; left: 12px; z-index: 1000;
+            background: rgba(12,15,20,0.92); backdrop-filter: blur(12px);
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            padding: 0.65rem 0.85rem; display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;
+            font-size: 0.7rem; color: var(--text-muted);
+        }
+        .legend-item { display: flex; align-items: center; gap: 0.35rem; }
+        .legend-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            border: 2px solid currentColor; display: inline-block;
+        }
+
+        /* EXPORT BAR */
+        .export-bar {
+            display: flex; gap: 0.5rem; flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .export-btn {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text-muted); padding: 0.45rem 0.9rem;
+            border-radius: 99px; font-size: 0.75rem; cursor: pointer;
+            text-decoration: none; transition: all 0.2s;
+            font-family: inherit;
+        }
+        .export-btn:hover {
+            border-color: var(--accent-gold); color: var(--accent-gold);
+            background: rgba(212,168,83,0.06);
+        }
+
+        /* ITINERARY */
+        .day-section { margin-bottom: 2rem; }
+        .day-header {
+            display: flex; align-items: center; gap: 0.75rem;
+            margin-bottom: 1rem; padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .day-badge {
+            font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; padding: 0.25rem 0.6rem;
+            border-radius: 99px; border: 1px solid;
+        }
+        .day-badge.fri { color: var(--day-fri); border-color: rgba(90,143,212,0.3); background: rgba(90,143,212,0.08); }
+        .day-badge.sat { color: var(--day-sat); border-color: rgba(232,168,73,0.3); background: rgba(232,168,73,0.08); }
+        .day-badge.sun { color: var(--day-sun); border-color: rgba(139,108,193,0.3); background: rgba(139,108,193,0.08); }
+        .day-title { font-weight: 600; font-size: 0.95rem; }
+        .day-date { color: var(--text-muted); font-size: 0.8rem; margin-left: auto; }
+
+        .timeline { position: relative; padding-left: 2rem; }
+        .timeline::before {
+            content: ''; position: absolute; left: 7px; top: 6px;
+            bottom: 6px; width: 1px; background: var(--border);
+        }
+        .tl-item {
+            position: relative; margin-bottom: 1.25rem;
+            padding: 0.85rem 1rem; background: var(--bg-card);
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            transition: all 0.2s; cursor: default;
+        }
+        .tl-item:hover { border-color: var(--border-active); background: var(--bg-card-hover); }
+        .tl-item::before {
+            content: ''; position: absolute; left: -1.7rem; top: 1rem;
+            width: 9px; height: 9px; border-radius: 50%;
+            border: 2px solid var(--accent-gold); background: var(--bg-deep);
+        }
+        .tl-item.temple::before { border-color: var(--accent-temple); }
+        .tl-item.food::before { border-color: var(--accent-food); }
+        .tl-item.coffee::before { border-color: var(--accent-coffee); }
+        .tl-item.hotel::before { border-color: var(--accent-hotel); }
+        .tl-item.civic::before { border-color: var(--accent-civic); }
+        .tl-item.airport::before { border-color: var(--accent-airport); }
+
+        .tl-time {
+            font-size: 0.7rem; color: var(--text-dim); font-weight: 500;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-bottom: 0.2rem;
+        }
+        .tl-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.15rem; }
+        .tl-name-th { font-size: 0.8rem; color: var(--text-muted); font-family: 'Noto Sans Thai', sans-serif; margin-bottom: 0.3rem; }
+        .tl-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+        .tl-tag {
+            display: inline-block; font-size: 0.6rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.08em;
+            padding: 0.15rem 0.5rem; border-radius: 99px; margin-top: 0.4rem;
+        }
+        .tl-tag.temple { color: var(--accent-temple); background: rgba(232,168,73,0.1); }
+        .tl-tag.food { color: var(--accent-food); background: rgba(224,90,79,0.1); }
+        .tl-tag.coffee { color: var(--accent-coffee); background: rgba(176,125,86,0.1); }
+        .tl-tag.hotel { color: var(--accent-hotel); background: rgba(90,143,212,0.1); }
+        .tl-tag.civic { color: var(--accent-civic); background: rgba(139,108,193,0.1); }
+        .tl-tag.drive { color: var(--text-dim); background: rgba(255,255,255,0.04); }
+        .tl-tag.airport { color: var(--accent-airport); background: rgba(93,184,130,0.1); }
+
+        .tl-nav-link {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            font-size: 0.7rem; color: var(--accent-gold);
+            text-decoration: none; margin-top: 0.4rem; margin-left: 0.5rem;
+            opacity: 0.7; transition: opacity 0.2s;
+        }
+        .tl-nav-link:hover { opacity: 1; text-decoration: underline; }
+
+        .note-card {
+            background: rgba(212,168,83,0.05); border: 1px solid rgba(212,168,83,0.15);
+            border-radius: var(--radius-sm); padding: 0.75rem 1rem;
+            font-size: 0.78rem; color: var(--text-muted); margin-top: 1.5rem;
+        }
+        .note-card strong { color: var(--accent-gold); }
+
+        /* FOOTER */
+        footer {
+            margin-top: 3rem; padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.7rem; color: var(--text-dim);
+            text-align: center; padding-bottom: 2rem;
+        }
+
+        /* Custom Leaflet Markers */
+        .custom-marker {
+            display: flex; align-items: center; justify-content: center;
+            width: 28px; height: 28px; border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg); border: 2px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+        .custom-marker span {
+            transform: rotate(45deg); font-size: 12px;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-card) !important;
+            color: var(--text) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius-sm) !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+        }
+        .leaflet-popup-tip { background: var(--bg-card) !important; }
+        .leaflet-popup-content { font-family: 'DM Sans', 'Noto Sans Thai', sans-serif !important; font-size: 13px !important; }
+        .popup-title { font-weight: 700; margin-bottom: 2px; }
+        .popup-subtitle { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+        .popup-link { font-size: 11px; color: var(--accent-gold); }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            #map { height: 360px; }
+            .map-legend { bottom: 8px; left: 8px; right: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Chiang Mai <span>&</span> Beyond</h1>
+            <div class="subtitle">Trip Plan · Friday 6 – Sunday 8 February 2026 · Temples · Laab · Coffee</div>
+        </header>
+
+        <div id="map-wrap">
+            <div id="map"></div>
+            <div class="map-legend">
+                <div class="legend-item"><span class="legend-dot" style="color:var(--accent-temple)"></span> Temple</div>
+                <div class="legend-item"><span class="legend-dot" style="color:var(--accent-food)"></span> Food</div>
+                <div class="legend-item"><span class="legend-dot" style="color:var(--accent-coffee)"></span> Coffee</div>
+                <div class="legend-item"><span class="legend-dot" style="color:var(--accent-hotel)"></span> Hotel</div>
+                <div class="legend-item"><span class="legend-dot" style="color:var(--accent-civic)"></span> Civic</div>
+                <div class="legend-item"><span class="legend-dot" style="color:var(--accent-airport)"></span> Airport</div>
+            </div>
+        </div>
+
+        <div class="export-bar">
+            <a id="gmaps-link" class="export-btn" target="_blank" rel="noopener">
+                📍 Open all pins in Google Maps
+            </a>
+            <button class="export-btn" onclick="exportGeoJSON()">💾 Export GeoJSON</button>
+            <button class="export-btn" onclick="exportKML()">🌐 Export KML (Google Earth)</button>
+        </div>
+
+        <!-- DAY 1: FRIDAY -->
+        <section class="day-section">
+            <div class="day-header">
+                <span class="day-badge fri">FRI</span>
+                <span class="day-title">Arrival & City Exploration</span>
+                <span class="day-date">6 February 2026</span>
+            </div>
+            <div class="timeline">
+                <div class="tl-item hotel" onclick="flyTo(0)">
+                    <div class="tl-time">Afternoon</div>
+                    <div class="tl-name">Check in — ibis Styles Chiang Mai</div>
+                    <div class="tl-desc">Settle in and freshen up. Your base for 2 nights.</div>
+                    <span class="tl-tag hotel">Hotel</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=ibis+Styles+Chiang+Mai+RX46%2BF2" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item temple" onclick="flyTo(1)">
+                    <div class="tl-time">16:00 – 17:30</div>
+                    <div class="tl-name">วัดดับภัย (Wat Dap Phai)</div>
+                    <div class="tl-desc">A serene old-city temple, ~15 min from the hotel. Perfect for a quiet late afternoon visit.</div>
+                    <span class="tl-tag temple">Temple</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=QXVJ%2B5J+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item coffee" onclick="flyTo(2)">
+                    <div class="tl-time">17:30 – 18:15</div>
+                    <div class="tl-name">Roast8ry Coffee Flagship</div>
+                    <div class="tl-desc">Walk over to the Nimman area. Specialty roasters with industrial-chic interiors.</div>
+                    <span class="tl-tag coffee">Coffee</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=QXV9%2BX9+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item coffee" onclick="flyTo(3)">
+                    <div class="tl-time">18:30 – 19:15</div>
+                    <div class="tl-name">GRAPH One Nimman</div>
+                    <div class="tl-desc">Just a short walk from Roast8ry. Iconic Chiang Mai café in the One Nimman complex.</div>
+                    <span class="tl-tag coffee">Coffee</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=QXX9%2BX7+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item coffee" onclick="flyTo(4)">
+                    <div class="tl-time">19:30 – 20:00</div>
+                    <div class="tl-name">Ristr8to Original</div>
+                    <div class="tl-desc">World Latte Art champion's flagship. Close Nimman hop with an evening cup.</div>
+                    <span class="tl-tag coffee">Coffee</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=QXX8%2BMV+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- DAY 2: SATURDAY -->
+        <section class="day-section">
+            <div class="day-header">
+                <span class="day-badge sat">SAT</span>
+                <span class="day-title">Temples, Laab & Countryside</span>
+                <span class="day-date">7 February 2026</span>
+            </div>
+            <div class="timeline">
+                <div class="tl-item temple" onclick="flyTo(5)">
+                    <div class="tl-time">06:30 – 10:00</div>
+                    <div class="tl-name">พระธาตุดอยคำ (Phra That Doi Kham)</div>
+                    <div class="tl-desc">Depart early for the hilltop temple southwest of the city (~25 min drive). The morning light is beautiful. Take your time — 3+ hours for circumambulation, prayer, and contemplation with no rush. One of Chiang Mai's most sacred temples.</div>
+                    <span class="tl-tag temple">Temple · Priority</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=QW59%2BQF+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item" style="background: rgba(255,255,255,0.015);">
+                    <div class="tl-time">10:00 – 11:00</div>
+                    <div class="tl-name">🚗 Drive north to Mae Taeng</div>
+                    <div class="tl-desc">~55 km via Route 107 heading north. Scenic drive through the valley.</div>
+                    <span class="tl-tag drive">Drive · ~1 hr</span>
+                </div>
+                <div class="tl-item temple" onclick="flyTo(6)">
+                    <div class="tl-time">11:00 – 12:00</div>
+                    <div class="tl-name">วัดทุ่งหลวง (Wat Thung Luang, Mae Taeng)</div>
+                    <div class="tl-desc">Famous Lanna temple known for ครูบาธรรมชัย, beautiful viharn, herbal sauna, and the มหาเจดีย์นักษัตร. Allow 1 hour to explore.</div>
+                    <span class="tl-tag temple">Temple</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=%E0%B8%A7%E0%B8%B1%E0%B8%94%E0%B8%97%E0%B8%B8%E0%B9%88%E0%B8%87%E0%B8%AB%E0%B8%A5%E0%B8%A7%E0%B8%87+%E0%B9%81%E0%B8%A1%E0%B9%88%E0%B9%81%E0%B8%95%E0%B8%87+%E0%B9%80%E0%B8%8A%E0%B8%B5%E0%B8%A2%E0%B8%87%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item food" onclick="flyTo(7)">
+                    <div class="tl-time">12:00 – 13:00</div>
+                    <div class="tl-name">ลาบต้นขาม</div>
+                    <div class="tl-name-th">Laab Ton Kham · near Wat Thung Luang</div>
+                    <div class="tl-desc">Immediately after the temple. Renowned local laab in the Mae Taeng countryside. Don't miss the ลาบเมือง.</div>
+                    <span class="tl-tag food">Food</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=4WQW%2BFW+San+Mahaphon+Mae+Taeng+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item" style="background: rgba(255,255,255,0.015);">
+                    <div class="tl-time">13:00 – 14:00</div>
+                    <div class="tl-name">🚗 Drive back to Chiang Mai city</div>
+                    <div class="tl-desc">~40 km south back into the city via Route 107.</div>
+                    <span class="tl-tag drive">Drive · ~45 min</span>
+                </div>
+                <div class="tl-item food" onclick="flyTo(8)">
+                    <div class="tl-time">14:00 – 15:00</div>
+                    <div class="tl-name">ลาบบัวตอง</div>
+                    <div class="tl-name-th">Laab Bua Tong · ⚠ Saturday only</div>
+                    <div class="tl-desc">East of city center. A legendary laab spot that opens Saturday only — this is your one chance. Even after Mae Taeng lunch, it's worth a taste.</div>
+                    <span class="tl-tag food">Food · Sat Only</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=Q2QH%2BRG+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item coffee" onclick="flyTo(9)">
+                    <div class="tl-time">16:00 – 17:30</div>
+                    <div class="tl-name">The Baristro Asian Style</div>
+                    <div class="tl-desc">Wind down the day at this aesthetic café southwest of Nimman. Beautiful Thai-contemporary interiors.</div>
+                    <span class="tl-tag coffee">Coffee</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=QXQ2%2BXM+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- DAY 3: SUNDAY -->
+        <section class="day-section">
+            <div class="day-header">
+                <span class="day-badge sun">SUN</span>
+                <span class="day-title">Referendum & Departure</span>
+                <span class="day-date">8 February 2026</span>
+            </div>
+            <div class="timeline">
+                <div class="tl-item civic" onclick="flyTo(10)">
+                    <div class="tl-time">08:00 – 09:30</div>
+                    <div class="tl-name">ลงประชามติ — สโมสร Land & Houses Park</div>
+                    <div class="tl-name-th">Referendum voting · San Sai</div>
+                    <div class="tl-desc">~20 min drive northeast from the hotel. Head early to avoid queues.</div>
+                    <span class="tl-tag civic">Civic</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=V287%2BC69+Nong+Chom+San+Sai+Chiang+Mai" target="_blank">Navigate ↗</a>
+                </div>
+                <div class="tl-item hotel" onclick="flyTo(0)">
+                    <div class="tl-time">10:00 – 11:00</div>
+                    <div class="tl-name">Check out — ibis Styles</div>
+                    <div class="tl-desc">Return to hotel, pack up, check out. Store luggage if needed.</div>
+                    <span class="tl-tag hotel">Hotel</span>
+                </div>
+                <div class="tl-item coffee">
+                    <div class="tl-time">11:00 – 16:00</div>
+                    <div class="tl-name">Free time — explore at leisure</div>
+                    <div class="tl-desc">Revisit a favourite café, explore the old city, or relax. You have a comfortable buffer before your evening flight.</div>
+                    <span class="tl-tag coffee">Leisure</span>
+                </div>
+                <div class="tl-item" style="background: rgba(255,255,255,0.015);">
+                    <div class="tl-time">18:00</div>
+                    <div class="tl-name">🚗 Head to Chiang Mai Airport</div>
+                    <div class="tl-desc">Allow 30 min for the drive + 1.5 hours before departure for domestic check-in.</div>
+                    <span class="tl-tag drive">Drive · ~20 min</span>
+                </div>
+                <div class="tl-item airport" onclick="flyTo(11)">
+                    <div class="tl-time">21:00</div>
+                    <div class="tl-name">✈ Departure — Chiang Mai International Airport</div>
+                    <div class="tl-desc">CNX → Return flight home. Safe travels!</div>
+                    <span class="tl-tag airport">Flight</span>
+                    <a class="tl-nav-link" href="https://maps.google.com/?q=Chiang+Mai+International+Airport" target="_blank">Navigate ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="note-card">
+            <strong>📌 Note about วัดทุ่งหลวง:</strong> The Plus code you provided (CPQF+CM) resolves to a วัดทุ่งหลวง in <em>Pak Tho, Ratchaburi</em>, which is ~700 km south of Chiang Mai. The map pin here uses the well-known <strong>วัดทุ่งหลวง in ตำบลแม่แตง, อำเภอแม่แตง, เชียงใหม่</strong> — the one near ลาบต้นขาม as described. If you intended the Ratchaburi temple for a separate trip, let me know and I'll adjust.
+        </div>
+
+        <footer>
+            Generated for Tanat · Feb 2026 · All map data © OpenStreetMap contributors
+        </footer>
+    </div>
+
+    <script>
+    // === LOCATION DATA ===
+    const LOCATIONS = [
+        { id: 0, name: "ibis Styles Chiang Mai", nameTh: "ไอบิส สไตล์ เชียงใหม่", lat: 18.806188, lng: 98.960062, type: "hotel", day: "fri", plusCode: "RX46+F2" },
+        { id: 1, name: "Wat Dap Phai", nameTh: "วัดดับภัย", lat: 18.792938, lng: 98.981562, type: "temple", day: "fri", plusCode: "QXVJ+5J" },
+        { id: 2, name: "Roast8ry Coffee Flagship", nameTh: "", lat: 18.794938, lng: 98.968437, type: "coffee", day: "fri", plusCode: "QXV9+X9" },
+        { id: 3, name: "GRAPH One Nimman", nameTh: "", lat: 18.799937, lng: 98.968187, type: "coffee", day: "fri", plusCode: "QXX9+X7" },
+        { id: 4, name: "Ristr8to Original", nameTh: "", lat: 18.799188, lng: 98.967187, type: "coffee", day: "fri", plusCode: "QXX8+MV" },
+        { id: 5, name: "Phra That Doi Kham", nameTh: "พระธาตุดอยคำ", lat: 18.759437, lng: 98.918688, type: "temple", day: "sat", plusCode: "QW59+QF" },
+        { id: 6, name: "Wat Thung Luang (Mae Taeng)", nameTh: "วัดทุ่งหลวง", lat: 19.133, lng: 98.945, type: "temple", day: "sat", plusCode: "" },
+        { id: 7, name: "Laab Ton Kham", nameTh: "ลาบต้นขาม", lat: 19.138688, lng: 98.947312, type: "food", day: "sat", plusCode: "4WQW+FW" },
+        { id: 8, name: "Laab Bua Tong", nameTh: "ลาบบัวตอง (Sat only)", lat: 18.789563, lng: 99.028813, type: "food", day: "sat", plusCode: "Q2QH+RG" },
+        { id: 9, name: "The Baristro Asian Style", nameTh: "", lat: 18.789938, lng: 98.951688, type: "coffee", day: "sat", plusCode: "QXQ2+XM" },
+        { id: 10, name: "สโมสร Land & Houses Park", nameTh: "ลงประชามติ", lat: 18.866038, lng: 99.013109, type: "civic", day: "sun", plusCode: "V287+C69" },
+        { id: 11, name: "Chiang Mai Airport (CNX)", nameTh: "ท่าอากาศยานเชียงใหม่", lat: 18.7668, lng: 98.9625, type: "airport", day: "sun", plusCode: "" },
+    ];
+
+    const COLORS = {
+        temple: '#e8a849',
+        food: '#e05a4f',
+        coffee: '#b07d56',
+        hotel: '#5a8fd4',
+        civic: '#8b6cc1',
+        airport: '#5db882'
+    };
+
+    const EMOJIS = {
+        temple: '🛕',
+        food: '🍜',
+        coffee: '☕',
+        hotel: '🏨',
+        civic: '🗳️',
+        airport: '✈️'
+    };
+
+    // === MAP INIT ===
+    const map = L.map('map', {
+        center: [18.82, 98.97],
+        zoom: 11,
+        zoomControl: true,
+        attributionControl: true
+    });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+
+    // Add markers
+    const markers = [];
+    LOCATIONS.forEach(loc => {
+        const color = COLORS[loc.type] || '#888';
+        const emoji = EMOJIS[loc.type] || '📍';
+
+        const icon = L.divIcon({
+            className: 'custom-div-icon',
+            html: `<div class="custom-marker" style="background:${color}"><span>${emoji}</span></div>`,
+            iconSize: [28, 36],
+            iconAnchor: [14, 36],
+            popupAnchor: [0, -36]
+        });
+
+        const marker = L.marker([loc.lat, loc.lng], { icon })
+            .addTo(map)
+            .bindPopup(`
+                <div class="popup-title">${loc.name}</div>
+                ${loc.nameTh ? `<div class="popup-subtitle">${loc.nameTh}</div>` : ''}
+                <div class="popup-subtitle" style="text-transform:capitalize">${loc.type} · ${loc.day === 'fri' ? 'Friday' : loc.day === 'sat' ? 'Saturday' : 'Sunday'}</div>
+                ${loc.plusCode ? `<a class="popup-link" href="https://maps.google.com/?q=${encodeURIComponent(loc.plusCode + ' Chiang Mai')}" target="_blank">Open in Google Maps ↗</a>` : ''}
+            `);
+        markers.push(marker);
+    });
+
+    // Fit bounds to show all markers
+    const group = L.featureGroup(markers);
+    map.fitBounds(group.getBounds().pad(0.1));
+
+    // Draw day routes
+    const satRoute = [
+        [18.806188, 98.960062], // hotel
+        [18.759437, 98.918688], // doi kham
+        [19.133, 98.945],       // wat thung luang
+        [19.138688, 98.947312], // laab ton kham
+        [18.789563, 99.028813], // laab bua tong
+        [18.789938, 98.951688], // baristro
+        [18.806188, 98.960062], // hotel
+    ];
+    L.polyline(satRoute, { color: '#e8a849', weight: 1.5, opacity: 0.35, dashArray: '6 4' }).addTo(map);
+
+    // === FLY TO ===
+    function flyTo(id) {
+        const loc = LOCATIONS[id];
+        if (loc) {
+            map.flyTo([loc.lat, loc.lng], 15, { duration: 1 });
+            markers[id].openPopup();
+        }
+    }
+
+    // === GOOGLE MAPS LINK (all pins) ===
+    const waypoints = LOCATIONS.map(l => `${l.lat},${l.lng}`);
+    const gmapsUrl = `https://www.google.com/maps/dir/${waypoints.slice(0, 10).join('/')}`;
+    document.getElementById('gmaps-link').href = gmapsUrl;
+
+    // === EXPORT GeoJSON ===
+    function exportGeoJSON() {
+        const geojson = {
+            type: "FeatureCollection",
+            features: LOCATIONS.map(loc => ({
+                type: "Feature",
+                properties: {
+                    name: loc.name,
+                    nameTh: loc.nameTh,
+                    type: loc.type,
+                    day: loc.day,
+                    plusCode: loc.plusCode
+                },
+                geometry: {
+                    type: "Point",
+                    coordinates: [loc.lng, loc.lat]
+                }
+            }))
+        };
+        downloadFile('chiangmai-trip-2026.geojson', JSON.stringify(geojson, null, 2), 'application/geo+json');
+    }
+
+    // === EXPORT KML ===
+    function exportKML() {
+        const placemarks = LOCATIONS.map(loc => `
+    <Placemark>
+      <name>${escXml(loc.name)}${loc.nameTh ? ' (' + escXml(loc.nameTh) + ')' : ''}</name>
+      <description>${escXml(loc.type)} · ${escXml(loc.day)}</description>
+      <Style><IconStyle><color>${kmlColor(COLORS[loc.type])}</color><scale>1.2</scale></IconStyle></Style>
+      <Point><coordinates>${loc.lng},${loc.lat},0</coordinates></Point>
+    </Placemark>`).join('\n');
+
+        const kml = `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Chiang Mai Trip — Feb 6-8, 2026</name>
+    <description>Temples, Laab, and Coffee in Chiang Mai</description>
+${placemarks}
+  </Document>
+</kml>`;
+        downloadFile('chiangmai-trip-2026.kml', kml, 'application/vnd.google-earth.kml+xml');
+    }
+
+    function escXml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function kmlColor(hex) {
+        const r = hex.slice(1,3), g = hex.slice(3,5), b = hex.slice(5,7);
+        return 'ff' + b + g + r; // KML uses aaBBGGRR
+    }
+
+    function downloadFile(name, content, mime) {
+        const blob = new Blob([content], { type: mime });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = name;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }
+    </script>
+</body>
+</html>
