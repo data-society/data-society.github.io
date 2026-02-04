@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Chiang Mai Trip Plan: Feb 6-8</title>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <style>#map {height: 600px; width: 100%;}</style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([18.90, 99.00], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        var locations = [
+            {lat: 18.807, lon: 98.957, title: "ibis Styles Chiang Mai", desc: "Hotel Base"},
+            {lat: 19.105, lon: 98.950, title: "Wat Thung Luang (Mae Taeng)", desc: "Sat Morning"},
+            {lat: 19.122, lon: 98.941, title: "Larb Ton Kham", desc: "Sat Lunch"},
+            {lat: 18.790, lon: 99.035, title: "Larb Bua Tong", desc: "Sat Dinner (Sat Only)"},
+            {lat: 18.880, lon: 99.030, title: "Land & Houses Park", desc: "Sun Morning: Voting"},
+            {lat: 18.759, lon: 98.918, title: "Wat Phra That Doi Kham", desc: "Sun Afternoon"},
+            {lat: 18.790, lon: 98.955, title: "The Baristro Asian Style", desc: "Coffee Break"},
+            {lat: 18.793, lon: 98.982, title: "Wat Dap Phai", desc: "Old City Temple"}
+        ];
+
+        locations.forEach(function(loc) {
+            L.marker([loc.lat, loc.lon]).addTo(map)
+                .bindPopup("<b>" + loc.title + "</b><br>" + loc.desc);
+        });
+    </script>
+</body>
+</html>
