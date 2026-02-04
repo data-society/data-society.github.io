@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiang Mai Trip Map - Feb 6-8</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        #map { height: 85vh; width: 100%; }
+        .header { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 15px; 
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .legend {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
+            line-height: 1.5;
+        }
+        .legend i {
+            width: 12px;
+            height: 12px;
+            display: inline-block;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .day-1 { color: #e74c3c; }
+        .day-2 { color: #27ae60; }
+        .day-3 { color: #f39c12; }
+        .hotel { color: #8e44ad; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>🗺️ Chiang Mai Trip Planner | Feb 6-8, 2026</h2>
+        <small>ibis Styles → Mae Taeng → Airport</small>
+    </div>
+    <div id="map"></div>
+
+    <script>
+        // Initialize map centered on Chiang Mai
+        var map = L.map('map').setView([18.85, 98.95], 11);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Custom icons
+        var hotelIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: "<div style='background-color:#8e44ad;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);'></div>",
+            iconSize: [12, 12],
+            iconAnchor: [6, 6]
+        });
+        
+        var fridayIcon = L.divIcon({
+            html: "<div style='background-color:#e74c3c;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);'></div>",
+            iconSize: [12, 12], iconAnchor: [6, 6]
+        });
+        
+        var saturdayIcon = L.divIcon({
+            html: "<div style='background-color:#27ae60;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);'></div>",
+            iconSize: [12, 12], iconAnchor: [6, 6]
+        });
+        
+        var sundayIcon = L.divIcon({
+            html: "<div style='background-color:#f39c12;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);'></div>",
+            iconSize: [12, 12], iconAnchor: [6, 6]
+        });
+
+        // Locations
+        var locations = [
+            // Hotel (Purple)
+            {name: "🏨 ibis Styles Chiang Mai", coords: [18.7964, 98.9772], icon: hotelIcon, desc: "Base | RX46+F2 | Fri-Sat nights"},
+            
+            // Friday - Coffee (Red)
+            {name: "☕ The Baristro Asian Style", coords: [18.7889, 98.9700], icon: fridayIcon, desc: "Friday 4PM | QXQ2+XM"},
+            {name: "☕ Ristr8to Original", coords: [18.8006, 98.9672], icon: fridayIcon, desc: "Friday 5PM | QXX8+MV"},
+            {name: "☕ GRAPH One Nimman", coords: [18.8022, 98.9675], icon: fridayIcon, desc: "Friday 6PM | QXX9+X7"},
+            {name: "☕ Roast8ry Flagship", coords: [18.7969, 98.9686], icon: fridayIcon, desc: "Friday 7PM | QXV9+X9"},
+            
+            // Saturday - Temples & Food (Green)
+            {name: "🛕 วัดทุ่งหลวง", coords: [19.1000, 98.9000], icon: saturdayIcon, desc: "Saturday 9AM | CPQF+CM* | Mae Taeng"},
+            {name: "🍖 ลาบต้นขาม", coords: [19.1167, 98.8833], icon: saturdayIcon, desc: "Saturday 10:30AM | 4WQW+FW | After temple"},
+            {name: "🍖 ลาบบัวตอง (SAT ONLY)", coords: [18.9333, 98.9167], icon: saturdayIcon, desc: "Saturday 12PM | Q2QH+RG | Saturday only!"},
+            {name: "🙏 พระธาตุดอยคำ", coords: [18.7475, 98.9319], icon: saturdayIcon, desc: "Saturday 3-6PM | QW59+QF | Unhurried prayer time"},
+            
+            // Sunday - Voting & Flight (Orange)
+            {name: "🗳️ สโมสรฯ Land & House Park", coords: [18.8956, 99.0417], icon: sundayIcon, desc: "Sunday 8:30AM | V287+C69 | ลงประชามติ"},
+            {name: "🛕 วัดดับภัย", coords: [18.7667, 98.9667], icon: sundayIcon, desc: "Sunday 11AM | QXVJ+5J | Pre-airport"},
+            {name: "✈️ Chiang Mai Airport (CNX)", coords: [18.7667, 98.9667], icon: sundayIcon, desc: "Sunday 9PM Departure"}
+        ];
+
+        // Add markers
+        locations.forEach(function(loc) {
+            L.marker(loc.coords, {icon: loc.icon})
+             .addTo(map)
+             .bindPopup("<b>" + loc.name + "</b><br>" + loc.desc);
+        });
+
+        // Add legend
+        var legend = L.control({position: 'bottomright'});
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend');
+            div.innerHTML += '<div><span style="background:#8e44ad;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:5px;"></span>Hotel (Base)</div>';
+            div.innerHTML += '<div><span style="background:#e74c3c;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:5px;"></span>Friday (Coffee)</div>';
+            div.innerHTML += '<div><span style="background:#27ae60;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:5px;"></span>Saturday (Temples/Food)</div>';
+            div.innerHTML += '<div><span style="background:#f39c12;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:5px;"></span>Sunday (Voting/Flight)</div>';
+            return div;
+        };
+        legend.addTo(map);
+
+        // Fit bounds to show all markers
+        var group = new L.featureGroup(locations.map(l => L.marker(l.coords)));
+        map.fitBounds(group.getBounds().pad(0.1));
+    </script>
+</body>
+</html>
