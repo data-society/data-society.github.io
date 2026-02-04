@@ -1,0 +1,2398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    
+    <title>ตะกรุดไมยราพณ์สะกดทัพ เนื้อเงิน | Silver Takrud Maiyarap Sakod Thap</title>
+
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='sg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23D4D4DC'/%3E%3Cstop offset='50%25' stop-color='%23A0A0B0'/%3E%3Cstop offset='100%25' stop-color='%23707080'/%3E%3C/linearGradient%3E%3ClinearGradient id='gg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%23C9A96E'/%3E%3Cstop offset='100%25' stop-color='%238B6914'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='22' y='4' width='20' height='56' rx='10' fill='url(%23sg)' stroke='%23888' stroke-width='1'/%3E%3Cellipse cx='32' cy='10' rx='10' ry='6' fill='url(%23sg)' stroke='%23999' stroke-width='0.5'/%3E%3Cellipse cx='32' cy='54' rx='10' ry='6' fill='url(%23sg)' stroke='%23999' stroke-width='0.5'/%3E%3Cline x1='32' y1='16' x2='32' y2='48' stroke='url(%23gg)' stroke-width='1' stroke-dasharray='2 2'/%3E%3Ccircle cx='32' cy='26' r='3' fill='none' stroke='%23C9A96E' stroke-width='0.7'/%3E%3Ccircle cx='32' cy='38' r='3' fill='none' stroke='%23C9A96E' stroke-width='0.7'/%3E%3Cpath d='M28 30 L32 32 L36 30' fill='none' stroke='%23C9A96E' stroke-width='0.5'/%3E%3Cpath d='M28 34 L32 36 L36 34' fill='none' stroke='%23C9A96E' stroke-width='0.5'/%3E%3C/svg%3E">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Sarabun:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+    <style>
+        /* ══════════════════════════════════════════════════════
+           NEXUS MICRO-FRAMEWORK v13.0 — "Silver Moon" Variant
+           Color DNA: Moonlit Silver × Indigo Void × Sacred Gold
+           ══════════════════════════════════════════════════════ */
+        @layer base, layout, components, animations, utilities;
+
+        @layer base {
+            :root {
+                /* Void & Surface — Deep indigo night */
+                --space-void: #060610;
+                --space-surface: #0C0C1A;
+                --space-elevated: #121225;
+
+                /* Silver Spectrum */
+                --silver-bright: #D4D4DC;
+                --silver-mid: #A0A0B0;
+                --silver-dark: #6B6B7B;
+                --silver-glow: rgba(212, 212, 220, 0.12);
+
+                /* Moonlight — Primary accent (replaces neon-core) */
+                --moonlight: #8BA4C8;
+                --moonlight-bright: #A8C4E8;
+                --moonlight-glow: rgba(139, 164, 200, 0.15);
+
+                /* Sacred Gold */
+                --sacred-gold: #C9A96E;
+                --sacred-gold-bright: #E0C88A;
+                --sacred-gold-dim: #8B6914;
+                --sacred-gold-glow: rgba(201, 169, 110, 0.15);
+
+                /* Mystical Indigo */
+                --indigo-deep: #2D1B69;
+                --indigo-mid: #4C1D95;
+                --indigo-glow: rgba(76, 29, 149, 0.2);
+
+                /* Risk / Ritual */
+                --ritual-red: #8B1A1A;
+                --ritual-red-bright: #B91C1C;
+                --risk-warm: #D97706;
+
+                /* Text */
+                --text-main: #E0E0EC;
+                --text-muted: #7A7A90;
+                --text-dim: #4A4A5C;
+
+                /* Glass */
+                --glass-border: rgba(212, 212, 220, 0.08);
+                --glass-bg: rgba(12, 12, 26, 0.8);
+
+                /* Motion */
+                --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+                --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            html {
+                scroll-behavior: smooth;
+                scroll-padding-top: 80px;
+            }
+
+            body {
+                background: var(--space-void);
+                color: var(--text-main);
+                font-family: 'Sarabun', 'Cormorant Garamond', serif;
+                font-size: 16px;
+                line-height: 1.75;
+                overflow-x: hidden;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            /* i18n Toggle */
+            [lang="th"] {
+                display: none;
+            }
+
+            body[data-lang="th"] [lang="en"] {
+                display: none;
+            }
+
+            body[data-lang="th"] [lang="th"] {
+                display: revert;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+            }
+
+            a {
+                color: var(--moonlight-bright);
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+            a:hover {
+                color: var(--sacred-gold);
+            }
+
+            ::selection {
+                background: var(--sacred-gold);
+                color: var(--space-void);
+            }
+
+            ::-webkit-scrollbar {
+                width: 6px;
+                background: var(--space-void);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: var(--silver-dark);
+                border-radius: 4px;
+            }
+
+            h1,
+            h2,
+            h3,
+            h4 {
+                font-family: 'Orbitron', sans-serif;
+                letter-spacing: 0.05em;
+                line-height: 1.3;
+            }
+        }
+
+        @layer layout {
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 1.5rem;
+            }
+
+            .section {
+                padding: 5rem 0;
+                position: relative;
+            }
+
+            .section+.section {
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .grid-2 {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+                align-items: start;
+            }
+
+            .grid-3 {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+
+            @media (max-width: 860px) {
+
+                .grid-2,
+                .grid-3 {
+                    grid-template-columns: 1fr;
+                }
+
+                .section {
+                    padding: 3rem 0;
+                }
+            }
+        }
+
+        @layer components {
+
+            /* Glass Panel */
+            .glass {
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+                border-radius: 16px;
+            }
+
+            /* Header */
+            .site-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+                padding: 0.75rem 1.5rem;
+                background: rgba(6, 6, 16, 0.85);
+                backdrop-filter: blur(24px);
+                -webkit-backdrop-filter: blur(24px);
+                border-bottom: 1px solid var(--glass-border);
+                transition: all 0.3s var(--ease-smooth);
+            }
+
+            .header-inner {
+                max-width: 1200px;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .header-logo {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .header-logo svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .header-title {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 0.75rem;
+                font-weight: 700;
+                letter-spacing: 0.15em;
+                color: var(--silver-bright);
+            }
+
+            .header-nav {
+                display: flex;
+                gap: 0.25rem;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
+            .nav-link {
+                font-size: 0.65rem;
+                padding: 0.35rem 0.7rem;
+                border-radius: 6px;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                font-family: 'Orbitron', sans-serif;
+                font-weight: 500;
+                transition: all 0.2s;
+                cursor: pointer;
+                border: 1px solid transparent;
+                background: none;
+                white-space: nowrap;
+            }
+
+            .nav-link:hover,
+            .nav-link.active {
+                color: var(--sacred-gold);
+                border-color: var(--sacred-gold-glow);
+                background: var(--sacred-gold-glow);
+            }
+
+            /* Hero */
+            .hero {
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                position: relative;
+                padding: 6rem 1.5rem 4rem;
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 2;
+                max-width: 800px;
+            }
+
+            .hero-badge {
+                display: inline-block;
+                padding: 0.3rem 1rem;
+                border-radius: 99px;
+                font-family: 'Orbitron', sans-serif;
+                font-size: 0.6rem;
+                font-weight: 700;
+                letter-spacing: 0.2em;
+                text-transform: uppercase;
+                border: 1px solid var(--sacred-gold);
+                color: var(--sacred-gold);
+                background: var(--sacred-gold-glow);
+                margin-bottom: 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: clamp(2rem, 5vw, 3.5rem);
+                font-weight: 900;
+                background: linear-gradient(135deg, var(--silver-bright) 0%, var(--sacred-gold) 50%, var(--moonlight-bright) 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin-bottom: 1rem;
+            }
+
+            .hero-sub {
+                font-size: 1.15rem;
+                color: var(--text-muted);
+                max-width: 600px;
+                margin: 0 auto 2rem;
+                font-style: italic;
+            }
+
+            .hero-image-frame {
+                margin: 2.5rem auto 0;
+                max-width: 360px;
+                position: relative;
+                border-radius: 20px;
+                overflow: hidden;
+                border: 2px solid var(--sacred-gold-dim);
+                box-shadow: 0 0 60px rgba(201, 169, 110, 0.15), 0 0 120px rgba(139, 164, 200, 0.08);
+            }
+
+            .hero-image-frame img {
+                width: 100%;
+                display: block;
+            }
+
+            .hero-image-frame::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(180deg, transparent 60%, var(--space-void) 100%);
+                pointer-events: none;
+            }
+
+            /* Section Headers */
+            .section-header {
+                margin-bottom: 3rem;
+            }
+
+            .section-number {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.7rem;
+                color: var(--sacred-gold);
+                letter-spacing: 0.15em;
+                margin-bottom: 0.5rem;
+                display: block;
+            }
+
+            .section-title {
+                font-size: clamp(1.5rem, 3vw, 2.2rem);
+                font-weight: 700;
+                color: var(--silver-bright);
+                margin-bottom: 0.75rem;
+            }
+
+            .section-subtitle {
+                font-size: 0.95rem;
+                color: var(--text-muted);
+                max-width: 600px;
+                font-style: italic;
+            }
+
+            /* Content Blocks */
+            .prose {
+                font-size: 1rem;
+                line-height: 1.85;
+                color: var(--text-main);
+            }
+
+            .prose p {
+                margin-bottom: 1.25rem;
+            }
+
+            .prose strong {
+                color: var(--sacred-gold);
+                font-weight: 600;
+            }
+
+            .prose em {
+                color: var(--moonlight-bright);
+                font-style: italic;
+            }
+
+            .thai-term {
+                font-family: 'Sarabun', sans-serif;
+                font-weight: 600;
+                color: var(--sacred-gold);
+                font-style: normal;
+                border-bottom: 1px dotted var(--sacred-gold-dim);
+                cursor: help;
+            }
+
+            /* Info Cards */
+            .info-card {
+                padding: 1.5rem;
+                border-radius: 12px;
+                background: var(--space-elevated);
+                border: 1px solid var(--glass-border);
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+            .info-card:hover {
+                border-color: rgba(201, 169, 110, 0.2);
+                box-shadow: 0 4px 20px rgba(201, 169, 110, 0.08);
+            }
+
+            .info-card-icon {
+                font-size: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .info-card h4 {
+                font-size: 0.75rem;
+                font-weight: 700;
+                color: var(--sacred-gold);
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin-bottom: 0.5rem;
+            }
+
+            .info-card p {
+                font-size: 0.9rem;
+                color: var(--text-muted);
+                line-height: 1.65;
+            }
+
+            /* Comparison Table */
+            .compare-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 0.85rem;
+                margin: 1.5rem 0;
+            }
+
+            .compare-table th {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                padding: 0.75rem;
+                text-align: left;
+                color: var(--sacred-gold);
+                border-bottom: 1px solid var(--sacred-gold-dim);
+            }
+
+            .compare-table td {
+                padding: 0.75rem;
+                border-bottom: 1px solid var(--glass-border);
+                color: var(--text-main);
+                vertical-align: top;
+            }
+
+            .compare-table tr:hover td {
+                background: rgba(212, 212, 220, 0.03);
+            }
+
+            /* Timeline */
+            .timeline {
+                position: relative;
+                padding-left: 2rem;
+            }
+
+            .timeline::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: linear-gradient(180deg, var(--sacred-gold), var(--moonlight), transparent);
+            }
+
+            .timeline-item {
+                position: relative;
+                margin-bottom: 2rem;
+                padding: 1.25rem;
+                background: var(--space-elevated);
+                border-radius: 12px;
+                border: 1px solid var(--glass-border);
+            }
+
+            .timeline-item::before {
+                content: '';
+                position: absolute;
+                left: -2.35rem;
+                top: 1.5rem;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: var(--sacred-gold);
+                border: 2px solid var(--space-void);
+                box-shadow: 0 0 12px var(--sacred-gold);
+            }
+
+            .timeline-step {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.65rem;
+                color: var(--sacred-gold);
+                letter-spacing: 0.1em;
+                margin-bottom: 0.35rem;
+            }
+
+            .timeline-item h4 {
+                font-size: 0.9rem;
+                color: var(--silver-bright);
+                margin-bottom: 0.5rem;
+                font-family: 'Sarabun', sans-serif;
+                font-weight: 700;
+            }
+
+            .timeline-item p {
+                font-size: 0.85rem;
+                color: var(--text-muted);
+            }
+
+            /* Media Players */
+            .media-section {
+                padding: 1.5rem;
+                border-radius: 16px;
+                background: var(--space-surface);
+                border: 1px solid var(--glass-border);
+            }
+
+            .media-label {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 0.65rem;
+                color: var(--sacred-gold);
+                text-transform: uppercase;
+                letter-spacing: 0.15em;
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .video-wrapper {
+                position: relative;
+                padding-bottom: 56.25%;
+                height: 0;
+                overflow: hidden;
+                border-radius: 12px;
+            }
+
+            .video-wrapper iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                border: 0;
+                border-radius: 12px;
+            }
+
+            .audio-player {
+                padding: 1rem 1.25rem;
+                border-radius: 12px;
+                background: var(--space-elevated);
+                border: 1px solid var(--glass-border);
+            }
+
+            .audio-player audio {
+                width: 100%;
+                height: 40px;
+                filter: sepia(30%) saturate(60%) hue-rotate(180deg);
+            }
+
+            /* PDF Carousel */
+            .pdf-carousel {
+                position: relative;
+                border-radius: 12px;
+                overflow: hidden;
+                background: var(--space-surface);
+                border: 1px solid var(--glass-border);
+            }
+
+            .pdf-viewport {
+                width: 100%;
+                aspect-ratio: 3/4;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .pdf-viewport canvas {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
+
+            .pdf-controls {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.75rem;
+                padding: 0.75rem;
+                background: var(--space-elevated);
+                border-top: 1px solid var(--glass-border);
+            }
+
+            .pdf-btn {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                border: 1px solid var(--glass-border);
+                background: var(--space-surface);
+                color: var(--text-main);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.85rem;
+                transition: all 0.2s;
+            }
+
+            .pdf-btn:hover {
+                border-color: var(--sacred-gold);
+                color: var(--sacred-gold);
+            }
+
+            .pdf-page-info {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 0.7rem;
+                color: var(--text-muted);
+                min-width: 60px;
+                text-align: center;
+            }
+
+            .pdf-progress {
+                width: 100%;
+                height: 2px;
+                background: var(--glass-border);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+            }
+
+            .pdf-progress-fill {
+                height: 100%;
+                background: var(--sacred-gold);
+                transition: width 0.3s;
+            }
+
+            /* Network Viz */
+            .network-viz {
+                width: 100%;
+                height: 500px;
+                position: relative;
+                overflow: hidden;
+                border-radius: 12px;
+                border: 1px solid var(--glass-border);
+                background: radial-gradient(ellipse at center, #0C0C1A 0%, #060610 100%);
+            }
+
+            .network-legend {
+                position: absolute;
+                bottom: 1rem;
+                left: 1rem;
+                padding: 0.75rem 1rem;
+                border-radius: 10px;
+                background: rgba(6, 6, 16, 0.85);
+                backdrop-filter: blur(12px);
+                border: 1px solid var(--glass-border);
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+
+            .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 0.4rem;
+                font-size: 0.65rem;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+            }
+
+            .legend-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 2px;
+            }
+
+            /* Badge */
+            .badge {
+                display: inline-flex;
+                align-items: center;
+                padding: 0.15rem 0.6rem;
+                border-radius: 99px;
+                font-size: 0.6rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+                border: 1px solid transparent;
+            }
+
+            .badge-gold {
+                background: var(--sacred-gold-glow);
+                color: var(--sacred-gold);
+                border-color: rgba(201, 169, 110, 0.3);
+            }
+
+            .badge-moon {
+                background: var(--moonlight-glow);
+                color: var(--moonlight);
+                border-color: rgba(139, 164, 200, 0.3);
+            }
+
+            .badge-ritual {
+                background: rgba(139, 26, 26, 0.15);
+                color: var(--ritual-red-bright);
+                border-color: rgba(185, 28, 28, 0.3);
+            }
+
+            .badge-indigo {
+                background: var(--indigo-glow);
+                color: #A78BFA;
+                border-color: rgba(167, 139, 250, 0.3);
+            }
+
+            /* Slide Panel */
+            .slide-panel {
+                position: fixed;
+                top: 0;
+                right: 0;
+                width: 100%;
+                max-width: 480px;
+                height: 100%;
+                background: var(--space-surface);
+                border-left: 1px solid var(--glass-border);
+                transform: translateX(100%);
+                transition: transform 0.5s var(--ease-out);
+                z-index: 200;
+                overflow-y: auto;
+                padding: 2rem;
+            }
+
+            .slide-panel.open {
+                transform: translateX(0);
+            }
+
+            .panel-close {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                background: none;
+                border: none;
+                color: var(--text-muted);
+                font-size: 1.25rem;
+                cursor: pointer;
+                transition: color 0.2s;
+            }
+
+            .panel-close:hover {
+                color: var(--ritual-red-bright);
+            }
+
+            .panel-overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 199;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s;
+            }
+
+            .panel-overlay.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            /* Warning Card */
+            .warning-card {
+                padding: 1.25rem;
+                border-radius: 12px;
+                background: rgba(139, 26, 26, 0.08);
+                border: 1px solid rgba(185, 28, 28, 0.2);
+                border-left: 3px solid var(--ritual-red-bright);
+            }
+
+            .warning-card h4 {
+                color: var(--ritual-red-bright);
+                font-size: 0.85rem;
+                margin-bottom: 0.5rem;
+                font-family: 'Sarabun', sans-serif;
+                font-weight: 700;
+            }
+
+            .warning-card p {
+                font-size: 0.85rem;
+                color: var(--text-muted);
+            }
+
+            /* Anuphap (Power) Radar */
+            .radar-wrap {
+                padding: 1.5rem;
+            }
+
+            /* Footer */
+            .site-footer {
+                padding: 3rem 0;
+                text-align: center;
+                border-top: 1px solid var(--glass-border);
+                font-size: 0.75rem;
+                color: var(--text-dim);
+            }
+
+            /* Loading */
+            .loading-screen {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: var(--space-void);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: opacity 0.8s var(--ease-out), visibility 0.8s;
+            }
+
+            .loading-screen.done {
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+            }
+
+            .loading-text {
+                font-family: 'Orbitron', sans-serif;
+                font-size: 0.85rem;
+                color: var(--moonlight);
+                letter-spacing: 0.25em;
+                animation: pulse-glow 2s ease-in-out infinite;
+            }
+
+            .loading-sub {
+                font-size: 0.7rem;
+                color: var(--text-dim);
+                margin-top: 0.75rem;
+                font-family: 'Sarabun', sans-serif;
+            }
+        }
+
+        @layer animations {
+            @keyframes pulse-glow {
+
+                0%,
+                100% {
+                    opacity: 0.5;
+                }
+
+                50% {
+                    opacity: 1;
+                    text-shadow: 0 0 20px var(--moonlight);
+                }
+            }
+
+            @keyframes fade-up {
+                from {
+                    opacity: 0;
+                    transform: translateY(24px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @keyframes float {
+
+                0%,
+                100% {
+                    transform: translateY(0);
+                }
+
+                50% {
+                    transform: translateY(-8px);
+                }
+            }
+
+            .fade-up {
+                animation: fade-up 0.8s var(--ease-out) both;
+            }
+
+            .fade-up-d1 {
+                animation-delay: 0.1s;
+            }
+
+            .fade-up-d2 {
+                animation-delay: 0.2s;
+            }
+
+            .fade-up-d3 {
+                animation-delay: 0.3s;
+            }
+
+            .fade-up-d4 {
+                animation-delay: 0.4s;
+            }
+
+            .float-gentle {
+                animation: float 6s ease-in-out infinite;
+            }
+        }
+
+        @layer utilities {
+            .font-display {
+                font-family: 'Orbitron', sans-serif;
+            }
+
+            .font-body {
+                font-family: 'Sarabun', 'Cormorant Garamond', serif;
+            }
+
+            .font-mono {
+                font-family: 'JetBrains Mono', monospace;
+            }
+
+            .text-gold {
+                color: var(--sacred-gold);
+            }
+
+            .text-moon {
+                color: var(--moonlight);
+            }
+
+            .text-silver {
+                color: var(--silver-bright);
+            }
+
+            .text-muted {
+                color: var(--text-muted);
+            }
+
+            .text-center {
+                text-align: center;
+            }
+
+            .mt-1 {
+                margin-top: 0.5rem;
+            }
+
+            .mt-2 {
+                margin-top: 1rem;
+            }
+
+            .mt-3 {
+                margin-top: 1.5rem;
+            }
+
+            .mt-4 {
+                margin-top: 2rem;
+            }
+
+            .mb-1 {
+                margin-bottom: 0.5rem;
+            }
+
+            .mb-2 {
+                margin-bottom: 1rem;
+            }
+
+            .mb-3 {
+                margin-bottom: 1.5rem;
+            }
+
+            .flex {
+                display: flex;
+            }
+
+            .flex-col {
+                flex-direction: column;
+            }
+
+            .items-center {
+                align-items: center;
+            }
+
+            .justify-between {
+                justify-content: space-between;
+            }
+
+            .gap-1 {
+                gap: 0.5rem;
+            }
+
+            .gap-2 {
+                gap: 1rem;
+            }
+
+            .gap-3 {
+                gap: 1.5rem;
+            }
+
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                border: 0;
+            }
+        }
+    </style>
+</head>
+
+<body data-lang="en">
+
+    <canvas id="antigravity-canvas" style="position:fixed;inset:0;z-index:0;pointer-events:none;"></canvas>
+
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-text">INITIALIZING NEXUS</div>
+        <div class="loading-sub" lang="en">Silver Takrud Maiyarap — Decrypting Artifact...</div>
+        <div class="loading-sub" lang="th">ตะกรุดเงินไมยราพณ์สะกดทัพ — กำลังถอดรหัสพลังวัตถุมงคล...</div>
+    </div>
+
+    <header class="site-header" id="site-header">
+        <div class="header-inner">
+            <div class="header-logo">
+                <svg viewBox="0 0 64 64" fill="none" width="28" height="28">
+                    <rect x="22" y="4" width="20" height="56" rx="10" fill="none" stroke="currentColor" stroke-width="2"
+                        style="color:var(--sacred-gold)" />
+                    <ellipse cx="32" cy="10" rx="10" ry="6" fill="none" stroke="currentColor" stroke-width="1.5"
+                        style="color:var(--sacred-gold)" />
+                    <ellipse cx="32" cy="54" rx="10" ry="6" fill="none" stroke="currentColor" stroke-width="1.5"
+                        style="color:var(--sacred-gold)" />
+                    <line x1="32" y1="18" x2="32" y2="46" stroke="var(--moonlight)" stroke-width="1"
+                        stroke-dasharray="3 3" />
+                    <circle cx="32" cy="32" r="5" fill="none" stroke="var(--moonlight)" stroke-width="1" />
+                </svg>
+                <span class="header-title">
+                    <span lang="en">MAIYARAP // SILVER</span>
+                    <span lang="th">ไมยราพณ์ // เนื้อเงิน</span>
+                </span>
+            </div>
+            <nav class="header-nav" id="main-nav">
+                <button class="nav-link" data-target="hero" lang="en">Origin</button>
+                <button class="nav-link" data-target="hero" lang="th">ต้นกำเนิด</button>
+                <button class="nav-link" data-target="alchemy" lang="en">Silver</button>
+                <button class="nav-link" data-target="alchemy" lang="th">เนื้อเงิน</button>
+                <button class="nav-link" data-target="sakod" lang="en">Sakod Thap</button>
+                <button class="nav-link" data-target="sakod" lang="th">สะกดทัพ</button>
+                <button class="nav-link" data-target="rangap" lang="en">Rangap</button>
+                <button class="nav-link" data-target="rangap" lang="th">รังงับ</button>
+                <button class="nav-link" data-target="ritual" lang="en">Ritual</button>
+                <button class="nav-link" data-target="ritual" lang="th">พิธีกรรม</button>
+                <button class="nav-link" data-target="media" lang="en">Media</button>
+                <button class="nav-link" data-target="media" lang="th">สื่อ</button>
+                <button class="nav-link" data-target="vault" lang="en">Vault</button>
+                <button class="nav-link" data-target="vault" lang="th">ห้องนิรภัย</button>
+                <button class="nav-link" onclick="APP.toggleLang()"
+                    style="color:var(--sacred-gold); border-color:var(--sacred-gold-dim);">EN / TH</button>
+            </nav>
+        </div>
+    </header>
+
+    <main style="position:relative; z-index:1;">
+
+        <section class="hero" id="hero">
+            <div class="hero-content">
+                <div class="hero-badge fade-up">
+                    <span lang="en">Number One Takrud of Siam — The Emperor of Silence</span>
+                    <span lang="th">ตะกรุดอันดับหนึ่งของสยาม — จักรพรรดิแห่งความเงียบ</span>
+                </div>
+
+                <h1 class="fade-up fade-up-d1">
+                    <span lang="en">The Silver Takrud Maiyarap Sakod Thap</span>
+                    <span lang="th">ตะกรุดไมยราพณ์สะกดทัพ เนื้อเงิน</span>
+                </h1>
+
+                <p class="hero-sub fade-up fade-up-d2">
+                    <span lang="en">Luang Phor Goon — Wat Phra Non, Phetchaburi Province. A metaphysical weapon of the
+                        <em class="thai-term">Khahabodi</em> (ขรัวบดี), the aristocratic merchant class, forged through
+                        three years of the <em class="thai-term">Lob Thom</em> ritual — erased and rewritten under the
+                        moonlight until the Silver itself dreams of the Sleeping Army.</span>
+                    <span lang="th">หลวงพ่อกูน — วัดพระนอน จังหวัดเพชรบุรี อาวุธทางอภิญญาของ<em
+                            class="thai-term">ขรัวบดี</em> ชนชั้นคหบดี ผู้มีฐานะ สร้างผ่านพิธี<em
+                            class="thai-term">ลบถม</em>สามปี — ลบแล้วเขียน เขียนแล้วลบ ภายใต้แสงจันทร์
+                        จนเนื้อเงินเองก็ฝันถึงกองทัพที่หลับใหล</span>
+                </p>
+
+                <div class="hero-image-frame fade-up fade-up-d3 float-gentle">
+                    <img src="https://tanat.net/maiyarap/Maiyarap_Silver.jpg"
+                        alt="Silver Takrud Maiyarap Sakod Thap by Luang Phor Goon, Wat Phra Non" loading="eager"
+                        onerror="this.parentElement.innerHTML='<div style=&quot;padding:4rem 2rem;text-align:center;color:var(--text-dim);font-size:0.85rem;&quot;>⟡ Silver Takrud Image ⟡</div>'">
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="alchemy">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-number" lang="en">II — MATERIAL METAPHYSICS</span>
+                    <span class="section-number" lang="th">II — อภิปรัชญาวัสดุ</span>
+                    <h2 class="section-title">
+                        <span lang="en">Alchemy of the Silver Moon</span>
+                        <span lang="th">เล่นแร่แปรเงิน: อัลเคมีแห่งจันทร์</span>
+                    </h2>
+                    <p class="section-subtitle">
+                        <span lang="en">The Lunar Affinity — why Silver transcends its metallic form to become a conduit
+                            of <em class="thai-term">Chantra</em> (จันทร์) energy</span>
+                        <span lang="th">ความสัมพันธ์กับดวงจันทร์ — เหตุใดเงินจึงข้ามพ้นรูปธาตุโลหะ
+                            กลายเป็นสื่อนำพลังแห่ง<em class="thai-term">จันทร์</em></span>
+                    </p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="prose fade-up">
+                        <p lang="en">In the cosmology of Thai <strong>Saiyasart</strong> (ไสยศาสตร์), every metal
+                            carries a <em class="thai-term">Thaatu</em> (ธาตุ) — an elemental soul. Silver belongs to
+                            the Moon (<em class="thai-term">Chantra</em>), embodying <strong>Yin energy</strong>: cool,
+                            reflective, receptive, and profoundly feminine. Copper, by contrast, burns with the Fire of
+                            Mars — aggressive, commanding, forceful. Lead sinks with the heavy gravity of Saturn —
+                            oppressive, unyielding, crushing.</p>
+                        <p lang="en">The Silver Takrud occupies a singular niche: it does not conquer through force but
+                            through <strong>enchantment</strong>. Where a Lead <em class="thai-term">Sakod Thap</em>
+                            puts enemies into a comatose stupor — a heavy, dreamless darkness — Silver induces <em
+                                class="thai-term">Nithra Yen</em> (นิทราเย็น), the "Cool Sleep," a gentle, seductive
+                            slumber. The enemy does not feel attacked; they feel <em>at peace</em>. This is the weapon
+                            of sophistication.</p>
+
+                        <p lang="th">ในจักรวาลวิทยาของ<strong>ไสยศาสตร์</strong>ไทย โลหะทุกชนิดล้วนมี<em
+                                class="thai-term">ธาตุ</em> — วิญญาณแห่งธาตุ เงินเป็นของพระจันทร์ (<em
+                                class="thai-term">จันทร์</em>) สื่อถึง<strong>พลังยิน</strong>: เย็น สะท้อน เปิดรับ
+                            และมีความเป็นหญิงอย่างลึกซึ้ง ทองแดงตรงกันข้ามลุกไหม้ด้วยไฟแห่งอังคาร — ก้าวร้าว บัญชาการ
+                            รุนแรง ตะกั่วจมลงด้วยแรงโน้มถ่วงหนักของเสาร์ — กดดัน แข็งกระด้าง บดขยี้</p>
+                        <p lang="th">ตะกรุดเนื้อเงินอยู่ในช่องว่างพิเศษเฉพาะตัว: ไม่พิชิตด้วยกำลัง
+                            แต่ด้วย<strong>มนต์เสน่ห์</strong> ในขณะที่ตะกั่ว<em
+                                class="thai-term">สะกดทัพ</em>ทำให้ศัตรูตกอยู่ในอาการซึม — ความมืดหนักไร้ความฝัน —
+                            แต่เงินชักนำ<em class="thai-term">นิทราเย็น</em> การหลับที่อ่อนโยน ยั่วยวน
+                            ศัตรูไม่รู้สึกว่าถูกโจมตี พวกเขารู้สึก<em>สงบ</em> นี่คืออาวุธแห่งความประณีต</p>
+                    </div>
+
+                    <div class="flex-col gap-3 fade-up fade-up-d2">
+                        <div class="info-card">
+                            <div class="info-card-icon">🌙</div>
+                            <h4 lang="en">Lunar Affinity (Yin)</h4>
+                            <h4 lang="th">ธาตุจันทร์ (หยิน)</h4>
+                            <p lang="en">Silver resonates with the Moon's frequency. Its cool nature purifies <em
+                                    class="thai-term">Khlet</em> (เคล็ด) — bad luck and spiritual toxins — just as
+                                scientifically, silver ions exhibit antimicrobial properties, destroying pathogens on
+                                contact.</p>
+                            <p lang="th">เงินสั่นสะเทือนกับความถี่ของดวงจันทร์ ธรรมชาติอันเย็นชำระล้าง<em
+                                    class="thai-term">เคล็ด</em> — โชคร้ายและพิษทางจิตวิญญาณ —
+                                เช่นเดียวกับในทางวิทยาศาสตร์ ไอออนเงินมีคุณสมบัติต้านจุลชีพ ทำลายเชื้อโรคเมื่อสัมผัส</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-icon">🔬</div>
+                            <h4 lang="en">The Science-Magic Bridge</h4>
+                            <h4 lang="th">สะพานวิทยาศาสตร์-ไสยศาสตร์</h4>
+                            <p lang="en">Silver tarnishes when exposed to sulfur compounds — the ancients observed this
+                                as silver "detecting poison." In Saiyasart, this translates directly: the Silver Takrud
+                                <strong>senses spiritual danger</strong>, growing darker when malevolent forces are
+                                near, acting as a metaphysical early-warning system.
+                            </p>
+                            <p lang="th">เงินหมองเมื่อสัมผัสสารประกอบกำมะถัน — คนโบราณสังเกตว่าเงิน "ตรวจจับยาพิษ"
+                                ในทางไสยศาสตร์สิ่งนี้แปลตรงตัว: ตะกรุดเงิน<strong>รับรู้อันตรายทางจิตวิญญาณ</strong>
+                                หมองคล้ำลงเมื่อพลังชั่วร้ายอยู่ใกล้ ทำหน้าที่เป็นระบบเตือนภัยล่วงหน้าทางอภิปรัชญา</p>
+                        </div>
+
+                        <table class="compare-table">
+                            <thead>
+                                <tr>
+                                    <th lang="en">Material</th>
+                                    <th lang="en">Element</th>
+                                    <th lang="en">Nature of Power</th>
+                                    <th lang="th">วัสดุ</th>
+                                    <th lang="th">ธาตุ</th>
+                                    <th lang="th">ลักษณะพลัง</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="badge badge-moon" lang="en">Silver (เงิน)</span><span
+                                            class="badge badge-moon" lang="th">เงิน</span></td>
+                                    <td lang="en">Moon / Yin</td>
+                                    <td lang="en">Cool Sleep, Enchantment, Diplomacy</td>
+                                    <td lang="th">จันทร์ / หยิน</td>
+                                    <td lang="th">นิทราเย็น, มนต์เสน่ห์, การทูต</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-gold" lang="en">Copper (ทองแดง)</span><span
+                                            class="badge badge-gold" lang="th">ทองแดง</span></td>
+                                    <td lang="en">Mars / Fire</td>
+                                    <td lang="en">Aggressive Command, Battle Focus</td>
+                                    <td lang="th">อังคาร / ไฟ</td>
+                                    <td lang="th">อำนาจก้าวร้าว, สมาธิรบ</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="badge badge-indigo" lang="en">Lead (ตะกั่ว)</span><span
+                                            class="badge badge-indigo" lang="th">ตะกั่ว</span></td>
+                                    <td lang="en">Saturn / Earth</td>
+                                    <td lang="en">Heavy Coma, Crushing Oppression</td>
+                                    <td lang="th">เสาร์ / ดิน</td>
+                                    <td lang="th">โคม่าหนัก, การกดขี่บดขยี้</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="sakod">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-number" lang="en">III — CORE POWER ANALYSIS</span>
+                    <span class="section-number" lang="th">III — วิเคราะห์อนุภาพหลัก</span>
+                    <h2 class="section-title">
+                        <span lang="en">Sakod Thap — Hypnotizing the Army</span>
+                        <span lang="th">สะกดทัพ — มนต์สะกดกองทัพ</span>
+                    </h2>
+                    <p class="section-subtitle">
+                        <span lang="en">The <em class="thai-term">Wicha</em> (วิชา) that silences entire battalions —
+                            and the Silver variant that does so with terrifying elegance</span>
+                        <span lang="th"><em class="thai-term">วิชา</em>ที่ทำให้กองทัพทั้งกองเงียบสนิท —
+                            และรุ่นเนื้อเงินที่ทำเช่นนั้นด้วยความประณีตอันน่าสะพรึง</span>
+                    </p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="prose fade-up">
+                        <p lang="en">The legend of <strong>Maiyarap</strong> (ไมยราพณ์) — the demon king from the
+                            Ramakien epic — centers on his ability to put Lord Rama's entire army to sleep through
+                            magical incantation. The <em class="thai-term">Sakod Thap</em> (สะกดทัพ) Takrud channels
+                            this precise power: the ability to render enemies unconscious, passive, or utterly unable to
+                            act against the bearer.</p>
+                        <p lang="en">What makes this Takrud exceptional is the <strong>7 Cemeteries Connection</strong>.
+                            Luang Phor Goon performed the consecration ritual across <em class="thai-term">Jet Pa
+                                Cha</em> (เจ็ดป่าช้า) — seven different charnel grounds. Each cemetery contributes the
+                            <strong>"Silence of Death"</strong> to the Silver. The dead do not speak, do not resist, do
+                            not rise. This silence is inscribed into the metal's spiritual DNA.
+                        </p>
+                        <p lang="en">The critical distinction for the Silver version lies in the <em>quality</em> of the
+                            hypnosis. Lead-based Sakod Thap operates through <em class="thai-term">Nithra Nak</em>
+                            (นิทราหนัก) — "Heavy Sleep." Victims collapse as if struck by a sledgehammer of
+                            unconsciousness. But the Silver version induces <em class="thai-term">Nithra Yen</em>
+                            (นิทราเย็น) — "Cool Sleep." The enemy drifts into slumber gently, willingly, as if lulled by
+                            moonlight itself. They do not feel coerced. They feel <em>seduced into stillness</em>.</p>
+
+                        <p lang="th">ตำนาน<strong>ไมยราพณ์</strong> — ราชายักษ์จากมหากาพย์รามเกียรติ์ —
+                            มีแกนกลางอยู่ที่ความสามารถในการสะกดกองทัพพระรามทั้งกองให้หลับใหลด้วยมนต์คาถา ตะกรุด<em
+                                class="thai-term">สะกดทัพ</em>ถ่ายทอดพลังนี้โดยตรง: ความสามารถในการทำให้ศัตรูหมดสติ
+                            เฉื่อยชา หรือไม่สามารถกระทำการใดๆ ต่อผู้ถือครองได้อย่างสิ้นเชิง</p>
+                        <p lang="th">สิ่งที่ทำให้ตะกรุดนี้พิเศษเหนือสิ่งอื่นใดคือ<strong>พิธีเจ็ดป่าช้า</strong>
+                            หลวงพ่อกูนประกอบพิธีปลุกเสกข้าม<em class="thai-term">เจ็ดป่าช้า</em> —
+                            ป่าช้าเจ็ดแห่งที่แตกต่างกัน
+                            ป่าช้าแต่ละแห่งมอบ<strong>"ความเงียบแห่งความตาย"</strong>ให้แก่เนื้อเงิน ผู้ตายไม่พูด
+                            ไม่ต่อต้าน ไม่ลุกขึ้น ความเงียบนี้ถูกจารึกลงใน DNA ทางจิตวิญญาณของโลหะ</p>
+                        <p lang="th">ความแตกต่างสำคัญของเนื้อเงินอยู่ที่<em>คุณภาพ</em>ของการสะกด
+                            ตะกั่วสะกดทัพทำงานผ่าน<em class="thai-term">นิทราหนัก</em> — "หลับหนัก"
+                            เหยื่อล้มลงราวกับถูกค้อนแห่งความหมดสติฟาดใส่ แต่เนื้อเงินชักนำ<em
+                                class="thai-term">นิทราเย็น</em> — "หลับเย็น" ศัตรูลอยเข้าสู่การหลับใหลอย่างอ่อนโยน
+                            เต็มใจ ราวกับถูกกล่อมด้วยแสงจันทร์ พวกเขาไม่รู้สึกถูกบังคับ
+                            พวกเขารู้สึก<em>ถูกเสน่ห์ล่อลวงสู่ความนิ่งสงบ</em></p>
+                    </div>
+
+                    <div class="flex-col gap-3 fade-up fade-up-d2">
+                        <div class="info-card" style="border-left: 3px solid var(--sacred-gold);">
+                            <div class="info-card-icon">⚰️</div>
+                            <h4 lang="en">The 7 Cemeteries (เจ็ดป่าช้า)</h4>
+                            <h4 lang="th">พิธีเจ็ดป่าช้า</h4>
+                            <p lang="en">Each charnel ground contributes a layer of deathly silence. Seven layers of
+                                absolute stillness are folded into the Silver — creating a "spiritual anesthetic" of
+                                extraordinary depth. This is not mere folklore; it is a precise engineering of
+                                accumulated mortuary energy (<em class="thai-term">Snim Teen Ga</em>).</p>
+                            <p lang="th">ป่าช้าแต่ละแห่งมอบชั้นของความเงียบแห่งความตาย
+                                เจ็ดชั้นของความนิ่งสนิทสมบูรณ์ถูกพับซ้อนลงในเนื้อเงิน — สร้าง "ยาชาทางจิตวิญญาณ"
+                                ที่มีความลึกเป็นพิเศษ นี่ไม่ใช่เพียงนิทานพื้นบ้าน
+                                แต่เป็นวิศวกรรมที่แม่นยำของพลังงานสุสานสะสม (<em class="thai-term">สนิมตีนกา</em>)</p>
+                        </div>
+
+                        <div class="warning-card">
+                            <h4 lang="en">⚠ Historical Application — The Thief's Tactic</h4>
+                            <h4 lang="th">⚠ การใช้งานในประวัติศาสตร์ — กลวิธีของโจร</h4>
+                            <p lang="en">Historical accounts record thieves placing the Sakod Thap Takrud <strong>under
+                                    the floorboards</strong> of a target household. The entire family would fall into
+                                deep, unbreakable sleep, allowing the burglary to proceed in absolute silence. This is
+                                not endorsement — it is testimony to the Takrud's terrifying efficacy.</p>
+                            <p lang="th">บันทึกประวัติศาสตร์ระบุว่าโจรวาง
+                                ตะกรุดสะกดทัพ<strong>ใต้พื้นบ้าน</strong>ของเป้าหมาย
+                                ครอบครัวทั้งหมดจะตกอยู่ในภวังค์หลับลึกที่ไม่สามารถปลุกได้
+                                ทำให้การปล้นดำเนินไปในความเงียบสนิท นี่ไม่ใช่การสนับสนุน —
+                                แต่เป็นพยานหลักฐานถึงประสิทธิภาพอันน่าสะพรึงของตะกรุด</p>
+                        </div>
+
+                        <div class="radar-wrap glass" style="border-radius:12px;">
+                            <div class="media-label">
+                                <span lang="en">⟡ ANUPHAP MATRIX — Power Profile</span>
+                                <span lang="th">⟡ เมทริกซ์อนุภาพ — โปรไฟล์พลัง</span>
+                            </div>
+                            <div style="height:260px;"><canvas id="anuphapRadar"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="rangap">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-number" lang="en">IV — CORE POWER ANALYSIS</span>
+                    <span class="section-number" lang="th">IV — วิเคราะห์อนุภาพหลัก</span>
+                    <h2 class="section-title">
+                        <span lang="en">Maha Rangap — The Great Suppression</span>
+                        <span lang="th">มหารังงับ — การระงับอันยิ่งใหญ่</span>
+                    </h2>
+                    <p class="section-subtitle">
+                        <span lang="en">Soft Power over Hard Power — the aristocrat's weapon of choice</span>
+                        <span lang="th">พลังอ่อนเหนือพลังแข็ง — อาวุธคู่ใจของชนชั้นขรัวบดี</span>
+                    </p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="prose fade-up">
+                        <p lang="en">If <em class="thai-term">Sakod Thap</em> is the sword that puts the battlefield to
+                            sleep, then <em class="thai-term">Maha Rangap</em> (มหารังงับ) is the diplomat's cloak that
+                            silences the courtroom. <strong>"Rangap"</strong> means to suppress, to still, to render
+                            silent. But in the Silver medium, this suppression is not violent — it is <em>cooling</em>.
+                        </p>
+                        <p lang="en">The concept of <em class="thai-term">Yen</em> (เย็น) — "Coolness" — is central to
+                            Thai mysticism. A "cool" person commands respect without raising their voice. A "cool"
+                            situation is one where conflict has been defused before it erupts. The Silver Takrud,
+                            consecrated under the <em class="thai-term">Chan Pen</em> (จันทร์เพ็ญ) — Full Moon — carries
+                            this cooling energy as its fundamental operating frequency.</p>
+                        <p lang="en">This is precisely why the Silver version was the weapon of the
+                            <strong>Khahabodi</strong> (ขรัวบดี/คหบดี) — the wealthy merchant, the aristocrat, the
+                            magistrate — rather than the soldier. The Khahabodi does not need to be invulnerable on the
+                            battlefield. He needs to <strong>win court cases, silence rivals, dissolve hostile
+                                negotiations, and command deference</strong> from those around him. The Silver Takrud
+                            achieves this through a fusion of <em class="thai-term">Maha Amnaj</em> (มหาอำนาจ — Great
+                            Authority) and <em class="thai-term">Metta Mahaniyom</em> (เมตตามหานิยม — Loving
+                            Popularity). The target does not hate or fear the bearer — they <em>respect and defer</em>
+                            to him.
+                        </p>
+
+                        <p lang="th">หาก<em class="thai-term">สะกดทัพ</em>คือดาบที่ทำให้สนามรบหลับใหล <em
+                                class="thai-term">มหารังงับ</em>ก็คือเสื้อคลุมของนักการทูตที่ทำให้ห้องพิจารณาคดีเงียบสนิท
+                            <strong>"รังงับ"</strong> แปลว่าระงับ สงบ ทำให้เงียบ แต่ในสื่อเงิน การระงับนี้ไม่รุนแรง —
+                            มัน<em>เย็น</em>
+                        </p>
+                        <p lang="th">แนวคิดเรื่อง<em class="thai-term">เย็น</em>เป็นหัวใจของไสยศาสตร์ไทย คนที่ "เย็น"
+                            สั่งการด้วยความเคารพโดยไม่ต้องเปล่งเสียง สถานการณ์ที่ "เย็น"
+                            คือสถานการณ์ที่ความขัดแย้งถูกคลี่คลายก่อนจะปะทุ ตะกรุดเนื้อเงินที่ปลุกเสกภายใต้<em
+                                class="thai-term">จันทร์เพ็ญ</em>พกพาพลังงานแห่งความเย็นนี้เป็นความถี่ปฏิบัติการพื้นฐาน
+                        </p>
+                        <p lang="th">นี่คือเหตุผลที่เนื้อเงินเป็นอาวุธของ<strong>คหบดี</strong> — พ่อค้าผู้มั่งคั่ง
+                            ชนชั้นสูง ผู้พิพากษา — ไม่ใช่ทหาร คหบดีไม่ต้องการอยู่ยงคงกระพันในสนามรบ
+                            เขาต้องการ<strong>ชนะคดีความ สยบคู่แข่ง คลี่คลายการเจรจาที่เป็นปฏิปักษ์
+                                และสั่งการความเคารพ</strong>จากผู้คนรอบข้าง ตะกรุดเงินบรรลุสิ่งนี้ผ่านการหลอมรวมของ<em
+                                class="thai-term">มหาอำนาจ</em>และ<em class="thai-term">เมตตามหานิยม</em>
+                            เป้าหมายไม่เกลียดหรือกลัวผู้ถือครอง — พวกเขา<em>เคารพและเกรงใจ</em></p>
+                    </div>
+
+                    <div class="flex-col gap-3 fade-up fade-up-d2">
+                        <div class="info-card">
+                            <div class="info-card-icon">🌕</div>
+                            <h4 lang="en">The Full Moon (จันทร์เพ็ญ) Factor</h4>
+                            <h4 lang="th">ปัจจัยจันทร์เพ็ญ</h4>
+                            <p lang="en">The Full Moon consecration is not decorative — it is functional engineering.
+                                <em class="thai-term">Chan Pen</em> represents the Moon at maximum luminosity and
+                                maximum Yin energy. Silver consecrated under this celestial alignment absorbs the
+                                fullness of lunar calm. The resulting suppression effect is peaceful, diplomatic, and
+                                absolute — like an argument dissolving in moonlight.
+                            </p>
+                            <p lang="th">การปลุกเสกคืนจันทร์เพ็ญไม่ใช่เพียงพิธีตกแต่ง — แต่เป็นวิศวกรรมเชิงหน้าที่ <em
+                                    class="thai-term">จันทร์เพ็ญ</em>แทนดวงจันทร์ที่ความสว่างสูงสุดและพลังหยินสูงสุด
+                                เงินที่ปลุกเสกภายใต้การเรียงตัวของดวงดาวนี้ดูดซับความสมบูรณ์ของความสงบแห่งจันทร์
+                                ผลการระงับที่ได้คือสันติ ทางการทูต และสมบูรณ์แบบ —
+                                ราวกับข้อโต้แย้งที่ละลายหายไปในแสงจันทร์</p>
+                        </div>
+
+                        <div class="info-card" style="border-left: 3px solid var(--moonlight);">
+                            <div class="info-card-icon">👑</div>
+                            <h4 lang="en">Soft Power vs. Hard Power</h4>
+                            <h4 lang="th">พลังอ่อน vs. พลังแข็ง</h4>
+                            <p lang="en">The soldier wears the Copper Takrud to survive combat. The Khahabodi wears the
+                                Silver to <strong>never need combat at all</strong>. It operates through aura, through
+                                presence, through the inexplicable sensation that opposing this person is simply...
+                                unwise. This is <em class="thai-term">Maha Amnaj</em> — authority that needs no
+                                enforcement.</p>
+                            <p lang="th">ทหารสวมตะกรุดทองแดงเพื่อรอดจากการรบ
+                                คหบดีสวมเนื้อเงินเพื่อ<strong>ไม่ต้องรบเลย</strong> มันทำงานผ่านออร่า ผ่านบารมี
+                                ผ่านความรู้สึกที่อธิบายไม่ได้ว่าการต่อต้านคนผู้นี้เป็นสิ่ง... ไม่ฉลาด นี่คือ<em
+                                    class="thai-term">มหาอำนาจ</em> — อำนาจที่ไม่ต้องการการบังคับใช้</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="ritual">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-number" lang="en">V — THE ENGINEERING OF DIVINITY</span>
+                    <span class="section-number" lang="th">V — วิศวกรรมแห่งเทพ</span>
+                    <h2 class="section-title">
+                        <span lang="en">The Lob Thom Cycle</span>
+                        <span lang="th">วัฏจักรลบถม</span>
+                    </h2>
+                    <p class="section-subtitle">
+                        <span lang="en">Three years of writing, erasing, and rewriting — the grueling creation process
+                            that makes this Takrud a battery of spiritual energy</span>
+                        <span lang="th">สามปีแห่งการเขียน ลบ และเขียนซ้ำ —
+                            กระบวนการสร้างอันทรหดที่ทำให้ตะกรุดนี้เป็นแบตเตอรี่แห่งพลังจิตวิญญาณ</span>
+                    </p>
+                </div>
+
+                <div class="grid-2">
+                    <div class="timeline fade-up">
+                        <div class="timeline-item">
+                            <div class="timeline-step" lang="en">PHASE 01 — INSCRIPTION</div>
+                            <div class="timeline-step" lang="th">ขั้นตอนที่ 01 — การจารึก</div>
+                            <h4 lang="en">Writing on Saturday the 5th</h4>
+                            <h4 lang="th">เขียนวันเสาร์ที่ห้า</h4>
+                            <p lang="en">The sacred <em class="thai-term">Yantra</em> (ยันต์) — specifically the
+                                "Hanuman Binding Tosakan" pattern — is inscribed onto the Silver sheet using a
+                                consecrated <em class="thai-term">Lekh Jarn</em> (เหล็กจาร/stylus) on the 5th waning
+                                Saturday. Saturn's day, Saturn's hour — the planet of binding and restriction.</p>
+                            <p lang="th"><em class="thai-term">ยันต์</em>ศักดิ์สิทธิ์ — โดยเฉพาะลาย "หนุมานจับทศกัณฐ์" —
+                                ถูกจารึกลงบนแผ่นเงินด้วย<em class="thai-term">เหล็กจาร</em>ที่ปลุกเสกแล้วในวันเสาร์แรม ๕
+                                ค่ำ วันของเสาร์ ชั่วโมงของเสาร์ — ดาวเคราะห์แห่งการผูกมัดและจำกัด</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-step" lang="en">PHASE 02 — ERASURE</div>
+                            <div class="timeline-step" lang="th">ขั้นตอนที่ 02 — การลบ</div>
+                            <h4 lang="en">Erasing on the Full Moon of the 12th Month</h4>
+                            <h4 lang="th">ลบในคืนเพ็ญเดือนสิบสอง</h4>
+                            <p lang="en">On the Full Moon of the 12th lunar month, the inscription is methodically
+                                erased using the seed of <em class="thai-term">Look Saba Mon</em> (ลูกสบม่อน). The
+                                erasing does not destroy the Yantra — it <strong>drives it deeper</strong> into the
+                                Silver. Each erasure compresses the spiritual inscription further into the metal's
+                                crystalline structure.</p>
+                            <p lang="th">ในคืนเพ็ญเดือนสิบสอง จารึกถูกลบออกอย่างเป็นระบบด้วยเมล็ด<em
+                                    class="thai-term">ลูกสบม่อน</em> การลบไม่ได้ทำลายยันต์ —
+                                มัน<strong>ขับมันลึกลงไป</strong>ในเนื้อเงิน
+                                การลบแต่ละครั้งบีบอัดจารึกทางจิตวิญญาณลงไปในโครงสร้างผลึกของโลหะมากขึ้น</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-step" lang="en">PHASE 03 — THE 3-YEAR CYCLE</div>
+                            <div class="timeline-step" lang="th">ขั้นตอนที่ 03 — วัฏจักร 3 ปี</div>
+                            <h4 lang="en">Repeat for Three Full Years</h4>
+                            <h4 lang="th">ทำซ้ำสามปีเต็ม</h4>
+                            <p lang="en">This write-erase cycle is repeated for <strong>three complete years</strong>.
+                                The Yantra is inscribed and erased dozens of times, each cycle adding another layer of
+                                spiritual charge. By the end, the Silver is so saturated with incantation energy that it
+                                has become, in effect, a <strong>"Battery of Spiritual Energy"</strong> — a capacitor
+                                charged by years of focused will.</p>
+                            <p lang="th">วัฏจักรเขียน-ลบนี้ทำซ้ำ<strong>สามปีเต็ม</strong>
+                                ยันต์ถูกจารึกและลบหลายสิบครั้ง แต่ละรอบเพิ่มอีกชั้นของประจุทางจิตวิญญาณ
+                                เมื่อสิ้นสุดกระบวนการ
+                                เนื้อเงินอิ่มตัวด้วยพลังคาถาจนกลายเป็น<strong>"แบตเตอรี่แห่งพลังจิตวิญญาณ"</strong> —
+                                ตัวเก็บประจุที่ชาร์จด้วยเจตจำนงที่มุ่งมั่นตลอดหลายปี</p>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="timeline-step" lang="en">PHASE 04 — CONSECRATION</div>
+                            <div class="timeline-step" lang="th">ขั้นตอนที่ 04 — พิธีปลุกเสก</div>
+                            <h4 lang="en">Final Binding & Lacquer Seal</h4>
+                            <h4 lang="th">การผูกมัดสุดท้ายและการปิดผนึกด้วยรัก</h4>
+                            <p lang="en">The Silver sheet is rolled into a cylindrical Takrud, bound with consecrated
+                                thread, and sealed with black lacquer (<em class="thai-term">Rak</em>). The Yantra — now
+                                invisible beneath the surface — can only be verified through X-ray analysis, which
+                                reveals the "Hanuman Binding Tosakan" pattern hidden within.</p>
+                            <p lang="th">แผ่นเงินถูกม้วนเป็นตะกรุดทรงกระบอก ผูกด้วยด้ายปลุกเสก และปิดผนึกด้วยรักดำ ยันต์
+                                — ตอนนี้มองไม่เห็นใต้ผิว — สามารถตรวจสอบได้โดยการเอกซเรย์เท่านั้น ซึ่งจะเผยลาย
+                                "หนุมานจับทศกัณฐ์" ที่ซ่อนอยู่ภายใน</p>
+                        </div>
+                    </div>
+
+                    <div class="prose fade-up fade-up-d2">
+                        <p lang="en">This is not mass production. The <em class="thai-term">Lob Thom</em> (ลบถม) method
+                            is among the most labor-intensive consecration techniques in all of Thai Saiyasart. The monk
+                            must maintain absolute ritual purity for three years. He must inscribe and erase at
+                            astronomically precise moments. The Silver itself must be of sufficient purity to hold the
+                            spiritual charge without "leaking."</p>
+                        <p lang="en">The result is a Takrud that is not merely blessed — it is <strong>engineered at the
+                                molecular-spiritual level</strong>. Each atom of Silver carries the residue of hundreds
+                            of inscriptions. The Yantra may be invisible to the naked eye, but its energy signature
+                            permeates every grain of the metal. This is why authentic examples command extraordinary
+                            reverence in the collector's market.</p>
+
+                        <p lang="th">นี่ไม่ใช่การผลิตจำนวนมาก วิธี<em
+                                class="thai-term">ลบถม</em>เป็นหนึ่งในเทคนิคการปลุกเสกที่ใช้แรงงานเข้มข้นที่สุดในไสยศาสตร์ไทยทั้งหมด
+                            พระสงฆ์ต้องรักษาความบริสุทธิ์ทางพิธีกรรมอย่างสมบูรณ์ตลอดสามปี
+                            ต้องจารึกและลบในช่วงเวลาที่แม่นยำทางดาราศาสตร์
+                            เนื้อเงินเองต้องมีความบริสุทธิ์เพียงพอที่จะกักเก็บประจุทางจิตวิญญาณโดยไม่ "รั่วไหล"</p>
+                        <p lang="th">ผลลัพธ์คือตะกรุดที่ไม่ใช่เพียงปลุกเสก —
+                            แต่ถูก<strong>วิศวกรรมในระดับโมเลกุล-จิตวิญญาณ</strong>
+                            อะตอมเงินทุกอะตอมพกร่องรอยของจารึกหลายร้อยครั้ง ยันต์อาจมองไม่เห็นด้วยตาเปล่า
+                            แต่ลายเซ็นพลังงานแทรกซึมทุกเม็ดของโลหะ
+                            นี่คือเหตุผลที่ตัวอย่างแท้ครองความเคารพอย่างสูงในตลาดนักสะสม</p>
+
+                        <div class="info-card mt-3">
+                            <div class="info-card-icon">🔋</div>
+                            <h4 lang="en">The "Battery" Analogy</h4>
+                            <h4 lang="th">การเปรียบเทียบ "แบตเตอรี่"</h4>
+                            <p lang="en">Think of each Lob Thom cycle as a charge cycle. A single inscription is like a
+                                single charge — useful but limited. Thirty-six cycles over three years? That is a
+                                spiritual supercapacitor. The Silver does not merely <em>hold</em> the Wicha — it
+                                <em>radiates</em> it continuously, like a low-frequency broadcast that never stops
+                                transmitting.
+                            </p>
+                            <p lang="th">ลองคิดว่าแต่ละรอบลบถมคือรอบการชาร์จ จารึกครั้งเดียวเหมือนชาร์จครั้งเดียว —
+                                มีประโยชน์แต่จำกัด สามสิบหกรอบตลอดสามปี? นั่นคือซูเปอร์คาปาซิเตอร์ทางจิตวิญญาณ
+                                เนื้อเงินไม่เพียง<em>กักเก็บ</em>วิชา — มัน<em>แผ่รังสี</em>อย่างต่อเนื่อง
+                                เหมือนการออกอากาศความถี่ต่ำที่ไม่เคยหยุดส่ง</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="media">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-number" lang="en">VI — MULTIMEDIA ARCHIVE</span>
+                    <span class="section-number" lang="th">VI — คลังสื่อมัลติมีเดีย</span>
+                    <h2 class="section-title">
+                        <span lang="en">Evidence Chamber</span>
+                        <span lang="th">ห้องหลักฐาน</span>
+                    </h2>
+                </div>
+
+                <div class="grid-3 fade-up">
+                    <div class="media-section" style="grid-column: span 2;">
+                        <div class="media-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14"
+                                height="14">
+                                <polygon points="5 3 19 12 5 21 5 3" />
+                            </svg>
+                            <span lang="en">Video Documentary</span>
+                            <span lang="th">สารคดีวีดิทัศน์</span>
+                        </div>
+                        <div class="video-wrapper" id="video-container">
+                            <div id="video-fallback" style="display:none; position:absolute; inset:0; background:#000; flex-direction:column; align-items:center; justify-content:center; text-align:center; z-index:10; padding:2rem;">
+                                <p style="color:var(--ritual-red-bright); font-weight:bold; margin-bottom:0.5rem;">⚠️ Video Playback Restricted</p>
+                                <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:1rem;">YouTube embeds are blocked when opening files directly (Error 153). Please use a local web server.</p>
+                                <a href="https://www.youtube.com/watch?v=b4TOAvBOc2U" target="_blank" style="padding:0.5rem 1rem; border:1px solid var(--sacred-gold); border-radius:4px; font-size:0.75rem; color:var(--sacred-gold);">Watch on YouTube ↗</a>
+                            </div>
+
+                            <iframe id="youtube-player"
+                                src="https://www.youtube.com/embed/b4TOAvBOc2U?rel=0&modestbranding=1"
+                                title="Silver Takrud Maiyarap Sakod Thap Documentary"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen 
+                                loading="lazy"
+                                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                        </div>
+                        <script>
+                            if (window.location.protocol === 'file:') {
+                                document.getElementById('video-fallback').style.display = 'flex';
+                                document.getElementById('youtube-player').style.opacity = '0.1';
+                            }
+                        </script>
+                    </div>
+
+                    <div class="media-section">
+                        <div class="media-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14"
+                                height="14">
+                                <path d="M9 18V5l12-2v13" />
+                                <circle cx="6" cy="18" r="3" />
+                                <circle cx="18" cy="16" r="3" />
+                            </svg>
+                            <span lang="en">Audio Narration</span>
+                            <span lang="th">เสียงบรรยาย</span>
+                        </div>
+                        <div class="audio-player">
+                            <p style="font-size:0.75rem;color:var(--text-muted);margin-bottom:0.75rem;">
+                                <span lang="en">Listen to the oral history of the Silver Takrud Maiyarap</span>
+                                <span lang="th">ฟังประวัติศาสตร์บอกเล่าของตะกรุดเงินไมยราพณ์</span>
+                            </p>
+                            <audio controls preload="metadata" style="width:100%;">
+                                <source src="https://tanat.net/maiyarap/Maiyarap_Silver.m4a" type="audio/mp4">
+                                <source src="https://tanat.net/maiyarap/Maiyarap_Silver.m4a" type="audio/x-m4a">
+                                <p lang="en" style="font-size:0.75rem;color:var(--text-muted);">Your browser does not
+                                    support audio playback. <a href="https://tanat.net/maiyarap/Maiyarap_Silver.m4a"
+                                        download>Download the audio</a>.</p>
+                                <p lang="th" style="font-size:0.75rem;color:var(--text-muted);">
+                                    เบราว์เซอร์ของคุณไม่รองรับการเล่นเสียง <a
+                                        href="https://tanat.net/maiyarap/Maiyarap_Silver.m4a"
+                                        download>ดาวน์โหลดเสียง</a></p>
+                            </audio>
+                        </div>
+
+                        <div class="info-card mt-2" style="padding:1rem;">
+                            <div
+                                style="font-size:0.65rem;color:var(--sacred-gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.35rem;font-family:'Orbitron',sans-serif;">
+                                <span lang="en">Artifact Image</span>
+                                <span lang="th">ภาพวัตถุมงคล</span>
+                            </div>
+                            <img src="https://tanat.net/maiyarap/Maiyarap_Silver.jpg" alt="Silver Takrud Maiyarap"
+                                style="width:100%;border-radius:8px;border:1px solid var(--glass-border);"
+                                loading="lazy" onerror="this.style.display='none'">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 fade-up fade-up-d2">
+                    <div class="media-section">
+                        <div class="media-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14"
+                                height="14">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                            <span lang="en">Research Document — Auto-Rotating Carousel</span>
+                            <span lang="th">เอกสารวิจัย — ภาพหมุนอัตโนมัติ</span>
+                        </div>
+                        <div class="pdf-carousel" id="pdf-carousel">
+                            <div class="pdf-viewport" id="pdf-viewport">
+                                <div id="pdf-loading"
+                                    style="text-align:center;color:var(--text-muted);font-size:0.8rem;">
+                                    <span lang="en">Loading PDF document...</span>
+                                    <span lang="th">กำลังโหลดเอกสาร PDF...</span>
+                                </div>
+                                <canvas id="pdf-canvas" style="display:none;"></canvas>
+                            </div>
+                            <div class="pdf-controls">
+                                <button class="pdf-btn" id="pdf-prev" title="Previous page">◀</button>
+                                <button class="pdf-btn" id="pdf-auto" title="Toggle auto-rotate">⟳</button>
+                                <span class="pdf-page-info" id="pdf-info">— / —</span>
+                                <button class="pdf-btn" id="pdf-next" title="Next page">▶</button>
+                                <button class="pdf-btn" id="pdf-full" title="Open PDF"
+                                    onclick="window.open('https://tanat.net/maiyarap/Silver_Takrud_The_Emperor_of_Silence.pdf','_blank')">⤢</button>
+                            </div>
+                            <div class="pdf-progress">
+                                <div class="pdf-progress-fill" id="pdf-progress-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="lineage">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-number" lang="en">VII — PROVENANCE TOPOLOGY</span>
+                    <span class="section-number" lang="th">VII — โทโพโลยีที่มา</span>
+                    <h2 class="section-title">
+                        <span lang="en">Lineage & Power Network</span>
+                        <span lang="th">เครือข่ายสายวิชาและพลัง</span>
+                    </h2>
+                    <p class="section-subtitle">
+                        <span lang="en">Interactive topology — click any node to explore its role in the Takrud's
+                            creation and power</span>
+                        <span lang="th">โทโพโลยีแบบโต้ตอบ —
+                            คลิกที่โหนดใดก็ได้เพื่อสำรวจบทบาทในการสร้างและพลังของตะกรุด</span>
+                    </p>
+                </div>
+
+                <div class="fade-up">
+                    <div class="network-viz" id="network-container">
+                        <svg id="network-svg" width="100%" height="100%"></svg>
+                        <div class="network-legend">
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:var(--moonlight);border-radius:50%;"></div>
+                                <span lang="en">Person/Monk</span><span lang="th">บุคคล/พระ</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot" style="background:var(--sacred-gold);border-radius:2px;"></div>
+                                <span lang="en">Artifact/Material</span><span lang="th">วัตถุ/วัสดุ</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot"
+                                    style="background:var(--ritual-red-bright);clip-path:polygon(50% 0%,100% 100%,0% 100%);">
+                                </div><span lang="en">Temple/Site</span><span lang="th">วัด/สถานที่</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-dot"
+                                    style="background:var(--indigo-mid);border-radius:50% 0 50% 50%;"></div><span
+                                    lang="en">Wicha/Power</span><span lang="th">วิชา/พลัง</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="vault">
+            <div class="container">
+                <div class="section-header fade-up">
+                    <span class="section-number" lang="en">VIII — THE COLLECTOR'S VAULT</span>
+                    <span class="section-number" lang="th">VIII — ห้องนิรภัยนักสะสม</span>
+                    <h2 class="section-title">
+                        <span lang="en">Authentication & Forbidden Rules</span>
+                        <span lang="th">การตรวจสอบความแท้และข้อห้าม</span>
+                    </h2>
+                </div>
+
+                <div class="grid-2">
+                    <div class="flex-col gap-3 fade-up">
+                        <div class="info-card">
+                            <div class="info-card-icon">☢️</div>
+                            <h4 lang="en">X-Ray Analysis</h4>
+                            <h4 lang="th">การวิเคราะห์เอกซเรย์</h4>
+                            <p lang="en">Under X-ray, the authentic Silver Takrud reveals the <strong>"Hanuman Binding
+                                    Tosakan" Yantra</strong> inscribed within the lacquer seal. The inscription pattern
+                                — invisible to the naked eye — shows the characteristic strokes of Luang Phor Goon's
+                                hand, including the specific geometric binding lines unique to the Phetchaburi lineage.
+                            </p>
+                            <p lang="th">ภายใต้เอกซเรย์ ตะกรุดเงินแท้จะเผย<strong>ยันต์
+                                    "หนุมานจับทศกัณฐ์"</strong>ที่จารึกภายในผนึกรัก ลายจารึก — มองไม่เห็นด้วยตาเปล่า —
+                                แสดงลายมือเฉพาะของหลวงพ่อกูน รวมถึงเส้นผูกมัดทางเรขาคณิตเฉพาะสายเพชรบุรี</p>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-card-icon">⚖️</div>
+                            <h4 lang="en">Density & Tactile Test</h4>
+                            <h4 lang="th">การทดสอบความหนาแน่นและสัมผัส</h4>
+                            <p lang="en">The Silver Takrud occupies a specific weight niche: <strong>heavier than
+                                    Copper, lighter than Lead</strong>. An experienced collector can distinguish by hand
+                                — the Silver version has a distinct "solid but not crushing" heft. The lacquer surface
+                                should show age-appropriate patina, and the rolled edges should be tight and uniform.
+                            </p>
+                            <p lang="th">ตะกรุดเงินอยู่ในช่วงน้ำหนักเฉพาะ: <strong>หนักกว่าทองแดง เบากว่าตะกั่ว</strong>
+                                นักสะสมผู้มีประสบการณ์แยกแยะได้ด้วยมือ — เนื้อเงินมีความหนักเฉพาะ "แน่นแต่ไม่บดขยี้"
+                                ผิวรักควรแสดงคราบเก่าตามอายุ และขอบม้วนควรแน่นและสม่ำเสมอ</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-col gap-3 fade-up fade-up-d2">
+                        <div class="warning-card" style="border-left-width: 4px;">
+                            <h4 lang="en">⛔ THE CURSE — The Moral Clause</h4>
+                            <h4 lang="th">⛔ คำสาป — ข้อบัญญัติทางศีลธรรม</h4>
+                            <p lang="en">The sources are explicit and unambiguous: <strong>"The owner must not
+                                    steal."</strong> The Sakod Thap power to put households to sleep was acknowledged,
+                                but using it for theft inverts the Takrud's sacred charge. The consequences described in
+                                the tradition include: reversal of all accumulated merit, the Takrud "turning against"
+                                the owner (inducing insomnia, paranoia, and misfortune), and in extreme cases, spiritual
+                                possession by the charnel ground spirits (<em class="thai-term">Phi Pa Cha</em>) that
+                                were bound into the metal during the 7-cemetery consecration.</p>
+                            <p lang="th">ตำราระบุชัดเจนและไม่คลุมเครือ: <strong>"เจ้าของต้องไม่ลักขโมย"</strong>
+                                พลังสะกดทัพที่ทำให้ครัวเรือนหลับใหลเป็นที่รับรู้
+                                แต่การใช้เพื่อการลักขโมยย้อนกลับประจุศักดิ์สิทธิ์ของตะกรุด ผลลัพธ์ที่ตำราบรรยายรวมถึง:
+                                การย้อนกลับของบุญสะสมทั้งหมด ตะกรุด "หันกลับมาทำร้าย" เจ้าของ (ทำให้นอนไม่หลับ หวาดระแวง
+                                และโชคร้าย) และในกรณีรุนแรง ถูกสิงโดยวิญญาณป่าช้า (<em class="thai-term">ผีป่าช้า</em>)
+                                ที่ถูกผูกมัดลงในโลหะระหว่างพิธีเจ็ดป่าช้า</p>
+                        </div>
+
+                        <div class="info-card" style="border: 1px solid rgba(201, 169, 110, 0.3);">
+                            <div class="info-card-icon">🏛️</div>
+                            <h4 lang="en">Provenance Markers</h4>
+                            <h4 lang="th">เครื่องหมายที่มา</h4>
+                            <p lang="en">Authentic examples from Luang Phor Goon's workshop at Wat Phra Non typically
+                                exhibit: hand-rolled (not machine-pressed) cylindrical form, black lacquer with natural
+                                wear patterns (not artificial aging), consistent diameter throughout the length, and the
+                                distinctive "double-wrap" thread binding associated with the Phetchaburi school.
+                                Certificates of authenticity (<em class="thai-term">Bai Rap Rong</em>) from recognized
+                                expert committees are essential for high-value examples.</p>
+                            <p lang="th">ตัวอย่างแท้จากโรงงานหลวงพ่อกูน วัดพระนอน โดยทั่วไปแสดงลักษณะ: ม้วนมือ
+                                (ไม่ใช่กดเครื่อง) ทรงกระบอก รักดำที่มีรอยสึกธรรมชาติ (ไม่ใช่ทำให้เก่าเทียม)
+                                เส้นผ่าศูนย์กลางสม่ำเสมอตลอดความยาว และการถักด้ายแบบ "พันสองชั้น" เฉพาะสำนักเพชรบุรี
+                                ใบรับรองความแท้ (<em class="thai-term">ใบรับรอง</em>)
+                                จากคณะกรรมการผู้เชี่ยวชาญที่ได้รับการยอมรับเป็นสิ่งจำเป็นสำหรับตัวอย่างมูลค่าสูง</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p lang="en"
+                style="color:var(--sacred-gold);font-family:'Orbitron',sans-serif;font-size:0.65rem;letter-spacing:0.15em;margin-bottom:0.5rem;">
+                MAIYARAP SILVER // NEXUS ARTIFACT v13.0</p>
+            <p lang="th"
+                style="color:var(--sacred-gold);font-family:'Orbitron',sans-serif;font-size:0.65rem;letter-spacing:0.15em;margin-bottom:0.5rem;">
+                ไมยราพณ์เนื้อเงิน // NEXUS ARTIFACT v13.0</p>
+            <p lang="en">Silver Takrud Maiyarap Sakod Thap — Luang Phor Goon, Wat Phra Non, Phetchaburi</p>
+            <p lang="th">ตะกรุดไมยราพณ์สะกดทัพ เนื้อเงิน — หลวงพ่อกูน วัดพระนอน เพชรบุรี</p>
+        </div>
+    </footer>
+
+    <div class="panel-overlay" id="panel-overlay"></div>
+    <aside class="slide-panel" id="slide-panel">
+        <button class="panel-close" id="panel-close">✕</button>
+        <div id="panel-content"></div>
+    </aside>
+
+    <script>
+        (function () {
+            'use strict';
+
+            // ══════════════════════════════════
+            // 1. SIMPLEX NOISE
+            // ══════════════════════════════════
+            class SimplexNoise {
+                constructor() {
+                    this.p = new Uint8Array(256);
+                    for (let i = 0; i < 256; i++) this.p[i] = Math.floor(256 * Math.random());
+                    this.perm = new Uint8Array(512);
+                    for (let i = 0; i < 512; i++) this.perm[i] = this.p[i & 255];
+                }
+                noise(xin, yin) {
+                    const F2 = 0.5 * (Math.sqrt(3) - 1), G2 = (3 - Math.sqrt(3)) / 6;
+                    let s = (xin + yin) * F2;
+                    let i = Math.floor(xin + s), j = Math.floor(yin + s);
+                    let t = (i + j) * G2;
+                    let x0 = xin - (i - t), y0 = yin - (j - t);
+                    let i1 = x0 > y0 ? 1 : 0, j1 = x0 > y0 ? 0 : 1;
+                    let x1 = x0 - i1 + G2, y1 = y0 - j1 + G2;
+                    let x2 = x0 - 1 + 2 * G2, y2 = y0 - 1 + 2 * G2;
+                    let ii = i & 255, jj = j & 255;
+                    let gi0 = this.perm[ii + this.perm[jj]] % 12;
+                    let gi1 = this.perm[ii + i1 + this.perm[jj + j1]] % 12;
+                    let gi2 = this.perm[ii + 1 + this.perm[jj + 1]] % 12;
+                    const grad = (gi, x, y) => [Math.cos(gi * 0.5236), Math.sin(gi * 0.5236)][0] * x + [Math.cos(gi * 0.5236), Math.sin(gi * 0.5236)][1] * y;
+                    let t0 = 0.5 - x0 * x0 - y0 * y0;
+                    let n0 = t0 < 0 ? 0 : Math.pow(t0, 4) * grad(gi0, x0, y0);
+                    let t1 = 0.5 - x1 * x1 - y1 * y1;
+                    let n1 = t1 < 0 ? 0 : Math.pow(t1, 4) * grad(gi1, x1, y1);
+                    let t2 = 0.5 - x2 * x2 - y2 * y2;
+                    let n2 = t2 < 0 ? 0 : Math.pow(t2, 4) * grad(gi2, x2, y2);
+                    return 70 * (n0 + n1 + n2);
+                }
+            }
+
+            // ══════════════════════════════════
+            // 2. ANTIGRAVITY ENGINE (Hybrid)
+            // ══════════════════════════════════
+            class AntigravityEngine {
+                constructor() {
+                    this.canvas = document.getElementById('antigravity-canvas');
+                    if (!this.canvas) return;
+                    try {
+                        if (typeof THREE !== 'undefined') { this.initThree(); return; }
+                    } catch (e) { /* fallback */ }
+                    this.initCanvas();
+                }
+
+                initThree() {
+                    const c = this.canvas;
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ canvas: c, alpha: true, antialias: false });
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+
+                    // Silver-moonlight particles
+                    const count = 400;
+                    const geo = new THREE.BufferGeometry();
+                    const pos = new Float32Array(count * 3);
+                    for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 60;
+                    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                    const mat = new THREE.PointsMaterial({ size: 0.12, color: 0x8BA4C8, transparent: true, opacity: 0.6 });
+                    const points = new THREE.Points(geo, mat);
+                    scene.add(points);
+
+                    // Secondary gold dust
+                    const geo2 = new THREE.BufferGeometry();
+                    const pos2 = new Float32Array(100 * 3);
+                    for (let i = 0; i < 100 * 3; i++) pos2[i] = (Math.random() - 0.5) * 40;
+                    geo2.setAttribute('position', new THREE.BufferAttribute(pos2, 3));
+                    const mat2 = new THREE.PointsMaterial({ size: 0.18, color: 0xC9A96E, transparent: true, opacity: 0.4 });
+                    scene.add(new THREE.Points(geo2, mat2));
+
+                    camera.position.z = 25;
+
+                    const animate = () => {
+                        requestAnimationFrame(animate);
+                        points.rotation.y += 0.0008;
+                        points.rotation.x += 0.0003;
+                        renderer.render(scene, camera);
+                    };
+                    animate();
+
+                    window.addEventListener('resize', () => {
+                        camera.aspect = window.innerWidth / window.innerHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(window.innerWidth, window.innerHeight);
+                    }, { passive: true });
+                }
+
+                initCanvas() {
+                    const c = this.canvas;
+                    const ctx = c.getContext('2d');
+                    const simplex = new SimplexNoise();
+                    let w, h, particles = [];
+
+                    const resize = () => {
+                        w = c.width = window.innerWidth;
+                        h = c.height = window.innerHeight;
+                    };
+                    resize();
+                    window.addEventListener('resize', resize, { passive: true });
+
+                    for (let i = 0; i < 120; i++) {
+                        particles.push({
+                            x: Math.random() * w, y: Math.random() * h,
+                            speed: 0.2 + Math.random() * 0.4,
+                            color: Math.random() > 0.8 ? 'rgba(201,169,110,0.5)' : 'rgba(139,164,200,0.35)',
+                            size: 1 + Math.random() * 1.5
+                        });
+                    }
+
+                    const animate = () => {
+                        ctx.fillStyle = 'rgba(6,6,16,0.08)';
+                        ctx.fillRect(0, 0, w, h);
+                        particles.forEach(p => {
+                            const n = simplex.noise(p.x * 0.002, p.y * 0.002 + Date.now() * 0.00005);
+                            p.x += Math.cos(n * 6.28) * p.speed;
+                            p.y += Math.sin(n * 6.28) * p.speed;
+                            if (p.x < 0) p.x = w; if (p.x > w) p.x = 0;
+                            if (p.y < 0) p.y = h; if (p.y > h) p.y = 0;
+                            ctx.fillStyle = p.color;
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.size, 0, 6.28);
+                            ctx.fill();
+                        });
+                        requestAnimationFrame(animate);
+                    };
+                    animate();
+                }
+            }
+
+            // ══════════════════════════════════
+            // 3. PDF CAROUSEL ENGINE
+            // ══════════════════════════════════
+            class PDFCarousel {
+                constructor() {
+                    this.pdfDoc = null;
+                    this.currentPage = 1;
+                    this.totalPages = 0;
+                    this.autoplay = true;
+                    this.autoTimer = null;
+                    this.canvas = document.getElementById('pdf-canvas');
+                    this.loading = document.getElementById('pdf-loading');
+                    this.info = document.getElementById('pdf-info');
+                    this.progressFill = document.getElementById('pdf-progress-fill');
+
+                    if (!this.canvas) return;
+
+                    document.getElementById('pdf-prev').addEventListener('click', () => this.prev());
+                    document.getElementById('pdf-next').addEventListener('click', () => this.next());
+                    document.getElementById('pdf-auto').addEventListener('click', () => this.toggleAuto());
+
+                    this.load();
+                }
+
+                async load() {
+                    const pdfUrl = 'https://tanat.net/maiyarap/Silver_Takrud_The_Emperor_of_Silence.pdf';
+                    const viewport = document.getElementById('pdf-viewport');
+
+                    if (typeof pdfjsLib === 'undefined') {
+                        this.showFallbackViewer(pdfUrl, viewport);
+                        return;
+                    }
+
+                    try {
+                        // Configure PDF.js - use inline worker to avoid CORS issues with external worker
+                        pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+
+                        // Suppress the "fake worker" warning by setting up properly
+                        if (pdfjsLib.GlobalWorkerOptions) {
+                            pdfjsLib.GlobalWorkerOptions.isEvalSupported = false;
+                        }
+
+                        // Load the PDF with proper configuration to handle cross-origin
+                        const loadingTask = pdfjsLib.getDocument({
+                            url: pdfUrl,
+                            withCredentials: false,
+                            isEvalSupported: false,
+                            disableAutoFetch: true,
+                            disableStream: true,
+                            disableFontFace: false
+                        });
+
+                        this.pdfDoc = await loadingTask.promise;
+                        this.totalPages = this.pdfDoc.numPages;
+                        if (this.loading) this.loading.style.display = 'none';
+                        this.canvas.style.display = 'block';
+                        await this.renderPage(1);
+                        this.startAuto();
+                    } catch (e) {
+                        console.warn('PDF.js load error, falling back to iframe viewer:', e.message || e);
+                        this.showFallbackViewer(pdfUrl, viewport);
+                    }
+                }
+
+                showFallbackViewer(pdfUrl, viewport) {
+                    // Hide canvas and loading, show iframe fallback using Google Docs Viewer
+                    if (this.loading) this.loading.style.display = 'none';
+                    if (this.canvas) this.canvas.style.display = 'none';
+
+                    // Create iframe with Google Docs Viewer as fallback
+                    const encodedUrl = encodeURIComponent(pdfUrl);
+                    const iframeHtml = `
+                        <iframe 
+                            src="https://docs.google.com/viewer?url=${encodedUrl}&embedded=true"
+                            style="width:100%;height:100%;border:none;border-radius:8px;background:var(--space-surface);"
+                            title="PDF Document Viewer"
+                            loading="lazy"
+                            allow="autoplay">
+                        </iframe>
+                        <div style="position:absolute;bottom:60px;left:50%;transform:translateX(-50%);padding:0.5rem 1rem;background:rgba(6,6,16,0.9);border-radius:8px;font-size:0.7rem;color:var(--text-muted);text-align:center;">
+                            <span lang="en">Viewing via Google Docs. <a href="${pdfUrl}" target="_blank" style="color:var(--moonlight);">Open original PDF →</a></span>
+                            <span lang="th">ดูผ่าน Google Docs <a href="${pdfUrl}" target="_blank" style="color:var(--moonlight);">เปิด PDF ต้นฉบับ →</a></span>
+                        </div>
+                    `;
+                    viewport.innerHTML = iframeHtml;
+
+                    // Update controls to indicate fallback mode
+                    if (this.info) this.info.textContent = 'PDF';
+                    if (this.progressFill) this.progressFill.style.width = '100%';
+
+                    // Disable prev/next buttons in fallback mode (Google Docs handles its own navigation)
+                    const prevBtn = document.getElementById('pdf-prev');
+                    const nextBtn = document.getElementById('pdf-next');
+                    const autoBtn = document.getElementById('pdf-auto');
+                    if (prevBtn) prevBtn.style.opacity = '0.3';
+                    if (nextBtn) nextBtn.style.opacity = '0.3';
+                    if (autoBtn) autoBtn.style.opacity = '0.3';
+                }
+
+                async renderPage(num) {
+                    if (!this.pdfDoc) return;
+                    const page = await this.pdfDoc.getPage(num);
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    this.canvas.width = viewport.width;
+                    this.canvas.height = viewport.height;
+                    const ctx = this.canvas.getContext('2d');
+                    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+                    this.currentPage = num;
+                    if (this.info) this.info.textContent = `${num} / ${this.totalPages}`;
+                    if (this.progressFill) this.progressFill.style.width = `${(num / this.totalPages) * 100}%`;
+                }
+
+                next() {
+                    const p = this.currentPage >= this.totalPages ? 1 : this.currentPage + 1;
+                    this.renderPage(p);
+                }
+                prev() {
+                    const p = this.currentPage <= 1 ? this.totalPages : this.currentPage - 1;
+                    this.renderPage(p);
+                }
+                startAuto() {
+                    this.stopAuto();
+                    if (this.autoplay) {
+                        this.autoTimer = setInterval(() => this.next(), 5000);
+                    }
+                    const btn = document.getElementById('pdf-auto');
+                    if (btn) btn.style.color = this.autoplay ? 'var(--sacred-gold)' : '';
+                }
+                stopAuto() { if (this.autoTimer) clearInterval(this.autoTimer); }
+                toggleAuto() {
+                    this.autoplay = !this.autoplay;
+                    this.startAuto();
+                }
+            }
+
+            // ══════════════════════════════════
+            // 4. D3 NETWORK — Lineage Topology
+            // ══════════════════════════════════
+            function initNetwork() {
+                const container = document.getElementById('network-container');
+                if (!container || typeof d3 === 'undefined') return;
+
+                const width = container.clientWidth;
+                const height = 500;
+                const svg = d3.select('#network-svg').attr('viewBox', [0, 0, width, height]);
+
+                // Define the lineage graph
+                const nodes = [
+                    { id: 'LP Goon', type: 'person', label_en: 'Luang Phor Goon', label_th: 'หลวงพ่อกูน', risk: 'master' },
+                    { id: 'Wat Phra Non', type: 'temple', label_en: 'Wat Phra Non', label_th: 'วัดพระนอน', risk: 'sacred' },
+                    { id: 'Phetchaburi', type: 'temple', label_en: 'Phetchaburi Lineage', label_th: 'สายเพชรบุรี', risk: 'sacred' },
+                    { id: 'Silver', type: 'artifact', label_en: 'Silver Takrud (เงิน)', label_th: 'ตะกรุดเนื้อเงิน', risk: 'primary' },
+                    { id: 'Lead', type: 'artifact', label_en: 'Lead Takrud (ตะกั่ว)', label_th: 'ตะกรุดเนื้อตะกั่ว', risk: 'secondary' },
+                    { id: 'Copper', type: 'artifact', label_en: 'Copper Takrud (ทองแดง)', label_th: 'ตะกรุดเนื้อทองแดง', risk: 'secondary' },
+                    { id: 'Maiyarap', type: 'wicha', label_en: 'Maiyarap (ไมยราพณ์)', label_th: 'ไมยราพณ์', risk: 'mythical' },
+                    { id: 'Sakod Thap', type: 'wicha', label_en: 'Sakod Thap (สะกดทัพ)', label_th: 'สะกดทัพ', risk: 'power' },
+                    { id: 'Maha Rangap', type: 'wicha', label_en: 'Maha Rangap (มหารังงับ)', label_th: 'มหารังงับ', risk: 'power' },
+                    { id: 'Lob Thom', type: 'wicha', label_en: 'Lob Thom Ritual (ลบถม)', label_th: 'พิธีลบถม', risk: 'ritual' },
+                    { id: '7 Cem', type: 'temple', label_en: '7 Cemeteries (เจ็ดป่าช้า)', label_th: 'เจ็ดป่าช้า', risk: 'sacred' },
+                    { id: 'Moon', type: 'wicha', label_en: 'Lunar Energy (จันทร์)', label_th: 'พลังจันทร์', risk: 'celestial' },
+                    { id: 'Khahabodi', type: 'person', label_en: 'Khahabodi (คหบดี)', label_th: 'คหบดี', risk: 'patron' },
+                    { id: 'Amnaj', type: 'wicha', label_en: 'Maha Amnaj (มหาอำนาจ)', label_th: 'มหาอำนาจ', risk: 'power' },
+                    { id: 'Metta', type: 'wicha', label_en: 'Metta Mahaniyom', label_th: 'เมตตามหานิยม', risk: 'power' },
+                ];
+
+                const links = [
+                    { source: 'LP Goon', target: 'Wat Phra Non', type: 'solid' },
+                    { source: 'Wat Phra Non', target: 'Phetchaburi', type: 'solid' },
+                    { source: 'LP Goon', target: 'Silver', type: 'solid' },
+                    { source: 'LP Goon', target: 'Lead', type: 'dashed' },
+                    { source: 'LP Goon', target: 'Copper', type: 'dashed' },
+                    { source: 'Maiyarap', target: 'Sakod Thap', type: 'solid' },
+                    { source: 'Sakod Thap', target: 'Silver', type: 'solid' },
+                    { source: 'Maha Rangap', target: 'Silver', type: 'solid' },
+                    { source: 'Lob Thom', target: 'Silver', type: 'solid' },
+                    { source: 'Lob Thom', target: 'LP Goon', type: 'dashed' },
+                    { source: '7 Cem', target: 'Sakod Thap', type: 'solid' },
+                    { source: 'Moon', target: 'Silver', type: 'solid' },
+                    { source: 'Moon', target: 'Maha Rangap', type: 'dashed' },
+                    { source: 'Khahabodi', target: 'Silver', type: 'solid' },
+                    { source: 'Amnaj', target: 'Maha Rangap', type: 'solid' },
+                    { source: 'Metta', target: 'Maha Rangap', type: 'solid' },
+                    { source: 'Sakod Thap', target: 'Lead', type: 'dashed' },
+                    { source: 'Sakod Thap', target: 'Copper', type: 'dashed' },
+                ];
+
+                const colorMap = {
+                    person: '#8BA4C8',
+                    artifact: '#C9A96E',
+                    temple: '#B91C1C',
+                    wicha: '#7C3AED'
+                };
+
+                // Arrow markers
+                svg.append('defs').selectAll('marker')
+                    .data(['arrow']).join('marker')
+                    .attr('id', d => d).attr('viewBox', '0 -5 10 10')
+                    .attr('refX', 25).attr('refY', 0)
+                    .attr('markerWidth', 6).attr('markerHeight', 6)
+                    .attr('orient', 'auto')
+                    .append('path').attr('d', 'M0,-5L10,0L0,5').attr('fill', '#555');
+
+                const simulation = d3.forceSimulation(nodes)
+                    .force('link', d3.forceLink(links).id(d => d.id).distance(90))
+                    .force('charge', d3.forceManyBody().strength(-350))
+                    .force('center', d3.forceCenter(width / 2, height / 2))
+                    .force('collision', d3.forceCollide(30));
+
+                const link = svg.append('g').selectAll('line')
+                    .data(links).join('line')
+                    .attr('stroke', '#444').attr('stroke-width', 1)
+                    .attr('stroke-dasharray', d => d.type === 'dashed' ? '4 4' : null)
+                    .attr('marker-end', 'url(#arrow)');
+
+                const node = svg.append('g').selectAll('.node')
+                    .data(nodes).join('g').attr('class', 'node')
+                    .style('cursor', 'pointer')
+                    .call(d3.drag()
+                        .on('start', (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+                        .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; })
+                        .on('end', (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; })
+                    )
+                    .on('click', (e, d) => APP.openPanel(d));
+
+                // Polymorphic shapes
+                node.each(function (d) {
+                    const el = d3.select(this);
+                    const c = colorMap[d.type] || '#888';
+                    if (d.type === 'person') {
+                        el.append('circle').attr('r', 14).attr('fill', c).attr('fill-opacity', 0.2).attr('stroke', c).attr('stroke-width', 1.5);
+                    } else if (d.type === 'artifact') {
+                        el.append('rect').attr('width', 26).attr('height', 26).attr('x', -13).attr('y', -13).attr('rx', 4)
+                            .attr('fill', c).attr('fill-opacity', 0.2).attr('stroke', c).attr('stroke-width', 1.5);
+                    } else if (d.type === 'temple') {
+                        el.append('polygon').attr('points', '0,-15 13,10 -13,10')
+                            .attr('fill', c).attr('fill-opacity', 0.2).attr('stroke', c).attr('stroke-width', 1.5);
+                    } else {
+                        // Wicha = diamond
+                        el.append('polygon').attr('points', '0,-14 12,0 0,14 -12,0')
+                            .attr('fill', c).attr('fill-opacity', 0.2).attr('stroke', c).attr('stroke-width', 1.5);
+                    }
+                });
+
+                const labelLang = document.body.dataset.lang || 'en';
+                node.append('text')
+                    .text(d => labelLang === 'th' ? d.label_th : d.label_en)
+                    .attr('y', 26).attr('font-size', 9).attr('fill', '#aaa').attr('text-anchor', 'middle')
+                    .attr('font-family', "'Sarabun', sans-serif");
+
+                simulation.on('tick', () => {
+                    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+                        .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+                    node.attr('transform', d => `translate(${d.x},${d.y})`);
+                });
+
+                // Zoom
+                svg.call(d3.zoom().scaleExtent([0.3, 4]).on('zoom', (e) => {
+                    svg.selectAll('g').attr('transform', e.transform);
+                }));
+
+                // Store ref for language updates
+                window._networkNodes = node;
+                window._networkData = nodes;
+            }
+
+            // ══════════════════════════════════
+            // 5. ANUPHAP CHART
+            // ══════════════════════════════════
+            function initCharts() {
+                const ctx = document.getElementById('anuphapRadar');
+                if (!ctx || typeof Chart === 'undefined') return;
+
+                new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                        labels: ['Sakod Thap\n(สะกดทัพ)', 'Maha Rangap\n(มหารังงับ)', 'Maha Amnaj\n(มหาอำนาจ)', 'Metta\n(เมตตา)', 'Klaew Klaad\n(แคล้วคลาด)'],
+                        datasets: [{
+                            label: 'Silver (เงิน)',
+                            data: [95, 92, 88, 85, 70],
+                            backgroundColor: 'rgba(139, 164, 200, 0.15)',
+                            borderColor: '#8BA4C8',
+                            borderWidth: 1.5,
+                            pointBackgroundColor: '#8BA4C8'
+                        }, {
+                            label: 'Lead (ตะกั่ว)',
+                            data: [98, 60, 50, 30, 75],
+                            backgroundColor: 'rgba(124, 58, 237, 0.1)',
+                            borderColor: '#7C3AED',
+                            borderWidth: 1,
+                            pointBackgroundColor: '#7C3AED',
+                            borderDash: [4, 4]
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                beginAtZero: true, max: 100,
+                                grid: { color: 'rgba(255,255,255,0.06)' },
+                                angleLines: { color: 'rgba(255,255,255,0.06)' },
+                                ticks: { display: false },
+                                pointLabels: { color: '#7A7A90', font: { size: 9, family: "'Sarabun', sans-serif" } }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: '#7A7A90', font: { size: 10 }, boxWidth: 12 }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ══════════════════════════════════
+            // 6. INTERSECTION OBSERVER (Fade-in)
+            // ══════════════════════════════════
+            function initObserver() {
+                const els = document.querySelectorAll('.fade-up');
+                if (!('IntersectionObserver' in window)) {
+                    els.forEach(el => el.style.opacity = '1');
+                    return;
+                }
+                const obs = new IntersectionObserver((entries) => {
+                    entries.forEach(e => {
+                        if (e.isIntersecting) { e.target.style.animationPlayState = 'running'; obs.unobserve(e.target); }
+                    });
+                }, { threshold: 0.1 });
+                els.forEach(el => {
+                    el.style.animationPlayState = 'paused';
+                    obs.observe(el);
+                });
+            }
+
+            // ══════════════════════════════════
+            // 7. APP CONTROLLER
+            // ══════════════════════════════════
+            const APP = window.APP = {
+                lang: 'en',
+
+                init() {
+                    // Hide loader
+                    const loader = document.getElementById('loading-screen');
+                    if (loader) loader.classList.add('done');
+
+                    // Physics
+                    new AntigravityEngine();
+
+                    // Charts
+                    initCharts();
+
+                    // Network
+                    initNetwork();
+
+                    // PDF
+                    new PDFCarousel();
+
+                    // Observer
+                    initObserver();
+
+                    // Nav
+                    document.querySelectorAll('.nav-link[data-target]').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const target = document.getElementById(btn.dataset.target);
+                            if (target) target.scrollIntoView({ behavior: 'smooth' });
+                        });
+                    });
+
+                    // Panel
+                    document.getElementById('panel-close').addEventListener('click', () => this.closePanel());
+                    document.getElementById('panel-overlay').addEventListener('click', () => this.closePanel());
+                },
+
+                toggleLang() {
+                    this.lang = this.lang === 'en' ? 'th' : 'en';
+                    document.body.dataset.lang = this.lang;
+
+                    // Update D3 labels
+                    if (window._networkNodes && window._networkData) {
+                        window._networkNodes.selectAll('text')
+                            .text(d => this.lang === 'th' ? d.label_th : d.label_en);
+                    }
+                },
+
+                openPanel(d) {
+                    const panel = document.getElementById('slide-panel');
+                    const content = document.getElementById('panel-content');
+                    const overlay = document.getElementById('panel-overlay');
+
+                    const riskColors = {
+                        master: 'var(--moonlight)', primary: 'var(--sacred-gold)',
+                        secondary: 'var(--silver-mid)', sacred: 'var(--ritual-red-bright)',
+                        mythical: 'var(--indigo-mid)', power: '#7C3AED',
+                        ritual: 'var(--sacred-gold)', patron: 'var(--moonlight-bright)',
+                        celestial: 'var(--moonlight-bright)'
+                    };
+                    const rc = riskColors[d.risk] || 'var(--text-muted)';
+
+                    const descriptions = {
+                        'LP Goon': { en: 'The master monk of Wat Phra Non, Phetchaburi Province. His mastery of the Maiyarap Wicha was legendary, producing some of the most sought-after Sakod Thap Takruds in Siamese history. The Lob Thom technique he employed required three years of unbroken ritual discipline.', th: 'พระอาจารย์แห่งวัดพระนอน จังหวัดเพชรบุรี ความเชี่ยวชาญวิชาไมยราพณ์ของท่านเป็นตำนาน สร้างตะกรุดสะกดทัพที่เป็นที่ต้องการมากที่สุดในประวัติศาสตร์สยาม เทคนิคลบถมที่ท่านใช้ต้องการวินัยทางพิธีกรรมไม่ขาดสายสามปี' },
+                        'Silver': { en: 'The rarest and most refined variant of the Maiyarap Sakod Thap Takrud. Silver\'s lunar affinity creates a "Cool Sleep" hypnosis that charms rather than crushes. This was the weapon of choice for the aristocratic Khahabodi class.', th: 'รุ่นที่หายากและประณีตที่สุดของตะกรุดไมยราพณ์สะกดทัพ ความสัมพันธ์กับจันทร์ของเงินสร้าง "นิทราเย็น" ที่สะกดด้วยเสน่ห์แทนการบดขยี้ นี่คืออาวุธคู่ใจของชนชั้นคหบดี' },
+                        'Maiyarap': { en: 'The demon king from the Ramakien (Thai Ramayana) epic who possessed the power to put Lord Rama\'s entire army into magical sleep. His name is synonymous with the Wicha of Army Hypnotism.', th: 'ราชายักษ์จากมหากาพย์รามเกียรติ์ผู้มีฤทธิ์สะกดกองทัพพระรามทั้งกองให้หลับใหล ชื่อของท่านเป็นคำพ้องกับวิชาสะกดทัพ' },
+                        'Sakod Thap': { en: 'The core Wicha (magical science) of Army Hypnotism — the power to render enemies unconscious or completely passive. In the Silver version, this manifests as a gentle, enchanting sleep rather than a heavy coma.', th: 'วิชาหลักแห่งการสะกดทัพ — พลังที่ทำให้ศัตรูหมดสติหรือเฉื่อยชาสิ้นเชิง ในเนื้อเงิน สิ่งนี้ปรากฏเป็นการหลับที่อ่อนโยนยั่วยวนแทนที่จะเป็นโคม่าหนัก' },
+                    };
+
+                    const desc = descriptions[d.id] || { en: 'A key element in the lineage and power network of the Silver Takrud Maiyarap Sakod Thap.', th: 'องค์ประกอบสำคัญในเครือข่ายสายวิชาและพลังของตะกรุดเงินไมยราพณ์สะกดทัพ' };
+
+                    content.innerHTML = `
+                    <div style="border-left:3px solid ${rc};padding-left:1rem;margin-bottom:2rem;">
+                        <div style="font-family:'Orbitron',sans-serif;font-size:0.6rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:0.25rem;">${d.type.toUpperCase()}</div>
+                        <h2 style="font-family:'Orbitron',sans-serif;font-size:1.1rem;color:var(--silver-bright);margin-bottom:0.25rem;">${this.lang === 'th' ? d.label_th : d.label_en}</h2>
+                        <span class="badge" style="background:${rc}20;color:${rc};border-color:${rc}40;">${d.risk}</span>
+                    </div>
+                    <div class="prose" style="font-size:0.9rem;">
+                        <p>${this.lang === 'th' ? desc.th : desc.en}</p>
+                    </div>
+                `;
+
+                    panel.classList.add('open');
+                    overlay.classList.add('active');
+                },
+
+                closePanel() {
+                    document.getElementById('slide-panel').classList.remove('open');
+                    document.getElementById('panel-overlay').classList.remove('active');
+                }
+            };
+
+            // ══════════════════════════════════
+            // 8. RESILIENT LOADER
+            // ══════════════════════════════════
+            function waitForLibs(retries) {
+                retries = retries || 0;
+                const d3Ready = typeof d3 !== 'undefined';
+                const chartReady = typeof Chart !== 'undefined';
+
+                if (d3Ready && chartReady) {
+                    console.log(`[Nexus] System Ready (${retries * 100}ms)`);
+                    APP.init();
+                } else if (retries < 80) {
+                    setTimeout(() => waitForLibs(retries + 1), 100);
+                } else {
+                    console.warn('[Nexus] Timeout — initializing with available libs');
+                    APP.init();
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => waitForLibs(0));
+        })();
+    </script>
+
+</body>
+
+</html>
+```</candidate>
