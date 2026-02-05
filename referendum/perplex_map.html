@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiang Mai Trip Planner - Feb 6-8, 2026</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --color-background: #fcfcf9;
+            --color-surface: #fffffe;
+            --color-text: #13343b;
+            --color-text-secondary: #626c71;
+            --color-primary: #21808d;
+            --color-primary-hover: #1d7480;
+            --color-border: rgba(94, 82, 64, 0.2);
+            --color-card-border: rgba(94, 82, 64, 0.12);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --radius-base: 8px;
+            --radius-lg: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-background: #1f2121;
+                --color-surface: #262828;
+                --color-text: #f5f5f5;
+                --color-text-secondary: rgba(167, 169, 169, 0.7);
+                --color-primary: #32b8c6;
+                --color-primary-hover: #2da6b2;
+                --color-border: rgba(119, 124, 124, 0.3);
+                --color-card-border: rgba(119, 124, 124, 0.2);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 380px;
+            background: var(--color-surface);
+            border-right: 1px solid var(--color-border);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .header {
+            padding: 24px;
+            border-bottom: 1px solid var(--color-border);
+            background: var(--color-surface);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--color-text);
+        }
+
+        .header p {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+        }
+
+        .trip-info {
+            padding: 16px 24px;
+            background: rgba(33, 128, 141, 0.08);
+            border-bottom: 1px solid var(--color-border);
+            font-size: 13px;
+        }
+
+        .trip-info strong {
+            color: var(--color-primary);
+        }
+
+        .content {
+            padding: 20px 24px;
+        }
+
+        .day-section {
+            margin-bottom: 32px;
+        }
+
+        .day-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--color-text);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .location-card {
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-base);
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .location-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary);
+            transform: translateY(-1px);
+        }
+
+        .location-card.active {
+            border-color: var(--color-primary);
+            background: rgba(33, 128, 141, 0.05);
+        }
+
+        .location-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .location-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .location-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--color-text);
+            line-height: 1.4;
+        }
+
+        .location-time {
+            font-size: 13px;
+            color: var(--color-primary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .location-details {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .location-pluscode {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            background: rgba(33, 128, 141, 0.08);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .alert {
+            background: rgba(255, 84, 89, 0.1);
+            border: 1px solid rgba(255, 84, 89, 0.3);
+            border-radius: var(--radius-base);
+            padding: 12px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--color-text);
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: var(--color-surface);
+            padding: 16px;
+            border-radius: var(--radius-base);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border);
+            z-index: 1000;
+            max-width: 200px;
+        }
+
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .legend-icon {
+            font-size: 18px;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .btn {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: var(--radius-base);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover {
+            background: var(--color-primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--color-surface);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(33, 128, 141, 0.08);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 50vh;
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+            }
+            
+            .map-container {
+                height: 50vh;
+            }
+
+            .legend {
+                bottom: 10px;
+                right: 10px;
+                padding: 12px;
+                max-width: 160px;
+            }
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: var(--radius-base);
+        }
+
+        .popup-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: var(--color-text);
+        }
+
+        .popup-details {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .badge-temple { background: rgba(147, 51, 234, 0.15); color: #9333ea; }
+        .badge-food { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+        .badge-coffee { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+        .badge-hotel { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+        .badge-other { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="header">
+                <h1>🗺️ Chiang Mai Trip</h1>
+                <p>February 6-8, 2026</p>
+            </div>
+
+            <div class="trip-info">
+                <strong>✈️ Flight:</strong> FNQF5K<br>
+                <strong>🏨 Hotel:</strong> ibis Styles (1979064961)<br>
+                <strong>📅 Duration:</strong> 3 Days, 2 Nights
+            </div>
+
+            <div class="content">
+                <div class="day-section">
+                    <div class="day-header">Day 1 - Friday, Feb 6</div>
+                    
+                    <div class="location-card" data-lat="18.8034" data-lng="98.9863" data-name="Chiang Mai Airport">
+                        <div class="location-time">19:05 - 20:25</div>
+                        <div class="location-header">
+                            <span class="location-icon">✈️</span>
+                            <span class="location-name">Arrival at Chiang Mai Airport (CNX)</span>
+                        </div>
+                        <div class="location-details">Bangkok → Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8034" data-lng="99.0347" data-name="Penn.izakaya">
+                        <div class="location-time">21:00 - 23:30</div>
+                        <div class="location-header">
+                            <span class="location-icon">🍜</span>
+                            <span class="location-name">Penn.izakaya</span>
+                        </div>
+                        <div class="location-details">Late dinner, Japanese-Thai fusion izakaya. Open till midnight.</div>
+                        <div class="location-pluscode">RX3M+8W Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8067" data-lng="99.0100" data-name="ibis Styles Chiang Mai">
+                        <div class="location-time">Check-in</div>
+                        <div class="location-header">
+                            <span class="location-icon">🏨</span>
+                            <span class="location-name">ibis Styles Chiang Mai</span>
+                        </div>
+                        <div class="location-details">Your home base for 2 nights. Booking ID: 1979064961</div>
+                        <div class="location-pluscode">RX46+F2 Chiang Mai</div>
+                    </div>
+                </div>
+
+                <div class="day-section">
+                    <div class="day-header">Day 2 - Saturday, Feb 7</div>
+
+                    <div class="alert">
+                        <div class="alert-title">⚠️ Timing Conflict</div>
+                        ลาบบัวตอง closes at 14:30. Since you'll be at ลาบต้นขาม until 13:30 + 30min drive, consider skipping ลาบบัวตอง or adjusting schedule.
+                    </div>
+
+                    <div class="location-card" data-lat="18.8447" data-lng="99.0184" data-name="Roast8ry Coffee">
+                        <div class="location-time">07:00 - 08:00</div>
+                        <div class="location-header">
+                            <span class="location-icon">☕</span>
+                            <span class="location-name">Roast8ry Coffee Flagship Store</span>
+                        </div>
+                        <div class="location-details">Breakfast coffee option, walking distance from hotel</div>
+                        <div class="location-pluscode">QXV9+X9 Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="19.0035" data-lng="98.8816" data-name="Wat Thung Luang">
+                        <div class="location-time">09:00 - 11:00</div>
+                        <div class="location-header">
+                            <span class="location-icon">⛩️</span>
+                            <span class="location-name">วัดทุ่งหลวง (Wat Thung Luang)</span>
+                        </div>
+                        <div class="location-details">Beautiful Northern Thai temple in Mae Taeng district. ~35 km, 45-60 min drive</div>
+                        <div class="location-pluscode">5W3J+XJ6 Mae Taeng</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.9964" data-lng="98.8970" data-name="Laab Ton Kham">
+                        <div class="location-time">11:15 - 13:30</div>
+                        <div class="location-header">
+                            <span class="location-icon">🍖</span>
+                            <span class="location-name">ลาบต้นขาม (Laab Ton Kham)</span>
+                        </div>
+                        <div class="location-details">⭐ Best raw buffalo laap in Chiang Mai! Visit right after temple. Opens 11 AM, runs out by 2 PM.</div>
+                        <div class="location-pluscode">4WQW+FW San Mahaphon, Mae Taeng</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8018" data-lng="99.0287" data-name="Laab Bua Tong">
+                        <div class="location-time">14:45 - 15:45 (OPTIONAL)</div>
+                        <div class="location-header">
+                            <span class="location-icon">🍖</span>
+                            <span class="location-name">ลาบบัวตอง (Laab Bua Tong)</span>
+                        </div>
+                        <div class="location-details">⚠️ Saturday ONLY, last order ~14:30. May not be feasible with current schedule.</div>
+                        <div class="location-pluscode">Q2QH+RG Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8068" data-lng="99.0050" data-name="Pharmacy CMU">
+                        <div class="location-time">17:30 - 18:00</div>
+                        <div class="location-header">
+                            <span class="location-icon">💊</span>
+                            <span class="location-name">Pharmacy หน้า CMU</span>
+                        </div>
+                        <div class="location-details">Pick up personal health boost medicines. Near hotel.</div>
+                        <div class="location-pluscode">RX53+9X Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8011" data-lng="99.0514" data-name="Jia Tong Heng">
+                        <div class="location-time">18:30 - 20:30</div>
+                        <div class="location-header">
+                            <span class="location-icon">🐷</span>
+                            <span class="location-name">ภัตตาคารเจี่ยท้งเฮง</span>
+                        </div>
+                        <div class="location-details">🌟 Suckling pig dinner! Reserve in advance. Famous for traditional Chinese-Thai roasted meats.</div>
+                        <div class="location-pluscode">Q2J2+MJ Chiang Mai</div>
+                    </div>
+                </div>
+
+                <div class="day-section">
+                    <div class="day-header">Day 3 - Sunday, Feb 8</div>
+
+                    <div class="location-card" data-lat="18.7399" data-lng="98.8683" data-name="Wat Phra That Doi Kham">
+                        <div class="location-time">06:45 - 09:00</div>
+                        <div class="location-header">
+                            <span class="location-icon">🙏</span>
+                            <span class="location-name">พระธาตุดอยคำ (Wat Phra That Doi Kham)</span>
+                        </div>
+                        <div class="location-details">⭐ Temple of the Golden Mountain - 1,300+ years old. 17m tall Buddha. Make ONE wish with full name. Plenty of time for prayers!</div>
+                        <div class="location-pluscode">QW59+QF Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8633" data-lng="99.0132" data-name="Land and House Park">
+                        <div class="location-time">09:30 - 11:30</div>
+                        <div class="location-header">
+                            <span class="location-icon">🗳️</span>
+                            <span class="location-name">สโมสรโครงการหมู่บ้านแลนด์แอนด์เฮ้าส์พาร์ค</span>
+                        </div>
+                        <div class="location-details">Referendum voting (ลงประชามติ). ~18 km from Doi Kham, 25-30 min drive.</div>
+                        <div class="location-pluscode">V287+C69 Nong Chom, San Sai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8443" data-lng="99.0195" data-name="Wat Dub Phai">
+                        <div class="location-time">12:00 - 13:30 (OPTIONAL)</div>
+                        <div class="location-header">
+                            <span class="location-icon">⛩️</span>
+                            <span class="location-name">วัดดับภัย (Wat Dub Phai)</span>
+                        </div>
+                        <div class="location-details">Optional temple visit with lunch nearby</div>
+                        <div class="location-pluscode">QXVJ+5J Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8445" data-lng="99.0187" data-name="Baan Landai">
+                        <div class="location-time">Lunch Option</div>
+                        <div class="location-header">
+                            <span class="location-icon">🍽️</span>
+                            <span class="location-name">Baan Landai</span>
+                        </div>
+                        <div class="location-details">Traditional Northern Thai cuisine</div>
+                        <div class="location-pluscode">QXVP+JX Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8017" data-lng="99.0577" data-name="CHOW CHOW">
+                        <div class="location-time">Lunch Option</div>
+                        <div class="location-header">
+                            <span class="location-icon">🍽️</span>
+                            <span class="location-name">CHOW CHOW Thai Contemporary</span>
+                        </div>
+                        <div class="location-details">Modern Thai cuisine</div>
+                        <div class="location-pluscode">Q2P3+C5 Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8442" data-lng="99.0280" data-name="Sandwich Bar">
+                        <div class="location-time">Lunch Option</div>
+                        <div class="location-header">
+                            <span class="location-icon">🥪</span>
+                            <span class="location-name">Sandwich Bar</span>
+                        </div>
+                        <div class="location-details">Quick casual lunch option</div>
+                        <div class="location-pluscode">QXVH+VF Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8034" data-lng="98.9863" data-name="CNX Airport">
+                        <div class="location-time">17:00 - 18:30</div>
+                        <div class="location-header">
+                            <span class="location-icon">✈️</span>
+                            <span class="location-name">Chiang Mai Airport (CNX)</span>
+                        </div>
+                        <div class="location-details">Check-in for 21:05 departure. Allow 2+ hours before flight.</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8034" data-lng="98.9863" data-name="Departure">
+                        <div class="location-time">21:05 - 22:25</div>
+                        <div class="location-header">
+                            <span class="location-icon">🛫</span>
+                            <span class="location-name">Departure to Bangkok</span>
+                        </div>
+                        <div class="location-details">Chiang Mai → Bangkok (Suvarnabhumi)</div>
+                    </div>
+                </div>
+
+                <div class="day-section">
+                    <div class="day-header">☕ Coffee Spots (Anytime)</div>
+
+                    <div class="location-card" data-lat="18.8498" data-lng="99.0168" data-name="GRAPH One Nimman">
+                        <div class="location-header">
+                            <span class="location-icon">☕</span>
+                            <span class="location-name">GRAPH One Nimman</span>
+                        </div>
+                        <div class="location-details">Trendy Nimman area café</div>
+                        <div class="location-pluscode">QXX9+X7 Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8494" data-lng="99.0168" data-name="Ristr8to Original">
+                        <div class="location-header">
+                            <span class="location-icon">☕</span>
+                            <span class="location-name">Ristr8to Original</span>
+                        </div>
+                        <div class="location-details">Award-winning specialty coffee</div>
+                        <div class="location-pluscode">QXX8+MV Chiang Mai</div>
+                    </div>
+
+                    <div class="location-card" data-lat="18.8396" data-lng="99.0507" data-name="The Baristro">
+                        <div class="location-header">
+                            <span class="location-icon">☕</span>
+                            <span class="location-name">The Baristro Asian Style</span>
+                        </div>
+                        <div class="location-details">Unique Asian-fusion café</div>
+                        <div class="location-pluscode">QXQ2+XM Chiang Mai</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <div id="map"></div>
+            
+            <div class="legend">
+                <div class="legend-title">Map Legend</div>
+                <div class="legend-item"><span class="legend-icon">⛩️</span> Temples</div>
+                <div class="legend-item"><span class="legend-icon">🍜</span> Restaurants</div>
+                <div class="legend-item"><span class="legend-icon">☕</span> Coffee Shops</div>
+                <div class="legend-item"><span class="legend-icon">🏨</span> Hotel</div>
+                <div class="legend-item"><span class="legend-icon">✈️</span> Airport</div>
+                <div class="legend-item"><span class="legend-icon">🗳️</span> Other</div>
+            </div>
+
+            <div class="controls">
+                <button class="btn" onclick="fitAllMarkers()">📍 Show All</button>
+                <button class="btn btn-secondary" onclick="exportItinerary()">💾 Export</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize map centered on Chiang Mai
+        const map = L.map('map').setView([18.7883, 98.9853], 12);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        // Store all markers for bounds fitting
+        const markers = [];
+
+        // Location data with categories
+        const locations = [
+            // Day 1
+            { lat: 18.8034, lng: 98.9863, name: 'Chiang Mai Airport', icon: '✈️', category: 'transport', plusCode: 'Airport' },
+            { lat: 18.8034, lng: 99.0347, name: 'Penn.izakaya', icon: '🍜', category: 'food', plusCode: 'RX3M+8W', details: 'Japanese-Thai fusion izakaya, open till midnight' },
+            { lat: 18.8067, lng: 99.0100, name: 'ibis Styles Chiang Mai', icon: '🏨', category: 'hotel', plusCode: 'RX46+F2', details: 'Your accommodation for 2 nights' },
+            
+            // Day 2
+            { lat: 18.8447, lng: 99.0184, name: 'Roast8ry Coffee Flagship', icon: '☕', category: 'coffee', plusCode: 'QXV9+X9', details: 'Breakfast coffee option' },
+            { lat: 19.0035, lng: 98.8816, name: 'วัดทุ่งหลวง (Wat Thung Luang)', icon: '⛩️', category: 'temple', plusCode: '5W3J+XJ6', details: 'Beautiful Northern Thai temple, Mae Taeng' },
+            { lat: 18.9964, lng: 98.8970, name: 'ลาบต้นขาม (Laab Ton Kham)', icon: '🍖', category: 'food', plusCode: '4WQW+FW', details: '⭐ Best raw buffalo laap in Chiang Mai!' },
+            { lat: 18.8018, lng: 99.0287, name: 'ลาบบัวตอง (Laab Bua Tong)', icon: '🍖', category: 'food', plusCode: 'Q2QH+RG', details: 'Saturday only, last order 14:30' },
+            { lat: 18.8068, lng: 99.0050, name: 'Pharmacy หน้า CMU', icon: '💊', category: 'other', plusCode: 'RX53+9X', details: 'Personal health medicines' },
+            { lat: 18.8011, lng: 99.0514, name: 'ภัตตาคารเจี่ยท้งเฮง', icon: '🐷', category: 'food', plusCode: 'Q2J2+MJ', details: '🌟 Suckling pig dinner!' },
+            
+            // Day 3
+            { lat: 18.7399, lng: 98.8683, name: 'พระธาตุดอยคำ (Wat Phra That Doi Kham)', icon: '🙏', category: 'temple', plusCode: 'QW59+QF', details: '⭐ Temple of the Golden Mountain, 1,300+ years old' },
+            { lat: 18.8633, lng: 99.0132, name: 'สโมสรโครงการหมู่บ้านแลนด์แอนด์เฮ้าส์พาร์ค', icon: '🗳️', category: 'other', plusCode: 'V287+C69', details: 'Referendum voting location' },
+            { lat: 18.8443, lng: 99.0195, name: 'วัดดับภัย (Wat Dub Phai)', icon: '⛩️', category: 'temple', plusCode: 'QXVJ+5J', details: 'Optional temple visit' },
+            { lat: 18.8445, lng: 99.0187, name: 'Baan Landai', icon: '🍽️', category: 'food', plusCode: 'QXVP+JX', details: 'Traditional Northern Thai' },
+            { lat: 18.8017, lng: 99.0577, name: 'CHOW CHOW Thai Contemporary', icon: '🍽️', category: 'food', plusCode: 'Q2P3+C5', details: 'Modern Thai cuisine' },
+            { lat: 18.8442, lng: 99.0280, name: 'Sandwich Bar', icon: '🥪', category: 'food', plusCode: 'QXVH+VF', details: 'Quick casual lunch' },
+            
+            // Coffee shops
+            { lat: 18.8498, lng: 99.0168, name: 'GRAPH One Nimman', icon: '☕', category: 'coffee', plusCode: 'QXX9+X7', details: 'Trendy Nimman café' },
+            { lat: 18.8494, lng: 99.0168, name: 'Ristr8to Original', icon: '☕', category: 'coffee', plusCode: 'QXX8+MV', details: 'Award-winning coffee' },
+            { lat: 18.8396, lng: 99.0507, name: 'The Baristro Asian Style', icon: '☕', category: 'coffee', plusCode: 'QXQ2+XM', details: 'Asian-fusion café' }
+        ];
+
+        // Create custom icon function
+        function createCustomIcon(emoji) {
+            return L.divIcon({
+                html: `<div style="font-size: 24px; text-shadow: 0 0 3px white;">${emoji}</div>`,
+                className: 'custom-icon',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+        }
+
+        // Add markers to map
+        locations.forEach(loc => {
+            const marker = L.marker([loc.lat, loc.lng], {
+                icon: createCustomIcon(loc.icon)
+            }).addTo(map);
+
+            // Create popup content
+            const popupContent = `
+                <div class="popup-title">${loc.icon} ${loc.name}</div>
+                <div class="popup-details">
+                    ${loc.details ? loc.details + '<br>' : ''}
+                    <strong>Plus Code:</strong> ${loc.plusCode}
+                </div>
+                <span class="category-badge badge-${loc.category}">${loc.category}</span>
+            `;
+
+            marker.bindPopup(popupContent);
+            markers.push(marker);
+
+            // Store location data on marker
+            marker.locationData = loc;
+        });
+
+        // Add click handlers to location cards
+        document.querySelectorAll('.location-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const lat = parseFloat(this.dataset.lat);
+                const lng = parseFloat(this.dataset.lng);
+                const name = this.dataset.name;
+
+                if (lat && lng) {
+                    // Remove active class from all cards
+                    document.querySelectorAll('.location-card').forEach(c => c.classList.remove('active'));
+                    // Add active class to clicked card
+                    this.classList.add('active');
+
+                    // Pan to location and zoom
+                    map.setView([lat, lng], 15, { animate: true });
+
+                    // Find and open popup for this marker
+                    markers.forEach(marker => {
+                        if (marker.locationData.name === name) {
+                            marker.openPopup();
+                        }
+                    });
+                }
+            });
+        });
+
+        // Fit all markers function
+        function fitAllMarkers() {
+            const group = L.featureGroup(markers);
+            map.fitBounds(group.getBounds().pad(0.1));
+            document.querySelectorAll('.location-card').forEach(c => c.classList.remove('active'));
+        }
+
+        // Export itinerary function
+        function exportItinerary() {
+            const itinerary = {
+                trip: "Chiang Mai Trip",
+                dates: "February 6-8, 2026",
+                flightReference: "FNQF5K",
+                hotelBooking: "1979064961",
+                locations: locations.map(loc => ({
+                    name: loc.name,
+                    plusCode: loc.plusCode,
+                    coordinates: { lat: loc.lat, lng: loc.lng },
+                    category: loc.category,
+                    details: loc.details || ''
+                }))
+            };
+
+            // Create JSON file
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(itinerary, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", "chiang-mai-trip-itinerary.json");
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+
+            // Also copy Google Maps link to clipboard
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${locations[0].lat},${locations[0].lng}`;
+            navigator.clipboard.writeText(mapsUrl).then(() => {
+                alert('✅ Itinerary exported as JSON!\n📋 First location copied to clipboard!');
+            });
+        }
+
+        // Initial fit to show all locations
+        setTimeout(fitAllMarkers, 500);
+    </script>
+</body>
+</html>
