@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chiang Mai Trip Map - Feb 6-8</title>
+    <title>Chiang Mai Trip Feb 6-8 | FNQF5K</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
         body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        #map { height: 85vh; width: 100%; }
+        #map { height: 80vh; width: 100%; }
         .header { 
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
             color: white; 
@@ -16,109 +16,127 @@
             text-align: center;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
+        .header small { opacity: 0.9; display: block; margin-top: 5px; }
         .legend {
             background: white;
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: 12px;
         }
-        .legend i {
-            width: 12px;
-            height: 12px;
-            display: inline-block;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-        .day-1 { color: #e74c3c; }
-        .day-2 { color: #27ae60; }
-        .day-3 { color: #f39c12; }
-        .hotel { color: #8e44ad; }
+        .legend-item { display: flex; align-items: center; margin-bottom: 4px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; border: 2px solid white; box-shadow: 0 0 0 1px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
     <div class="header">
-        <h2>🗺️ Chiang Mai Trip Planner | Feb 6-8, 2026</h2>
-        <small>ibis Styles → Mae Taeng → Airport</small>
+        <h2>🗺️ Chiang Mai Trip | Feb 6-8, 2026</h2>
+        <small>Booking: FNQF5K | Agoda: 1979064961 | ibis Styles Base</small>
     </div>
     <div id="map"></div>
 
     <script>
-        // Initialize map centered on Chiang Mai
+        // Initialize map
         var map = L.map('map').setView([18.85, 98.95], 11);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        // Custom icons
-        var hotelIcon = L.divIcon({
-            className: 'custom-div-icon',
-            html: "<div style='background-color:#8e44ad;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);'></div>",
-            iconSize: [12, 12],
-            iconAnchor: [6, 6]
-        });
-        
-        var fridayIcon = L.divIcon({
-            html: "<div style='background-color:#e74c3c;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);'></div>",
-            iconSize: [12, 12], iconAnchor: [6, 6]
-        });
-        
-        var saturdayIcon = L.divIcon({
-            html: "<div style='background-color:#27ae60;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);'></div>",
-            iconSize: [12, 12], iconAnchor: [6, 6]
-        });
-        
-        var sundayIcon = L.divIcon({
-            html: "<div style='background-color:#f39c12;width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 0 4px rgba(0,0,0,0.4);'></div>",
-            iconSize: [12, 12], iconAnchor: [6, 6]
-        });
+        // Color codes
+        var colors = {
+            hotel: '#8e44ad',    // Purple
+            friday: '#c0392b',   // Red
+            saturday: '#27ae60', // Green  
+            sunday: '#f39c12',   // Orange
+            food: '#e74c3c',     // Red-ish
+            temple: '#2980b9'    // Blue
+        };
 
-        // Locations
-        var locations = [
+        function createIcon(color) {
+            return L.divIcon({
+                className: 'custom-icon',
+                html: `<div style="background-color:${color};width:14px;height:14px;border-radius:50%;border:3px solid white;box-shadow:0 0 4px rgba(0,0,0,0.5);"></div>`,
+                iconSize: [14, 14],
+                iconAnchor: [7, 7]
+            });
+        }
+
+        // Locations data
+        var places = [
             // Hotel (Purple)
-            {name: "🏨 ibis Styles Chiang Mai", coords: [18.7964, 98.9772], icon: hotelIcon, desc: "Base | RX46+F2 | Fri-Sat nights"},
+            {name: "🏨 ibis Styles Chiang Mai (Base)", coords: [18.7964, 98.9772], color: colors.hotel, 
+             desc: "Fri-Sat nights | Agoda #1979064961 | Check-in after Penn.izakaya"},
             
-            // Friday - Coffee (Red)
-            {name: "☕ The Baristro Asian Style", coords: [18.7889, 98.9700], icon: fridayIcon, desc: "Friday 4PM | QXQ2+XM"},
-            {name: "☕ Ristr8to Original", coords: [18.8006, 98.9672], icon: fridayIcon, desc: "Friday 5PM | QXX8+MV"},
-            {name: "☕ GRAPH One Nimman", coords: [18.8022, 98.9675], icon: fridayIcon, desc: "Friday 6PM | QXX9+X7"},
-            {name: "☕ Roast8ry Flagship", coords: [18.7969, 98.9686], icon: fridayIcon, desc: "Friday 7PM | QXV9+X9"},
+            // Friday (Red)
+            {name: "✈️ CNX Airport (Arrival)", coords: [18.7667, 98.9667], color: colors.friday,
+             desc: "Feb 6, 20:25 landing | BKK→CNX"},
+            {name: "🍶 Penn.izakaya", coords: [18.7945, 98.9680], color: colors.friday,
+             desc: "Friday 21:15 | RX3M+8W | Open till midnight"},
             
-            // Saturday - Temples & Food (Green)
-            {name: "🛕 วัดทุ่งหลวง", coords: [19.1000, 98.9000], icon: saturdayIcon, desc: "Saturday 9AM | CPQF+CM* | Mae Taeng"},
-            {name: "🍖 ลาบต้นขาม", coords: [19.1167, 98.8833], icon: saturdayIcon, desc: "Saturday 10:30AM | 4WQW+FW | After temple"},
-            {name: "🍖 ลาบบัวตอง (SAT ONLY)", coords: [18.9333, 98.9167], icon: saturdayIcon, desc: "Saturday 12PM | Q2QH+RG | Saturday only!"},
-            {name: "🙏 พระธาตุดอยคำ", coords: [18.7475, 98.9319], icon: saturdayIcon, desc: "Saturday 3-6PM | QW59+QF | Unhurried prayer time"},
+            // Saturday - Mae Taeng (Green)
+            {name: "🛕 วัดทุ่งหลวง", coords: [19.1500, 98.9400], color: colors.saturday,
+             desc: "Saturday 08:30 | 5W3J+XJ6 | Mae Taeng District | Prayer first"},
+            {name: "🍖 ลาบต้นขาม", coords: [19.1167, 98.8833], color: colors.saturday,
+             desc: "Saturday 10:00 | 4WQW+FW | Right after temple"},
+            {name: "🍖 ลาบบัวตอง (SAT ONLY)", coords: [18.9333, 98.9167], color: colors.saturday,
+             desc: "Saturday 11:30 | Q2QH+RG | Last order 14:30! Critical timing"},
+            {name: "🙏 พระธาตุดอยคำ", coords: [18.7475, 98.9319], color: colors.saturday,
+             desc: "Saturday 14:00-17:00 | QW59+QF | Unhurried prayer time | Doi Kham"},
+            {name: "🐷 ภัตตาคารเจี่ยท้งเฮง", coords: [18.7900, 98.9850], color: colors.saturday,
+             desc: "Saturday 19:00 | Q2J2+MJ | Suckling pig dinner"},
             
-            // Sunday - Voting & Flight (Orange)
-            {name: "🗳️ สโมสรฯ Land & House Park", coords: [18.8956, 99.0417], icon: sundayIcon, desc: "Sunday 8:30AM | V287+C69 | ลงประชามติ"},
-            {name: "🛕 วัดดับภัย", coords: [18.7667, 98.9667], icon: sundayIcon, desc: "Sunday 11AM | QXVJ+5J | Pre-airport"},
-            {name: "✈️ Chiang Mai Airport (CNX)", coords: [18.7667, 98.9667], icon: sundayIcon, desc: "Sunday 9PM Departure"}
+            // Sunday (Orange)
+            {name: "🗳️ สโมสร Land & House Park", coords: [18.8956, 99.0417], color: colors.sunday,
+             desc: "Sunday 08:30 | V287+C69 | ลงประชามติ | San Sai District"},
+            {name: "💊 Pharmacy หน้า CMU", coords: [18.8040, 98.9500], color: colors.sunday,
+             desc: "Sunday 10:30 | RX53+9X | Medicine pickup | Chiang Mai University"},
+            {name: "🍽️ Baan Landai", coords: [18.8000, 98.9650], color: colors.sunday,
+             desc: "Sunday 11:30 | QXVP+JX | Northern Thai lunch | Book ahead"},
+            {name: "🥪 Sandwich Bar", coords: [18.7950, 98.9680], color: colors.sunday,
+             desc: "Sunday 15:30 | QXVH+VF | Quick bite"},
+            {name: "🛕 วัดดับภัย", coords: [18.7667, 98.9667], color: colors.sunday,
+             desc: "Sunday 16:30 | QXVJ+5J | Pre-airport temple"},
+            {name: "✈️ CNX Airport (Departure)", coords: [18.7667, 98.9667], color: colors.sunday,
+             desc: "Sunday 21:05 departure | Arrive by 19:30"},
+            
+            // Alternative/Optional Food (Blue pins)
+            {name: "🍽️ CHOW CHOW (Alt. lunch)", coords: [18.7920, 98.9700], color: colors.food,
+             desc: "Q2P3+C5 | Alternative to Baan Landai"},
+            {name: "☕ The Baristro Asian Style", coords: [18.7889, 98.9700], color: colors.food,
+             desc: "QXQ2+XM | Coffee option"},
+            {name: "☕ Ristr8to Original", coords: [18.8006, 98.9672], color: colors.food,
+             desc: "QXX8+MV | World latte art champion"},
+            {name: "☕ GRAPH One Nimman", coords: [18.8022, 98.9675], color: colors.food,
+             desc: "QXX9+X7 | Specialty coffee"},
+            {name: "☕ Roast8ry Flagship", coords: [18.7969, 98.9686], color: colors.food,
+             desc: "QXV9+X9 | Unicorn latte"}
         ];
 
         // Add markers
-        locations.forEach(function(loc) {
-            L.marker(loc.coords, {icon: loc.icon})
+        places.forEach(function(place) {
+            L.marker(place.coords, {icon: createIcon(place.color)})
              .addTo(map)
-             .bindPopup("<b>" + loc.name + "</b><br>" + loc.desc);
+             .bindPopup("<b>" + place.name + "</b><br>" + place.desc);
         });
 
         // Add legend
         var legend = L.control({position: 'bottomright'});
         legend.onAdd = function (map) {
             var div = L.DomUtil.create('div', 'legend');
-            div.innerHTML += '<div><span style="background:#8e44ad;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:5px;"></span>Hotel (Base)</div>';
-            div.innerHTML += '<div><span style="background:#e74c3c;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:5px;"></span>Friday (Coffee)</div>';
-            div.innerHTML += '<div><span style="background:#27ae60;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:5px;"></span>Saturday (Temples/Food)</div>';
-            div.innerHTML += '<div><span style="background:#f39c12;width:12px;height:12px;display:inline-block;border-radius:50%;margin-right:5px;"></span>Sunday (Voting/Flight)</div>';
+            div.innerHTML += '<div class="legend-item"><div class="dot" style="background:' + colors.hotel + '"></div>Hotel (Base)</div>';
+            div.innerHTML += '<div class="legend-item"><div class="dot" style="background:' + colors.friday + '"></div>Friday (Arrival)</div>';
+            div.innerHTML += '<div class="legend-item"><div class="dot" style="background:' + colors.saturday + '"></div>Saturday (Mae Taeng + Doi Kham)</div>';
+            div.innerHTML += '<div class="legend-item"><div class="dot" style="background:' + colors.sunday + '"></div>Sunday (Voting + Flight)</div>';
+            div.innerHTML += '<div class="legend-item"><div class="dot" style="background:' + colors.food + '"></div>Alternative Dining/Coffee</div>';
             return div;
         };
         legend.addTo(map);
 
-        // Fit bounds to show all markers
-        var group = new L.featureGroup(locations.map(l => L.marker(l.coords)));
-        map.fitBounds(group.getBounds().pad(0.1));
+        // Fit bounds
+        var group = new L.featureGroup(places.map(p => L.marker(p.coords)));
+        map.fitBounds(group.getBounds().pad(0.15));
     </script>
 </body>
 </html>
