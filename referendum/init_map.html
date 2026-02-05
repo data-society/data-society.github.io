@@ -5,7 +5,7 @@
     <title>Chiang Mai Trip Plan: Feb 6-8</title>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
-    <style>#map {height: 600px; width: 100%;}</style>
+    <style>#map {height: 600px; width: 100%; font-family: sans-serif;}</style>
 </head>
 <body>
     <div id="map"></div>
@@ -16,14 +16,19 @@
         }).addTo(map);
 
         var locations = [
-            {lat: 18.807, lon: 98.957, title: "ibis Styles Chiang Mai", desc: "Hotel Base"},
-            {lat: 19.105, lon: 98.950, title: "Wat Thung Luang (Mae Taeng)", desc: "Sat Morning"},
-            {lat: 19.122, lon: 98.941, title: "Larb Ton Kham", desc: "Sat Lunch"},
-            {lat: 18.790, lon: 99.035, title: "Larb Bua Tong", desc: "Sat Dinner (Sat Only)"},
-            {lat: 18.880, lon: 99.030, title: "Land & Houses Park", desc: "Sun Morning: Voting"},
-            {lat: 18.759, lon: 98.918, title: "Wat Phra That Doi Kham", desc: "Sun Afternoon"},
-            {lat: 18.790, lon: 98.955, title: "The Baristro Asian Style", desc: "Coffee Break"},
-            {lat: 18.793, lon: 98.982, title: "Wat Dap Phai", desc: "Old City Temple"}
+            {lat: 18.807, lon: 98.957, title: "ibis Styles Chiang Mai", desc: "Hotel Base (RX46+F2)"},
+            {lat: 18.809, lon: 98.960, title: "Penn.izakaya", desc: "Fri Night: Arrival Dinner (RX3M+8W)"},
+            {lat: 18.800, lon: 98.950, title: "Pharmacy Front of CMU", desc: "Sat Morning: Pickup (RX53+9X)"},
+            {lat: 18.789, lon: 98.980, title: "Sandwich Bar", desc: "Sat Morning: Breakfast (QXVH+VF)"},
+            {lat: 18.793, lon: 98.982, title: "Wat Dap Phai", desc: "Sat Morning: Temple (QXVJ+5J)"},
+            {lat: 18.790, lon: 99.035, title: "Larb Bua Tong", desc: "Sat Lunch: SAT ONLY (Q2QH+RG)"},
+            {lat: 18.825, lon: 99.005, title: "CHOW CHOW", desc: "Sat Afternoon: Snack/Visit (Q2P3+C5)"},
+            {lat: 18.807, lon: 99.012, title: "Jia Tong Heng", desc: "Sat Dinner: Suckling Pig (Q2J2+MJ)"},
+            {lat: 18.880, lon: 99.030, title: "Land & Houses Park", desc: "Sun Morning: Vote (V287+C69)"},
+            {lat: 19.105, lon: 98.950, title: "Wat Thung Luang", desc: "Sun Morning: Mae Taeng (5W3J+XJ6)"},
+            {lat: 19.122, lon: 98.941, title: "Larb Ton Kham", desc: "Sun Lunch: Spicy Larb (4WQW+FW)"},
+            {lat: 18.759, lon: 98.918, title: "Wat Phra That Doi Kham", desc: "Sun Afternoon: Prayer (QW59+QF)"},
+            {lat: 18.794, lon: 98.987, title: "Baan Landai", desc: "Sun Dinner: Farewell (QXVP+JX)"}
         ];
 
         locations.forEach(function(loc) {
