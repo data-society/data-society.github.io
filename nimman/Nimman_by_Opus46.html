@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midnight & Mixology: The Nimman Edit | Chiang Mai Feb 6-8, 2026</title>
+    <meta name="description" content="The definitive strategy for boutique stays and world-champion coffee mixology in Nimman, Chiang Mai during the Flower Festival Weekend.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='bG' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%234a3728'/%3E%3Cstop offset='100%25' style='stop-color:%231a110a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx='32' cy='32' rx='24' ry='28' fill='url(%23bG)' transform='rotate(-15 32 32)'/%3E%3Cpath d='M32 8Q28 32 32 56' stroke='%231a0f08' stroke-width='3' fill='none' stroke-linecap='round' transform='rotate(-15 32 32)'/%3E%3C/svg%3E">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        /* ══════════════════════════════════════════════════════════════════════
+           DESIGN TOKENS
+           ══════════════════════════════════════════════════════════════════════ */
+        :root {
+            --espresso-void: #0d0a08;
+            --espresso-deep: #1a1512;
+            --espresso-surface: #231e1a;
+            --espresso-elevated: #2d2621;
+            
+            --cream-primary: #f5f0e8;
+            --cream-muted: #d4ccc0;
+            --cream-subtle: #a89f94;
+            --stone-warm: #6b6259;
+            
+            --copper-bright: #c8956c;
+            --copper-muted: #a67c52;
+            --rose-gold: #b4846c;
+            --terracotta: #c76d4e;
+            --deep-gold: #D4AF37;
+            
+            --success-sage: #7a9e7e;
+            --warning-amber: #d4a84b;
+            --alert-rose: #c75c5c;
+            --info-slate: #7a8b9a;
+            
+            --glass-light: rgba(245, 240, 232, 0.05);
+            --glass-border: rgba(200, 149, 108, 0.15);
+            --glass-glow: rgba(200, 149, 108, 0.08);
+            
+            --font-display: 'Playfair Display', serif;
+            --font-elegant: 'Cormorant Garamond', serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-thai: 'Sarabun', sans-serif;
+            
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            
+            --ease-elegant: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --duration-fast: 200ms;
+            --duration-normal: 400ms;
+            --duration-slow: 800ms;
+            
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           BASE RESET
+           ══════════════════════════════════════════════════════════════════════ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+        body {
+            background: var(--espresso-void);
+            color: var(--cream-primary);
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* i18n */
+        [lang="th"] { display: none; font-family: var(--font-thai); }
+        body[data-lang="th"] [lang="en"] { display: none; }
+        body[data-lang="th"] [lang="th"] { display: block; }
+
+        ::selection { background: var(--copper-bright); color: var(--espresso-void); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--espresso-deep); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--copper-muted), var(--rose-gold)); border-radius: 4px; }
+        :focus-visible { outline: 2px solid var(--copper-bright); outline-offset: 2px; }
+        a { color: var(--copper-bright); text-decoration: none; transition: color var(--duration-fast); }
+        a:hover { color: var(--cream-primary); }
+        img { max-width: 100%; height: auto; display: block; }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           LAYOUT
+           ══════════════════════════════════════════════════════════════════════ */
+        .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 var(--space-lg); }
+        .section { padding: var(--space-3xl) 0; position: relative; }
+        .grid { display: grid; gap: var(--space-lg); }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-4 { grid-template-columns: repeat(4, 1fr); }
+        @media (max-width: 1024px) { .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+            .container { padding: 0 var(--space-md); }
+            .section { padding: var(--space-2xl) 0; }
+        }
+        .flex { display: flex; } .flex-col { flex-direction: column; }
+        .items-center { align-items: center; } .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-sm { gap: var(--space-sm); } .gap-md { gap: var(--space-md); }
+        .gap-lg { gap: var(--space-lg); } .gap-xl { gap: var(--space-xl); }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           ALERT BAR
+           ══════════════════════════════════════════════════════════════════════ */
+        .alert-bar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: linear-gradient(90deg, var(--terracotta), var(--alert-rose));
+            color: var(--cream-primary); padding: var(--space-sm) var(--space-lg);
+            text-align: center; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.02em;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .alert-bar svg { display: inline-block; vertical-align: middle; margin-right: var(--space-xs); }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(199, 92, 92, 0.4); }
+            50% { box-shadow: 0 0 20px 0 rgba(199, 92, 92, 0.2); }
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           NAVIGATION
+           ══════════════════════════════════════════════════════════════════════ */
+        .nav {
+            position: fixed; top: 40px; left: 0; right: 0; z-index: 900;
+            padding: var(--space-md) 0; background: rgba(13, 10, 8, 0.9);
+            backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border);
+            transition: all var(--duration-normal) var(--ease-elegant);
+        }
+        .nav.scrolled { top: 0; padding: var(--space-sm) 0; }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+        .nav-logo {
+            font-family: var(--font-display); font-size: 1.25rem; font-weight: 600;
+            color: var(--cream-primary); display: flex; align-items: center; gap: var(--space-sm);
+        }
+        .nav-logo span { color: var(--copper-bright); }
+        .nav-links { display: flex; gap: var(--space-xl); list-style: none; }
+        .nav-links a {
+            color: var(--cream-muted); font-size: 0.9rem; font-weight: 500;
+            letter-spacing: 0.03em; text-transform: uppercase; position: relative;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+            background: var(--copper-bright); transition: width var(--duration-normal) var(--ease-elegant);
+        }
+        .nav-links a:hover { color: var(--cream-primary); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-actions { display: flex; gap: var(--space-sm); }
+        @media (max-width: 768px) { .nav-links { display: none; } }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           BUTTONS
+           ══════════════════════════════════════════════════════════════════════ */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg); font-family: var(--font-body);
+            font-size: 0.85rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+            border: none; border-radius: var(--radius-sm); cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-elegant);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--copper-bright), var(--rose-gold));
+            color: var(--espresso-void);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200, 149, 108, 0.3); }
+        .btn-ghost { background: transparent; color: var(--cream-muted); border: 1px solid var(--glass-border); }
+        .btn-ghost:hover { background: var(--glass-light); color: var(--cream-primary); border-color: var(--copper-muted); }
+        .btn-sm { padding: var(--space-xs) var(--space-md); font-size: 0.75rem; }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           GLASS PANEL
+           ══════════════════════════════════════════════════════════════════════ */
+        .glass-panel {
+            background: linear-gradient(135deg, rgba(35, 30, 26, 0.8), rgba(26, 21, 18, 0.9));
+            backdrop-filter: blur(24px); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           HERO
+           ══════════════════════════════════════════════════════════════════════ */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            position: relative; padding-top: 120px; overflow: hidden;
+        }
+        .hero-bg { position: absolute; inset: 0; z-index: -1; }
+        .hero-bg::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 20% 40%, rgba(200, 149, 108, 0.08), transparent),
+                        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(180, 132, 108, 0.06), transparent);
+        }
+        .hero-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 0%, var(--espresso-void) 100%);
+        }
+        .hero-content { position: relative; z-index: 1; text-align: center; max-width: 1000px; margin: 0 auto; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg); background: var(--glass-light);
+            border: 1px solid var(--glass-border); border-radius: 999px;
+            font-size: 0.8rem; font-weight: 500; color: var(--copper-bright);
+            letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: var(--space-xl);
+        }
+        .hero-title {
+            font-family: var(--font-display); font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 400; line-height: 1.1; margin-bottom: var(--space-lg); letter-spacing: -0.02em;
+        }
+        .hero-title em { font-style: italic; color: var(--copper-bright); }
+        .hero-subtitle {
+            font-family: var(--font-elegant); font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--cream-muted); margin-bottom: var(--space-xl); font-weight: 400;
+        }
+
+        /* Countdown */
+        .countdown-bar {
+            display: inline-flex; align-items: center; gap: var(--space-lg);
+            padding: var(--space-md) var(--space-xl);
+            background: var(--espresso-surface); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md); margin-bottom: var(--space-2xl);
+            flex-wrap: wrap; justify-content: center;
+        }
+        .countdown-unit { text-align: center; min-width: 64px; }
+        .countdown-value {
+            font-family: var(--font-mono); font-size: 1.8rem; font-weight: 700;
+            color: var(--copper-bright); line-height: 1;
+        }
+        .countdown-label {
+            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em;
+            color: var(--cream-subtle); margin-top: 4px;
+        }
+        .countdown-sep {
+            font-family: var(--font-mono); font-size: 1.5rem; color: var(--stone-warm);
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .hero-dates {
+            display: inline-flex; align-items: center; gap: var(--space-md);
+            padding: var(--space-md) var(--space-xl); background: var(--espresso-surface);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+            font-family: var(--font-mono); font-size: 0.9rem; margin-bottom: var(--space-lg);
+            flex-wrap: wrap; justify-content: center;
+        }
+        .hero-dates .divider { width: 1px; height: 24px; background: var(--glass-border); }
+        .hero-cta { display: flex; justify-content: center; gap: var(--space-md); flex-wrap: wrap; }
+
+        .hero-stats {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md);
+            margin-top: var(--space-2xl); max-width: 800px; margin-left: auto; margin-right: auto;
+        }
+        .hero-stat {
+            background: var(--glass-light); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md); padding: var(--space-lg); text-align: center;
+        }
+        .hero-stat-icon { font-size: 1.5rem; margin-bottom: var(--space-sm); }
+        .hero-stat-value { font-family: var(--font-display); font-size: 1.5rem; color: var(--copper-bright); margin-bottom: var(--space-xs); }
+        .hero-stat-label { font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+        @media (max-width: 768px) { .hero-stats { grid-template-columns: repeat(2, 1fr); } }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           SECTION HEADERS
+           ══════════════════════════════════════════════════════════════════════ */
+        .section-header { text-align: center; margin-bottom: var(--space-2xl); }
+        .section-tag {
+            display: inline-block; font-family: var(--font-mono); font-size: 0.7rem;
+            letter-spacing: 0.2em; text-transform: uppercase; color: var(--copper-bright);
+            margin-bottom: var(--space-md);
+        }
+        .section-title {
+            font-family: var(--font-display); font-size: clamp(1.75rem, 4vw, 2.75rem);
+            font-weight: 400; margin-bottom: var(--space-md);
+        }
+        .section-desc {
+            font-family: var(--font-elegant); font-size: 1.15rem; color: var(--cream-muted);
+            max-width: 700px; margin: 0 auto;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           SCROLL REVEAL
+           ══════════════════════════════════════════════════════════════════════ */
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.7s var(--ease-elegant), transform 0.7s var(--ease-elegant);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           EXECUTIVE SUMMARY
+           ══════════════════════════════════════════════════════════════════════ */
+        .executive-summary {
+            background: linear-gradient(135deg, var(--espresso-surface), var(--espresso-deep));
+            border: 1px solid var(--glass-border); border-radius: var(--radius-xl);
+            padding: var(--space-2xl); margin-bottom: var(--space-2xl);
+        }
+        .executive-summary-header {
+            display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg); border-bottom: 1px solid var(--glass-border);
+        }
+        .executive-summary-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--copper-bright), var(--rose-gold));
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .executive-summary-title { font-family: var(--font-display); font-size: 1.5rem; }
+        .executive-summary-content { font-size: 1.1rem; line-height: 1.8; color: var(--cream-muted); }
+        .executive-summary-content strong { color: var(--cream-primary); }
+        .executive-summary-content .highlight { color: var(--copper-bright); font-weight: 600; }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           CONFIRMED STAY CARD
+           ══════════════════════════════════════════════════════════════════════ */
+        .confirmed-stay {
+            background: linear-gradient(135deg, var(--espresso-elevated), var(--espresso-surface));
+            border: 2px solid var(--success-sage); border-radius: var(--radius-xl);
+            padding: var(--space-2xl); position: relative; overflow: hidden;
+        }
+        .confirmed-stay::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(122, 158, 126, 0.1), transparent);
+            border-radius: 50%; transform: translate(50%, -50%);
+        }
+        .confirmed-badge {
+            position: absolute; top: var(--space-lg); right: var(--space-lg);
+            background: var(--success-sage); color: var(--espresso-void);
+            padding: var(--space-xs) var(--space-md); border-radius: var(--radius-sm);
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+        }
+        .confirmed-stay h3 {
+            font-family: var(--font-display); font-size: 2rem; color: var(--success-sage); margin-bottom: var(--space-sm);
+        }
+        .confirmed-stay .stay-subtitle {
+            font-family: var(--font-mono); font-size: 0.85rem; color: var(--cream-muted);
+            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-lg);
+        }
+        .confirmed-stay .stay-desc {
+            font-size: 1rem; line-height: 1.8; color: var(--cream-muted); margin-bottom: var(--space-xl);
+        }
+        .stay-features {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md);
+        }
+        .stay-feature {
+            display: flex; align-items: center; gap: var(--space-sm); font-size: 0.9rem; color: var(--cream-primary);
+        }
+        .stay-feature-icon { color: var(--success-sage); }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           COFFEE ANCHOR
+           ══════════════════════════════════════════════════════════════════════ */
+        .coffee-anchor-card {
+            background: linear-gradient(135deg, var(--espresso-elevated), var(--espresso-surface));
+            border: 2px solid var(--copper-bright); border-radius: var(--radius-xl);
+            padding: var(--space-2xl); position: relative; overflow: hidden;
+        }
+        .coffee-anchor-card::before {
+            content: ''; position: absolute; top: 0; right: 0; width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(200, 149, 108, 0.1), transparent);
+            border-radius: 50%; transform: translate(50%, -50%);
+        }
+        .coffee-anchor-badge {
+            position: absolute; top: var(--space-lg); right: var(--space-lg);
+            background: linear-gradient(135deg, var(--copper-bright), var(--terracotta));
+            color: var(--espresso-void); padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-sm); font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+        }
+        .coffee-anchor-title { font-family: var(--font-display); font-size: 2rem; color: var(--copper-bright); margin-bottom: var(--space-sm); }
+        .coffee-anchor-subtitle { font-family: var(--font-mono); font-size: 0.85rem; color: var(--cream-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-lg); }
+        .coffee-anchor-description { font-size: 1rem; line-height: 1.8; color: var(--cream-muted); margin-bottom: var(--space-xl); }
+        .coffee-anchor-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-md); }
+        .coffee-anchor-feature { display: flex; align-items: center; gap: var(--space-sm); font-size: 0.9rem; color: var(--cream-primary); }
+        .coffee-anchor-feature-icon { color: var(--copper-bright); }
+
+        /* Coffee cards */
+        .coffee-card {
+            display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md);
+            background: var(--espresso-elevated); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md); margin-bottom: var(--space-sm); transition: all var(--duration-fast);
+        }
+        .coffee-card:hover { border-color: var(--copper-muted); background: var(--espresso-surface); }
+        .coffee-emoji { font-size: 2rem; }
+        .coffee-name { font-family: var(--font-display); font-size: 1rem; margin-bottom: 2px; }
+        .coffee-desc { font-size: 0.8rem; color: var(--cream-muted); }
+
+        /* Mixology table */
+        .mixology-table { width: 100%; border-collapse: collapse; margin-top: var(--space-lg); }
+        .mixology-table th, .mixology-table td {
+            padding: var(--space-md); text-align: left; border-bottom: 1px solid var(--glass-border);
+        }
+        .mixology-table th {
+            font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600;
+            letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper-bright);
+            background: var(--espresso-elevated);
+        }
+        .mixology-table td { font-size: 0.9rem; color: var(--cream-muted); }
+        .mixology-table .venue-name { font-family: var(--font-display); font-weight: 600; color: var(--cream-primary); }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           CHART / RADAR
+           ══════════════════════════════════════════════════════════════════════ */
+        .chart-section {
+            display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-2xl);
+        }
+        @media (max-width: 1024px) { .chart-section { grid-template-columns: 1fr; } }
+        .chart-container {
+            background: var(--espresso-surface); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg); padding: var(--space-lg); position: relative; height: 420px;
+        }
+        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); }
+        .chart-title { font-family: var(--font-display); font-size: 1.1rem; }
+        .chart-badge { font-size: 0.7rem; background: var(--espresso-elevated); padding: var(--space-xs) var(--space-sm); border-radius: var(--radius-sm); color: var(--cream-muted); }
+        .chart-canvas-wrapper { height: calc(100% - 60px); }
+
+        /* D3 Network */
+        #d3-network {
+            background: var(--espresso-surface); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg); overflow: hidden;
+        }
+        #d3-network svg { width: 100%; height: 100%; }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           ITINERARY TIMELINE
+           ══════════════════════════════════════════════════════════════════════ */
+        .timeline { position: relative; padding-left: 40px; }
+        .timeline::before {
+            content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px;
+            background: linear-gradient(180deg, var(--copper-bright), var(--rose-gold), var(--copper-muted));
+        }
+        .timeline-item { position: relative; margin-bottom: var(--space-xl); }
+        .timeline-dot {
+            position: absolute; left: -33px; top: 4px; width: 14px; height: 14px;
+            border-radius: 50%; background: var(--copper-bright); border: 3px solid var(--espresso-void);
+            box-shadow: 0 0 0 3px var(--copper-bright);
+        }
+        .timeline-dot.confirmed { background: var(--success-sage); box-shadow: 0 0 0 3px var(--success-sage); }
+        .timeline-time {
+            font-family: var(--font-mono); font-size: 0.8rem; color: var(--copper-bright);
+            margin-bottom: var(--space-xs);
+        }
+        .timeline-title { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: var(--space-xs); }
+        .timeline-desc { font-size: 0.9rem; color: var(--cream-muted); line-height: 1.6; }
+        .timeline-tag {
+            display: inline-block; font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 2px 8px; background: var(--espresso-elevated);
+            border-radius: var(--radius-sm); color: var(--cream-muted); margin-top: var(--space-sm);
+        }
+        .timeline-tag.coffee { background: rgba(200, 149, 108, 0.2); color: var(--copper-bright); }
+        .timeline-tag.food { background: rgba(122, 158, 126, 0.2); color: var(--success-sage); }
+        .timeline-tag.transport { background: rgba(122, 139, 154, 0.2); color: var(--info-slate); }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           PROTOCOL SECTION
+           ══════════════════════════════════════════════════════════════════════ */
+        .protocol-card {
+            padding: var(--space-xl); background: var(--espresso-surface);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+            transition: all var(--duration-fast);
+        }
+        .protocol-card:hover { border-color: var(--copper-muted); }
+        .protocol-card.warning { border-color: var(--terracotta); }
+        .protocol-header {
+            display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-md); border-bottom: 1px solid var(--glass-border);
+        }
+        .protocol-icon { font-size: 1.5rem; }
+        .protocol-title { font-family: var(--font-display); font-size: 1.15rem; }
+        .protocol-content { font-size: 0.9rem; color: var(--cream-muted); line-height: 1.7; }
+        .protocol-content p { margin-bottom: var(--space-md); }
+        .protocol-content strong { color: var(--cream-primary); }
+        .protocol-content ul { margin-left: var(--space-lg); margin-top: var(--space-sm); }
+        .protocol-content li { margin-bottom: var(--space-sm); }
+
+        .script-box {
+            padding: var(--space-lg); background: var(--espresso-void); border: 1px solid var(--glass-border);
+            border-left: 3px solid var(--copper-bright); border-radius: var(--radius-md);
+            font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.7; position: relative;
+            margin-top: var(--space-md);
+        }
+        .script-box .copy-btn {
+            position: absolute; top: var(--space-sm); right: var(--space-sm);
+            padding: var(--space-xs) var(--space-sm); background: var(--espresso-surface);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-sm);
+            font-size: 0.7rem; color: var(--cream-muted); cursor: pointer; transition: all var(--duration-fast);
+        }
+        .script-box .copy-btn:hover { background: var(--copper-muted); color: var(--espresso-void); }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           HISTORY
+           ══════════════════════════════════════════════════════════════════════ */
+        .history-section {
+            background: linear-gradient(135deg, var(--espresso-deep), var(--espresso-surface));
+            border: 1px solid var(--glass-border); border-radius: var(--radius-xl); padding: var(--space-2xl);
+        }
+        .history-content { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl); }
+        @media (max-width: 768px) { .history-content { grid-template-columns: 1fr; } }
+        .history-text { font-size: 1rem; line-height: 1.8; color: var(--cream-muted); }
+        .history-text p { margin-bottom: var(--space-lg); }
+        .history-text strong { color: var(--cream-primary); }
+        .history-text .highlight { color: var(--copper-bright); }
+        .history-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md); }
+        .history-stat {
+            background: var(--espresso-elevated); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md); padding: var(--space-lg); text-align: center;
+        }
+        .history-stat-value { font-family: var(--font-display); font-size: 2rem; color: var(--copper-bright); margin-bottom: var(--space-xs); }
+        .history-stat-label { font-size: 0.8rem; color: var(--cream-muted); }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           MAP SECTION (Leaflet)
+           ══════════════════════════════════════════════════════════════════════ */
+        #leaflet-map {
+            border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--glass-border);
+            height: 500px; z-index: 1;
+        }
+        .leaflet-popup-content-wrapper {
+            background: var(--espresso-surface) !important; color: var(--cream-primary) !important;
+            border: 1px solid var(--glass-border) !important; border-radius: var(--radius-md) !important;
+        }
+        .leaflet-popup-tip { background: var(--espresso-surface) !important; }
+        .leaflet-popup-content { font-family: var(--font-body) !important; font-size: 0.9rem !important; }
+        .leaflet-popup-content strong { color: var(--copper-bright); }
+        .leaflet-popup-content .pop-tag {
+            display: inline-block; font-size: 0.65rem; padding: 2px 6px; border-radius: 3px;
+            background: rgba(200,149,108,0.2); color: var(--copper-bright); margin-top: 4px;
+        }
+        .map-legend {
+            display: flex; justify-content: center; gap: var(--space-xl); margin-top: var(--space-lg); flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: var(--space-sm); font-size: 0.85rem; color: var(--cream-muted); }
+        .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .legend-dot.hotel { background: var(--success-sage); }
+        .legend-dot.coffee { background: var(--copper-bright); }
+        .legend-dot.food { background: var(--terracotta); }
+        .legend-dot.landmark { background: var(--info-slate); }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           FOOTER
+           ══════════════════════════════════════════════════════════════════════ */
+        .footer {
+            padding: var(--space-3xl) 0 var(--space-xl); background: var(--espresso-deep);
+            border-top: 1px solid var(--glass-border);
+        }
+        .footer-cta { text-align: center; margin-bottom: var(--space-2xl); }
+        .footer-cta-title { font-family: var(--font-display); font-size: 1.75rem; margin-bottom: var(--space-md); }
+        .footer-cta-desc { color: var(--cream-muted); margin-bottom: var(--space-lg); }
+        .footer-links { display: flex; justify-content: center; gap: var(--space-xl); flex-wrap: wrap; }
+        .footer-link {
+            display: flex; align-items: center; gap: var(--space-sm);
+            padding: var(--space-md) var(--space-xl); background: var(--espresso-surface);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+            transition: all var(--duration-fast);
+        }
+        .footer-link:hover { border-color: var(--copper-bright); transform: translateY(-2px); }
+        .footer-bottom {
+            padding-top: var(--space-xl); border-top: 1px solid var(--glass-border);
+            text-align: center; font-size: 0.85rem; color: var(--cream-subtle);
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           AMBIENT CANVAS
+           ══════════════════════════════════════════════════════════════════════ */
+        #ambient-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -10; pointer-events: none; opacity: 0.5;
+        }
+
+        /* ══════════════════════════════════════════════════════════════════════
+           UTILITIES
+           ══════════════════════════════════════════════════════════════════════ */
+        .text-center { text-align: center; }
+        .text-muted { color: var(--cream-muted); }
+        .text-copper { color: var(--copper-bright); }
+        .font-display { font-family: var(--font-display); }
+        .font-mono { font-family: var(--font-mono); }
+        .uppercase { text-transform: uppercase; }
+        .mb-sm { margin-bottom: var(--space-sm); }
+        .mb-md { margin-bottom: var(--space-md); }
+        .mb-lg { margin-bottom: var(--space-lg); }
+        .mb-xl { margin-bottom: var(--space-xl); }
+        .mb-2xl { margin-bottom: var(--space-2xl); }
+        .mt-md { margin-top: var(--space-md); }
+        .mt-lg { margin-top: var(--space-lg); }
+        .mt-xl { margin-top: var(--space-xl); }
+        .mt-2xl { margin-top: var(--space-2xl); }
+        .p-md { padding: var(--space-md); }
+        .p-lg { padding: var(--space-lg); }
+        .p-xl { padding: var(--space-xl); }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body data-lang="en">
+    <!-- Ambient Canvas -->
+    <canvas id="ambient-canvas"></canvas>
+
+    <!-- Alert Bar -->
+    <div class="alert-bar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span lang="en"><strong>Flower Festival Weekend:</strong> Feb 6–8, 2026 — Expect traffic & crowding around Nimman. Arrive prepared.</span>
+        <span lang="th"><strong>สุดสัปดาห์เทศกาลดอกไม้:</strong> 6-8 ก.พ. 2569 — คาดว่าจราจรหนาแน่นรอบนิมมาน เตรียมตัวล่วงหน้า</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="main-nav">
+        <div class="container nav-inner">
+            <div class="nav-logo">☕ Midnight <span>&</span> Mixology</div>
+            <ul class="nav-links">
+                <li><a href="#executive" lang="en">Summary</a><a href="#executive" lang="th">สรุป</a></li>
+                <li><a href="#coffee-anchor" lang="en">Coffee</a><a href="#coffee-anchor" lang="th">กาแฟ</a></li>
+                <li><a href="#itinerary" lang="en">Itinerary</a><a href="#itinerary" lang="th">กำหนดการ</a></li>
+                <li><a href="#protocol" lang="en">Protocol</a><a href="#protocol" lang="th">คู่มือ</a></li>
+                <li><a href="#map" lang="en">Map</a><a href="#map" lang="th">แผนที่</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="btn btn-ghost btn-sm" onclick="APP.toggleLang()">EN / TH</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span lang="en">Nimman District • Chiang Mai • Fourth Wave Coffee</span>
+                    <span lang="th">ย่านนิมมาน • เชียงใหม่ • กาแฟคลื่นลูกที่สี่</span>
+                </div>
+                <h1 class="hero-title">
+                    <span lang="en">Touch Down at <em>Midnight</em>.<br>Wake Up to <em>World Champions</em>.</span>
+                    <span lang="th">ลงจอด<em>เที่ยงคืน</em>.<br>ตื่นมาพบ<em>แชมป์โลก</em>.</span>
+                </h1>
+                <p class="hero-subtitle">
+                    <span lang="en">The definitive strategy for innovative coffee mixology in the heart of Nimman<br>during the Flower Festival Weekend — where espresso meets alchemy.</span>
+                    <span lang="th">กลยุทธ์ที่ครบถ้วนสำหรับกาแฟมิกซ์โซโลยีสร้างสรรค์ใจกลางนิมมาน<br>ช่วงเทศกาลดอกไม้ — ที่ซึ่งเอสเพรสโซ่พบกับการเล่นแร่แปรธาตุ</span>
+                </p>
+
+                <!-- Countdown -->
+                <div class="countdown-bar" id="countdown">
+                    <div class="countdown-unit"><div class="countdown-value" id="cd-days">--</div><div class="countdown-label">Days</div></div>
+                    <div class="countdown-sep">:</div>
+                    <div class="countdown-unit"><div class="countdown-value" id="cd-hours">--</div><div class="countdown-label">Hours</div></div>
+                    <div class="countdown-sep">:</div>
+                    <div class="countdown-unit"><div class="countdown-value" id="cd-mins">--</div><div class="countdown-label">Minutes</div></div>
+                    <div class="countdown-sep">:</div>
+                    <div class="countdown-unit"><div class="countdown-value" id="cd-secs">--</div><div class="countdown-label">Seconds</div></div>
+                </div>
+
+                <div class="hero-dates">
+                    <span>📅 Feb 6–8, 2026</span>
+                    <span class="divider"></span>
+                    <span>🌸 Flower Festival</span>
+                    <span class="divider"></span>
+                    <span>🕛 Midnight Arrival</span>
+                    <span class="divider"></span>
+                    <span>🏆 World Champions</span>
+                </div>
+                <div class="hero-cta">
+                    <a href="#coffee-anchor" class="btn btn-primary"><span lang="en">Discover the Anchor</span><span lang="th">ค้นพบจุดหมาย</span> →</a>
+                    <a href="#map" class="btn btn-ghost">📍 <span lang="en">Explore Map</span><span lang="th">สำรวจแผนที่</span></a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="hero-stat"><div class="hero-stat-icon">🏨</div><div class="hero-stat-value">ibis</div><div class="hero-stat-label" lang="en">Confirmed</div><div class="hero-stat-label" lang="th">ยืนยันแล้ว</div></div>
+                    <div class="hero-stat"><div class="hero-stat-icon">☕</div><div class="hero-stat-value">4</div><div class="hero-stat-label" lang="en">Coffee Anchors</div><div class="hero-stat-label" lang="th">ร้านกาแฟ</div></div>
+                    <div class="hero-stat"><div class="hero-stat-icon">🏆</div><div class="hero-stat-value">5</div><div class="hero-stat-label" lang="en">Disciplines</div><div class="hero-stat-label" lang="th">สาขาแข่งขัน</div></div>
+                    <div class="hero-stat"><div class="hero-stat-icon">🌸</div><div class="hero-stat-value">3</div><div class="hero-stat-label" lang="en">Festival Days</div><div class="hero-stat-label" lang="th">วันเทศกาล</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ EXECUTIVE SUMMARY ═══════════════════ -->
+    <section class="section" id="executive">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag" lang="en">// Executive Summary</span>
+                <span class="section-tag" lang="th">// สรุปผู้บริหาร</span>
+                <h2 class="section-title"><span lang="en">The Strategic Overview</span><span lang="th">ภาพรวมเชิงกลยุทธ์</span></h2>
+            </div>
+
+            <div class="executive-summary reveal">
+                <div class="executive-summary-header">
+                    <div class="executive-summary-icon">💡</div>
+                    <h3 class="executive-summary-title"><span lang="en">Mission Brief</span><span lang="th">สรุปภารกิจ</span></h3>
+                </div>
+                <div class="executive-summary-content">
+                    <p lang="en">
+                        Accommodation is locked — <strong>ibis Styles Chiang Mai</strong> confirmed for Feb 6–8. The mission now focuses entirely on coffee mixology exploration. Your primary anchor is <strong>Roast8ry Flagship Store</strong> on <span class="highlight">Soi 17</span>, founded by the <span class="highlight">2017 World Latte Art Champion</span>. Secondary targets include <strong>GRAPH One Nimman</strong> (gothic nitrogen cold brews), <strong>Ristr8to Original</strong> (the OG specialty pioneer), and <strong>The Baristro</strong> (Instagram-optimized hybrids).
+                    </p>
+                    <p lang="th">
+                        ที่พักยืนยันแล้ว — <strong>ibis Styles Chiang Mai</strong> จองสำหรับ 6-8 ก.พ. ภารกิจตอนนี้เน้นการสำรวจกาแฟมิกซ์โซโลยีทั้งหมด จุดหมายหลักคือ <strong>Roast8ry Flagship Store</strong> บน <span class="highlight">ซอย 17</span> ก่อตั้งโดย <span class="highlight">แชมป์โลกลาเต้อาร์ต 2017</span> เป้าหมายรองรวม <strong>GRAPH One Nimman</strong> (โคลด์บรูว์ไนโตรเจนสไตล์กอธิค), <strong>Ristr8to Original</strong> (ผู้บุกเบิกสเปเชียลตี้ดั้งเดิม), และ <strong>The Baristro</strong> (ไฮบริดเหมาะกับ Instagram)
+                    </p>
+                    <p lang="en" style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--glass-border);">
+                        <strong>⚠️ Critical Context:</strong> February 6–8, 2026 coincides with the <span class="highlight">Chiang Mai Flower Festival</span>. Expect heavy traffic around Nimman with floral floats. Coffee shops will be <span class="highlight">busier than usual</span> — plan morning visits for best seating. Night markets expand during festival weekends.
+                    </p>
+                    <p lang="th" style="margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--glass-border);">
+                        <strong>⚠️ บริบทสำคัญ:</strong> 6-8 กุมภาพันธ์ 2569 ตรงกับ <span class="highlight">เทศกาลดอกไม้เชียงใหม่</span> คาดว่าจราจรหนาแน่นรอบนิมมานจากขบวนรถดอกไม้ ร้านกาแฟจะ <span class="highlight">คึกคักกว่าปกติ</span> — วางแผนไปตอนเช้าเพื่อที่นั่งดีที่สุด ตลาดกลางคืนขยายช่วงสุดสัปดาห์เทศกาล
+                    </p>
+                </div>
+            </div>
+
+            <!-- Confirmed Stay -->
+            <div class="confirmed-stay reveal" id="confirmed-stay">
+                <div class="confirmed-badge"><span lang="en">✓ Confirmed</span><span lang="th">✓ ยืนยันแล้ว</span></div>
+                <h3>ibis Styles Chiang Mai</h3>
+                <p class="stay-subtitle">Nimman Area • Feb 6–8, 2026</p>
+                <p class="stay-desc" lang="en">
+                    Your base of operations for the Midnight & Mixology expedition. ibis Styles offers reliable, modern accommodation with 24-hour reception — perfect for your midnight arrival on Feb 6th. Strategically positioned within the Nimman ecosystem for walking access to all coffee anchors.
+                </p>
+                <p class="stay-desc" lang="th">
+                    ฐานปฏิบัติการสำหรับภารกิจ Midnight & Mixology ibis Styles มีที่พักทันสมัยเชื่อถือได้พร้อมรีเซฟชั่น 24 ชม. — เหมาะสำหรับการมาถึงเที่ยงคืนวันที่ 6 ก.พ. ตำแหน่งเชิงกลยุทธ์ในระบบนิเวศนิมมานเดินถึงร้านกาแฟทุกแห่ง
+                </p>
+                <div class="stay-features">
+                    <div class="stay-feature"><span class="stay-feature-icon">🌙</span><span lang="en">24h Reception</span><span lang="th">รีเซฟชั่น 24 ชม.</span></div>
+                    <div class="stay-feature"><span class="stay-feature-icon">📍</span><span lang="en">Nimman Area</span><span lang="th">ย่านนิมมาน</span></div>
+                    <div class="stay-feature"><span class="stay-feature-icon">🚶</span><span lang="en">Walk to Coffee</span><span lang="th">เดินไปร้านกาแฟ</span></div>
+                    <div class="stay-feature"><span class="stay-feature-icon">🌸</span><span lang="en">Festival Access</span><span lang="th">เข้าถึงเทศกาล</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ COFFEE ANCHORS ═══════════════════ -->
+    <section class="section" id="coffee-anchor" style="background: var(--espresso-deep);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag" lang="en">// The Coffee Anchor</span>
+                <span class="section-tag" lang="th">// จุดหมายกาแฟ</span>
+                <h2 class="section-title"><span lang="en">Fourth Wave Mixology Destinations</span><span lang="th">จุดหมายมิกซ์โซโลยีคลื่นลูกที่สี่</span></h2>
+                <p class="section-desc">
+                    <span lang="en">In Nimman, coffee is treated with the structural complexity of a fine spirit—nitrogen infusion, botanical balancing, and culinary construction that challenges the palate.</span>
+                    <span lang="th">ในนิมมาน กาแฟถูกปฏิบัติด้วยความซับซ้อนเชิงโครงสร้างเหมือนสุราชั้นดี—การอัดไนโตรเจน การสมดุลพฤกษศาสตร์ และการสร้างสรรค์เชิงอาหาร</span>
+                </p>
+            </div>
+
+            <!-- Primary: Roast8ry -->
+            <div class="coffee-anchor-card mb-2xl reveal">
+                <div class="coffee-anchor-badge"><span lang="en">Primary Anchor</span><span lang="th">จุดหมายหลัก</span></div>
+                <h3 class="coffee-anchor-title">Roast8ry Coffee Flagship Store</h3>
+                <p class="coffee-anchor-subtitle">Nimmanhaemin Soi 17 • World Champion Territory</p>
+                <p class="coffee-anchor-description" lang="en">
+                    Founded by <strong>Arnon "Tong" Thitiprasert</strong>, the 2017 World Latte Art Champion with three consecutive Thailand National Championship victories (2015-2017). The Roast8ry concept integrates expertise from <strong>five distinct world coffee championship disciplines</strong>: latte art, barista competition, coffee in good spirits, brewers cup, and roasting. This is not coffee for the faint of heart—it is technical mastery served in a glass.
+                </p>
+                <p class="coffee-anchor-description" lang="th">
+                    ก่อตั้งโดย <strong>อานนท์ "ต้อง" ฐิติประเสริฐ</strong> แชมป์โลกลาเต้อาร์ต 2017 พร้อมชัยชนะแชมป์ประเทศไทยติดต่อกันสามปี (2015-2017) แนวคิด Roast8ry ผสมผสานความเชี่ยวชาญจาก <strong>ห้าสาขาการแข่งขันกาแฟโลก</strong>: ลาเต้อาร์ต, บาริสต้า, กาแฟในสุรา, บรูว์เวอร์สคัพ, และการคั่ว
+                </p>
+                <div class="coffee-anchor-features">
+                    <div class="coffee-anchor-feature"><span class="coffee-anchor-feature-icon">🏆</span><span lang="en">World Champion Founder</span><span lang="th">ผู้ก่อตั้งแชมป์โลก</span></div>
+                    <div class="coffee-anchor-feature"><span class="coffee-anchor-feature-icon">🧪</span><span lang="en">Laboratory-Industrial Vibe</span><span lang="th">บรรยากาศแล็บ</span></div>
+                    <div class="coffee-anchor-feature"><span class="coffee-anchor-feature-icon">🍸</span><span lang="en">Coffee Cocktails Specialty</span><span lang="th">เชี่ยวชาญค็อกเทลกาแฟ</span></div>
+                    <div class="coffee-anchor-feature"><span class="coffee-anchor-feature-icon">⏰</span><span>8:00 AM – 6:00 PM</span></div>
+                </div>
+                <div style="margin-top: var(--space-xl);">
+                    <h4 style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--copper-bright); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--space-md);">
+                        <span lang="en">Signature Creations</span><span lang="th">เมนูซิกเนเจอร์</span>
+                    </h4>
+                    <div class="grid grid-3">
+                        <div class="coffee-card"><div class="coffee-emoji">💀</div><div><div class="coffee-name">Satan Latte</div><div class="coffee-desc" lang="en">Served in a skull glass — theatrical and bold</div><div class="coffee-desc" lang="th">เสิร์ฟในแก้วหัวกะโหลก — ดราม่าและเข้มข้น</div></div></div>
+                        <div class="coffee-card"><div class="coffee-emoji">🥃</div><div><div class="coffee-name">Dirty White Russian</div><div class="coffee-desc" lang="en">Coffee cocktail with cream layers</div><div class="coffee-desc" lang="th">ค็อกเทลกาแฟกับครีมเป็นชั้น</div></div></div>
+                        <div class="coffee-card"><div class="coffee-emoji">🍸</div><div><div class="coffee-name">Black Martini</div><div class="coffee-desc" lang="en">Espresso-forward, sophisticated edge</div><div class="coffee-desc" lang="th">เอสเพรสโซ่เข้มข้น สไตล์หรูหรา</div></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Coffee Destinations -->
+            <h3 class="font-display text-center mb-lg reveal" style="font-size: 1.5rem;">
+                <span lang="en">Secondary Mixology Destinations</span><span lang="th">จุดหมายมิกซ์โซโลยีรอง</span>
+            </h3>
+            <div class="grid grid-3 gap-lg">
+                <div class="glass-panel p-xl reveal reveal-delay-1">
+                    <div style="font-size: 2rem; margin-bottom: var(--space-md);">⬛</div>
+                    <h4 class="font-display text-copper mb-sm" style="font-size: 1.25rem;">GRAPH One Nimman</h4>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="en">Dark, moody, gothic-industrial. Specializes in nitrogen-infused cold brews with botanical infusions—charcoal, rose water, and lychee.</p>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="th">มืด ลึกลับ กอธิค-อินดัสเทรียล เชี่ยวชาญโคลด์บรูว์อัดไนโตรเจนกับสมุนไพร</p>
+                    <div style="font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);"><span lang="en">Must Try:</span><span lang="th">ต้องลอง:</span></div>
+                    <div class="coffee-card"><div class="coffee-emoji">🌹</div><div><div class="coffee-name">Lost Garden</div><div class="coffee-desc">Nitro + Rose water + Lychee</div></div></div>
+                </div>
+                <div class="glass-panel p-xl reveal reveal-delay-2">
+                    <div style="font-size: 2rem; margin-bottom: var(--space-md);">🏅</div>
+                    <h4 class="font-display text-copper mb-sm" style="font-size: 1.25rem;">Ristr8to Original</h4>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="en">The OG specialty coffee pioneer. Multiple international awards, consistent quality, central location on the main road.</p>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="th">ผู้บุกเบิกกาแฟสเปเชียลตี้ดั้งเดิม รางวัลนานาชาติมากมาย คุณภาพสม่ำเสมอ</p>
+                    <div style="font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);"><span lang="en">Must Try:</span><span lang="th">ต้องลอง:</span></div>
+                    <div class="coffee-card"><div class="coffee-emoji">🎨</div><div><div class="coffee-name">Award-Winning Latte Art</div><div class="coffee-desc">Precision brewing excellence</div></div></div>
+                </div>
+                <div class="glass-panel p-xl reveal reveal-delay-3">
+                    <div style="font-size: 2rem; margin-bottom: var(--space-md);">🥥</div>
+                    <h4 class="font-display text-copper mb-sm" style="font-size: 1.25rem;">The Baristro at Nimman</h4>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="en">Hybrid hospitality model with "Baristotel" branding. Instagram-optimized, white marble and floral accents.</p>
+                    <p class="text-muted mb-md" style="font-size: 0.85rem;" lang="th">โมเดลการบริการแบบไฮบริดกับแบรนด์ "Baristotel" เหมาะกับ Instagram</p>
+                    <div style="font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);"><span lang="en">Must Try:</span><span lang="th">ต้องลอง:</span></div>
+                    <div class="coffee-card"><div class="coffee-emoji">🥥</div><div><div class="coffee-name">Black Coconut</div><div class="coffee-desc">Espresso over fresh coconut water</div></div></div>
+                </div>
+            </div>
+
+            <!-- Charts: Radar + D3 Network -->
+            <div class="chart-section mt-2xl">
+                <div class="chart-container reveal">
+                    <div class="chart-header">
+                        <h4 class="chart-title"><span lang="en">Venue Comparison Radar</span><span lang="th">เรดาร์เปรียบเทียบร้าน</span></h4>
+                        <span class="chart-badge">Chart.js</span>
+                    </div>
+                    <div class="chart-canvas-wrapper"><canvas id="radarChart"></canvas></div>
+                </div>
+                <div id="d3-network" class="reveal" style="height: 420px; position: relative;">
+                    <div style="position: absolute; top: var(--space-md); left: var(--space-md); z-index: 2; font-family: var(--font-display); font-size: 1.1rem;">
+                        <span lang="en">Nimman Coffee Network</span><span lang="th">เครือข่ายกาแฟนิมมาน</span>
+                    </div>
+                    <div style="position: absolute; top: var(--space-md); right: var(--space-md); z-index: 2;">
+                        <span class="chart-badge">D3.js Force</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mixology Comparison Table -->
+            <div class="glass-panel p-xl mt-2xl reveal">
+                <h4 class="font-display mb-lg" style="font-size: 1.25rem;">
+                    <span lang="en">Coffee Mixology Comparison Matrix</span><span lang="th">ตารางเปรียบเทียบมิกซ์โซโลยีกาแฟ</span>
+                </h4>
+                <div style="overflow-x: auto;">
+                    <table class="mixology-table">
+                        <thead>
+                            <tr><th>Venue</th><th>Primary Focus</th><th>Signature Creations</th><th>Vibe</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="venue-name">Roast8ry Flagship</td><td>Technical mastery & "Coffee in Good Spirits"</td><td>Satan Latte, Dirty White Russian, Black Martini</td><td>Laboratory-Industrial</td></tr>
+                            <tr><td class="venue-name">GRAPH One Nimman</td><td>Experimental cold brews & visual storytelling</td><td>Monochrome, Lost Garden, Boy with Girlfriend</td><td>Gothic-Industrial</td></tr>
+                            <tr><td class="venue-name">Ristr8to Original</td><td>Award-winning latte art & precision brewing</td><td>Classic espresso-driven drinks</td><td>Bustling & Energetic</td></tr>
+                            <tr><td class="venue-name">The Baristro</td><td>Minimalist aesthetics & refreshing hybrids</td><td>Black Coconut, Charcoal Latte</td><td>Instagram-Optimized</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ ITINERARY TIMELINE ═══════════════════ -->
+    <section class="section" id="itinerary">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag" lang="en">// Coffee Crawl Itinerary</span>
+                <span class="section-tag" lang="th">// กำหนดการเที่ยวกาแฟ</span>
+                <h2 class="section-title"><span lang="en">The 48-Hour Playbook</span><span lang="th">แผนการ 48 ชั่วโมง</span></h2>
+                <p class="section-desc">
+                    <span lang="en">A curated timeline from midnight touchdown to final cup. Optimized for maximum coffee exploration during festival weekend.</span>
+                    <span lang="th">ไทม์ไลน์คัดสรรจากลงจอดเที่ยงคืนจนถ้วยสุดท้าย เพื่อการสำรวจกาแฟสูงสุดช่วงสุดสัปดาห์เทศกาล</span>
+                </p>
+            </div>
+
+            <div class="grid grid-2 gap-xl">
+                <!-- Day 1 -->
+                <div class="reveal">
+                    <h3 class="font-display mb-lg text-copper" style="font-size: 1.5rem;">
+                        <span lang="en">Day 1 — Friday, Feb 6</span><span lang="th">วันที่ 1 — ศุกร์ 6 ก.พ.</span>
+                    </h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot confirmed"></div>
+                            <div class="timeline-time">22:30 – 23:30</div>
+                            <div class="timeline-title" lang="en">✈️ Arrive CNX Airport</div>
+                            <div class="timeline-title" lang="th">✈️ ถึงสนามบิน CNX</div>
+                            <div class="timeline-desc" lang="en">Flight lands ~22:30. Grab/Bolt to ibis Styles (~฿150-250, 15-20 min).</div>
+                            <div class="timeline-desc" lang="th">เครื่องลง ~22:30 Grab/Bolt ไป ibis Styles (~฿150-250, 15-20 นาที)</div>
+                            <span class="timeline-tag transport">Transport</span>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">23:30 – 00:30</div>
+                            <div class="timeline-title" lang="en">🌙 Check-in & Late Snack</div>
+                            <div class="timeline-title" lang="th">🌙 เช็คอิน & อาหารดึก</div>
+                            <div class="timeline-desc" lang="en">24h reception at ibis Styles. Hit 7-Eleven Soi 6 for legendary toasties, or midnight fried chicken stalls near Maya.</div>
+                            <div class="timeline-desc" lang="th">รีเซฟชั่น 24 ชม. ที่ ibis Styles แวะ 7-Eleven ซอย 6 หรือแผงไก่ทอดใกล้ Maya</div>
+                            <span class="timeline-tag food">Food</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Day 2 -->
+                <div class="reveal reveal-delay-1">
+                    <h3 class="font-display mb-lg text-copper" style="font-size: 1.5rem;">
+                        <span lang="en">Day 2 — Saturday, Feb 7</span><span lang="th">วันที่ 2 — เสาร์ 7 ก.พ.</span>
+                    </h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">08:00 – 10:00</div>
+                            <div class="timeline-title" lang="en">☕ Roast8ry Flagship — Primary Anchor</div>
+                            <div class="timeline-title" lang="th">☕ Roast8ry Flagship — จุดหมายหลัก</div>
+                            <div class="timeline-desc" lang="en">Arrive early for best seating. Try the Satan Latte and Dirty White Russian. Meet the World Champion team.</div>
+                            <div class="timeline-desc" lang="th">ไปถึงเช้าเพื่อที่นั่งดี ลอง Satan Latte และ Dirty White Russian พบทีมแชมป์โลก</div>
+                            <span class="timeline-tag coffee">Primary Coffee</span>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">10:30 – 12:00</div>
+                            <div class="timeline-title" lang="en">🌸 Flower Festival Morning</div>
+                            <div class="timeline-title" lang="th">🌸 เช้าเทศกาลดอกไม้</div>
+                            <div class="timeline-desc" lang="en">Catch the floral float parade on Nimmanhaemin Road. Photography opportunities everywhere.</div>
+                            <div class="timeline-desc" lang="th">ชมขบวนรถดอกไม้บนถนนนิมมานเหมินท์ โอกาสถ่ายรูปทุกที่</div>
+                            <span class="timeline-tag">Festival</span>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">14:00 – 15:30</div>
+                            <div class="timeline-title" lang="en">⬛ GRAPH One Nimman — Dark Arts</div>
+                            <div class="timeline-title" lang="th">⬛ GRAPH One Nimman — ศิลปะมืด</div>
+                            <div class="timeline-desc" lang="en">Afternoon nitrogen cold brew session. Must try: Lost Garden (Nitro + Rose water + Lychee). Monochrome ambiance.</div>
+                            <div class="timeline-desc" lang="th">ช่วงบ่ายเซสชั่นโคลด์บรูว์ไนโตรเจน ต้องลอง: Lost Garden (ไนโตร + น้ำกุหลาบ + ลิ้นจี่)</div>
+                            <span class="timeline-tag coffee">Coffee</span>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">16:00 – 17:30</div>
+                            <div class="timeline-title" lang="en">🏅 Ristr8to Original — The Pioneer</div>
+                            <div class="timeline-title" lang="th">🏅 Ristr8to Original — ผู้บุกเบิก</div>
+                            <div class="timeline-desc" lang="en">Late afternoon espresso at the original specialty pioneer. Award-winning latte art showcase.</div>
+                            <div class="timeline-desc" lang="th">เอสเพรสโซ่บ่ายแก่ที่ผู้บุกเบิกสเปเชียลตี้ดั้งเดิม การแสดงลาเต้อาร์ตระดับรางวัล</div>
+                            <span class="timeline-tag coffee">Coffee</span>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-time">18:00+</div>
+                            <div class="timeline-title" lang="en">🌃 Festival Night Market</div>
+                            <div class="timeline-title" lang="th">🌃 ตลาดกลางคืนเทศกาล</div>
+                            <div class="timeline-desc" lang="en">Expanded night markets during festival. Street food, live music, floral installations.</div>
+                            <div class="timeline-desc" lang="th">ตลาดกลางคืนขยายช่วงเทศกาล อาหารถนน ดนตรีสด ประติมากรรมดอกไม้</div>
+                            <span class="timeline-tag food">Food & Culture</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3 condensed -->
+            <div class="glass-panel p-xl mt-2xl reveal">
+                <h3 class="font-display mb-lg text-copper" style="font-size: 1.25rem;">
+                    <span lang="en">Day 3 — Sunday, Feb 8 (Departure)</span><span lang="th">วันที่ 3 — อาทิตย์ 8 ก.พ. (วันกลับ)</span>
+                </h3>
+                <div class="grid grid-3 gap-lg">
+                    <div>
+                        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);">08:00 – 10:00</div>
+                        <div class="font-display mb-sm" lang="en">🥥 The Baristro — Finale</div>
+                        <div class="font-display mb-sm" lang="th">🥥 The Baristro — ปิดท้าย</div>
+                        <p class="text-muted" style="font-size: 0.9rem;" lang="en">Black Coconut for a refreshing farewell. Instagram the marble interiors.</p>
+                        <p class="text-muted" style="font-size: 0.9rem;" lang="th">Black Coconut สำหรับการอำลาสดชื่น ถ่ายรูปภายในหินอ่อน</p>
+                    </div>
+                    <div>
+                        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);">10:00 – 12:00</div>
+                        <div class="font-display mb-sm" lang="en">🌸 Festival Farewell Walk</div>
+                        <div class="font-display mb-sm" lang="th">🌸 เดินเทศกาลอำลา</div>
+                        <p class="text-muted" style="font-size: 0.9rem;" lang="en">Final stroll through Nimman. Pick up local coffee beans as souvenirs.</p>
+                        <p class="text-muted" style="font-size: 0.9rem;" lang="th">เดินรอบนิมมานครั้งสุดท้าย ซื้อเมล็ดกาแฟท้องถิ่นเป็นของฝาก</p>
+                    </div>
+                    <div>
+                        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--copper-bright); margin-bottom: var(--space-sm);">12:00+</div>
+                        <div class="font-display mb-sm" lang="en">✈️ Check-out & Depart</div>
+                        <div class="font-display mb-sm" lang="th">✈️ เช็คเอาท์ & เดินทางกลับ</div>
+                        <p class="text-muted" style="font-size: 0.9rem;" lang="en">Check out by noon. Grab/Bolt to CNX airport.</p>
+                        <p class="text-muted" style="font-size: 0.9rem;" lang="th">เช็คเอาท์ก่อนเที่ยง Grab/Bolt ไปสนามบิน</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ FROM OPIUM TO ARABICA ═══════════════════ -->
+    <section class="section" style="background: var(--espresso-deep);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag" lang="en">// From Opium to Arabica</span>
+                <span class="section-tag" lang="th">// จากฝิ่นสู่อาราบิก้า</span>
+                <h2 class="section-title"><span lang="en">The Impactful Backstory</span><span lang="th">เรื่องราวที่มีผลกระทบ</span></h2>
+            </div>
+            <div class="history-section reveal">
+                <div class="history-content">
+                    <div class="history-text">
+                        <p lang="en">The liquid art in your cup is the result of a profound <strong>geopolitical shift</strong>. Historically, these northern highlands were part of the infamous <span class="highlight">"Golden Triangle" opium trade</span>. This was dismantled by the <strong>Royal Project Initiative</strong>, spearheaded by King Bhumibol Adulyadej, who successfully incentivized hill tribes to pivot to high-altitude Arabica cultivation.</p>
+                        <p lang="th">ศิลปะของเหลวในถ้วยของคุณเป็นผลจาก <strong>การเปลี่ยนแปลงทางภูมิรัฐศาสตร์</strong> ที่ลึกซึ้ง ในอดีต ที่ราบสูงทางเหนือเหล่านี้เป็นส่วนหนึ่งของ <span class="highlight">การค้าฝิ่น "สามเหลี่ยมทองคำ"</span> สิ่งนี้ถูกรื้อถอนโดย <strong>โครงการหลวง</strong></p>
+                        <p lang="en">Today, beans from districts like <strong>Doi Chang</strong> and <strong>Mae Jan Tai</strong> consistently achieve specialty-grade <span class="highlight">SCA scores of 80+</span>. This local supply chain allows Chiang Mai baristas to use world-class beans for experimental recipes—pairing espresso with tamarind or milk-washing their brews—at a fraction of the cost found in Singapore or London.</p>
+                        <p lang="th">ปัจจุบัน เมล็ดกาแฟจากอำเภอเช่น <strong>ดอยช้าง</strong> และ <strong>แม่จันใต้</strong> ได้คะแนน <span class="highlight">SCA 80+</span> ระดับสเปเชียลตี้อย่างสม่ำเสมอ ทำให้บาริสต้าเชียงใหม่ใช้เมล็ดกาแฟระดับโลกในราคาเศษเสี้ยวของสิงคโปร์หรือลอนดอน</p>
+                    </div>
+                    <div class="history-stats">
+                        <div class="history-stat"><div class="history-stat-value">80+</div><div class="history-stat-label">SCA Score</div></div>
+                        <div class="history-stat"><div class="history-stat-value">1969</div><div class="history-stat-label">Royal Project Start</div></div>
+                        <div class="history-stat"><div class="history-stat-value">5</div><div class="history-stat-label">Championship Disciplines</div></div>
+                        <div class="history-stat"><div class="history-stat-value">2017</div><div class="history-stat-label">World Champion Year</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ PROTOCOL ═══════════════════ -->
+    <section class="section" id="protocol">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag" lang="en">// The Midnight Protocol</span>
+                <span class="section-tag" lang="th">// คู่มือเที่ยงคืน</span>
+                <h2 class="section-title"><span lang="en">Logistics Toolkit</span><span lang="th">ชุดเครื่องมือเดินทาง</span></h2>
+                <p class="section-desc"><span lang="en">Everything for a frictionless midnight arrival on Friday, February 6th.</span><span lang="th">ทุกสิ่งสำหรับการมาถึงเที่ยงคืนวันศุกร์ที่ 6 กุมภาพันธ์</span></p>
+            </div>
+            <div class="grid grid-2 gap-lg">
+                <div class="protocol-card reveal">
+                    <div class="protocol-header"><span class="protocol-icon">🚗</span><h3 class="protocol-title"><span lang="en">Transport Intel</span><span lang="th">ข้อมูลการเดินทาง</span></h3></div>
+                    <div class="protocol-content">
+                        <p><strong lang="en">⚠️ Avoid:</strong><strong lang="th">⚠️ หลีกเลี่ยง:</strong> <span lang="en">RTC City Bus (stops at 10–11 PM)</span><span lang="th">รถบัส RTC (หยุด 22:00-23:00)</span></p>
+                        <p><strong lang="en">✅ Recommended:</strong><strong lang="th">✅ แนะนำ:</strong></p>
+                        <ul>
+                            <li><strong>Grab/Bolt:</strong> <span lang="en">~฿150-250 to Nimman (gold standard)</span><span lang="th">~฿150-250 ไปนิมมาน</span></li>
+                            <li><strong lang="en">Airport Taxi:</strong><strong lang="th">แท็กซี่สนามบิน:</strong> <span lang="en">Flat rate ~฿250-300 (counter inside arrivals)</span><span lang="th">อัตราคงที่ ~฿250-300</span></li>
+                        </ul>
+                        <p class="mt-md"><strong lang="en">🕐 Estimated:</strong><strong lang="th">🕐 โดยประมาณ:</strong> <span lang="en">15-20 min to Nimman</span><span lang="th">15-20 นาทีไปนิมมาน</span></p>
+                    </div>
+                </div>
+                <div class="protocol-card reveal reveal-delay-1">
+                    <div class="protocol-header"><span class="protocol-icon">🍜</span><h3 class="protocol-title"><span lang="en">Late Night Eats</span><span lang="th">อาหารดึก</span></h3></div>
+                    <div class="protocol-content">
+                        <p><strong lang="en">⚠️ Note:</strong><strong lang="th">⚠️ หมายเหตุ:</strong> <span lang="en">Most kitchens close at 10 PM weekdays.</span><span lang="th">ร้านอาหารส่วนใหญ่ปิดครัว 22:00</span></p>
+                        <p class="mt-md"><strong lang="en">🏪 Recommendations:</strong><strong lang="th">🏪 แนะนำ:</strong></p>
+                        <ul>
+                            <li lang="en">7-Eleven at Soi 6 — legendary toasties (24h)</li><li lang="th">7-Eleven ซอย 6 — โทสต์ตำนาน (24 ชม.)</li>
+                            <li lang="en">Midnight Fried Chicken stalls near Maya</li><li lang="th">แผงไก่ทอดเที่ยงคืนใกล้ Maya</li>
+                            <li lang="en">Expanded festival night market (Feb 6-8)</li><li lang="th">ตลาดกลางคืนเทศกาลขยาย (6-8 ก.พ.)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-header"><span class="protocol-icon">📋</span><h3 class="protocol-title"><span lang="en">Quick Reference Card</span><span lang="th">บัตรอ้างอิงด่วน</span></h3></div>
+                    <div class="protocol-content">
+                        <p lang="en"><strong>Emergency:</strong> 191 (Police) | 1669 (Ambulance)</p>
+                        <p lang="th"><strong>ฉุกเฉิน:</strong> 191 (ตำรวจ) | 1669 (รถพยาบาล)</p>
+                        <div class="script-box mt-md">
+                            <button class="copy-btn" onclick="APP.copyScript()"><span lang="en">Copy</span><span lang="th">คัดลอก</span></button>
+                            <span id="booking-script">Essential Thai phrases:
+ขอบคุณครับ (khob khun krab) = Thank you
+เท่าไหร่ (thao rai) = How much?
+นิมมาน (nim-maan) = Nimman
+กาแฟ (ga-fae) = Coffee
+ร้อน (ron) = Hot | เย็น (yen) = Iced</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="protocol-card warning reveal reveal-delay-1">
+                    <div class="protocol-header"><span class="protocol-icon">🌸</span><h3 class="protocol-title" style="color: var(--terracotta);"><span lang="en">Flower Festival Intel</span><span lang="th">ข้อมูลเทศกาลดอกไม้</span></h3></div>
+                    <div class="protocol-content">
+                        <p><strong lang="en">🌸 Feb 6–8, 2026 is peak season.</strong><strong lang="th">🌸 6-8 ก.พ. 2569 เป็นช่วงพีค</strong></p>
+                        <ul style="margin-top: var(--space-md);">
+                            <li lang="en">Traffic around Nimman heavy with floral floats</li><li lang="th">จราจรรอบนิมมานหนาแน่นจากขบวนรถดอกไม้</li>
+                            <li lang="en">Coffee shops <strong style="color: var(--terracotta);">busier than usual</strong> — go early</li><li lang="th">ร้านกาแฟ <strong style="color: var(--terracotta);">คึกคักกว่าปกติ</strong> — ไปเช้า</li>
+                            <li lang="en">Expanded night markets with live music</li><li lang="th">ตลาดกลางคืนขยายพร้อมดนตรีสด</li>
+                            <li lang="en"><strong>Floral parade route:</strong> along Nimmanhaemin main road</li><li lang="th"><strong>เส้นทางขบวน:</strong> ตามถนนนิมมานเหมินท์สายหลัก</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ MAP (Leaflet) ═══════════════════ -->
+    <section class="section" id="map" style="background: var(--espresso-deep);">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-tag" lang="en">// Location Intelligence</span>
+                <span class="section-tag" lang="th">// ข้อมูลสถานที่</span>
+                <h2 class="section-title"><span lang="en">The Nimman Map</span><span lang="th">แผนที่นิมมาน</span></h2>
+                <p class="section-desc"><span lang="en">Interactive map with all coffee anchors, your hotel, and late-night essentials.</span><span lang="th">แผนที่โต้ตอบกับร้านกาแฟทั้งหมด โรงแรม และร้านเปิดดึก</span></p>
+            </div>
+            <div id="leaflet-map" class="reveal"></div>
+            <div class="map-legend mt-lg">
+                <div class="legend-item"><span class="legend-dot hotel"></span><span lang="en">Your Hotel</span><span lang="th">โรงแรมของคุณ</span></div>
+                <div class="legend-item"><span class="legend-dot coffee"></span><span lang="en">Coffee Anchors</span><span lang="th">ร้านกาแฟ</span></div>
+                <div class="legend-item"><span class="legend-dot food"></span><span lang="en">Late Night Eats</span><span lang="th">อาหารดึก</span></div>
+                <div class="legend-item"><span class="legend-dot landmark"></span><span lang="en">Landmarks</span><span lang="th">สถานที่สำคัญ</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ FOOTER ═══════════════════ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-cta">
+                <h2 class="footer-cta-title"><span lang="en">Ready for Midnight?</span><span lang="th">พร้อมสำหรับเที่ยงคืน?</span></h2>
+                <p class="footer-cta-desc"><span lang="en">ibis Styles is locked. The coffee awaits. See you on the other side of midnight.</span><span lang="th">ibis Styles ยืนยันแล้ว กาแฟรอคุณอยู่ เจอกันหลังเที่ยงคืน</span></p>
+                <div class="footer-links">
+                    <a href="https://maps.google.com/?q=Roast8ry+Lab+Nimman+Chiang+Mai" target="_blank" rel="noopener" class="footer-link">📍 <span lang="en">Roast8ry Map</span><span lang="th">แผนที่ Roast8ry</span></a>
+                    <a href="https://maps.google.com/?q=GRAPH+Cafe+One+Nimman+Chiang+Mai" target="_blank" rel="noopener" class="footer-link">📍 <span lang="en">GRAPH Map</span><span lang="th">แผนที่ GRAPH</span></a>
+                    <a href="https://www.google.com/maps/dir/?api=1&destination=ibis+Styles+Chiang+Mai&travelmode=driving" target="_blank" rel="noopener" class="footer-link">🚗 <span lang="en">Directions to Hotel</span><span lang="th">นำทางไปโรงแรม</span></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p><span lang="en">Midnight & Mixology: The Nimman Edit — Feb 6–8, 2026</span><span lang="th">Midnight & Mixology: The Nimman Edit — 6-8 ก.พ. 2569</span></p>
+                <p class="mt-md" style="font-size: 0.75rem;"><span lang="en">Analysis based on verified venue data and reviews. Coffee hours may vary during festival weekend.</span><span lang="th">การวิเคราะห์อ้างอิงจากข้อมูลร้านค้าและรีวิวที่ยืนยันแล้ว เวลาเปิดร้านกาแฟอาจเปลี่ยนช่วงเทศกาล</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+    <script>
+    // ═══════════════════ SIMPLEX NOISE ═══════════════════
+    class SimplexNoise{constructor(){this.p=new Uint8Array(256);for(let i=0;i<256;i++)this.p[i]=Math.floor(256*Math.random());this.perm=new Uint8Array(512);for(let i=0;i<512;i++)this.perm[i]=this.p[i&255]}noise(xin,yin){const F2=.5*(Math.sqrt(3)-1),G2=(3-Math.sqrt(3))/6;let s=(xin+yin)*F2,i=Math.floor(xin+s),j=Math.floor(yin+s),t=(i+j)*G2,x0=xin-(i-t),y0=yin-(j-t);let i1,j1;x0>y0?(i1=1,j1=0):(i1=0,j1=1);let x1=x0-i1+G2,y1=y0-j1+G2,x2=x0-1+2*G2,y2=y0-1+2*G2,ii=i&255,jj=j&255;const gr=[[1,1],[-1,1],[1,-1],[-1,-1],[1,0],[-1,0],[0,1],[0,-1]];let gi0=this.perm[ii+this.perm[jj]]%8,gi1=this.perm[ii+i1+this.perm[jj+j1]]%8,gi2=this.perm[ii+1+this.perm[jj+1]]%8;let t0=.5-x0*x0-y0*y0,n0=t0<0?0:(t0*=t0,t0*t0*(gr[gi0][0]*x0+gr[gi0][1]*y0));let t1=.5-x1*x1-y1*y1,n1=t1<0?0:(t1*=t1,t1*t1*(gr[gi1][0]*x1+gr[gi1][1]*y1));let t2=.5-x2*x2-y2*y2,n2=t2<0?0:(t2*=t2,t2*t2*(gr[gi2][0]*x2+gr[gi2][1]*y2));return 70*(n0+n1+n2)}}
+
+    // ═══════════════════ DATA ═══════════════════
+    const LOCATIONS = {
+        hotel: { name: 'ibis Styles Chiang Mai', lat: 18.7960, lng: 98.9684, type: 'hotel', desc: 'Your confirmed base' },
+        coffee: [
+            { name: 'Roast8ry Flagship', lat: 18.7948, lng: 98.9672, type: 'coffee', desc: '🏆 Primary Anchor — World Champion', badge: 'Primary' },
+            { name: 'GRAPH One Nimman', lat: 18.7988, lng: 98.9675, type: 'coffee', desc: '⬛ Gothic-Industrial Nitrogen Cold Brews' },
+            { name: 'Ristr8to Original', lat: 18.7975, lng: 98.9680, type: 'coffee', desc: '🏅 OG Specialty Pioneer' },
+            { name: 'The Baristro', lat: 18.7965, lng: 98.9690, type: 'coffee', desc: '🥥 Instagram-Optimized Hybrids' }
+        ],
+        food: [
+            { name: '7-Eleven Soi 6', lat: 18.7970, lng: 98.9678, type: 'food', desc: '24h — Legendary toasties' },
+            { name: 'Maya Fried Chicken', lat: 18.8010, lng: 98.9672, type: 'food', desc: 'Midnight street food stalls' }
+        ],
+        landmarks: [
+            { name: 'One Nimman', lat: 18.7992, lng: 98.9678, type: 'landmark', desc: 'Shopping & dining complex' },
+            { name: 'Maya Lifestyle Mall', lat: 18.8010, lng: 98.9668, type: 'landmark', desc: 'Major mall at Nimman entrance' },
+            { name: 'THINK PARK', lat: 18.7985, lng: 98.9685, type: 'landmark', desc: 'Creative community space' }
+        ]
+    };
+
+    // ═══════════════════ APP ═══════════════════
+    const APP = {
+        lang: 'en',
+
+        init() {
+            this.initCountdown();
+            this.initAmbientCanvas();
+            this.initNavScroll();
+            this.initSmoothScroll();
+            this.initScrollReveal();
+            this.initRadarChart();
+            this.initD3Network();
+            this.initLeafletMap();
+            console.log('[Midnight & Mixology] ☕ System initialized');
+        },
+
+        toggleLang() {
+            this.lang = this.lang === 'en' ? 'th' : 'en';
+            document.body.dataset.lang = this.lang;
+        },
+
+        copyScript() {
+            const text = document.getElementById('booking-script').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.script-box .copy-btn');
+                btn.innerHTML = '✓';
+                btn.style.background = 'var(--success-sage)';
+                setTimeout(() => { btn.innerHTML = '<span lang="en">Copy</span><span lang="th">คัดลอก</span>'; btn.style.background = ''; }, 2000);
+            });
+        },
+
+        // ─── Countdown ───
+        initCountdown() {
+            const target = new Date('2026-02-06T22:30:00+07:00').getTime();
+            const update = () => {
+                const now = Date.now();
+                const diff = target - now;
+                if (diff <= 0) {
+                    document.getElementById('cd-days').textContent = '🛬';
+                    document.getElementById('cd-hours').textContent = 'NOW';
+                    document.getElementById('cd-mins').textContent = '';
+                    document.getElementById('cd-secs').textContent = '';
+                    return;
+                }
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+                document.getElementById('cd-days').textContent = String(d).padStart(2, '0');
+                document.getElementById('cd-hours').textContent = String(h).padStart(2, '0');
+                document.getElementById('cd-mins').textContent = String(m).padStart(2, '0');
+                document.getElementById('cd-secs').textContent = String(s).padStart(2, '0');
+            };
+            update();
+            setInterval(update, 1000);
+        },
+
+        // ─── Ambient Canvas (SimplexNoise, tuned) ───
+        initAmbientCanvas() {
+            const canvas = document.getElementById('ambient-canvas');
+            const ctx = canvas.getContext('2d');
+            const simplex = new SimplexNoise();
+            let particles = [], time = 0;
+
+            const resize = () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                createParticles();
+            };
+            const createParticles = () => {
+                const count = Math.min(35, Math.floor((canvas.width * canvas.height) / 50000));
+                particles = [];
+                for (let i = 0; i < count; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: 0, vy: 0,
+                        size: Math.random() * 1.8 + 0.5,
+                        alpha: Math.random() * 0.2 + 0.05,
+                        hue: Math.random() * 30 + 20
+                    });
+                }
+            };
+            const animate = () => {
+                ctx.fillStyle = 'rgba(13, 10, 8, 0.25)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                time += 0.002;
+                particles.forEach((p, i) => {
+                    const n = simplex.noise(p.x * 0.002 + time, p.y * 0.002 + time);
+                    const angle = n * Math.PI * 2;
+                    p.vx += Math.cos(angle) * 0.02;
+                    p.vy += Math.sin(angle) * 0.02;
+                    p.vx *= 0.98; p.vy *= 0.98;
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.x > canvas.width) p.x = 0;
+                    if (p.y < 0) p.y = canvas.height;
+                    if (p.y > canvas.height) p.y = 0;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsla(${p.hue}, 50%, 60%, ${p.alpha})`;
+                    ctx.fill();
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p2.x - p.x, dy = p2.y - p.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 70) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `hsla(30, 40%, 50%, ${(1 - dist / 70) * 0.04})`;
+                            ctx.stroke();
+                        }
+                    }
+                });
+                requestAnimationFrame(animate);
+            };
+            window.addEventListener('resize', resize);
+            resize();
+            animate();
+        },
+
+        // ─── Nav Scroll ───
+        initNavScroll() {
+            const nav = document.getElementById('main-nav');
+            window.addEventListener('scroll', () => {
+                nav.classList.toggle('scrolled', window.pageYOffset > 100);
+            });
+        },
+
+        // ─── Smooth Scroll ───
+        initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(a => {
+                a.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const t = document.querySelector(this.getAttribute('href'));
+                    if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.pageYOffset - 120, behavior: 'smooth' });
+                });
+            });
+        },
+
+        // ─── Scroll Reveal (IntersectionObserver) ───
+        initScrollReveal() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        },
+
+        // ─── Radar Chart (Chart.js) ───
+        initRadarChart() {
+            if (typeof Chart === 'undefined') return;
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Innovation', 'Ambiance', 'Coffee Quality', 'Instagram Factor', 'Value', 'Uniqueness'],
+                    datasets: [
+                        { label: 'Roast8ry', data: [10, 8, 10, 7, 7, 10], borderColor: '#c8956c', backgroundColor: 'rgba(200,149,108,0.15)', pointBackgroundColor: '#c8956c' },
+                        { label: 'GRAPH', data: [9, 10, 8, 9, 7, 9], borderColor: '#7a8b9a', backgroundColor: 'rgba(122,139,154,0.15)', pointBackgroundColor: '#7a8b9a' },
+                        { label: 'Ristr8to', data: [7, 6, 9, 6, 8, 7], borderColor: '#D4AF37', backgroundColor: 'rgba(212,175,55,0.15)', pointBackgroundColor: '#D4AF37' },
+                        { label: 'Baristro', data: [6, 8, 7, 10, 7, 6], borderColor: '#b4846c', backgroundColor: 'rgba(180,132,108,0.15)', pointBackgroundColor: '#b4846c' }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true, max: 10,
+                            grid: { color: 'rgba(200,149,108,0.1)' },
+                            angleLines: { color: 'rgba(200,149,108,0.1)' },
+                            pointLabels: { color: '#d4ccc0', font: { size: 11 } },
+                            ticks: { color: '#6b6259', backdropColor: 'transparent', stepSize: 2 }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#d4ccc0', usePointStyle: true, pointStyle: 'circle' } },
+                        tooltip: { backgroundColor: '#231e1a', titleColor: '#f5f0e8', bodyColor: '#d4ccc0', borderColor: '#c8956c', borderWidth: 1 }
+                    }
+                }
+            });
+        },
+
+        // ─── D3 Network ───
+        initD3Network() {
+            if (typeof d3 === 'undefined') return;
+            const container = document.getElementById('d3-network');
+            const w = container.clientWidth, h = container.clientHeight || 420;
+
+            const nodes = [
+                { id: 'ibis', label: 'ibis Styles', type: 'hotel', r: 18 },
+                { id: 'roast8ry', label: 'Roast8ry', type: 'coffee-primary', r: 22 },
+                { id: 'graph', label: 'GRAPH', type: 'coffee', r: 16 },
+                { id: 'ristr8to', label: 'Ristr8to', type: 'coffee', r: 16 },
+                { id: 'baristro', label: 'Baristro', type: 'coffee', r: 16 },
+                { id: 'onenimman', label: 'One Nimman', type: 'landmark', r: 12 },
+                { id: 'maya', label: 'Maya Mall', type: 'landmark', r: 12 },
+                { id: 'thinkpark', label: 'THINK PARK', type: 'landmark', r: 10 },
+                { id: 'soi17', label: 'Soi 17', type: 'zone', r: 10 },
+                { id: 'nightmarket', label: 'Night Market', type: 'food', r: 12 }
+            ];
+            const links = [
+                { source: 'ibis', target: 'roast8ry', strength: 0.9 },
+                { source: 'ibis', target: 'graph', strength: 0.6 },
+                { source: 'ibis', target: 'ristr8to', strength: 0.5 },
+                { source: 'ibis', target: 'baristro', strength: 0.5 },
+                { source: 'roast8ry', target: 'soi17', strength: 0.8 },
+                { source: 'ibis', target: 'soi17', strength: 0.7 },
+                { source: 'graph', target: 'onenimman', strength: 0.8 },
+                { source: 'ristr8to', target: 'thinkpark', strength: 0.5 },
+                { source: 'baristro', target: 'onenimman', strength: 0.4 },
+                { source: 'maya', target: 'nightmarket', strength: 0.7 },
+                { source: 'ibis', target: 'maya', strength: 0.4 },
+                { source: 'onenimman', target: 'maya', strength: 0.6 }
+            ];
+
+            const colorMap = { hotel: '#7a9e7e', 'coffee-primary': '#c8956c', coffee: '#c76d4e', landmark: '#7a8b9a', zone: '#d4a84b', food: '#b4846c' };
+
+            const svg = d3.select(container).append('svg').attr('width', w).attr('height', h);
+            const defs = svg.append('defs');
+            Object.entries(colorMap).forEach(([key, color]) => {
+                const g = defs.append('radialGradient').attr('id', `grad-${key}`);
+                g.append('stop').attr('offset', '0%').attr('stop-color', color).attr('stop-opacity', 0.6);
+                g.append('stop').attr('offset', '100%').attr('stop-color', color).attr('stop-opacity', 0.15);
+            });
+
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(80).strength(d => d.strength * 0.3))
+                .force('charge', d3.forceManyBody().strength(-200))
+                .force('center', d3.forceCenter(w / 2, h / 2))
+                .force('collision', d3.forceCollide().radius(d => d.r + 8));
+
+            const link = svg.append('g').selectAll('line').data(links).join('line')
+                .attr('stroke', 'rgba(200,149,108,0.2)').attr('stroke-width', d => d.strength * 2);
+
+            const node = svg.append('g').selectAll('g').data(nodes).join('g')
+                .call(d3.drag().on('start', (e, d) => { if (!e.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+                    .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; })
+                    .on('end', (e, d) => { if (!e.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
+
+            node.each(function(d) {
+                const g = d3.select(this);
+                if (d.type === 'hotel') {
+                    g.append('rect').attr('width', d.r * 2).attr('height', d.r * 2).attr('x', -d.r).attr('y', -d.r)
+                        .attr('rx', 6).attr('fill', `url(#grad-${d.type})`).attr('stroke', colorMap[d.type]).attr('stroke-width', 2);
+                } else if (d.type === 'zone') {
+                    const s = d.r;
+                    g.append('polygon').attr('points', `0,${-s} ${s*0.87},${s*0.5} ${-s*0.87},${s*0.5}`)
+                        .attr('fill', `url(#grad-${d.type})`).attr('stroke', colorMap[d.type]).attr('stroke-width', 1.5);
+                } else {
+                    g.append('circle').attr('r', d.r).attr('fill', `url(#grad-${d.type})`)
+                        .attr('stroke', colorMap[d.type]).attr('stroke-width', d.type === 'coffee-primary' ? 2.5 : 1.5);
+                }
+                g.append('text').text(d.label).attr('text-anchor', 'middle').attr('dy', d.r + 14)
+                    .attr('fill', '#d4ccc0').attr('font-size', d.type === 'coffee-primary' ? '11px' : '9px')
+                    .attr('font-family', "'DM Sans', sans-serif");
+            });
+
+            simulation.on('tick', () => {
+                link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+                node.attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+        },
+
+        // ─── Leaflet Map ───
+        initLeafletMap() {
+            if (typeof L === 'undefined') return;
+            const map = L.map('leaflet-map', { zoomControl: true, scrollWheelZoom: true })
+                .setView([18.7975, 98.9680], 16);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                maxZoom: 19
+            }).addTo(map);
+
+            const iconOpts = (color, size) => L.divIcon({
+                className: '',
+                html: `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};border:3px solid rgba(255,255,255,0.3);box-shadow:0 0 12px ${color}88;"></div>`,
+                iconSize: [size, size], iconAnchor: [size/2, size/2]
+            });
+
+            // Hotel
+            const h = LOCATIONS.hotel;
+            L.marker([h.lat, h.lng], { icon: iconOpts('#7a9e7e', 20) })
+                .bindPopup(`<strong>🏨 ${h.name}</strong><br>${h.desc}<br><span class="pop-tag">✓ Confirmed</span>`)
+                .addTo(map);
+
+            // Coffee
+            LOCATIONS.coffee.forEach(c => {
+                L.marker([c.lat, c.lng], { icon: iconOpts(c.badge ? '#c8956c' : '#c76d4e', c.badge ? 18 : 14) })
+                    .bindPopup(`<strong>☕ ${c.name}</strong><br>${c.desc}${c.badge ? '<br><span class="pop-tag">'+c.badge+'</span>' : ''}`)
+                    .addTo(map);
+            });
+
+            // Food
+            LOCATIONS.food.forEach(f => {
+                L.marker([f.lat, f.lng], { icon: iconOpts('#c76d4e', 12) })
+                    .bindPopup(`<strong>🍜 ${f.name}</strong><br>${f.desc}`)
+                    .addTo(map);
+            });
+
+            // Landmarks
+            LOCATIONS.landmarks.forEach(l => {
+                L.marker([l.lat, l.lng], { icon: iconOpts('#7a8b9a', 12) })
+                    .bindPopup(`<strong>📍 ${l.name}</strong><br>${l.desc}`)
+                    .addTo(map);
+            });
+
+            // Fit bounds
+            const allLocs = [
+                [h.lat, h.lng],
+                ...LOCATIONS.coffee.map(c => [c.lat, c.lng]),
+                ...LOCATIONS.landmarks.map(l => [l.lat, l.lng])
+            ];
+            map.fitBounds(allLocs, { padding: [40, 40] });
+
+            // Fix tile loading on scroll
+            setTimeout(() => map.invalidateSize(), 500);
+        }
+    };
+
+    // ═══════════════════ RESILIENT LOADER ═══════════════════
+    function waitForLibs(r = 0) {
+        const ready = typeof Chart !== 'undefined' && typeof d3 !== 'undefined' && typeof L !== 'undefined';
+        if (ready) {
+            console.log(`[System] All libraries loaded (${r * 100}ms)`);
+            APP.init();
+        } else if (r < 50) {
+            setTimeout(() => waitForLibs(r + 1), 100);
+        } else {
+            console.warn('[System] Some libraries failed to load, initializing with available');
+            APP.init();
+        }
+    }
+    document.addEventListener('DOMContentLoaded', () => waitForLibs());
+    </script>
+</body>
+</html>
