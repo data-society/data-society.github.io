@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>พระเสวยอายุ — มหาทักษา 108 ปี + ปีนักษัตร</title>
+
+<!-- Favicon: Dharma Wheel SVG -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230a0604'/%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='%23c89b3c' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='8' fill='none' stroke='%23c89b3c' stroke-width='2.5'/%3E%3Cg stroke='%23c89b3c' stroke-width='2'%3E%3Cline x1='32' y1='6' x2='32' y2='24'/%3E%3Cline x1='32' y1='40' x2='32' y2='58'/%3E%3Cline x1='6' y1='32' x2='24' y2='32'/%3E%3Cline x1='40' y1='32' x2='58' y2='32'/%3E%3Cline x1='13.6' y1='13.6' x2='26.3' y2='26.3'/%3E%3Cline x1='37.7' y1='37.7' x2='50.4' y2='50.4'/%3E%3Cline x1='50.4' y1='13.6' x2='37.7' y2='26.3'/%3E%3Cline x1='26.3' y1='37.7' x2='13.6' y2='50.4'/%3E%3C/g%3E%3Ccircle cx='32' cy='32' r='5' fill='%23c89b3c'/%3E%3C/svg%3E">
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Sarabun:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+@layer base, layout, components, calendar, wheel, timeline, tables, animations;
+
+@layer base {
+  :root {
+    --void: #0a0604;
+    --surface: #1a100b;
+    --surface-el: #2a1f1a;
+    --surface-glass: rgba(26,16,11,0.88);
+    --gold: #c89b3c;
+    --gold-dim: #8b6914;
+    --gold-bright: #e8c060;
+    --gold-glow: rgba(200,155,60,0.15);
+    --copper: #c8956c;
+    --cream: #f5e6c8;
+    --muted: #8a7560;
+    --glass-border: rgba(200,155,60,0.18);
+    --ease: cubic-bezier(0.16,1,0.3,1);
+
+    --c-sun: #CE1126;
+    --c-moon: #FDD835;
+    --c-mars: #E91E63;
+    --c-mercury: #2E7D32;
+    --c-saturn: #7B1FA2;
+    --c-jupiter: #EF6C00;
+    --c-rahu: #555555;
+    --c-venus: #0288D1;
+  }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--void);
+    color: var(--cream);
+    font-family: 'Sarabun', sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+  h1,h2,h3,h4 { font-family: 'Cinzel','Sarabun',serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+}
+
+@layer layout {
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  @media(max-width:768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+}
+
+@layer components {
+  .glass {
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+  .glass:hover { border-color: rgba(200,155,60,0.35); }
+
+  .card {
+    background: var(--surface-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  .card-title {
+    font-family: 'Cinzel','Sarabun',serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-title .bar { width: 4px; height: 24px; background: var(--gold); border-radius: 2px; flex-shrink:0; }
+
+  .badge {
+    display: inline-flex; align-items: center; padding: 4px 14px;
+    border-radius: 99px; font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; border: 1px solid;
+  }
+  .badge-gold { border-color: var(--gold); color: var(--gold); background: var(--gold-glow); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--gold), var(--copper));
+    color: var(--void); border: none; border-radius: 10px;
+    font-weight: 700; font-family: 'Sarabun',sans-serif; font-size: 1rem;
+    cursor: pointer; transition: all 0.3s var(--ease);
+    box-shadow: 0 4px 16px rgba(200,155,60,0.3);
+  }
+  .btn:hover { filter: brightness(1.15); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(200,155,60,0.4); }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-sm {
+    padding: 6px 14px; font-size: 0.85rem; border-radius: 8px;
+  }
+  .btn-ghost {
+    background: transparent; border: 1px solid var(--glass-border);
+    color: var(--cream); box-shadow: none;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  label {
+    display: block; font-size: 0.85rem; font-weight: 600;
+    color: var(--muted); margin-bottom: 6px; letter-spacing: 0.03em;
+  }
+  select, input[type="number"], input[type="time"], input[type="text"] {
+    width: 100%; padding: 10px 12px;
+    background: var(--surface); border: 1px solid var(--glass-border);
+    border-radius: 10px; color: var(--cream);
+    font-family: inherit; font-size: 1rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  select:focus, input:focus { border-color: var(--gold); }
+  select option { background: var(--surface); color: var(--cream); }
+
+  .swatch {
+    display: inline-block; width: 14px; height: 14px;
+    border-radius: 4px; border: 1px solid rgba(255,255,255,0.2);
+    vertical-align: middle;
+  }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid var(--glass-border); border-radius: 99px;
+    padding: 6px 14px; font-size: 0.95rem;
+  }
+
+  .hint {
+    font-size: 0.85rem; color: var(--muted); margin-top: 8px;
+  }
+
+  .error-msg {
+    color: #ff6b6b; font-weight: 700; margin-top: 10px; display: none;
+  }
+
+  .summary-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .summary-box {
+    border: 1px solid var(--glass-border); border-radius: 12px;
+    padding: 14px; background: rgba(26,16,11,0.5);
+  }
+  .summary-box .k { font-size: 0.85rem; color: var(--muted); margin-bottom: 4px; }
+  .summary-box .v { font-size: 1rem; font-weight: 700; }
+  .summary-box .v small { font-weight: 400; color: var(--muted); }
+  @media(max-width:768px) { .summary-grid { grid-template-columns: 1fr; } }
+
+  /* Dashboard Hero */
+  .dashboard {
+    text-align: center; padding: 32px; border-radius: 20px;
+    color: #fff; position: relative; overflow: hidden;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.3); margin-bottom: 24px;
+    transition: background 0.5s;
+  }
+  .dashboard .db-icon svg { width: 72px; height: 72px; margin-bottom: 8px; }
+  .dashboard .db-title { font-size: 1rem; opacity: 0.85; }
+  .dashboard .db-name { font-size: 2.2rem; font-weight: 800; margin: 4px 0 12px; font-family:'Sarabun',sans-serif; }
+  .dashboard .db-age { background: rgba(0,0,0,0.25); padding: 6px 18px; border-radius: 30px; font-size: 0.95rem; display: inline-block; }
+  .dashboard .db-offering {
+    margin-top: 20px; background: rgba(255,255,255,0.12);
+    padding: 16px; border-radius: 12px; text-align: left;
+    font-size: 0.95rem; backdrop-filter: blur(5px);
+  }
+}
+
+@layer calendar {
+  .cal-container { position: relative; }
+  .cal-trigger {
+    width: 100%; padding: 10px 12px;
+    background: var(--surface); border: 1px solid var(--glass-border);
+    border-radius: 10px; color: var(--cream);
+    font-family: inherit; font-size: 1rem;
+    cursor: pointer; text-align: left;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: border-color 0.2s;
+  }
+  .cal-trigger:hover, .cal-trigger:focus { border-color: var(--gold); outline:none; }
+  .cal-trigger .cal-icon { color: var(--gold); flex-shrink:0; }
+
+  .cal-dropdown {
+    position: absolute; top: calc(100% + 6px); left: 0;
+    width: 340px; max-width: 95vw;
+    background: var(--surface); border: 1px solid var(--gold-dim);
+    border-radius: 14px; box-shadow: 0 16px 48px rgba(0,0,0,0.6);
+    z-index: 1000; display: none; padding: 16px;
+    animation: calFadeIn 0.25s var(--ease);
+  }
+  .cal-dropdown.open { display: block; }
+  @keyframes calFadeIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+  .cal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px;
+  }
+  .cal-header button {
+    background: none; border: none; color: var(--gold);
+    font-size: 1.3rem; cursor: pointer; padding: 4px 8px;
+    border-radius: 6px; transition: background 0.2s;
+  }
+  .cal-header button:hover { background: var(--gold-glow); }
+  .cal-header .cal-month-year {
+    font-weight: 700; font-size: 1rem; color: var(--cream);
+    cursor: pointer; padding: 4px 10px; border-radius: 6px;
+    transition: background 0.2s;
+  }
+  .cal-header .cal-month-year:hover { background: var(--gold-glow); }
+
+  .cal-weekdays {
+    display: grid; grid-template-columns: repeat(7,1fr);
+    text-align: center; font-size: 0.75rem; font-weight: 700;
+    color: var(--muted); margin-bottom: 4px; gap: 2px;
+  }
+  .cal-weekdays span.sun-col { color: var(--c-sun); }
+  .cal-weekdays span.sat-col { color: var(--c-saturn); }
+
+  .cal-days {
+    display: grid; grid-template-columns: repeat(7,1fr);
+    gap: 2px; text-align: center;
+  }
+  .cal-day {
+    padding: 7px 2px; border-radius: 8px; cursor: pointer;
+    font-size: 0.9rem; font-weight: 600;
+    transition: all 0.15s; color: var(--cream); border: 1px solid transparent;
+  }
+  .cal-day:hover { background: var(--gold-glow); border-color: var(--gold-dim); }
+  .cal-day.empty { cursor: default; }
+  .cal-day.empty:hover { background: none; border-color: transparent; }
+  .cal-day.today { border-color: var(--gold); }
+  .cal-day.selected { background: var(--gold); color: var(--void); font-weight: 800; }
+  .cal-day.sun-day { color: #ff8a8a; }
+  .cal-day.sat-day { color: #c4a0ff; }
+  .cal-day.selected.sun-day, .cal-day.selected.sat-day { color: var(--void); }
+
+  .cal-year-grid {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 6px; max-height: 260px; overflow-y: auto;
+  }
+  .cal-year-grid button {
+    padding: 8px; border-radius: 8px; border: 1px solid var(--glass-border);
+    background: var(--surface); color: var(--cream); cursor: pointer;
+    font-size: 0.85rem; font-weight: 600; transition: all 0.15s;
+  }
+  .cal-year-grid button:hover { border-color: var(--gold); background: var(--gold-glow); }
+  .cal-year-grid button.active { background: var(--gold); color: var(--void); border-color: var(--gold); }
+}
+
+@layer wheel {
+  #wheelSvg { width: 100%; height: auto; display: block; }
+}
+
+@layer timeline {
+  #timelineSvg { width: 100%; height: auto; display: block; }
+  .timeline-wrap {
+    border: 1px solid var(--glass-border); border-radius: 12px;
+    overflow: hidden; background: rgba(255,255,255,0.03);
+  }
+}
+
+@layer tables {
+  .tbl-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { border-bottom: 1px solid var(--glass-border); padding: 10px 8px; vertical-align: top; }
+  th { text-align: left; font-size: 0.8rem; color: var(--muted); font-weight: 700; background: rgba(26,16,11,0.4); }
+  td { color: var(--cream); }
+  .planet-cell { display: flex; gap: 8px; align-items: center; font-weight: 700; }
+  .planet-icon-sm { width: 22px; height: 22px; flex: 0 0 auto; }
+
+  /* Naksatra fortune table */
+  .fortune-tbl th { text-align: center; }
+  .fortune-tbl td { text-align: center; font-weight: 600; }
+  .fortune-tbl tr.active-row { background: var(--gold-glow); }
+  .fortune-tbl td.fortune-highlight { background: rgba(200,155,60,0.2); border-radius: 6px; font-weight: 800; color: var(--gold-bright); }
+}
+
+@layer animations {
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+  @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  .anim-slideup { animation: slideUp 0.5s var(--ease); }
+
+  .loader {
+    width: 48px; height: 48px;
+    border: 3px solid var(--glass-border);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  #loading-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--void);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: opacity 0.6s var(--ease);
+  }
+  #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+  #loading-overlay .label {
+    margin-top: 16px; font-family: 'Cinzel',serif;
+    font-size: 0.85rem; color: var(--gold);
+    letter-spacing: 0.2em; animation: pulse 2s infinite;
+  }
+}
+
+/* Canvas background */
+#sacred-canvas {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; opacity: 0.4;
+}
+
+/* Header */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  padding: 14px 24px;
+  background: rgba(10,6,4,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.site-header h1 {
+  font-size: 1.1rem; font-weight: 700;
+  letter-spacing: 0.08em; color: var(--cream);
+}
+.site-header h1 span { color: var(--gold); }
+
+main {
+  position: relative; z-index: 1;
+  padding: 24px 0 60px;
+}
+
+/* Section dividers */
+.section-hidden { display: none; }
+.section-visible { display: block; animation: slideUp 0.5s var(--ease); }
+
+/* Responsive planet icon in SVG */
+.p-icon-use { }
+</style>
+</head>
+
+<body>
+
+<!-- Background Canvas -->
+<canvas id="sacred-canvas"></canvas>
+
+<!-- Loading Overlay -->
+<div id="loading-overlay">
+  <div class="loader"></div>
+  <div class="label">INITIALIZING ARTIFACT</div>
+</div>
+
+<!-- SVG Icon Sprite -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+<defs>
+  <symbol id="icon-sun" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="4"/>
+    <g stroke="currentColor" stroke-width="4" stroke-linecap="round">
+      <line x1="32" y1="4" x2="32" y2="14"/><line x1="32" y1="50" x2="32" y2="60"/>
+      <line x1="4" y1="32" x2="14" y2="32"/><line x1="50" y1="32" x2="60" y2="32"/>
+      <line x1="12" y1="12" x2="19" y2="19"/><line x1="45" y1="45" x2="52" y2="52"/>
+      <line x1="12" y1="52" x2="19" y2="45"/><line x1="45" y1="19" x2="52" y2="12"/>
+    </g>
+  </symbol>
+  <symbol id="icon-moon" viewBox="0 0 64 64">
+    <path d="M42 8c-10 3-17 13-17 25 0 14 11 25 25 25 4 0 8-1 11-3-5 8-14 13-25 13C21 68 8 55 8 39 8 22 21 8 38 8c1 0 3 0 4 0z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icon-mars" viewBox="0 0 64 64">
+    <circle cx="26" cy="38" r="14" fill="none" stroke="currentColor" stroke-width="4"/>
+    <line x1="36" y1="28" x2="56" y2="8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <polyline points="44,8 56,8 56,20" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="icon-mercury" viewBox="0 0 64 64">
+    <circle cx="32" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="4"/>
+    <path d="M20 16c4-4 8-6 12-6s8 2 12 6" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <line x1="32" y1="40" x2="32" y2="58" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <line x1="22" y1="50" x2="42" y2="50" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icon-saturn" viewBox="0 0 64 64">
+    <circle cx="32" cy="34" r="12" fill="none" stroke="currentColor" stroke-width="4"/>
+    <ellipse cx="32" cy="34" rx="22" ry="8" fill="none" stroke="currentColor" stroke-width="3"/>
+  </symbol>
+  <symbol id="icon-jupiter" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="16" fill="none" stroke="currentColor" stroke-width="4"/>
+    <path d="M18 26c6 4 22 4 28 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <path d="M16 32c8 4 24 4 32 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    <path d="M18 38c6 4 22 4 28 0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="icon-rahu" viewBox="0 0 64 64">
+    <circle cx="26" cy="32" r="16" fill="none" stroke="currentColor" stroke-width="4"/>
+    <circle cx="38" cy="32" r="16" fill="none" stroke="currentColor" stroke-width="4" opacity="0.6"/>
+  </symbol>
+  <symbol id="icon-venus" viewBox="0 0 64 64">
+    <circle cx="32" cy="24" r="12" fill="none" stroke="currentColor" stroke-width="4"/>
+    <line x1="32" y1="36" x2="32" y2="60" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    <line x1="22" y1="50" x2="42" y2="50" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+</defs>
+</svg>
+
+<!-- Header -->
+<header class="site-header">
+  <h1>NEXUS // <span>มหาทักษา</span></h1>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <button class="badge badge-gold" style="cursor:pointer;font-size:0.75rem;" onclick="APP.toggleLang()" title="สลับภาษา">EN / TH</button>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- INPUT SECTION -->
+  <div class="card" id="inputCard">
+    <div class="card-title"><span class="bar"></span>
+      <span lang="en">Birth Date Input</span>
+      <span lang="th">กรอกวันเกิด</span>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:16px;">
+      <!-- Calendar Picker -->
+      <div>
+        <label>
+          <span lang="en">Date of Birth (Calendar Picker)</span>
+          <span lang="th">วัน/เดือน/ปีเกิด (ปฏิทิน)</span>
+        </label>
+        <div class="cal-container" id="calContainer">
+          <button class="cal-trigger" id="calTrigger" type="button">
+            <span id="calDisplay">เลือกวันเกิด...</span>
+            <span class="cal-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+          </button>
+          <div class="cal-dropdown" id="calDropdown">
+            <div class="cal-header">
+              <button type="button" id="calPrevMonth">◀</button>
+              <span class="cal-month-year" id="calMonthYear" title="คลิกเพื่อเลือกปี"></span>
+              <button type="button" id="calNextMonth">▶</button>
+            </div>
+            <div class="cal-weekdays" id="calWeekdays"></div>
+            <div class="cal-days" id="calDays"></div>
+            <div class="cal-year-grid" id="calYearGrid" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Era + Year -->
+      <div>
+        <label>
+          <span lang="en">Year (manual)</span>
+          <span lang="th">ปี (พิมพ์เอง)</span>
+        </label>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <select id="eraMode" style="width:120px;">
+            <option value="auto">อัตโนมัติ</option>
+            <option value="BE">พ.ศ. (BE)</option>
+            <option value="AD">ค.ศ. (AD)</option>
+          </select>
+          <input type="number" id="manualYear" placeholder="25xx / 19xx" style="flex:1;" />
+        </div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-ghost" type="button" onclick="APP.adjYear(-50)">−50</button>
+          <button class="btn btn-sm btn-ghost" type="button" onclick="APP.adjYear(-10)">−10</button>
+          <button class="btn btn-sm btn-ghost" type="button" onclick="APP.adjYear(-1)">−1</button>
+          <button class="btn btn-sm btn-ghost" type="button" onclick="APP.adjYear(1)">+1</button>
+          <button class="btn btn-sm btn-ghost" type="button" onclick="APP.adjYear(10)">+10</button>
+          <button class="btn btn-sm btn-ghost" type="button" onclick="APP.adjYear(50)">+50</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-bottom:16px;">
+      <!-- Birth Time -->
+      <div>
+        <label>
+          <span lang="en">Birth Time (important for Wed/Rahu)</span>
+          <span lang="th">เวลาเกิด (สำคัญ: กฎ 06:00 น. + พุธกลางคืน/ราหู)</span>
+        </label>
+        <input type="time" id="birthTime" value="09:00" />
+        <div class="hint" style="color:#ff8a8a;">
+          <span lang="en">* Before 06:00 counts as previous astrological day. Wed 18:00+ = Rahu.</span>
+          <span lang="th">* เกิดก่อน 06:00 น. นับเป็นวันก่อนหน้า — พุธ 18:00+ = ราหู</span>
+        </div>
+      </div>
+
+      <!-- Reference Date -->
+      <div>
+        <label>
+          <span lang="en">Reference Date (default: today)</span>
+          <span lang="th">วันที่อ้างอิง (ค่าเริ่มต้น: วันนี้)</span>
+        </label>
+        <input type="text" id="asOfDate" readonly style="cursor:pointer;" />
+        <div class="hint">
+          <span lang="en">Click calendar above to change birth date; reference uses today's date</span>
+          <span lang="th">วันนี้ถูกใช้เป็นค่าเริ่มต้น</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn" style="width:100%;" type="button" id="computeBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span lang="en">CALCULATE</span>
+      <span lang="th">คำนวณ</span>
+    </button>
+
+    <div class="error-msg" id="errMsg"></div>
+  </div>
+
+  <!-- RESULTS SECTIONS (hidden initially) -->
+
+  <!-- Dashboard Hero -->
+  <div class="dashboard section-hidden" id="dashCard"></div>
+
+  <!-- Summary -->
+  <div class="card section-hidden" id="summaryCard">
+    <div class="card-title"><span class="bar"></span>
+      <span lang="en">Summary</span>
+      <span lang="th">สรุปผล</span>
+    </div>
+    <div class="summary-grid" id="summaryGrid"></div>
+  </div>
+
+  <!-- Naksatra (Zodiac Year) -->
+  <div class="card section-hidden" id="naksatraCard">
+    <div class="card-title"><span class="bar"></span>
+      <span lang="en">Thai Zodiac Year (ปีนักษัตร)</span>
+      <span lang="th">ปีนักษัตร + ตารางวันมงคล</span>
+    </div>
+    <div id="naksatraContent"></div>
+    <div style="margin-top:16px;" id="fortuneTableWrap"></div>
+  </div>
+
+  <!-- Wheel Chart -->
+  <div class="card section-hidden" id="wheelCard">
+    <div class="card-title"><span class="bar"></span>
+      <span lang="en">108-Year Wheel (Clockwise SVG Arc)</span>
+      <span lang="th">วงล้อ 108 ปี (SVG Arc — ตามเข็มนาฬิกา)</span>
+    </div>
+    <div class="timeline-wrap">
+      <svg id="wheelSvg" viewBox="0 0 720 720" role="img" aria-label="Wheel chart 0-108 years clockwise"></svg>
+    </div>
+    <div class="hint">
+      <span lang="th">จุดบนสุดคืออายุ 0 ปี (วันเกิด) เดินตามเข็มนาฬิกาจนครบ 108 ปี</span>
+      <span lang="en">Top = Age 0 (DOB), segments progress clockwise to 108</span>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card section-hidden" id="timelineCard">
+    <div class="card-title"><span class="bar"></span>
+      <span lang="en">Linear Timeline 0 → 108</span>
+      <span lang="th">ไทม์ไลน์ 0 → 108 ปี</span>
+    </div>
+    <div class="timeline-wrap">
+      <svg id="timelineSvg" viewBox="0 0 1200 220" role="img" aria-label="Timeline 0-108 years"></svg>
+    </div>
+  </div>
+
+  <!-- Tables -->
+  <div class="card section-hidden" id="tablesCard">
+    <div class="card-title"><span class="bar"></span>
+      <span lang="en">Detailed Schedule</span>
+      <span lang="th">ตารางรายละเอียด</span>
+    </div>
+
+    <h3 style="color:var(--gold);font-size:1rem;margin:16px 0 8px;">
+      <span lang="en">Planetary Periods (Full 108 Years)</span>
+      <span lang="th">ช่วงพระเสวยอายุ (ครบ 108 ปี)</span>
+    </h3>
+    <div class="tbl-wrap">
+      <table id="segmentTable">
+        <thead><tr>
+          <th>ดาว</th><th>กำลัง/ปี</th><th>อายุเริ่ม</th><th>อายุสิ้นสุด</th><th>วันที่เริ่ม</th><th>วันที่เปลี่ยน</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h3 style="color:var(--gold);font-size:1rem;margin:20px 0 8px;">
+      <span lang="en">Switch Events</span>
+      <span lang="th">จุดเปลี่ยน (Switch Events)</span>
+    </h3>
+    <div class="tbl-wrap">
+      <table id="switchTable">
+        <thead><tr>
+          <th>อายุ</th><th>วันที่เปลี่ยน</th><th>จาก</th><th>เป็น</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+// ============================================================
+// DATA
+// ============================================================
+const TH_MONTHS = ["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน",
+  "กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"];
+const TH_MONTHS_SHORT = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+const TH_WEEKDAYS = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"];
+const TH_WEEKDAYS_SHORT = ["อา","จ","อ","พ","พฤ","ศ","ส"];
+const EN_WEEKDAYS_SHORT = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+// Planet cycle: Sun→Moon→Mars→Mercury→Saturn→Jupiter→Rahu→Venus
+const PLANETS = [
+  { id:"SUN",     th:"พระอาทิตย์",   en:"Sun",     years:6,  color:"#CE1126", icon:"icon-sun",     dayTh:"อาทิตย์" },
+  { id:"MOON",    th:"พระจันทร์",     en:"Moon",    years:15, color:"#FDD835", icon:"icon-moon",    dayTh:"จันทร์" },
+  { id:"MARS",    th:"พระอังคาร",     en:"Mars",    years:8,  color:"#E91E63", icon:"icon-mars",    dayTh:"อังคาร" },
+  { id:"MERCURY", th:"พระพุธ",        en:"Mercury", years:17, color:"#43A047", icon:"icon-mercury", dayTh:"พุธ" },
+  { id:"SATURN",  th:"พระเสาร์",      en:"Saturn",  years:10, color:"#7B1FA2", icon:"icon-saturn",  dayTh:"เสาร์" },
+  { id:"JUPITER", th:"พระพฤหัสบดี",   en:"Jupiter", years:19, color:"#EF6C00", icon:"icon-jupiter", dayTh:"พฤหัสบดี" },
+  { id:"RAHU",    th:"พระราหู",       en:"Rahu",    years:12, color:"#555555", icon:"icon-rahu",    dayTh:"ราหู (พุธกลางคืน)" },
+  { id:"VENUS",   th:"พระศุกร์",      en:"Venus",   years:21, color:"#0288D1", icon:"icon-venus",   dayTh:"ศุกร์" }
+];
+
+const START_BY_DOW = { 0:"SUN", 1:"MOON", 2:"MARS", 3:"MERCURY", 4:"JUPITER", 5:"VENUS", 6:"SATURN" };
+
+// ปีนักษัตร data
+const NAKSATRA_NAMES = ["ชวด","ฉลู","ขาล","เถาะ","มะโรง","มะเส็ง","มะเมีย","มะแม","วอก","ระกา","จอ","กุน"];
+const NAKSATRA_ANIMALS = ["🐀","🐂","🐅","🐇","🐉","🐍","🐴","🐐","🐒","🐓","🐕","🐗"];
+// Fortune table: rows=naksatra, cols=[เสมอ,ตกต่ำ,ลาภ,ชัย,โจร,กิณี,มรณะ]
+// Values are day numbers: 1=อา, 2=จ, 3=อ, 4=พ, 5=พฤ, 6=ศ, 7=ส
+const FORTUNE_COLS = ["เสมอ","ตกต่ำ","ลาภ","ชัย","โจร","กิณี","มรณะ"];
+const FORTUNE_DATA = [
+  [3,7,4,1,5,2,6], // ชวด
+  [4,1,5,2,6,3,7], // ฉลู
+  [5,2,6,3,7,4,1], // ขาล
+  [6,3,7,4,1,5,2], // เถาะ
+  [7,4,1,5,2,6,3], // มะโรง
+  [1,5,2,6,3,7,4], // มะเส็ง
+  [2,6,3,7,4,1,5], // มะเมีย
+  [3,7,4,1,5,2,6], // มะแม
+  [4,1,5,2,6,3,7], // วอก
+  [5,2,6,3,7,4,1], // ระกา
+  [6,3,7,4,1,5,2], // จอ
+  [7,4,1,5,2,6,3], // กุน
+];
+const DAY_NUM_TO_NAME = { 1:"อาทิตย์", 2:"จันทร์", 3:"อังคาร", 4:"พุธ", 5:"พฤหัสบดี", 6:"ศุกร์", 7:"เสาร์" };
+const DAY_NUM_TO_COLOR = { 1:"#CE1126", 2:"#FDD835", 3:"#E91E63", 4:"#43A047", 5:"#EF6C00", 6:"#0288D1", 7:"#7B1FA2" };
+
+// ============================================================
+// DOM REFS
+// ============================================================
+const $=s=>document.getElementById(s);
+const calContainer=$("calContainer"), calTrigger=$("calTrigger"), calDisplay=$("calDisplay");
+const calDropdown=$("calDropdown"), calDays=$("calDays"), calWeekdays=$("calWeekdays");
+const calMonthYear=$("calMonthYear"), calYearGrid=$("calYearGrid");
+const manualYear=$("manualYear"), eraMode=$("eraMode"), birthTime=$("birthTime");
+const asOfDate=$("asOfDate"), computeBtn=$("computeBtn"), errMsg=$("errMsg");
+
+const dashCard=$("dashCard"), summaryCard=$("summaryCard"), naksatraCard=$("naksatraCard");
+const wheelCard=$("wheelCard"), timelineCard=$("timelineCard"), tablesCard=$("tablesCard");
+const summaryGrid=$("summaryGrid"), naksatraContent=$("naksatraContent");
+const fortuneTableWrap=$("fortuneTableWrap");
+const wheelSvg=$("wheelSvg"), timelineSvg=$("timelineSvg");
+const segTBody=document.querySelector("#segmentTable tbody");
+const swTBody=document.querySelector("#switchTable tbody");
+
+// ============================================================
+// CALENDAR PICKER STATE
+// ============================================================
+let calState = {
+  viewYear: 2000, viewMonth: 0, // 0-indexed
+  selectedDate: null, // { y, m, d } in AD
+  showYearPicker: false
+};
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function isLeapYear(y){ return (y%4===0)&&(y%100!==0||y%400===0); }
+function daysInMonth(y,m){ if(m===2) return isLeapYear(y)?29:28; return [4,6,9,11].includes(m)?30:31; }
+function dateUTC(y,m,d){ return new Date(Date.UTC(y,m-1,d)); }
+function todayUTC(){ const n=new Date(); return new Date(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate())); }
+function toISODate(dt){ return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth()+1).padStart(2,'0')}-${String(dt.getUTCDate()).padStart(2,'0')}`; }
+
+function addYearsClamped(dt,years){
+  const y=dt.getUTCFullYear()+years, m0=dt.getUTCMonth(), d=dt.getUTCDate();
+  const dim=daysInMonth(y,m0+1);
+  return new Date(Date.UTC(y,m0,Math.min(d,dim)));
+}
+
+function diffYMD(s,e){
+  let y=e.getUTCFullYear()-s.getUTCFullYear(), m=e.getUTCMonth()-s.getUTCMonth(), d=e.getUTCDate()-s.getUTCDate();
+  if(d<0){ m--; const pm=(e.getUTCMonth()-1+12)%12; const py=e.getUTCMonth()===0?e.getUTCFullYear()-1:e.getUTCFullYear(); d+=daysInMonth(py,pm+1); }
+  if(m<0){ y--; m+=12; }
+  return {years:y,months:m,days:d};
+}
+
+function normalizeYear(yr,mode,hint){
+  let m=mode;
+  if(m==="auto"){ m=(yr>=2400)?"BE":"AD"; }
+  return m==="BE"?yr-543:yr;
+}
+
+function formatDateThaiBoth(dt){
+  const d=dt.getUTCDate(),m=dt.getUTCMonth()+1,yAD=dt.getUTCFullYear(),yBE=yAD+543;
+  return `${d} ${TH_MONTHS[m-1]} พ.ศ. ${yBE} (ค.ศ. ${yAD})`;
+}
+function shortBEDate(dt){
+  return `${String(dt.getUTCDate()).padStart(2,'0')}/${String(dt.getUTCMonth()+1).padStart(2,'0')}/${dt.getUTCFullYear()+543}`;
+}
+
+function bestTextColor(bg){
+  const h=(bg||"").replace("#","");
+  if(h.length!==6) return "#fff";
+  const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+  const L=0.2126*srgb(r)+0.7152*srgb(g)+0.0722*srgb(b);
+  return L>0.45?"#111":"#fff";
+}
+function srgb(v){ const x=v/255; return x<=0.04045?x/12.92:Math.pow((x+0.055)/1.055,2.4); }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+// ============================================================
+// NAKSATRA YEAR CALCULATION
+// ============================================================
+// ปีนักษัตร starts April 1 of year Y, ends March 31 of year Y+1.
+// The naksatra "year" for a date:
+//   if month >= 4 (Apr-Dec) -> naksatra year = current AD year
+//   if month <= 3 (Jan-Mar) -> naksatra year = AD year - 1
+// Then: index = (naksatraYear - 4) % 12 gives animal (Rat=0, Ox=1, ...)
+// Reference: AD 2024 (Apr 2024 - Mar 2025) = มะโรง (Dragon)
+// Check: (2024-4)%12 = 2020%12 = 4 -> index 4 = มะโรง ✓
+
+function getNaksatraYear(adYear, month1based){
+  // month1based: 1-12
+  return (month1based >= 4) ? adYear : adYear - 1;
+}
+function getNaksatraIndex(naksatraYear){
+  return ((naksatraYear - 4) % 12 + 12) % 12;
+}
+
+// ============================================================
+// CALENDAR PICKER
+// ============================================================
+function initCalendar(){
+  const today = new Date();
+  calState.viewYear = today.getFullYear() - 30;
+  calState.viewMonth = today.getMonth();
+
+  // Weekday headers
+  const wds = TH_WEEKDAYS_SHORT;
+  calWeekdays.innerHTML = wds.map((w,i)=>{
+    let cls = '';
+    if(i===0) cls='sun-col';
+    if(i===6) cls='sat-col';
+    return `<span class="${cls}">${w}</span>`;
+  }).join('');
+
+  calTrigger.addEventListener('click',()=> toggleCalDropdown());
+  $("calPrevMonth").addEventListener('click',()=>{ calState.viewMonth--; if(calState.viewMonth<0){calState.viewMonth=11;calState.viewYear--;} renderCalDays(); });
+  $("calNextMonth").addEventListener('click',()=>{ calState.viewMonth++; if(calState.viewMonth>11){calState.viewMonth=0;calState.viewYear++;} renderCalDays(); });
+  calMonthYear.addEventListener('click',()=> toggleYearPicker());
+
+  document.addEventListener('click',(e)=>{
+    if(!calContainer.contains(e.target)) closeCalDropdown();
+  });
+
+  renderCalDays();
+  updateAsOfDate();
+}
+
+function toggleCalDropdown(){
+  calDropdown.classList.toggle('open');
+  calState.showYearPicker=false;
+  calYearGrid.style.display='none';
+  calDays.style.display='';
+  calWeekdays.style.display='';
+}
+function closeCalDropdown(){
+  calDropdown.classList.remove('open');
+  calState.showYearPicker=false;
+  calYearGrid.style.display='none';
+  calDays.style.display='';
+  calWeekdays.style.display='';
+}
+
+function toggleYearPicker(){
+  calState.showYearPicker = !calState.showYearPicker;
+  if(calState.showYearPicker){
+    calDays.style.display='none';
+    calWeekdays.style.display='none';
+    calYearGrid.style.display='';
+    renderYearPicker();
+  } else {
+    calDays.style.display='';
+    calWeekdays.style.display='';
+    calYearGrid.style.display='none';
+  }
+}
+
+function renderYearPicker(){
+  const curY = calState.viewYear;
+  const startY = curY - 60;
+  const endY = curY + 40;
+  let html = '';
+  for(let y=startY; y<=endY; y++){
+    const be = y+543;
+    const active = y===curY?'active':'';
+    html += `<button type="button" class="${active}" data-y="${y}">${be} (${y})</button>`;
+  }
+  calYearGrid.innerHTML = html;
+  calYearGrid.querySelectorAll('button').forEach(b=>{
+    b.addEventListener('click',()=>{
+      calState.viewYear = parseInt(b.dataset.y);
+      calState.showYearPicker=false;
+      calDays.style.display='';
+      calWeekdays.style.display='';
+      calYearGrid.style.display='none';
+      renderCalDays();
+    });
+  });
+  // Scroll active into view
+  const active = calYearGrid.querySelector('.active');
+  if(active) setTimeout(()=> active.scrollIntoView({block:'center'}), 50);
+}
+
+function renderCalDays(){
+  const y = calState.viewYear, m = calState.viewMonth; // 0-indexed
+  const be = y + 543;
+  calMonthYear.textContent = `${TH_MONTHS[m]} ${be} (${y})`;
+
+  const firstDow = new Date(y, m, 1).getDay(); // 0=Sun
+  const dim = daysInMonth(y, m+1);
+  const today = new Date();
+  const todayY=today.getFullYear(), todayM=today.getMonth(), todayD=today.getDate();
+
+  let html = '';
+  // Empty cells
+  for(let i=0;i<firstDow;i++) html += '<div class="cal-day empty"></div>';
+  for(let d=1;d<=dim;d++){
+    const dow = (firstDow + d - 1) % 7;
+    let cls = 'cal-day';
+    if(dow===0) cls+=' sun-day';
+    if(dow===6) cls+=' sat-day';
+    if(y===todayY && m===todayM && d===todayD) cls+=' today';
+    if(calState.selectedDate && calState.selectedDate.y===y && calState.selectedDate.m===m && calState.selectedDate.d===d) cls+=' selected';
+    html += `<div class="${cls}" data-d="${d}">${d}</div>`;
+  }
+  calDays.innerHTML = html;
+  calDays.querySelectorAll('.cal-day:not(.empty)').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const day = parseInt(el.dataset.d);
+      calState.selectedDate = { y, m, d: day };
+      manualYear.value = y + 543;
+      updateCalDisplay();
+      renderCalDays();
+      closeCalDropdown();
+    });
+  });
+
+  // Sync manual year
+  if(calState.selectedDate) manualYear.value = calState.selectedDate.y + 543;
+}
+
+function updateCalDisplay(){
+  if(!calState.selectedDate){
+    calDisplay.textContent = 'เลือกวันเกิด...';
+    return;
+  }
+  const {y,m,d} = calState.selectedDate;
+  const dow = new Date(y,m,d).getDay();
+  const be = y+543;
+  calDisplay.textContent = `วัน${TH_WEEKDAYS[dow]}ที่ ${d} ${TH_MONTHS[m]} พ.ศ. ${be} (ค.ศ. ${y})`;
+}
+
+function updateAsOfDate(){
+  const t = todayUTC();
+  asOfDate.value = formatDateThaiBoth(t);
+}
+
+// ============================================================
+// CORE ALGORITHM
+// ============================================================
+function buildSchedule(dob, natalId){
+  const si = PLANETS.findIndex(p=>p.id===natalId);
+  const segs = [];
+  let cum=0;
+  for(let i=0;i<PLANETS.length;i++){
+    const p = PLANETS[(si+i)%PLANETS.length];
+    const sDate = addYearsClamped(dob,cum);
+    const eDate = addYearsClamped(dob,cum+p.years);
+    segs.push({ planet:p, startAge:cum, endAge:cum+p.years, duration:p.years, startDate:sDate, endDate:eDate });
+    cum += p.years;
+  }
+  return segs;
+}
+
+function findSegment(segs,asof){
+  for(const s of segs){
+    if(asof.getTime()>=s.startDate.getTime() && asof.getTime()<s.endDate.getTime()) return s;
+  }
+  return null;
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+function renderDashboard(currentSeg, ageNow){
+  if(!currentSeg){ dashCard.innerHTML='<div style="padding:30px;text-align:center;font-size:1.3rem;">ครบ 108 ปีแล้ว</div>'; dashCard.style.background='#333'; return; }
+  const p = currentSeg.planet;
+  const txtC = bestTextColor(p.color);
+  dashCard.style.background = p.color;
+  dashCard.style.color = txtC;
+  dashCard.innerHTML = `
+    <div class="db-icon"><svg style="color:${txtC};" viewBox="0 0 64 64"><use href="#${p.icon}"></use></svg></div>
+    <div class="db-title">ขณะนี้พระเสวยอายุ คือ</div>
+    <div class="db-name">${esc(p.th)}</div>
+    <div class="db-age">ช่วงอายุ ${currentSeg.startAge}–${currentSeg.endAge} ปี (กำลัง ${p.years})</div>
+    <div class="db-offering">
+      <strong>เครื่องบูชาด้วยกำลัง ${p.years}:</strong><br>
+      ธูป ${p.years} ดอก · เทียน ${p.years} เล่ม · ดอกไม้ ${p.years} ดอก · เงิน ${p.years} บาท · ธง ${p.years} ผืน
+    </div>
+  `;
+}
+
+function renderSummary(dob, dow, natalPlanet, asof, currentSeg){
+  summaryGrid.innerHTML = '';
+  const dobStr = formatDateThaiBoth(dob);
+  const asofStr = formatDateThaiBoth(asof);
+  const age = diffYMD(dob,asof);
+  const boxes = [
+    ["วันเกิด", `${dobStr} <small>(วัน${TH_WEEKDAYS[dow]})</small>`],
+    ["พระประจำวันเกิด", `<span class="swatch" style="background:${natalPlanet.color}"></span> ${esc(natalPlanet.th)} (${esc(natalPlanet.dayTh)}) — กำลัง ${natalPlanet.years}`],
+    ["วันที่อ้างอิง", asofStr],
+    ["อายุ ณ วันอ้างอิง", `${age.years} ปี ${age.months} เดือน ${age.days} วัน`],
+    ["พระเสวยอายุปัจจุบัน", currentSeg ? `<span class="swatch" style="background:${currentSeg.planet.color}"></span> ${esc(currentSeg.planet.th)} — กำลัง ${currentSeg.planet.years}` : "ครบ 108 ปี"],
+    ["ครบรอบ 108 ปี", formatDateThaiBoth(addYearsClamped(dob,108))]
+  ];
+  boxes.forEach(([k,v])=>{
+    const d=document.createElement('div'); d.className='summary-box';
+    d.innerHTML=`<div class="k">${esc(k)}</div><div class="v">${v}</div>`;
+    summaryGrid.appendChild(d);
+  });
+}
+
+function renderNaksatra(dob, dow, birthHour){
+  const adYear = dob.getUTCFullYear();
+  const month1 = dob.getUTCMonth()+1;
+  const nYear = getNaksatraYear(adYear, month1);
+  const nIdx = getNaksatraIndex(nYear);
+  const nName = NAKSATRA_NAMES[nIdx];
+  const nAnimal = NAKSATRA_ANIMALS[nIdx];
+  const nBE = nYear + 543;
+
+  // Determine the astrological day of the week (with 6AM rule)
+  let astroDow = dow;
+  // The dow passed in is already adjusted for 6AM rule
+
+  // Day number for fortune table (1=อา, 2=จ, 3=อ, 4=พ, 5=พฤ, 6=ศ, 7=ส)
+  const dayNum = astroDow + 1; // JS 0=Sun → 1=อาทิตย์
+
+  naksatraContent.innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div style="font-size:3rem;">${nAnimal}</div>
+      <div>
+        <div style="font-size:1.4rem;font-weight:800;color:var(--gold-bright);">ปี${nName} ${nAnimal}</div>
+        <div style="color:var(--muted);font-size:0.9rem;">ปีนักษัตร พ.ศ. ${nBE} (ค.ศ. ${nYear}) — เริ่ม 1 เม.ย. ${nBE} ถึง 31 มี.ค. ${nBE+1}</div>
+        <div style="margin-top:6px;">วันเกิดทางโหราศาสตร์: <strong style="color:var(--gold);">วัน${TH_WEEKDAYS[astroDow]}</strong></div>
+      </div>
+    </div>
+  `;
+
+  // Fortune table
+  const fortuneRow = FORTUNE_DATA[nIdx];
+  let thtml = `<table class="fortune-tbl"><thead><tr><th>ปีนักษัตร</th>`;
+  FORTUNE_COLS.forEach(c=> thtml+=`<th>${c}</th>`);
+  thtml += `</tr></thead><tbody>`;
+
+  NAKSATRA_NAMES.forEach((name,i)=>{
+    const isActive = i===nIdx;
+    thtml += `<tr class="${isActive?'active-row':''}">`;
+    thtml += `<td style="font-weight:700;text-align:left;">${NAKSATRA_ANIMALS[i]} ${name}</td>`;
+    FORTUNE_DATA[i].forEach((val,ci)=>{
+      const dName = DAY_NUM_TO_NAME[val];
+      const dColor = DAY_NUM_TO_COLOR[val];
+      const isHighlight = isActive;
+      // Check if this fortune day matches the person's birth day
+      const isBirthDay = isActive && val === dayNum;
+      thtml += `<td class="${isHighlight?'fortune-highlight':''}" style="${isBirthDay?'outline:2px solid var(--gold);border-radius:6px;':''}">
+        <span class="swatch" style="background:${dColor};width:10px;height:10px;display:inline-block;border-radius:3px;margin-right:4px;"></span>
+        <span style="font-size:0.8rem;">${dName}</span>
+      </td>`;
+    });
+    thtml += `</tr>`;
+  });
+  thtml += `</tbody></table>`;
+
+  // Show which fortunes apply to the birth day
+  let birthDayFortunes = [];
+  fortuneRow.forEach((val,ci)=>{
+    if(val === dayNum) birthDayFortunes.push(FORTUNE_COLS[ci]);
+  });
+
+  let fortuneSummary = '';
+  if(birthDayFortunes.length > 0){
+    fortuneSummary = `<div style="margin-top:12px;padding:12px;border:1px solid var(--gold-dim);border-radius:10px;background:var(--gold-glow);">
+      <strong style="color:var(--gold);">วันเกิด (${TH_WEEKDAYS[astroDow]}) ตรงกับ:</strong> ${birthDayFortunes.map(f=>`<span class="badge badge-gold" style="margin:2px 4px;">${f}</span>`).join('')}
+    </div>`;
+  }
+
+  fortuneTableWrap.innerHTML = `
+    <div class="hint" style="margin-bottom:10px;">
+      ตารางวันมงคล/อัปมงคล ตามปีนักษัตร — แถวที่เน้นคือปีของท่าน (${nName})
+    </div>
+    <div class="tbl-wrap">${thtml}</div>
+    ${fortuneSummary}
+  `;
+}
+
+// ============================================================
+// WHEEL CHART (SVG ARC DONUT)
+// ============================================================
+function drawWheel(segments, currentSeg, dob, asof){
+  const svg = wheelSvg;
+  if(!svg) return;
+  const VB=720, cx=VB/2, cy=VB/2;
+  const outerR=240, innerR=155, midR=(outerR+innerR)/2;
+  const tickLen=12, labelR=outerR+40, labelR108=outerR+74;
+
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+
+  // Background
+  addRect(svg,0,0,VB,VB,"#0a0604");
+  addText(svg,14,22,"วงล้อพระเสวยอายุ (0–108 ปี)",{fontSize:13,fill:"#c89b3c",fontWeight:"700"});
+  addText(svg,VB-14,22,"↻ ตามเข็มนาฬิกา",{fontSize:11,fill:"#8a7560",textAnchor:"end"});
+
+  // Donut segments
+  segments.forEach(seg=>{
+    const sA=(seg.startAge/108)*360, eA=(seg.endAge/108)*360;
+    const d=donutPath(cx,cy,outerR,innerR,sA,eA);
+    const path=addPath(svg,d,seg.planet.color,"rgba(255,255,255,0.15)",1.5);
+    const title=document.createElementNS(SVG_NS,"title");
+    title.textContent=`${seg.planet.th} (${seg.planet.dayTh})\nกำลัง: ${seg.duration}\nอายุ: ${seg.startAge}–${seg.endAge}\nเริ่ม: ${formatDateThaiBoth(seg.startDate)}\nเปลี่ยน: ${formatDateThaiBoth(seg.endDate)}`;
+    path.appendChild(title);
+    if(currentSeg && currentSeg.startAge===seg.startAge){
+      addPath(svg,d,"none","#fff",3);
+    }
+    // Icon + label
+    const mA=(sA+eA)/2;
+    const pos=polar(cx,cy,midR,mA);
+    const tc=bestTextColor(seg.planet.color);
+    const g=document.createElementNS(SVG_NS,"g"); g.setAttribute("style",`color:${tc}`); svg.appendChild(g);
+    const sz=30;
+    const use=document.createElementNS(SVG_NS,"use");
+    use.setAttribute("href",`#${seg.planet.icon}`);
+    use.setAttribute("x",pos.x-sz/2); use.setAttribute("y",pos.y-sz/2-6);
+    use.setAttribute("width",sz); use.setAttribute("height",sz);
+    g.appendChild(use);
+    addText(svg,pos.x,pos.y+18,`${seg.duration}`,{fontSize:11,fill:tc,textAnchor:"middle",fontWeight:"800"});
+  });
+
+  // Inner circle
+  addCircle(svg,cx,cy,innerR-2,"#0a0604","rgba(200,155,60,0.2)",2);
+  addText(svg,cx,cy-22,"พระเสวยอายุ",{fontSize:15,fill:"#c89b3c",textAnchor:"middle",fontWeight:"800"});
+  addText(svg,cx,cy,`วันเกิด: ${shortBEDate(dob)}`,{fontSize:11,fill:"#8a7560",textAnchor:"middle"});
+  addText(svg,cx,cy+16,`อ้างอิง: ${shortBEDate(asof)}`,{fontSize:11,fill:"#8a7560",textAnchor:"middle"});
+  if(currentSeg){
+    addText(svg,cx,cy+38,`${currentSeg.planet.th} (${currentSeg.planet.years})`,{fontSize:13,fill:"#f5e6c8",textAnchor:"middle",fontWeight:"800"});
+    addRect(svg,cx-80,cy+50,160,8,currentSeg.planet.color,"rgba(200,155,60,0.3)",1,4);
+  }
+
+  // Outer ring
+  addCircle(svg,cx,cy,outerR,"none","rgba(200,155,60,0.2)",2);
+
+  // Boundary ticks
+  drawBoundary(svg,cx,cy,outerR,labelR,tickLen,0,0,dob,"0 ปี");
+  segments.forEach(seg=>{
+    const angle=(seg.endAge/108)*360;
+    const rL=seg.endAge===108?labelR108:labelR;
+    drawBoundary(svg,cx,cy,outerR,rL,tickLen,angle,seg.endAge,seg.endDate,`${seg.endAge} ปี`);
+  });
+}
+
+function drawBoundary(svg,cx,cy,outerR,labelR,tickLen,angle,age,date,ageLabel){
+  const p1=polar(cx,cy,outerR,angle), p2=polar(cx,cy,outerR+tickLen,angle);
+  const line=addLine(svg,p1.x,p1.y,p2.x,p2.y,"#8a7560",1.2);
+  const tip=document.createElementNS(SVG_NS,"title"); tip.textContent=`${ageLabel}: ${formatDateThaiBoth(date)}`; line.appendChild(tip);
+  const pL=polar(cx,cy,labelR,angle);
+  const anchor=anchorForAngle(angle);
+  addMultiText(svg,pL.x,pL.y,[ageLabel,shortBEDate(date)],anchor);
+}
+function anchorForAngle(a){ const r=(a-90)*Math.PI/180; const c=Math.cos(r); if(Math.abs(c)<0.25) return "middle"; return c>0?"start":"end"; }
+
+function addMultiText(svg,x,y,lines,anchor){
+  const t=document.createElementNS(SVG_NS,"text");
+  t.setAttribute("x",x); t.setAttribute("y",y);
+  t.setAttribute("text-anchor",anchor); t.setAttribute("dominant-baseline","middle");
+  svg.appendChild(t);
+  lines.forEach((line,i)=>{
+    const sp=document.createElementNS(SVG_NS,"tspan");
+    sp.setAttribute("x",x); sp.setAttribute("dy",i===0?"0":"13");
+    sp.textContent=line;
+    sp.setAttribute("font-size",i===0?"11":"10");
+    sp.setAttribute("font-weight",i===0?"700":"500");
+    sp.setAttribute("fill",i===0?"#f5e6c8":"#8a7560");
+    t.appendChild(sp);
+  });
+  return t;
+}
+
+function polar(cx,cy,r,deg){ const rad=(deg-90)*Math.PI/180; return {x:cx+r*Math.cos(rad),y:cy+r*Math.sin(rad)}; }
+function donutPath(cx,cy,rO,rI,sA,eA){
+  const sO=polar(cx,cy,rO,sA),eO=polar(cx,cy,rO,eA);
+  const sI=polar(cx,cy,rI,sA),eI=polar(cx,cy,rI,eA);
+  const la=(eA-sA>180)?1:0;
+  return `M${sO.x} ${sO.y} A${rO} ${rO} 0 ${la} 1 ${eO.x} ${eO.y} L${eI.x} ${eI.y} A${rI} ${rI} 0 ${la} 0 ${sI.x} ${sI.y} Z`;
+}
+
+// SVG helpers
+function addPath(svg,d,fill="none",stroke="none",sw=0){ const p=document.createElementNS(SVG_NS,"path"); p.setAttribute("d",d); p.setAttribute("fill",fill); p.setAttribute("stroke",stroke); p.setAttribute("stroke-width",sw); p.setAttribute("stroke-linejoin","round"); svg.appendChild(p); return p; }
+function addCircle(svg,cx,cy,r,fill="none",stroke="none",sw=0){ const c=document.createElementNS(SVG_NS,"circle"); c.setAttribute("cx",cx); c.setAttribute("cy",cy); c.setAttribute("r",r); c.setAttribute("fill",fill); c.setAttribute("stroke",stroke); c.setAttribute("stroke-width",sw); svg.appendChild(c); return c; }
+function addLine(svg,x1,y1,x2,y2,stroke="#000",sw=1){ const l=document.createElementNS(SVG_NS,"line"); l.setAttribute("x1",x1); l.setAttribute("y1",y1); l.setAttribute("x2",x2); l.setAttribute("y2",y2); l.setAttribute("stroke",stroke); l.setAttribute("stroke-width",sw); l.setAttribute("stroke-linecap","round"); svg.appendChild(l); return l; }
+function addRect(svg,x,y,w,h,fill,stroke="none",sw=0,rx=0){ const r=document.createElementNS(SVG_NS,"rect"); r.setAttribute("x",x); r.setAttribute("y",y); r.setAttribute("width",w); r.setAttribute("height",h); r.setAttribute("fill",fill); if(stroke!=="none"){ r.setAttribute("stroke",stroke); r.setAttribute("stroke-width",sw); } if(rx) r.setAttribute("rx",rx); svg.appendChild(r); return r; }
+function addText(svg,x,y,text,opts={}){ const t=document.createElementNS(SVG_NS,"text"); t.setAttribute("x",x); t.setAttribute("y",y); t.textContent=text; t.setAttribute("font-size",opts.fontSize||12); t.setAttribute("fill",opts.fill||"#f5e6c8"); t.setAttribute("font-weight",opts.fontWeight||"600"); t.setAttribute("text-anchor",opts.textAnchor||"start"); t.setAttribute("dominant-baseline","middle"); t.setAttribute("font-family","'Sarabun',sans-serif"); svg.appendChild(t); return t; }
+
+// ============================================================
+// TIMELINE (linear bar)
+// ============================================================
+function drawTimeline(segments, currentSeg){
+  const svg=timelineSvg;
+  const W=1200,H=220,BAR_Y=30,BAR_H=70,SC=W/108;
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+
+  addRect(svg,0,0,W,H,"#0a0604");
+  addText(svg,10,18,"ไทม์ไลน์พระเสวยอายุ (0–108 ปี)",{fontSize:13,fill:"#c89b3c",fontWeight:"700"});
+  addRect(svg,0,BAR_Y,W,BAR_H,"rgba(255,255,255,0.03)","rgba(200,155,60,0.15)",1);
+
+  segments.forEach(seg=>{
+    const x=seg.startAge*SC, w=seg.duration*SC;
+    const rect=addRect(svg,x,BAR_Y,w,BAR_H,seg.planet.color);
+    const title=document.createElementNS(SVG_NS,"title");
+    title.textContent=`${seg.planet.th}\nกำลัง: ${seg.duration}\nอายุ: ${seg.startAge}–${seg.endAge}`;
+    rect.appendChild(title);
+    const ccx=x+w/2, ccy=BAR_Y+BAR_H/2;
+    const tc=bestTextColor(seg.planet.color);
+    const g=document.createElementNS(SVG_NS,"g"); g.setAttribute("style",`color:${tc}`); svg.appendChild(g);
+    const use=document.createElementNS(SVG_NS,"use");
+    use.setAttribute("href",`#${seg.planet.icon}`);
+    use.setAttribute("x",ccx-14); use.setAttribute("y",ccy-20);
+    use.setAttribute("width",28); use.setAttribute("height",28);
+    g.appendChild(use);
+    addText(svg,ccx,ccy+20,`${seg.planet.th} (${seg.duration})`,{fontSize:w>90?11:9,fill:tc,textAnchor:"middle",fontWeight:currentSeg&&currentSeg.startAge===seg.startAge?"800":"600"});
+    if(currentSeg&&currentSeg.startAge===seg.startAge){
+      addRect(svg,x+1,BAR_Y+1,w-2,BAR_H-2,"none","#fff",2.5,6);
+    }
+  });
+
+  // Switch markers
+  segments.forEach((seg,idx)=>{
+    if(idx===segments.length-1) return;
+    const x=seg.endAge*SC;
+    addLine(svg,x,BAR_Y,x,BAR_Y+BAR_H+55,"rgba(200,155,60,0.4)",1);
+    addText(svg,x,BAR_Y+BAR_H+16,`${seg.endAge} ปี`,{fontSize:11,fill:"#f5e6c8",textAnchor:"middle",fontWeight:"700"});
+    addText(svg,x,BAR_Y+BAR_H+32,shortBEDate(seg.endDate),{fontSize:10,fill:"#8a7560",textAnchor:"middle"});
+  });
+  addText(svg,2,H-8,"0",{fontSize:10,fill:"#8a7560"});
+  addText(svg,W-2,H-8,"108",{fontSize:10,fill:"#8a7560",textAnchor:"end"});
+}
+
+// ============================================================
+// TABLES
+// ============================================================
+function renderTables(segments){
+  segTBody.innerHTML='';
+  segments.forEach(seg=>{
+    const tr=document.createElement('tr');
+    const ptd=document.createElement('td');
+    ptd.innerHTML=`<div class="planet-cell"><span class="swatch" style="background:${seg.planet.color}"></span><svg class="planet-icon-sm" viewBox="0 0 64 64" style="color:${bestTextColor(seg.planet.color)}"><use href="#${seg.planet.icon}"></use></svg><div>${esc(seg.planet.th)}<div style="font-weight:400;color:var(--muted);font-size:0.8rem;">${esc(seg.planet.dayTh)}</div></div></div>`;
+    tr.appendChild(ptd);
+    [seg.duration, seg.startAge, seg.endAge, formatDateThaiBoth(seg.startDate), formatDateThaiBoth(seg.endDate)].forEach(v=>{
+      const td=document.createElement('td'); td.textContent=String(v); tr.appendChild(td);
+    });
+    segTBody.appendChild(tr);
+  });
+
+  swTBody.innerHTML='';
+  for(let i=0;i<segments.length-1;i++){
+    const tr=document.createElement('tr');
+    [segments[i].endAge+' ปี', formatDateThaiBoth(segments[i].endDate), segments[i].planet.th, segments[i+1].planet.th].forEach(v=>{
+      const td=document.createElement('td'); td.textContent=v; tr.appendChild(td);
+    });
+    swTBody.appendChild(tr);
+  }
+  const last=segments[segments.length-1];
+  const trE=document.createElement('tr');
+  ['108 ปี', formatDateThaiBoth(last.endDate), last.planet.th, 'ครบ 108 ปี (จบรอบ)'].forEach(v=>{
+    const td=document.createElement('td'); td.textContent=v; trE.appendChild(td);
+  });
+  swTBody.appendChild(trE);
+}
+
+// ============================================================
+// BACKGROUND CANVAS
+// ============================================================
+class SimplexNoise{constructor(){this.p=new Uint8Array(256);for(let i=0;i<256;i++)this.p[i]=Math.floor(256*Math.random());this.perm=new Uint8Array(512);for(let i=0;i<512;i++)this.perm[i]=this.p[i&255]}dot(g,x,y){return g[0]*x+g[1]*y}noise(xin,yin){const F2=.5*(Math.sqrt(3)-1),G2=(3-Math.sqrt(3))/6;let i=Math.floor(xin+((xin+yin)*F2)),j=Math.floor(yin+((xin+yin)*F2)),t=(i+j)*G2,X0=i-t,Y0=j-t,x0=xin-X0,y0=yin-Y0;let i1,j1;if(x0>y0){i1=1;j1=0}else{i1=0;j1=1}let x1=x0-i1+G2,y1=y0-j1+G2,x2=x0-1+2*G2,y2=y0-1+2*G2,ii=i&255,jj=j&255,gi0=this.perm[ii+this.perm[jj]]%12,gi1=this.perm[ii+i1+this.perm[jj+j1]]%12,gi2=this.perm[ii+1+this.perm[jj+1]]%12,t0=.5-x0*x0-y0*y0,n0=t0<0?0:Math.pow(t0,4)*this.dot([Math.cos(gi0),Math.sin(gi0)],x0,y0),t1=.5-x1*x1-y1*y1,n1=t1<0?0:Math.pow(t1,4)*this.dot([Math.cos(gi1),Math.sin(gi1)],x1,y1),t2=.5-x2*x2-y2*y2,n2=t2<0?0:Math.pow(t2,4)*this.dot([Math.cos(gi2),Math.sin(gi2)],x2,y2);return 70*(n0+n1+n2)}}
+
+function initCanvas(){
+  const canvas=$("sacred-canvas"), ctx=canvas.getContext('2d');
+  const simplex=new SimplexNoise();
+  let W,H,particles=[];
+  function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; createParticles(); }
+  function createParticles(){
+    particles=[];
+    const count=Math.min(60, Math.floor(W*H/20000));
+    for(let i=0;i<count;i++){
+      particles.push({ x:Math.random()*W, y:Math.random()*H, size:Math.random()*2+0.5, speed:Math.random()*0.3+0.1 });
+    }
+  }
+  let t=0;
+  function animate(){
+    ctx.fillStyle='rgba(10,6,4,0.15)';
+    ctx.fillRect(0,0,W,H);
+    t+=0.003;
+    particles.forEach(p=>{
+      const nx=simplex.noise(p.x*0.003+t, p.y*0.003)*2;
+      const ny=simplex.noise(p.x*0.003, p.y*0.003+t)*2;
+      p.x+=nx*p.speed; p.y+=ny*p.speed;
+      if(p.x<0) p.x=W; if(p.x>W) p.x=0;
+      if(p.y<0) p.y=H; if(p.y>H) p.y=0;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.size,0,Math.PI*2);
+      ctx.fillStyle=`rgba(200,155,60,${0.15+p.size*0.1})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+  resize();
+  window.addEventListener('resize',resize);
+  animate();
+}
+
+// ============================================================
+// APP CONTROLLER
+// ============================================================
+window.APP = {
+  lang: 'th',
+
+  toggleLang(){
+    this.lang = this.lang==='en'?'th':'en';
+    document.body.dataset.lang = this.lang;
+  },
+
+  adjYear(delta){
+    const cur = parseInt(manualYear.value)||0;
+    manualYear.value = cur + delta;
+    // Sync calendar
+    const mode = eraMode.value;
+    const adY = normalizeYear(manualYear.value, mode, '');
+    if(calState.selectedDate){
+      calState.selectedDate.y = adY;
+      calState.viewYear = adY;
+      renderCalDays();
+      updateCalDisplay();
+    } else {
+      calState.viewYear = adY;
+      renderCalDays();
+    }
+  },
+
+  compute(){
+    hideError();
+    // Get date from calendar picker
+    if(!calState.selectedDate){
+      return showError("กรุณาเลือกวันเกิดจากปฏิทิน");
+    }
+    const {y: adYear, m: month0, d: day} = calState.selectedDate;
+    // month0 is 0-indexed
+    const month1 = month0 + 1;
+
+    // Validate
+    const dim = daysInMonth(adYear, month1);
+    if(day<1||day>dim) return showError("วันที่ไม่ถูกต้อง");
+
+    const dob = dateUTC(adYear, month1, day);
+    const asof = todayUTC();
+
+    if(asof.getTime() < dob.getTime()) return showError("วันที่อ้างอิงต้องไม่ก่อนวันเกิด");
+
+    // Birth time for 6AM rule & Rahu
+    const timeVal = birthTime.value || "09:00";
+    const [hr] = timeVal.split(':').map(Number);
+
+    // Astrological day: if born before 06:00, count as previous day
+    let astroDate = new Date(Date.UTC(adYear, month0, day));
+    const originalDow = astroDate.getUTCDay();
+    if(hr < 6){
+      astroDate = new Date(astroDate.getTime() - 86400000);
+    }
+    const astroDow = astroDate.getUTCDay(); // 0=Sun
+
+    // Determine natal planet
+    let natalId;
+    if(astroDow === 3){ // Wednesday
+      let isRahu = false;
+      if(originalDow === 4) isRahu = true; // Came from Thu before 6AM
+      else if(originalDow === 3 && hr >= 18) isRahu = true; // Wed night
+      natalId = isRahu ? "RAHU" : "MERCURY";
+    } else {
+      natalId = START_BY_DOW[astroDow];
+    }
+
+    const natal = PLANETS.find(p=>p.id===natalId);
+    const schedule = buildSchedule(dob, natalId);
+    const currentSeg = findSegment(schedule, asof);
+    const ageNow = diffYMD(dob, asof);
+
+    // Render all
+    renderDashboard(currentSeg, ageNow);
+    renderSummary(dob, astroDow, natal, asof, currentSeg);
+    renderNaksatra(dob, astroDow, hr);
+    drawWheel(schedule, currentSeg, dob, asof);
+    drawTimeline(schedule, currentSeg);
+    renderTables(schedule);
+
+    // Show sections
+    [dashCard,summaryCard,naksatraCard,wheelCard,timelineCard,tablesCard].forEach(el=>{
+      el.classList.remove('section-hidden');
+      el.classList.add('section-visible');
+    });
+
+    // Scroll to dashboard
+    setTimeout(()=> dashCard.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+  }
+};
+
+function showError(msg){ errMsg.textContent=msg; errMsg.style.display='block'; }
+function hideError(){ errMsg.style.display='none'; errMsg.textContent=''; }
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){
+  document.body.dataset.lang = 'th';
+  initCalendar();
+  initCanvas();
+
+  computeBtn.addEventListener('click', ()=> APP.compute());
+
+  // Sync manual year → calendar
+  manualYear.addEventListener('change',()=>{
+    const raw = parseInt(manualYear.value);
+    if(!raw) return;
+    const adY = normalizeYear(raw, eraMode.value, '');
+    calState.viewYear = adY;
+    if(calState.selectedDate) calState.selectedDate.y = adY;
+    renderCalDays();
+    updateCalDisplay();
+  });
+
+  // Hide loader
+  setTimeout(()=> $("loading-overlay").classList.add('hidden'), 600);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
+</body>
+</html>
