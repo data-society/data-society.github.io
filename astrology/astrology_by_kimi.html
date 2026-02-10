@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>พิธีสะเดาะเคราะห์ - คำนวณพระเสวยอายุ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        }
+        .thai-num {
+            font-feature-settings: "thai" on;
+        }
+        .planet-icon {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .timeline-segment {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .timeline-segment:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+            z-index: 10;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+            50% { box-shadow: 0 0 30px rgba(0,0,0,0.2); }
+        }
+        .current-active {
+            animation: pulse-glow 2s infinite;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.6;
+            transition: 0.2s;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .be-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.25rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 text-gray-800">
+
+    <div class="max-w-6xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2 mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-amber-900 tracking-tight">พิธีสะเดาะเคราะห์ พระเสวยอายุ</h1>
+            <p class="text-amber-800 text-lg">คำนวณตามตำราดั้งเดิม รวมกำลัง ๑๐๘ ปี</p>
+        </div>
+
+        <!-- Input Section -->
+        <div class="glass-panel rounded-2xl p-6 md:p-8 shadow-xl">
+            <div class="grid md:grid-cols-2 gap-6 items-end">
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-700 uppercase tracking-wide">วัน เดือน ปี เกิด</label>
+                    <div class="relative">
+                        <input type="date" id="dobInput" 
+                            class="w-full px-4 py-3 rounded-xl border-2 border-amber-200 focus:border-amber-500 focus:ring-4 focus:ring-amber-100 transition-all text-lg outline-none bg-white/80"
+                            placeholder="เลือกวันเกิด">
+                        <div class="absolute right-3 top-3 text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded">
+                            ค.ศ./พ.ศ.
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-1">
+                        * ระบบรองรับทั้ง ค.ศ. (AD) และ พ.ศ. (BE) โดยอัตโนมัติ (พ.ศ. > 2400)
+                    </p>
+                </div>
+                
+                <div class="flex gap-3">
+                    <button onclick="calculate()" 
+                        class="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all transform active:scale-95">
+                        คำนวณพระเสวยอายุ
+                    </button>
+                    <button onclick="setToday()" 
+                        class="px-4 py-3 bg-white border-2 border-amber-300 text-amber-800 rounded-xl hover:bg-amber-50 transition-colors font-medium">
+                        วันนี้
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Year Navigator -->
+            <div class="mt-6 pt-6 border-t border-amber-200">
+                <label class="block text-xs font-semibold text-gray-500 uppercase mb-2">เลื่อนปีอย่างรวดเร็ว (ถ้าไม่ทราบวันแน่นอน)</label>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="adjustYear(-10)" class="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50">-10 ปี</button>
+                    <button onclick="adjustYear(-5)" class="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50">-5 ปี</button>
+                    <button onclick="adjustYear(-1)" class="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50">-1 ปี</button>
+                    <div class="flex-1 min-w-[120px]">
+                        <input type="number" id="yearInput" placeholder="พ.ศ. หรือ ค.ศ." 
+                            class="w-full px-3 py-1 border border-gray-300 rounded-lg text-center focus:ring-2 focus:ring-amber-500 outline-none">
+                    </div>
+                    <button onclick="adjustYear(1)" class="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50">+1 ปี</button>
+                    <button onclick="adjustYear(5)" class="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50">+5 ปี</button>
+                    <button onclick="adjustYear(10)" class="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50">+10 ปี</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Status -->
+        <div id="currentStatus" class="hidden glass-panel rounded-2xl p-6 shadow-xl border-l-8 transition-all duration-500">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <div id="currentIcon" class="w-24 h-24 rounded-full flex items-center justify-center text-4xl shadow-2xl bg-white">
+                    <!-- Icon injected here -->
+                </div>
+                <div class="flex-1 text-center md:text-left space-y-2">
+                    <div class="text-sm font-semibold text-gray-500 uppercase tracking-wider">พระเสวยอายุปัจจุบัน</div>
+                    <h2 id="currentPlanet" class="text-3xl md:text-4xl font-bold text-gray-900"></h2>
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm">
+                        <span class="bg-white/80 px-3 py-1 rounded-full border border-gray-200">
+                            อายุ <span id="currentAge" class="font-bold text-lg"></span> ปี
+                        </span>
+                        <span class="bg-white/80 px-3 py-1 rounded-full border border-gray-200">
+                            กำลัง <span id="currentPower" class="font-bold text-lg"></span> ปี
+                        </span>
+                        <span id="currentColor" class="px-3 py-1 rounded-full text-white font-medium shadow-sm"></span>
+                    </div>
+                </div>
+                <div class="text-center md:text-right space-y-1 text-sm text-gray-600 bg-white/50 p-4 rounded-xl">
+                    <div>เริ่ม: <span id="periodStart" class="font-semibold"></span></div>
+                    <div>สิ้นสุด: <span id="periodEnd" class="font-semibold"></span></div>
+                    <div class="pt-2 border-t border-gray-300 mt-2 text-xs">
+                        เครื่องบูชา: เงิน <span id="offeringNum"></span> ธูป <span id="offeringNum2"></span> เทียน <span id="offeringNum3"></span> ดอกไม้ <span id="offeringNum4"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Visualization -->
+        <div id="timelineSection" class="hidden space-y-4">
+            <h3 class="text-xl font-bold text-amber-900 flex items-center gap-2">
+                <span class="w-2 h-8 bg-amber-600 rounded-full"></span>
+                แผนภูมิ ๑๐๘ ปี (วงจรพระเสวยอายุ)
+            </h3>
+            
+            <div class="glass-panel rounded-2xl p-6 shadow-xl overflow-x-auto">
+                <div class="min-w-[800px] space-y-4">
+                    <!-- Timeline Bar -->
+                    <div class="relative h-16 flex rounded-xl overflow-hidden shadow-inner bg-gray-200" id="timelineBar">
+                        <!-- Segments injected here -->
+                    </div>
+                    
+                    <!-- Age Markers -->
+                    <div class="relative h-6 text-xs text-gray-600 font-medium" id="ageMarkers">
+                        <!-- Markers injected here -->
+                    </div>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-3 justify-center text-xs">
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-red-600"></span> อาทิตย์ (6)</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-amber-500"></span> จันทร์ (15)</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-pink-500"></span> อังคาร (8)</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-emerald-500"></span> พุธ (17)</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-violet-600"></span> เสาร์ (10)</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-orange-600"></span> พฤหัส (19)</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-gray-800"></span> ราหู (12)</div>
+                    <div class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-blue-500"></span> ศุกร์ (21)</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Table -->
+        <div id="detailsSection" class="hidden glass-panel rounded-2xl p-6 shadow-xl">
+            <h3 class="text-xl font-bold text-amber-900 mb-4 flex items-center gap-2">
+                <span class="w-2 h-8 bg-amber-600 rounded-full"></span>
+                รายละเอียดการเปลี่ยนแปลงพระเสวยอายุ
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b-2 border-amber-200 text-left">
+                            <th class="pb-3 font-bold text-gray-700">ลำดับ</th>
+                            <th class="pb-3 font-bold text-gray-700">พระเสวยอายุ</th>
+                            <th class="pb-3 font-bold text-gray-700">สีประจำ</th>
+                            <th class="pb-3 font-bold text-gray-700">กำลัง (ปี)</th>
+                            <th class="pb-3 font-bold text-gray-700">ช่วงอายุ</th>
+                            <th class="pb-3 font-bold text-gray-700">วันที่เริ่ม (พ.ศ.)</th>
+                            <th class="pb-3 font-bold text-gray-700">วันที่สิ้นสุด (พ.ศ.)</th>
+                            <th class="pb-3 font-bold text-gray-700 text-right">เครื่องบูชา</th>
+                        </tr>
+                    </thead>
+                    <tbody id="detailsTableBody" class="divide-y divide-gray-100">
+                        <!-- Rows injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Planet Data Configuration
+        const planets = [
+            { 
+                id: 'sun', 
+                thai: 'พระอาทิตย์', 
+                short: 'อา.', 
+                years: 6, 
+                color: '#DC2626', 
+                bgClass: 'bg-red-600',
+                textClass: 'text-red-600',
+                symbol: 'sun',
+                desc: 'อาทิตย์'
+            },
+            { 
+                id: 'moon', 
+                thai: 'พระจันทร์', 
+                short: 'จ.', 
+                years: 15, 
+                color: '#F59E0B', 
+                bgClass: 'bg-amber-500',
+                textClass: 'text-amber-600',
+                symbol: 'moon',
+                desc: 'จันทร์'
+            },
+            { 
+                id: 'mars', 
+                thai: 'พระอังคาร', 
+                short: 'อ.', 
+                years: 8, 
+                color: '#EC4899', 
+                bgClass: 'bg-pink-500',
+                textClass: 'text-pink-600',
+                symbol: 'mars',
+                desc: 'อังคาร'
+            },
+            { 
+                id: 'mercury', 
+                thai: 'พระพุธ', 
+                short: 'พ.', 
+                years: 17, 
+                color: '#10B981', 
+                bgClass: 'bg-emerald-500',
+                textClass: 'text-emerald-600',
+                symbol: 'mercury',
+                desc: 'พุธ'
+            },
+            { 
+                id: 'saturn', 
+                thai: 'พระเสาร์', 
+                short: 'ส.', 
+                years: 10, 
+                color: '#7C3AED', 
+                bgClass: 'bg-violet-600',
+                textClass: 'text-violet-600',
+                symbol: 'saturn',
+                desc: 'เสาร์'
+            },
+            { 
+                id: 'jupiter', 
+                thai: 'พระพฤหัสบดี', 
+                short: 'พฤ.', 
+                years: 19, 
+                color: '#EA580C', 
+                bgClass: 'bg-orange-600',
+                textClass: 'text-orange-600',
+                symbol: 'jupiter',
+                desc: 'พฤหัส'
+            },
+            { 
+                id: 'rahu', 
+                thai: 'พระราหู', 
+                short: 'ร.', 
+                years: 12, 
+                color: '#1F2937', 
+                bgClass: 'bg-gray-800',
+                textClass: 'text-gray-800',
+                symbol: 'rahu',
+                desc: 'ราหู'
+            },
+            { 
+                id: 'venus', 
+                thai: 'พระศุกร์', 
+                short: 'ศ.', 
+                years: 21, 
+                color: '#3B82F6', 
+                bgClass: 'bg-blue-500',
+                textClass: 'text-blue-600',
+                symbol: 'venus',
+                desc: 'ศุกร์'
+            }
+        ];
+
+        // Day of week mapping (0 = Sunday in JavaScript)
+        const dayMapping = {
+            0: 'sun',      // Sunday
+            1: 'moon',     // Monday
+            2: 'mars',     // Tuesday
+            3: 'mercury',  // Wednesday
+            4: 'jupiter',  // Thursday
+            5: 'venus',    // Friday
+            6: 'saturn'    // Saturday
+        };
+
+        // SVG Icons
+        const icons = {
+            sun: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="50" r="18" fill="currentColor"/><g stroke="currentColor" stroke-width="4" stroke-linecap="round"><line x1="50" y1="10" x2="50" y2="22"/><line x1="50" y1="78" x2="50" y2="90"/><line x1="10" y1="50" x2="22" y2="50"/><line x1="78" y1="50" x2="90" y2="50"/><line x1="22" y1="22" x2="30" y2="30"/><line x1="70" y1="70" x2="78" y2="78"/><line x1="22" y1="78" x2="30" y2="70"/><line x1="70" y1="30" x2="78" y2="22"/></g></svg>`,
+            
+            moon: `<svg viewBox="0 0 100 100" class="w-full h-full"><path d="M60 15 A35 35 0 1 1 40 85 A25 25 0 1 0 60 15 Z" fill="currentColor"/></svg>`,
+            
+            mars: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="40" cy="55" r="20" fill="none" stroke="currentColor" stroke-width="4"/><line x1="55" y1="40" x2="85" y2="10" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><polyline points="70,10 85,10 85,25" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+            
+            mercury: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="35" r="15" fill="none" stroke="currentColor" stroke-width="4"/><line x1="50" y1="50" x2="50" y2="80" stroke="currentColor" stroke-width="4"/><line x1="35" y1="65" x2="65" y2="65" stroke="currentColor" stroke-width="4"/><path d="M40 25 L45 30 M60 25 L55 30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`,
+            
+            saturn: `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="35" y1="20" x2="65" y2="20" stroke="currentColor" stroke-width="4"/><line x1="50" y1="20" x2="50" y2="80" stroke="currentColor" stroke-width="4"/><line x1="30" y1="80" x2="70" y2="80" stroke="currentColor" stroke-width="4"/><line x1="35" y1="50" x2="65" y2="50" stroke="currentColor" stroke-width="4"/></svg>`,
+            
+            jupiter: `<svg viewBox="0 0 100 100" class="w-full h-full"><line x1="30" y1="25" x2="70" y2="25" stroke="currentColor" stroke-width="4"/><line x1="50" y1="25" x2="50" y2="55" stroke="currentColor" stroke-width="4"/><path d="M30 55 Q50 75 70 55" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg>`,
+            
+            rahu: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="45" r="22" fill="currentColor" opacity="0.3"/><circle cx="50" cy="45" r="15" fill="currentColor"/><path d="M50 60 L50 85 M35 75 L65 75" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="35" r="5" fill="white" opacity="0.6"/></svg>`,
+            
+            venus: `<svg viewBox="0 0 100 100" class="w-full h-full"><circle cx="50" cy="40" r="18" fill="none" stroke="currentColor" stroke-width="4"/><line x1="50" y1="58" x2="50" y2="85" stroke="currentColor" stroke-width="4"/><line x1="35" y1="72" x2="65" y2="72" stroke="currentColor" stroke-width="4"/></svg>`
+        };
+
+        function toThaiNum(num) {
+            const thai = ['๐', '๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙'];
+            return num.toString().split('').map(d => thai[parseInt(d)] || d).join('');
+        }
+
+        function formatDateBE(date) {
+            const d = new Date(date);
+            const day = d.getDate();
+            const month = d.getMonth() + 1;
+            const yearBE = d.getFullYear() + 543;
+            return `${day}/${month}/${yearBE}`;
+        }
+
+        function getThaiDayName(dayIndex) {
+            const days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+            return days[dayIndex];
+        }
+
+        function calculatePeriods(dob) {
+            const dayOfWeek = dob.getDay();
+            const startPlanetId = dayMapping[dayOfWeek];
+            
+            // Find starting index
+            let startIndex = planets.findIndex(p => p.id === startPlanetId);
+            if (startIndex === -1) startIndex = 0;
+            
+            const periods = [];
+            let currentDate = new Date(dob);
+            let cumulativeYears = 0;
+            
+            for (let i = 0; i < 8; i++) {
+                const planetIndex = (startIndex + i) % 8;
+                const planet = planets[planetIndex];
+                
+                const start = new Date(currentDate);
+                const end = new Date(currentDate);
+                end.setFullYear(end.getFullYear() + planet.years);
+                
+                // Handle Feb 29 -> Mar 1 in non-leap years (JS automatic)
+                // But we keep it as is since JS handles overflow
+                
+                periods.push({
+                    planet: planet,
+                    startDate: start,
+                    endDate: end,
+                    startAge: cumulativeYears,
+                    endAge: cumulativeYears + planet.years,
+                    isCurrent: false
+                });
+                
+                cumulativeYears += planet.years;
+                currentDate = end;
+            }
+            
+            return periods;
+        }
+
+        function calculate() {
+            const input = document.getElementById('dobInput').value;
+            if (!input) {
+                alert('กรุณาเลือกวันเกิด');
+                return;
+            }
+            
+            let [year, month, day] = input.split('-').map(Number);
+            
+            // Auto-detect BE (Buddhist Era)
+            // If year > 2400, assume it's BE and convert to AD
+            if (year > 2400) {
+                year = year - 543;
+            }
+            
+            const dob = new Date(year, month - 1, day);
+            const today = new Date();
+            
+            // Calculate periods
+            const periods = calculatePeriods(dob);
+            
+            // Find current period
+            let currentPeriod = null;
+            let currentAge = 0;
+            
+            for (let period of periods) {
+                if (today >= period.startDate && today < period.endDate) {
+                    period.isCurrent = true;
+                    currentPeriod = period;
+                    
+                    // Calculate exact age
+                    const diffTime = Math.abs(today - dob);
+                    currentAge = Math.floor(diffTime / (1000 * 60 * 60 * 24 * 365.25));
+                    break;
+                }
+            }
+            
+            // If today is after all periods (age > 108), use last period
+            if (!currentPeriod && today >= periods[periods.length-1].endDate) {
+                currentPeriod = periods[periods.length-1];
+                currentPeriod.isCurrent = true;
+                currentAge = 108;
+            }
+            
+            displayResults(periods, currentPeriod, currentAge, dob);
+        }
+
+        function displayResults(periods, current, age, dob) {
+            // Show sections
+            document.getElementById('currentStatus').classList.remove('hidden');
+            document.getElementById('timelineSection').classList.remove('hidden');
+            document.getElementById('detailsSection').classList.remove('hidden');
+            
+            // Current Status
+            const statusDiv = document.getElementById('currentStatus');
+            statusDiv.style.borderColor = current.planet.color;
+            
+            const iconDiv = document.getElementById('currentIcon');
+            iconDiv.innerHTML = icons[current.planet.symbol];
+            iconDiv.style.color = current.planet.color;
+            
+            document.getElementById('currentPlanet').textContent = current.planet.thai;
+            document.getElementById('currentPlanet').style.color = current.planet.color;
+            document.getElementById('currentAge').textContent = age;
+            document.getElementById('currentPower').textContent = current.planet.years;
+            
+            const colorBadge = document.getElementById('currentColor');
+            colorBadge.textContent = current.planet.color === '#DC2626' ? 'สีแดง' : 
+                                    current.planet.color === '#F59E0B' ? 'สีเหลือง' :
+                                    current.planet.color === '#EC4899' ? 'สีชมพู' :
+                                    current.planet.color === '#10B981' ? 'สีเขียว' :
+                                    current.planet.color === '#7C3AED' ? 'สีม่วง' :
+                                    current.planet.color === '#EA580C' ? 'สีส้ม' :
+                                    current.planet.color === '#1F2937' ? 'สีดำ' : 'สีฟ้า/ขาว';
+            colorBadge.style.backgroundColor = current.planet.color;
+            
+            document.getElementById('periodStart').textContent = formatDateBE(current.startDate) + ' (' + getThaiDayName(current.startDate.getDay()) + ')';
+            document.getElementById('periodEnd').textContent = formatDateBE(current.endDate) + ' (' + getThaiDayName(current.endDate.getDay()) + ')';
+            
+            // Offerings
+            document.getElementById('offeringNum').textContent = current.planet.years;
+            document.getElementById('offeringNum2').textContent = current.planet.years;
+            document.getElementById('offeringNum3').textContent = current.planet.years;
+            document.getElementById('offeringNum4').textContent = current.planet.years;
+            
+            // Timeline
+            const timelineBar = document.getElementById('timelineBar');
+            timelineBar.innerHTML = '';
+            
+            periods.forEach((period, idx) => {
+                const width = (period.planet.years / 108) * 100;
+                const segment = document.createElement('div');
+                segment.className = `timeline-segment relative h-full ${period.isCurrent ? 'current-active ring-2 ring-white' : ''}`;
+                segment.style.width = `${width}%`;
+                segment.style.backgroundColor = period.planet.color;
+                segment.title = `${period.planet.thai} (${period.planet.years} ปี) อายุ ${period.startAge}-${period.endAge}`;
+                
+                // Add label if wide enough
+                if (width > 6) {
+                    segment.innerHTML = `<span class="absolute inset-0 flex items-center justify-center text-white text-xs font-bold opacity-90">${period.planet.short}</span>`;
+                }
+                
+                timelineBar.appendChild(segment);
+            });
+            
+            // Age markers
+            const markersDiv = document.getElementById('ageMarkers');
+            markersDiv.innerHTML = '';
+            for (let i = 0; i <= 108; i += 12) {
+                const left = (i / 108) * 100;
+                const marker = document.createElement('div');
+                marker.className = 'absolute transform -translate-x-1/2';
+                marker.style.left = `${left}%`;
+                marker.textContent = i;
+                markersDiv.appendChild(marker);
+            }
+            
+            // Details Table
+            const tbody = document.getElementById('detailsTableBody');
+            tbody.innerHTML = '';
+            
+            periods.forEach((period, idx) => {
+                const row = document.createElement('tr');
+                row.className = period.isCurrent ? 'bg-amber-50 font-semibold' : 'hover:bg-gray-50';
+                
+                row.innerHTML = `
+                    <td class="py-3 pl-2">${idx + 1}</td>
+                    <td class="py-3">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white" style="background-color: ${period.planet.color}">
+                                <div class="w-5 h-5">${icons[period.planet.symbol]}</div>
+                            </div>
+                            <span>${period.planet.thai}</span>
+                        </div>
+                    </td>
+                    <td class="py-3">
+                        <span class="px-2 py-1 rounded text-white text-xs" style="background-color: ${period.planet.color}">
+                            ${period.planet.color === '#DC2626' ? 'แดง' : 
+                              period.planet.color === '#F59E0B' ? 'เหลือง' :
+                              period.planet.color === '#EC4899' ? 'ชมพู' :
+                              period.planet.color === '#10B981' ? 'เขียว' :
+                              period.planet.color === '#7C3AED' ? 'ม่วง' :
+                              period.planet.color === '#EA580C' ? 'ส้ม' :
+                              period.planet.color === '#1F2937' ? 'ดำ' : 'ฟ้า'}
+                        </span>
+                    </td>
+                    <td class="py-3">${period.planet.years}</td>
+                    <td class="py-3">${period.startAge} - ${period.endAge}</td>
+                    <td class="py-3 font-mono text-xs">${formatDateBE(period.startDate)}</td>
+                    <td class="py-3 font-mono text-xs">${formatDateBE(period.endDate)}</td>
+                    <td class="py-3 text-right text-xs text-gray-600">
+                        เงิน ${period.planet.years} ธูป ${period.planet.years} เทียน ${period.planet.years} ดอกไม้ ${period.planet.years}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Scroll to results
+            document.getElementById('currentStatus').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function adjustYear(delta) {
+            const input = document.getElementById('dobInput');
+            const yearInput = document.getElementById('yearInput');
+            
+            if (!input.value && !yearInput.value) {
+                // Set to current year - 30 as default
+                const now = new Date();
+                const defaultYear = now.getFullYear() - 30;
+                input.value = `${defaultYear}-01-01`;
+                yearInput.value = defaultYear + 543; // Show BE
+                return;
+            }
+            
+            let currentDate;
+            if (input.value) {
+                currentDate = new Date(input.value);
+            } else if (yearInput.value) {
+                let year = parseInt(yearInput.value);
+                if (year > 2400) year -= 543;
+                currentDate = new Date(year, 0, 1);
+            } else {
+                return;
+            }
+            
+            let newYear = currentDate.getFullYear() + delta;
+            if (newYear < 1800) newYear = 1800;
+            if (newYear > 2100) newYear = 2100;
+            
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const day = String(currentDate.getDate()).padStart(2, '0');
+            input.value = `${newYear}-${month}-${day}`;
+            yearInput.value = newYear + 543; // Show BE
+        }
+
+        function setToday() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('dobInput').value = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('yearInput').value = yyyy + 543;
+            calculate();
+        }
+
+        // Year input handler
+        document.getElementById('yearInput').addEventListener('change', function(e) {
+            let year = parseInt(e.target.value);
+            if (year > 2400) year -= 543; // Convert BE to AD for date input
+            
+            const input = document.getElementById('dobInput');
+            if (input.value) {
+                const parts = input.value.split('-');
+                input.value = `${year}-${parts[1]}-${parts[2]}`;
+            } else {
+                input.value = `${year}-01-01`;
+            }
+        });
+
+        // Initialize with empty state
+        document.addEventListener('DOMContentLoaded', () => {
+            const now = new Date();
+            const defaultYear = now.getFullYear() - 30; // Default to 30 years ago
+            const yyyy = defaultYear;
+            const mm = '01';
+            const dd = '01';
+            document.getElementById('dobInput').value = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('yearInput').value = defaultYear + 543;
+        });
+    </script>
+</body>
+</html>
