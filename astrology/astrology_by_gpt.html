@@ -1,0 +1,1108 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>เครื่องคำนวณ “พระเสวยอายุ” (รอบ 108 ปี)</title>
+  <style>
+    :root{
+      /* Thai weekday colors (adjust hex if you want different shades) */
+      --sun:    #E53935; /* อาทิตย์ - แดง */
+      --moon:   #FDD835; /* จันทร์ - เหลือง */
+      --mars:   #D81B60; /* อังคาร - ชมพู */
+      --mercury:#43A047; /* พุธ - เขียว */
+      --jupiter:#FB8C00; /* พฤหัส - แสด/ส้ม */
+      --venus:  #1E88E5; /* ศุกร์ - ฟ้า/น้ำเงิน */
+      --saturn: #8E24AA; /* เสาร์ - ม่วง */
+      --rahu:   #212121; /* ราหู - ดำ */
+      --fg: #111;
+      --muted:#666;
+      --border:#ddd;
+      --card:#fff;
+      --bg:#f6f7f9;
+    }
+
+    body{
+      margin:0;
+      background:var(--bg);
+      color:var(--fg);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", "Noto Sans", sans-serif;
+      line-height:1.45;
+    }
+
+    .container{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1{
+      margin: 0 0 10px 0;
+      font-size: 1.55rem;
+    }
+    p{ margin: 6px 0; color: var(--muted); }
+
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 14px;
+      margin: 14px 0;
+      box-shadow: 0 1px 0 rgba(0,0,0,0.03);
+    }
+
+    .grid{
+      display:grid;
+      gap:12px;
+      grid-template-columns: repeat(12, 1fr);
+      align-items:end;
+    }
+    .col-3{ grid-column: span 3; }
+    .col-4{ grid-column: span 4; }
+    .col-6{ grid-column: span 6; }
+    .col-8{ grid-column: span 8; }
+    .col-12{ grid-column: span 12; }
+
+    label{
+      display:block;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input, select, button{
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      font-size: 1rem;
+    }
+
+    button{
+      cursor: pointer;
+      font-weight: 600;
+      background: #111;
+      color: #fff;
+      border-color:#111;
+    }
+    button.secondary{
+      background:#fff;
+      color:#111;
+      border-color: var(--border);
+      font-weight:600;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .row > * { flex:1; }
+
+    .hint{
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-top:6px;
+    }
+
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:6px 10px;
+      background:#fff;
+      font-size:0.95rem;
+    }
+    .swatch{
+      width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,0.15);
+      display:inline-block;
+      vertical-align:middle;
+    }
+
+    .summary-grid{
+      display:grid;
+      gap:12px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .summary-grid .box{
+      grid-column: span 6;
+      border:1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background:#fff;
+    }
+    .k{
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom:6px;
+    }
+    .v{
+      font-size: 1.05rem;
+      font-weight: 650;
+    }
+    .v small{ font-weight: 500; color: var(--muted); }
+
+    .timeline-wrap{
+      border:1px solid var(--border);
+      border-radius: 12px;
+      overflow:hidden;
+      background:#fff;
+    }
+    #timelineSvg{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    th, td{
+      border-bottom:1px solid var(--border);
+      padding:10px 8px;
+      vertical-align: top;
+    }
+    th{
+      text-align:left;
+      font-size:0.9rem;
+      color:var(--muted);
+      font-weight:700;
+      background:#fafafa;
+    }
+
+    .planet-cell{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      font-weight:650;
+    }
+    .planet-icon{
+      width:22px;
+      height:22px;
+      flex:0 0 auto;
+    }
+
+    .notice{
+      font-size: 0.95rem;
+      color: #333;
+      background:#fff8e1;
+      border:1px solid #ffe0b2;
+      padding:10px 12px;
+      border-radius:10px;
+    }
+
+    .error{
+      color:#b00020;
+      font-weight:700;
+      margin-top:10px;
+    }
+
+    @media (max-width: 860px){
+      .col-3,.col-4,.col-6,.col-8{ grid-column: span 12; }
+      .summary-grid .box{ grid-column: span 12; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+  <h1>เครื่องคำนวณ “พระเสวยอายุ” ตามกำลัง (รอบ 108 ปี)</h1>
+  <p>
+    เครื่องมือนี้คำนวณตามผัง/ตัวเลขในภาพ: เริ่มนับจาก “พระประจำวันเกิด” แล้วเดินตามลำดับดาว
+    (อาทิตย์ → จันทร์ → อังคาร → พุธ → เสาร์ → พฤหัส → ราหู → ศุกร์) จนครบ 108 ปี
+    โดยคำนวณวันเปลี่ยนช่วงอย่างละเอียด (รวม leap year/leap day).
+  </p>
+
+  <div class="card">
+    <h2 style="margin:0 0 10px 0;">1) กรอกวันเกิด</h2>
+
+    <div class="grid">
+      <div class="col-3">
+        <label>วัน</label>
+        <select id="dobDay"></select>
+      </div>
+      <div class="col-3">
+        <label>เดือน</label>
+        <select id="dobMonth"></select>
+      </div>
+      <div class="col-6">
+        <label>ปี (พ.ศ. หรือ ค.ศ.)</label>
+        <div class="row" style="gap:8px;">
+          <button class="secondary" type="button" id="yMinus50">−50</button>
+          <button class="secondary" type="button" id="yMinus10">−10</button>
+          <input id="dobYear" type="number" inputmode="numeric" />
+          <button class="secondary" type="button" id="yPlus10">+10</button>
+          <button class="secondary" type="button" id="yPlus50">+50</button>
+        </div>
+        <div class="hint">ปุ่ม ±10/±50 ช่วยเลื่อนปีได้รวดเร็ว (เหมาะสำหรับเลื่อนย้อนหลังหลายทศวรรษ)</div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:10px;">
+      <div class="col-8">
+        <label>หรือพิมพ์วันเกิด (ตัวอย่าง: 17/05/2527, 1984-05-17, พ.ศ.2527-05-17)</label>
+        <input id="dobText" type="text" placeholder="DD/MM/YYYY หรือ YYYY-MM-DD (ใส่ พ.ศ./ค.ศ. ได้)" />
+        <div class="hint">หากไม่ระบุ พ.ศ./ค.ศ. ระบบจะเดาอัตโนมัติ (เช่น 25xx → พ.ศ.)</div>
+      </div>
+      <div class="col-4">
+        <label>ตัวเลือกยุคศักราช</label>
+        <select id="eraMode">
+          <option value="auto" selected>อัตโนมัติ</option>
+          <option value="BE">บังคับเป็น พ.ศ. (B.E.)</option>
+          <option value="AD">บังคับเป็น ค.ศ. (A.D.)</option>
+        </select>
+        <div class="row" style="margin-top:8px;">
+          <button class="secondary" type="button" id="parseBtn">อ่านค่าจากข้อความ</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:10px;">
+      <div class="col-6">
+        <label>วันที่อ้างอิง (ค่าเริ่มต้น: วันนี้)</label>
+        <input id="asOfDate" type="date" />
+      </div>
+      <div class="col-6">
+        <label>&nbsp;</label>
+        <button type="button" id="computeBtn">คำนวณ</button>
+      </div>
+    </div>
+
+    <div id="err" class="error" style="display:none;"></div>
+  </div>
+
+  <div class="card notice">
+    <strong>หมายเหตุทางเทคนิค (ความถูกต้องด้านปฏิทิน):</strong>
+    ระบบนี้ใช้กฎ leap year แบบ Gregorian มาตรฐาน และคำนวณ “วันเปลี่ยนช่วง” ด้วยการบวกปีแบบ
+    <em>clamp วันสิ้นเดือน</em> (เช่น เกิด 29 ก.พ. → ปีที่ไม่ leap จะใช้ 28 ก.พ.).
+  </div>
+
+  <div class="card" id="summaryCard" style="display:none;">
+    <h2 style="margin:0 0 10px 0;">2) สรุปผล</h2>
+    <div class="summary-grid" id="summaryGrid"></div>
+  </div>
+
+  <div class="card" id="timelineCard" style="display:none;">
+    <h2 style="margin:0 0 10px 0;">3) ไทม์ไลน์ 0 → 108 ปี (สี + ไอคอนดาว)</h2>
+    <div class="timeline-wrap">
+      <svg id="timelineSvg" viewBox="0 0 1200 220" role="img" aria-label="Timeline of พระเสวยอายุ 0 to 108 years"></svg>
+    </div>
+    <div class="hint">
+      เส้นตั้งคือ “วันเปลี่ยนพระเสวยอายุ” (switch) — แสดงอายุและวันที่เปลี่ยนช่วงแบบย่อ (อ่านรายละเอียดเต็มในตารางด้านล่าง)
+    </div>
+  </div>
+
+  <div class="card" id="tablesCard" style="display:none;">
+    <h2 style="margin:0 0 10px 0;">4) ตารางรายละเอียด</h2>
+
+    <h3 style="margin:14px 0 8px 0;">4.1 ช่วงพระเสวยอายุ (ครบ 108 ปี)</h3>
+    <div style="overflow:auto;">
+      <table id="segmentTable">
+        <thead>
+        <tr>
+          <th>ดาว (สีประจำวัน)</th>
+          <th>กำลัง/ปี</th>
+          <th>อายุเริ่ม</th>
+          <th>อายุสิ้นสุด</th>
+          <th>วันที่เริ่มช่วง</th>
+          <th>วันที่เปลี่ยนช่วง (Switch)</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h3 style="margin:16px 0 8px 0;">4.2 จุดเปลี่ยน (Switch Events)</h3>
+    <div style="overflow:auto;">
+      <table id="switchTable">
+        <thead>
+        <tr>
+          <th>อายุ ณ จุดเปลี่ยน</th>
+          <th>วันที่เปลี่ยน</th>
+          <th>เปลี่ยนจาก</th>
+          <th>เป็น</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- SVG icon sprite (inline, no external files) -->
+<svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+
+    <!-- SUN -->
+    <symbol id="icon-sun" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="12" fill="none" stroke="currentColor" stroke-width="4"/>
+      <g stroke="currentColor" stroke-width="4" stroke-linecap="round">
+        <line x1="32" y1="4"  x2="32" y2="14"/>
+        <line x1="32" y1="50" x2="32" y2="60"/>
+        <line x1="4"  y1="32" x2="14" y2="32"/>
+        <line x1="50" y1="32" x2="60" y2="32"/>
+        <line x1="12" y1="12" x2="19" y2="19"/>
+        <line x1="45" y1="45" x2="52" y2="52"/>
+        <line x1="12" y1="52" x2="19" y2="45"/>
+        <line x1="45" y1="19" x2="52" y2="12"/>
+      </g>
+    </symbol>
+
+    <!-- MOON -->
+    <symbol id="icon-moon" viewBox="0 0 64 64">
+      <path d="M42 8c-10 3-17 13-17 25 0 14 11 25 25 25 4 0 8-1 11-3-5 8-14 13-25 13C21 68 8 55 8 39 8 22 21 8 38 8c1 0 3 0 4 0z"
+            fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- MARS -->
+    <symbol id="icon-mars" viewBox="0 0 64 64">
+      <circle cx="26" cy="38" r="14" fill="none" stroke="currentColor" stroke-width="4"/>
+      <line x1="36" y1="28" x2="56" y2="8" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <polyline points="44,8 56,8 56,20" fill="none" stroke="currentColor" stroke-width="4"
+                stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- MERCURY -->
+    <symbol id="icon-mercury" viewBox="0 0 64 64">
+      <circle cx="32" cy="28" r="12" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M20 16c4-4 8-6 12-6s8 2 12 6" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <line x1="32" y1="40" x2="32" y2="58" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <line x1="22" y1="50" x2="42" y2="50" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- SATURN (ringed planet) -->
+    <symbol id="icon-saturn" viewBox="0 0 64 64">
+      <circle cx="32" cy="34" r="12" fill="none" stroke="currentColor" stroke-width="4"/>
+      <ellipse cx="32" cy="34" rx="22" ry="10" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M12 34c6 6 34 6 40 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- JUPITER (striped planet) -->
+    <symbol id="icon-jupiter" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="16" fill="none" stroke="currentColor" stroke-width="4"/>
+      <path d="M18 26c6 4 22 4 28 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M16 32c8 4 24 4 32 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <path d="M18 38c6 4 22 4 28 0" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- RAHU (eclipse / shadow overlap) -->
+    <symbol id="icon-rahu" viewBox="0 0 64 64">
+      <circle cx="26" cy="32" r="16" fill="none" stroke="currentColor" stroke-width="4"/>
+      <circle cx="38" cy="32" r="16" fill="none" stroke="currentColor" stroke-width="4" opacity="0.7"/>
+    </symbol>
+
+    <!-- VENUS -->
+    <symbol id="icon-venus" viewBox="0 0 64 64">
+      <circle cx="32" cy="24" r="12" fill="none" stroke="currentColor" stroke-width="4"/>
+      <line x1="32" y1="36" x2="32" y2="60" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+      <line x1="22" y1="50" x2="42" y2="50" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+
+  </defs>
+</svg>
+
+<script>
+(function(){
+  "use strict";
+
+  // ----------------------------
+  // Data definitions
+  // ----------------------------
+  const TH_MONTHS = [
+    "มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน",
+    "กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"
+  ];
+  const TH_WEEKDAYS = ["อาทิตย์","จันทร์","อังคาร","พุธ","พฤหัสบดี","ศุกร์","เสาร์"];
+
+  // Planet cycle order (clockwise) from the image: Sun → Moon → Mars → Mercury → Saturn → Jupiter → Rahu → Venus
+  const PLANETS = [
+    { id:"SUN",     th:"พระอาทิตย์",   years:6,  color:getCSS("--sun"),     icon:"icon-sun",     dayTh:"อาทิตย์" },
+    { id:"MOON",    th:"พระจันทร์",     years:15, color:getCSS("--moon"),    icon:"icon-moon",    dayTh:"จันทร์" },
+    { id:"MARS",    th:"พระอังคาร",     years:8,  color:getCSS("--mars"),    icon:"icon-mars",    dayTh:"อังคาร" },
+    { id:"MERCURY", th:"พระพุธ",        years:17, color:getCSS("--mercury"), icon:"icon-mercury", dayTh:"พุธ" },
+    { id:"SATURN",  th:"พระเสาร์",      years:10, color:getCSS("--saturn"),  icon:"icon-saturn",  dayTh:"เสาร์" },
+    { id:"JUPITER", th:"พระพฤหัสบดี",   years:19, color:getCSS("--jupiter"), icon:"icon-jupiter", dayTh:"พฤหัสบดี" },
+    { id:"RAHU",    th:"พระราหู",       years:12, color:getCSS("--rahu"),    icon:"icon-rahu",    dayTh:"ราหู (พุธกลางคืน)" },
+    { id:"VENUS",   th:"พระศุกร์",      years:21, color:getCSS("--venus"),   icon:"icon-venus",   dayTh:"ศุกร์" }
+  ];
+
+  // Natal planet by weekday (date-only). Wednesday defaults to MERCURY (พุธกลางวัน).
+  const START_PLANET_BY_WEEKDAY = {
+    0: "SUN",     // Sunday
+    1: "MOON",    // Monday
+    2: "MARS",    // Tuesday
+    3: "MERCURY", // Wednesday
+    4: "JUPITER", // Thursday
+    5: "VENUS",   // Friday
+    6: "SATURN"   // Saturday
+  };
+
+  // ----------------------------
+  // DOM references
+  // ----------------------------
+  const dobDay   = document.getElementById("dobDay");
+  const dobMonth = document.getElementById("dobMonth");
+  const dobYear  = document.getElementById("dobYear");
+  const dobText  = document.getElementById("dobText");
+  const eraMode  = document.getElementById("eraMode");
+  const asOfDate = document.getElementById("asOfDate");
+  const parseBtn = document.getElementById("parseBtn");
+  const computeBtn = document.getElementById("computeBtn");
+
+  const errBox = document.getElementById("err");
+
+  const summaryCard  = document.getElementById("summaryCard");
+  const summaryGrid  = document.getElementById("summaryGrid");
+  const timelineCard = document.getElementById("timelineCard");
+  const timelineSvg  = document.getElementById("timelineSvg");
+  const tablesCard   = document.getElementById("tablesCard");
+
+  const segTBody = document.querySelector("#segmentTable tbody");
+  const swTBody  = document.querySelector("#switchTable tbody");
+
+  // year jump buttons
+  document.getElementById("yMinus50").addEventListener("click", ()=> dobYear.value = (parseInt(dobYear.value,10)||0) - 50);
+  document.getElementById("yMinus10").addEventListener("click", ()=> dobYear.value = (parseInt(dobYear.value,10)||0) - 10);
+  document.getElementById("yPlus10").addEventListener("click",  ()=> dobYear.value = (parseInt(dobYear.value,10)||0) + 10);
+  document.getElementById("yPlus50").addEventListener("click",  ()=> dobYear.value = (parseInt(dobYear.value,10)||0) + 50);
+
+  // ----------------------------
+  // Initialize inputs
+  // ----------------------------
+  function init(){
+    // month select
+    dobMonth.innerHTML = TH_MONTHS.map((m,i)=> `<option value="${i+1}">${i+1} - ${m}</option>`).join("");
+
+    // day select (temporary, will be clamped by updateDays)
+    dobDay.innerHTML = Array.from({length:31}, (_,i)=> `<option value="${i+1}">${i+1}</option>`).join("");
+
+    const today = todayUTC();
+    asOfDate.value = toISODate(today);
+
+    // Default year shown as BE current year (Thai-friendly), but era mode is "auto".
+    dobYear.value = today.getUTCFullYear() + 543;
+    dobMonth.value = today.getUTCMonth() + 1;
+    dobDay.value = today.getUTCDate();
+
+    updateDays();
+
+    dobMonth.addEventListener("change", updateDays);
+    dobYear.addEventListener("input", updateDays);
+
+    parseBtn.addEventListener("click", ()=> {
+      const parsed = parseDateString(dobText.value, eraMode.value);
+      if(!parsed.ok) return showError(parsed.error);
+      setDOBFields(parsed.day, parsed.month, parsed.yearInput);
+      hideError();
+    });
+
+    computeBtn.addEventListener("click", ()=> {
+      hideError();
+      tryCompute();
+    });
+  }
+
+  function setDOBFields(day, month, yearInput){
+    dobYear.value = yearInput;
+    dobMonth.value = month;
+    updateDays();
+    dobDay.value = day;
+  }
+
+  function updateDays(){
+    // We need to compute days-in-month based on *normalized* AD year.
+    const yRaw = parseInt(dobYear.value,10);
+    const m = parseInt(dobMonth.value,10);
+    if(!yRaw || !m) return;
+
+    // Use auto detection on the year field itself (no text).
+    const yAD = normalizeYear(yRaw, eraMode.value, "");
+    if(!yAD.ok) return;
+
+    const dim = daysInMonth(yAD.yearAD, m);
+    const currentDay = parseInt(dobDay.value,10) || 1;
+
+    dobDay.innerHTML = Array.from({length:dim}, (_,i)=> `<option value="${i+1}">${i+1}</option>`).join("");
+    dobDay.value = Math.min(currentDay, dim);
+  }
+
+  // ----------------------------
+  // Core compute flow
+  // ----------------------------
+  function tryCompute(){
+    const d = parseInt(dobDay.value,10);
+    const m = parseInt(dobMonth.value,10);
+    const yRaw = parseInt(dobYear.value,10);
+
+    if(!d || !m || !yRaw) return showError("กรุณากรอกวัน/เดือน/ปีให้ครบถ้วน");
+
+    const yNorm = normalizeYear(yRaw, eraMode.value, dobText.value || "");
+    if(!yNorm.ok) return showError(yNorm.error);
+
+    // validate date
+    const dim = daysInMonth(yNorm.yearAD, m);
+    if(d < 1 || d > dim) return showError("วันที่ไม่ถูกต้องสำหรับเดือน/ปีที่เลือก");
+
+    const dob = dateUTC(yNorm.yearAD, m, d);
+
+    // as-of date
+    let asof = null;
+    if(asOfDate.value){
+      const [yy,mm,dd] = asOfDate.value.split("-").map(x=>parseInt(x,10));
+      asof = dateUTC(yy, mm, dd);
+    } else {
+      asof = todayUTC();
+    }
+
+    if(asof.getTime() < dob.getTime()){
+      return showError("วันที่อ้างอิงต้องไม่ก่อนวันเกิด");
+    }
+
+    // determine weekday and natal planet
+    const dow = dob.getUTCDay(); // 0=Sun
+    const natalId = START_PLANET_BY_WEEKDAY[dow];
+    const natal = PLANETS.find(p=>p.id===natalId);
+
+    // build full 108-year schedule (8 segments)
+    const schedule = buildSchedule(dob, natalId);
+
+    // locate current segment as-of date
+    const currentSeg = findSegmentForDate(schedule, asof);
+
+    // render
+    renderSummary(dob, yNorm.yearAD, dow, natal, asof, currentSeg);
+    drawTimeline(schedule, currentSeg);
+    renderTables(schedule);
+
+    summaryCard.style.display = "";
+    timelineCard.style.display = "";
+    tablesCard.style.display = "";
+  }
+
+  // ----------------------------
+  // Schedule building (108-year cycle)
+  // ----------------------------
+  function buildSchedule(dob, natalId){
+    const startIdx = PLANETS.findIndex(p=>p.id===natalId);
+    const segments = [];
+
+    let cum = 0;
+    for(let i=0; i<PLANETS.length; i++){
+      const p = PLANETS[(startIdx + i) % PLANETS.length];
+      const startAge = cum;
+      const endAge = cum + p.years;
+
+      const startDate = addYearsClamped(dob, startAge);
+      const endDate   = addYearsClamped(dob, endAge);
+
+      segments.push({
+        planet: p,
+        startAge,
+        endAge,
+        duration: p.years,
+        startDate,
+        endDate
+      });
+
+      cum = endAge;
+    }
+
+    // sanity: cum must be 108
+    return segments;
+  }
+
+  function findSegmentForDate(segments, asof){
+    // Segment is [startDate, endDate) except final endDate (108th birthday).
+    for(let i=0; i<segments.length; i++){
+      const s = segments[i];
+      if(asof.getTime() >= s.startDate.getTime() && asof.getTime() < s.endDate.getTime()){
+        return s;
+      }
+    }
+    // If on/after 108th birthday, return null (or could repeat cycle)
+    return null;
+  }
+
+  // ----------------------------
+  // Visualization rendering
+  // ----------------------------
+  function renderSummary(dob, dobYearAD, dow, natalPlanet, asof, currentSeg){
+    summaryGrid.innerHTML = "";
+
+    const dobStr = formatDateThaiBoth(dob);
+    const asofStr = formatDateThaiBoth(asof);
+    const weekdayTh = TH_WEEKDAYS[dow];
+
+    const ageNow = diffYMD(dob, asof);
+
+    const currentText = currentSeg
+      ? `${currentSeg.planet.th} (${currentSeg.planet.dayTh}) – กำลัง ${currentSeg.planet.years}`
+      : "ครบ 108 ปีแล้ว (เกินช่วงที่กำหนดในตารางนี้)";
+
+    const natalText = `${natalPlanet.th} (${natalPlanet.dayTh}) – กำลัง ${natalPlanet.years}`;
+
+    summaryGrid.appendChild(summaryBox("วันเกิด", `${dobStr}  <small>(วัน${weekdayTh})</small>`));
+    summaryGrid.appendChild(summaryBox("พระประจำวันเกิด (จุดเริ่มนับรอบ)", pillHTML(natalPlanet) + " " + escapeHTML(natalText)));
+    summaryGrid.appendChild(summaryBox("วันที่อ้างอิง", `${asofStr}`));
+    summaryGrid.appendChild(summaryBox("อายุ ณ วันที่อ้างอิง", `${ageNow.years} ปี ${ageNow.months} เดือน ${ageNow.days} วัน`));
+    summaryGrid.appendChild(summaryBox("พระเสวยอายุที่มีผล (ณ วันที่อ้างอิง)", currentSeg ? (pillHTML(currentSeg.planet) + " " + escapeHTML(currentText)) : escapeHTML(currentText)));
+    summaryGrid.appendChild(summaryBox("ช่วงครบ 108 ปี", `${formatDateThaiBoth(addYearsClamped(dob,108))} <small>(วันครบรอบ 108 ปี)</small>`));
+  }
+
+  function summaryBox(key, valueHTML){
+    const div = document.createElement("div");
+    div.className = "box";
+    div.innerHTML = `<div class="k">${escapeHTML(key)}</div><div class="v">${valueHTML}</div>`;
+    return div;
+  }
+
+  function pillHTML(planet){
+    const textColor = bestTextColor(planet.color);
+    return `
+      <span class="pill" style="border-color:${planet.color};">
+        <span class="swatch" style="background:${planet.color}"></span>
+        <svg class="planet-icon" viewBox="0 0 64 64" style="color:${textColor};">
+          <use href="#${planet.icon}"></use>
+        </svg>
+        <span>${escapeHTML(planet.th)}</span>
+      </span>
+    `;
+  }
+
+  function drawTimeline(segments, currentSeg){
+    // SVG dimensions (viewBox)
+    const W = 1200;
+    const H = 220;
+    const BAR_Y = 26;
+    const BAR_H = 72;
+    const SCALE = W / 108;
+
+    // clear
+    while(timelineSvg.firstChild) timelineSvg.removeChild(timelineSvg.firstChild);
+
+    // background title
+    addSvgText(timelineSvg, 10, 18, "ไทม์ไลน์พระเสวยอายุ (0–108 ปี)", {fontSize:14, fill:"#333", fontWeight:"700"});
+
+    // bar background
+    addSvgRect(timelineSvg, 0, BAR_Y, W, BAR_H, "#ffffff");
+    addSvgRect(timelineSvg, 0, BAR_Y, W, BAR_H, "none", "#e0e0e0", 1);
+
+    // segments
+    segments.forEach(seg=>{
+      const x = seg.startAge * SCALE;
+      const w = seg.duration * SCALE;
+
+      const rect = addSvgRect(timelineSvg, x, BAR_Y, w, BAR_H, seg.planet.color);
+      const title = document.createElementNS(SVG_NS, "title");
+      title.textContent =
+        `${seg.planet.th} (${seg.planet.dayTh})\n` +
+        `กำลัง/ปี: ${seg.duration}\n` +
+        `อายุ: ${seg.startAge}–${seg.endAge}\n` +
+        `เริ่ม: ${formatDateThaiBoth(seg.startDate)}\n` +
+        `เปลี่ยน: ${formatDateThaiBoth(seg.endDate)}`;
+      rect.appendChild(title);
+
+      // icon + label
+      const cx = x + w/2;
+      const cy = BAR_Y + BAR_H/2;
+
+      const txtColor = bestTextColor(seg.planet.color);
+
+      const g = document.createElementNS(SVG_NS, "g");
+      g.setAttribute("style", `color:${txtColor};`);
+      timelineSvg.appendChild(g);
+
+      // icon
+      const use = document.createElementNS(SVG_NS, "use");
+      use.setAttribute("href", `#${seg.planet.icon}`);
+      use.setAttribute("x", cx - 16);
+      use.setAttribute("y", cy - 22);
+      use.setAttribute("width", 32);
+      use.setAttribute("height", 32);
+      g.appendChild(use);
+
+      // label (Thai short)
+      addSvgText(timelineSvg, cx, cy + 22, `${seg.planet.th} (${seg.duration})`, {
+        fontSize: 12,
+        fill: txtColor,
+        textAnchor: "middle",
+        fontWeight: (currentSeg && currentSeg.startAge===seg.startAge) ? "800" : "700"
+      });
+
+      // current highlight outline
+      if(currentSeg && currentSeg.startAge===seg.startAge){
+        addSvgRect(timelineSvg, x+1, BAR_Y+1, w-2, BAR_H-2, "none", "#000", 3, 10);
+      }
+    });
+
+    // boundary markers (switch dates)
+    segments.forEach((seg, idx)=>{
+      if(idx === segments.length-1) return; // do not label the final endpoint (108) here; it is obvious.
+      const x = seg.endAge * SCALE;
+
+      // marker line
+      const line = document.createElementNS(SVG_NS, "line");
+      line.setAttribute("x1", x);
+      line.setAttribute("x2", x);
+      line.setAttribute("y1", BAR_Y);
+      line.setAttribute("y2", BAR_Y + BAR_H + 58);
+      line.setAttribute("stroke", "#444");
+      line.setAttribute("stroke-width", "1");
+      line.setAttribute("opacity", "0.8");
+      timelineSvg.appendChild(line);
+
+      // age label
+      addSvgText(timelineSvg, x, BAR_Y + BAR_H + 18, `${seg.endAge} ปี`, {
+        fontSize: 12,
+        fill: "#111",
+        textAnchor: "middle",
+        fontWeight: "800"
+      });
+
+      // date label (short)
+      const d = seg.endDate;
+      const short = `${d.getUTCDate()}/${d.getUTCMonth()+1}/${d.getUTCFullYear()+543}`;
+      addSvgText(timelineSvg, x, BAR_Y + BAR_H + 36, `พ.ศ.${short}`, {
+        fontSize: 11,
+        fill: "#444",
+        textAnchor: "middle"
+      });
+
+      // title tooltip for marker
+      const t = document.createElementNS(SVG_NS, "title");
+      t.textContent = `Switch at age ${seg.endAge}: ${formatDateThaiBoth(seg.endDate)}`;
+      line.appendChild(t);
+    });
+
+    // bottom axis labels
+    addSvgText(timelineSvg, 0, H-10, "0 ปี", {fontSize:12, fill:"#444", textAnchor:"start"});
+    addSvgText(timelineSvg, W, H-10, "108 ปี", {fontSize:12, fill:"#444", textAnchor:"end"});
+  }
+
+  function renderTables(segments){
+    // segment table
+    segTBody.innerHTML = "";
+    segments.forEach(seg=>{
+      const tr = document.createElement("tr");
+
+      const planetTd = document.createElement("td");
+      planetTd.innerHTML = `
+        <div class="planet-cell">
+          <span class="swatch" style="background:${seg.planet.color}"></span>
+          <svg class="planet-icon" viewBox="0 0 64 64" style="color:${bestTextColor(seg.planet.color)}">
+            <use href="#${seg.planet.icon}"></use>
+          </svg>
+          <div>
+            ${escapeHTML(seg.planet.th)}
+            <div style="font-weight:500;color:#666;font-size:0.9rem;">${escapeHTML(seg.planet.dayTh)}</div>
+          </div>
+        </div>
+      `;
+
+      tr.appendChild(planetTd);
+      tr.appendChild(td(seg.duration));
+      tr.appendChild(td(seg.startAge));
+      tr.appendChild(td(seg.endAge));
+      tr.appendChild(td(formatDateThaiBoth(seg.startDate)));
+      tr.appendChild(td(formatDateThaiBoth(seg.endDate)));
+
+      segTBody.appendChild(tr);
+    });
+
+    // switch table (events)
+    swTBody.innerHTML = "";
+    for(let i=0; i<segments.length-1; i++){
+      const from = segments[i].planet;
+      const to = segments[i+1].planet;
+      const age = segments[i].endAge;
+      const date = segments[i].endDate;
+
+      const tr = document.createElement("tr");
+      tr.appendChild(td(`${age} ปี`));
+      tr.appendChild(td(formatDateThaiBoth(date)));
+      tr.appendChild(td(`${from.th}`));
+      tr.appendChild(td(`${to.th}`));
+      swTBody.appendChild(tr);
+    }
+
+    // final completion row (108)
+    const last = segments[segments.length-1];
+    const trEnd = document.createElement("tr");
+    trEnd.appendChild(td(`108 ปี`));
+    trEnd.appendChild(td(formatDateThaiBoth(last.endDate)));
+    trEnd.appendChild(td(`${last.planet.th}`));
+    trEnd.appendChild(td(`ครบ 108 ปี (จบรอบ)`));
+    swTBody.appendChild(trEnd);
+  }
+
+  function td(text){
+    const x = document.createElement("td");
+    x.textContent = String(text);
+    return x;
+  }
+
+  // ----------------------------
+  // Date / calendar utilities (UTC + leap-year safe)
+  // ----------------------------
+  const SVG_NS = "http://www.w3.org/2000/svg";
+
+  function dateUTC(y,m,d){
+    return new Date(Date.UTC(y, m-1, d));
+  }
+
+  function todayUTC(){
+    const now = new Date();
+    return new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  }
+
+  function toISODate(dt){
+    const y = dt.getUTCFullYear();
+    const m = String(dt.getUTCMonth()+1).padStart(2,"0");
+    const d = String(dt.getUTCDate()).padStart(2,"0");
+    return `${y}-${m}-${d}`;
+  }
+
+  function isLeapYear(y){
+    return (y % 4 === 0) && (y % 100 !== 0 || y % 400 === 0);
+  }
+
+  function daysInMonth(y, m){ // m: 1..12
+    if(m === 2) return isLeapYear(y) ? 29 : 28;
+    return [4,6,9,11].includes(m) ? 30 : 31;
+  }
+
+  // Add years while preserving month/day; if invalid (Feb 29 → non-leap year), clamp to last day of that month.
+  function addYearsClamped(dt, years){
+    const y = dt.getUTCFullYear() + years;
+    const m0 = dt.getUTCMonth();       // 0..11
+    const d  = dt.getUTCDate();
+    const m  = m0 + 1;                 // 1..12
+    const dim = daysInMonth(y, m);
+    const dd = Math.min(d, dim);
+    return new Date(Date.UTC(y, m0, dd));
+  }
+
+  // Calendar difference in years/months/days (typical age representation)
+  function diffYMD(start, end){
+    let y = end.getUTCFullYear() - start.getUTCFullYear();
+    let m = end.getUTCMonth() - start.getUTCMonth();
+    let d = end.getUTCDate() - start.getUTCDate();
+
+    if(d < 0){
+      m -= 1;
+      const prevMonth = (end.getUTCMonth() - 1 + 12) % 12;
+      const prevYear  = (end.getUTCMonth() === 0) ? (end.getUTCFullYear() - 1) : end.getUTCFullYear();
+      d += daysInMonth(prevYear, prevMonth + 1);
+    }
+    if(m < 0){
+      y -= 1;
+      m += 12;
+    }
+    return {years:y, months:m, days:d};
+  }
+
+  // ----------------------------
+  // Parsing utilities (DOB text, BE/AD normalization)
+  // ----------------------------
+  function normalizeYear(yearInput, eraMode, rawText){
+    // eraMode: "auto" | "BE" | "AD"
+    let mode = eraMode;
+
+    const t = (rawText || "").toLowerCase();
+
+    if(mode === "auto"){
+      if(t.includes("พ.ศ") || t.includes("พศ") || t.includes("be") || t.includes("b.e")){
+        mode = "BE";
+      } else if(t.includes("ค.ศ") || t.includes("คศ") || t.includes("ad") || t.includes("a.d")){
+        mode = "AD";
+      } else {
+        // heuristic: Thai BE commonly 24xx–25xx for modern DOB
+        mode = (yearInput >= 2400) ? "BE" : "AD";
+      }
+    }
+
+    if(mode === "BE"){
+      return { ok:true, yearAD: yearInput - 543, modeUsed:"BE" };
+    }
+    if(mode === "AD"){
+      return { ok:true, yearAD: yearInput, modeUsed:"AD" };
+    }
+    return { ok:false, error:"ไม่สามารถระบุยุคศักราชได้" };
+  }
+
+  function parseDateString(s, eraMode){
+    const raw = (s || "").trim();
+    if(!raw) return {ok:false, error:"กรุณาพิมพ์วันเกิดก่อน (หรือกรอกในช่องวัน/เดือน/ปี)"};
+
+    // Extract digits: accept YYYY-MM-DD or DD/MM/YYYY etc.
+    // Remove Thai words but keep digits and separators
+    const cleaned = raw
+      .replace(/พ\.?\s*ศ\.?/gi, "")
+      .replace(/ค\.?\s*ศ\.?/gi, "")
+      .replace(/be|b\.e\.|ad|a\.d\./gi, "")
+      .trim();
+
+    // Try ISO: YYYY-MM-DD
+    let m = cleaned.match(/^(\d{4})[-\/\.](\d{1,2})[-\/\.](\d{1,2})$/);
+    if(m){
+      const yearInput = parseInt(m[1],10);
+      const month = parseInt(m[2],10);
+      const day = parseInt(m[3],10);
+      if(!validMonthDay(yearInput, month, day, eraMode, raw)) return {ok:false, error:"วันที่ไม่ถูกต้อง"};
+      return {ok:true, yearInput, month, day};
+    }
+
+    // Try DD/MM/YYYY
+    m = cleaned.match(/^(\d{1,2})[-\/\.](\d{1,2})[-\/\.](\d{4})$/);
+    if(m){
+      const day = parseInt(m[1],10);
+      const month = parseInt(m[2],10);
+      const yearInput = parseInt(m[3],10);
+      if(!validMonthDay(yearInput, month, day, eraMode, raw)) return {ok:false, error:"วันที่ไม่ถูกต้อง"};
+      return {ok:true, yearInput, month, day};
+    }
+
+    // Fallback: extract first 3 numbers
+    const nums = cleaned.match(/\d+/g);
+    if(nums && nums.length >= 3){
+      const a = parseInt(nums[0],10);
+      const b = parseInt(nums[1],10);
+      const c = parseInt(nums[2],10);
+
+      // Heuristic: if first is 4-digit => year first, else year last
+      if(String(a).length === 4){
+        const yearInput = a, month = b, day = c;
+        if(!validMonthDay(yearInput, month, day, eraMode, raw)) return {ok:false, error:"วันที่ไม่ถูกต้อง"};
+        return {ok:true, yearInput, month, day};
+      } else {
+        const day = a, month = b, yearInput = c;
+        if(!validMonthDay(yearInput, month, day, eraMode, raw)) return {ok:false, error:"วันที่ไม่ถูกต้อง"};
+        return {ok:true, yearInput, month, day};
+      }
+    }
+
+    return {ok:false, error:"รูปแบบวันที่ไม่รองรับ (แนะนำ: 17/05/2527 หรือ 1984-05-17)"};
+  }
+
+  function validMonthDay(yearInput, month, day, eraMode, rawText){
+    if(month < 1 || month > 12) return false;
+    const norm = normalizeYear(yearInput, eraMode, rawText);
+    if(!norm.ok) return false;
+    const dim = daysInMonth(norm.yearAD, month);
+    return day >= 1 && day <= dim;
+  }
+
+  // ----------------------------
+  // SVG helpers
+  // ----------------------------
+  function addSvgRect(svg, x, y, w, h, fill, stroke="none", strokeWidth=0, rx=0){
+    const r = document.createElementNS(SVG_NS, "rect");
+    r.setAttribute("x", x);
+    r.setAttribute("y", y);
+    r.setAttribute("width", w);
+    r.setAttribute("height", h);
+    r.setAttribute("fill", fill);
+    r.setAttribute("stroke", stroke);
+    r.setAttribute("stroke-width", strokeWidth);
+    if(rx) r.setAttribute("rx", rx);
+    svg.appendChild(r);
+    return r;
+  }
+
+  function addSvgText(svg, x, y, text, opts={}){
+    const t = document.createElementNS(SVG_NS, "text");
+    t.setAttribute("x", x);
+    t.setAttribute("y", y);
+    t.textContent = text;
+    t.setAttribute("font-size", opts.fontSize || 12);
+    t.setAttribute("fill", opts.fill || "#111");
+    t.setAttribute("font-weight", opts.fontWeight || "600");
+    t.setAttribute("text-anchor", opts.textAnchor || "start");
+    t.setAttribute("dominant-baseline", "middle");
+    svg.appendChild(t);
+    return t;
+  }
+
+  // ----------------------------
+  // Color / contrast helpers
+  // ----------------------------
+  function getCSS(varName){
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  }
+
+  function bestTextColor(bgHex){
+    // Return black/white based on luminance
+    const rgb = hexToRgb(bgHex);
+    if(!rgb) return "#111";
+    const {r,g,b} = rgb;
+    // relative luminance
+    const L = (0.2126*srgb(r) + 0.7152*srgb(g) + 0.0722*srgb(b));
+    return (L > 0.55) ? "#111" : "#fff";
+  }
+
+  function hexToRgb(hex){
+    const h = (hex||"").replace("#","").trim();
+    if(h.length === 3){
+      const r = parseInt(h[0]+h[0],16);
+      const g = parseInt(h[1]+h[1],16);
+      const b = parseInt(h[2]+h[2],16);
+      return {r,g,b};
+    }
+    if(h.length === 6){
+      const r = parseInt(h.slice(0,2),16);
+      const g = parseInt(h.slice(2,4),16);
+      const b = parseInt(h.slice(4,6),16);
+      return {r,g,b};
+    }
+    return null;
+  }
+
+  function srgb(v){
+    const x = v/255;
+    return (x <= 0.04045) ? (x/12.92) : Math.pow((x+0.055)/1.055, 2.4);
+  }
+
+  // ----------------------------
+  // Formatting
+  // ----------------------------
+  function formatDateThaiBoth(dt){
+    const d = dt.getUTCDate();
+    const m = dt.getUTCMonth()+1;
+    const yAD = dt.getUTCFullYear();
+    const yBE = yAD + 543;
+    return `${d} ${TH_MONTHS[m-1]} พ.ศ. ${yBE} (ค.ศ. ${yAD})`;
+  }
+
+  // ----------------------------
+  // Error handling
+  // ----------------------------
+  function showError(msg){
+    errBox.textContent = msg;
+    errBox.style.display = "";
+  }
+  function hideError(){
+    errBox.style.display = "none";
+    errBox.textContent = "";
+  }
+
+  // basic HTML escaping for dynamic text
+  function escapeHTML(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[c]));
+  }
+
+  // boot
+  init();
+
+})();
+</script>
+</body>
+</html>
