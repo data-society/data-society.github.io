@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เช็คพระเสวยอายุ (Phra Sawoei Ayu)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #2d3436;
+            --shadow: 0 8px 30px rgba(0,0,0,0.08);
+            
+            /* Astrological Colors */
+            --c-sun: #CE1126;     /* Sunday */
+            --c-moon: #FDD835;    /* Monday */
+            --c-mars: #E91E63;    /* Tuesday */
+            --c-mercury: #2E7D32; /* Wednesday */
+            --c-saturn: #7B1FA2;  /* Saturday */
+            --c-jupiter: #EF6C00; /* Thursday */
+            --c-rahu: #212121;    /* Wed Night */
+            --c-venus: #0288D1;   /* Friday */
+        }
+
+        body { font-family: 'Sarabun', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; -webkit-font-smoothing: antialiased; }
+        .container { max-width: 600px; margin: 0 auto; }
+
+        /* Input Card */
+        .card { background: var(--card); border-radius: 20px; padding: 25px; box-shadow: var(--shadow); margin-bottom: 25px; }
+        h1 { text-align: center; margin: 0 0 10px 0; font-weight: 800; color: #333; }
+        .desc { text-align: center; color: #888; font-size: 0.9rem; margin-bottom: 25px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: 1 / -1; }
+        
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #666; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 1rem; background: #fff; box-sizing: border-box; outline: none; transition: 0.2s; }
+        select:focus, input:focus { border-color: #333; }
+
+        .btn-calc {
+            width: 100%; background: #333; color: white; border: none; padding: 15px; border-radius: 12px;
+            font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 20px; transition: transform 0.1s;
+        }
+        .btn-calc:active { transform: scale(0.98); }
+
+        /* Dashboard (Current Status) */
+        #result-area { display: none; animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .dashboard {
+            text-align: center; padding: 30px; border-radius: 20px; color: white; position: relative; overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); margin-bottom: 30px; transition: background 0.5s;
+        }
+        .db-icon svg { width: 80px; height: 80px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); margin-bottom: 10px; }
+        .db-title { font-size: 1.1rem; opacity: 0.9; }
+        .db-name { font-size: 2.5rem; font-weight: 800; margin: 5px 0 10px 0; }
+        .db-age { background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 30px; font-size: 1rem; display: inline-block; }
+        .db-offering { margin-top: 20px; background: rgba(255,255,255,0.15); padding: 15px; border-radius: 12px; text-align: left; font-size: 0.95rem; backdrop-filter: blur(5px); }
+        
+        /* Timeline */
+        .timeline { padding-left: 20px; position: relative; }
+        .timeline::before { content: ''; position: absolute; left: 29px; top: 0; bottom: 0; width: 2px; background: #e0e0e0; z-index: 0; }
+        
+        .t-item { position: relative; margin-bottom: 25px; padding-left: 45px; opacity: 0.6; transition: 0.3s; }
+        .t-item.active { opacity: 1; transform: scale(1.02); transform-origin: left center; }
+        
+        .t-marker {
+            position: absolute; left: 0; top: 0; width: 60px; height: 60px; background: #fff; border: 4px solid #ccc;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1; transition: 0.3s;
+        }
+        .t-marker svg { width: 30px; height: 30px; fill: #999; }
+        
+        .t-content { background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 5px solid transparent; }
+        .t-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .t-name { font-weight: bold; font-size: 1.1rem; }
+        .t-dates { font-size: 0.85rem; color: #888; }
+
+        /* SVG Definitions */
+        .svg-defs { display: none; }
+    </style>
+</head>
+<body>
+
+<svg class="svg-defs">
+    <symbol id="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+    <symbol id="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"/></symbol>
+    <symbol id="icon-mars" viewBox="0 0 24 24"><circle cx="10" cy="14" r="6" stroke="currentColor" stroke-width="2" fill="none"/><path d="M14 10l6-6m0 0v4m0-4h-4" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+    <symbol id="icon-mercury" viewBox="0 0 24 24"><circle cx="12" cy="13" r="5" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 8V4m0 14v4m-4 0h8" stroke="currentColor" stroke-width="2"/><path d="M8 4a4 4 0 0 1 8 0" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+    <symbol id="icon-saturn" viewBox="0 0 24 24"><path d="M12 2a9 9 0 1 0 0 18 9 9 0 0 0 0-18z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M2.5 12h19" stroke="currentColor" stroke-width="2"/></symbol>
+    <symbol id="icon-jupiter" viewBox="0 0 24 24"><path d="M19 6h-6a4 4 0 1 0 0 8h1m0-8V2m0 12v6" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+    <symbol id="icon-rahu" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="currentColor" opacity="0.4"/><circle cx="12" cy="12" r="4" fill="currentColor"/></symbol>
+    <symbol id="icon-venus" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 15v7m-4-3h8" stroke="currentColor" stroke-width="2"/></symbol>
+</svg>
+
+<div class="container">
+    <div class="card">
+        <h1>🔮 คำนวณพระเสวยอายุ</h1>
+        <p class="desc">ระบบมหาทักษา (สูงสุด 108 ปี)</p>
+        
+        <div class="form-grid">
+            <div class="full-width">
+                <label>วันเกิด (Date)</label>
+                <div style="display:flex; gap:10px;">
+                    <select id="day" style="width:80px;"></select>
+                    <select id="month" style="flex:1;"></select>
+                </div>
+            </div>
+            <div>
+                <label>ปีเกิด (Year)</label>
+                <input type="number" id="year" placeholder="25XX">
+            </div>
+            <div>
+                <label>รูปแบบปี (Era)</label>
+                <select id="era">
+                    <option value="BE">พ.ศ. (BE)</option>
+                    <option value="AD">ค.ศ. (AD)</option>
+                </select>
+            </div>
+            <div class="full-width">
+                <label>เวลาเกิด (Birth Time) *สำคัญมาก</label>
+                <input type="time" id="time" value="09:00">
+                <small style="color:#E0115F; font-size:0.75rem;">*ใช้คำนวณวันพุธและตัดรอบวันใหม่ 06:00 น.</small>
+            </div>
+        </div>
+
+        <button class="btn-calc" onclick="calculate()">ตรวจสอบดวงชะตา (Calculate)</button>
+    </div>
+
+    <div id="result-area">
+        <div class="dashboard" id="dash">
+            <div class="db-icon" id="d-icon"></div>
+            <div class="db-title">ขณะนี้พระเสวยอายุ คือ</div>
+            <div class="db-name" id="d-name"></div>
+            <div class="db-age" id="d-age"></div>
+            <div class="db-offering" id="d-offering"></div>
+        </div>
+        
+        <div class="timeline" id="timeline"></div>
+    </div>
+</div>
+
+<script>
+    // --- Data Configuration (Maha Taksa Cycle) ---
+    // Sequence: Sun -> Moon -> Mars -> Mercury -> Saturn -> Jupiter -> Rahu -> Venus
+    const PLANETS = [
+        { id: 'sun', name: 'พระอาทิตย์', years: 6, color: '#CE1126', items: 6 },
+        { id: 'moon', name: 'พระจันทร์', years: 15, color: '#FDD835', items: 15 },
+        { id: 'mars', name: 'พระอังคาร', years: 8, color: '#E91E63', items: 8 },
+        { id: 'mercury', name: 'พระพุธ', years: 17, color: '#2E7D32', items: 17 },
+        { id: 'saturn', name: 'พระเสาร์', years: 10, color: '#7B1FA2', items: 10 },
+        { id: 'jupiter', name: 'พระพฤหัสบดี', years: 19, color: '#EF6C00', items: 19 },
+        { id: 'rahu', name: 'พระราหู', years: 12, color: '#212121', items: 12 },
+        { id: 'venus', name: 'พระศุกร์', years: 21, color: '#0288D1', items: 21 }
+    ];
+
+    const THAI_MONTHS = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+
+    // --- Initialization ---
+    window.onload = () => {
+        const dSel = document.getElementById('day');
+        const mSel = document.getElementById('month');
+        for(let i=1; i<=31; i++) dSel.add(new Option(i, i));
+        THAI_MONTHS.forEach((m, i) => mSel.add(new Option(m, i)));
+        document.getElementById('year').value = new Date().getFullYear() + 543 - 20; // Default approx 20yo
+    };
+
+    // --- Core Logic ---
+    function calculate() {
+        const d = parseInt(document.getElementById('day').value);
+        const m = parseInt(document.getElementById('month').value);
+        let y = parseInt(document.getElementById('year').value);
+        const era = document.getElementById('era').value;
+        const timeVal = document.getElementById('time').value;
+
+        if(!y) { alert("กรุณาระบุปีเกิด"); return; }
+        if(era === 'BE') y -= 543;
+
+        const dob = new Date(y, m, d);
+        if(dob.getMonth() !== m) { alert("วันที่ไม่ถูกต้อง"); return; }
+
+        // 1. Astrological Day Calculation (06:00 Rule)
+        const [hr, min] = timeVal.split(':').map(Number);
+        
+        let astroDate = new Date(dob);
+        // If born before 06:00, it counts as previous day in Thai Astrology
+        if(hr < 6) {
+            astroDate.setDate(astroDate.getDate() - 1);
+        }
+        const dayOfWeek = astroDate.getDay(); // 0=Sun, 1=Mon...
+
+        // 2. Find Start Index in PLANETS Array
+        // Array Indices: Sun(0), Moon(1), Mars(2), Merc(3), Sat(4), Jup(5), Rahu(6), Venus(7)
+        let startIndex = 0;
+
+        if (dayOfWeek === 3) { // If Astrological Day is Wednesday
+            // Check for Rahu (Wednesday Night)
+            // Rahu is Wed 18:00 to Thu 05:59
+            // Since we already adjusted < 6am births to the previous day:
+            // - If original birth was Thu 04:00 -> Adjusted to Wed -> Is Rahu? YES.
+            // - If original birth was Wed 20:00 -> Adjusted to Wed -> Is Rahu? YES.
+            // - If original birth was Wed 10:00 -> Adjusted to Wed -> Is Rahu? NO (Mercury).
+            
+            // We check the ORIGINAL hour relative to the adjusted day logic
+            let isRahu = false;
+            // Original Time Logic:
+            // Case A: Born Wed >= 18:00 (Wed Night)
+            // Case B: Born Thu < 06:00 (Thu Morning counts as Wed Night)
+            
+            // We can simplify: We are currently "Wed" due to logic.
+            // If we came from Thu (original day=4), it IS Rahu.
+            // If we came from Wed (original day=3), check if >= 18.
+            const originalDay = dob.getDay();
+            if (originalDay === 4) isRahu = true; 
+            else if (originalDay === 3 && hr >= 18) isRahu = true;
+
+            startIndex = isRahu ? 6 : 3; // 6=Rahu, 3=Mercury
+        } else {
+            // Mapping Standard Days to Planet Index
+            const map = { 0:0, 1:1, 2:2, 4:5, 5:7, 6:4 };
+            startIndex = map[dayOfWeek];
+        }
+
+        renderTimeline(dob, startIndex);
+    }
+
+    function renderTimeline(dob, startIndex) {
+        const timeline = document.getElementById('timeline');
+        const dash = document.getElementById('dash');
+        const resultArea = document.getElementById('result-area');
+        
+        timeline.innerHTML = '';
+        resultArea.style.display = 'block';
+
+        const today = new Date();
+        let runningDate = new Date(dob);
+        let totalAge = 0;
+        let ptr = startIndex;
+        let activeFound = false;
+
+        // Loop until 108 years
+        while (totalAge < 108) {
+            const p = PLANETS[ptr];
+            
+            const startDate = new Date(runningDate);
+            // Accurate Leap Year Addition
+            runningDate.setFullYear(runningDate.getFullYear() + p.years);
+            const endDate = new Date(runningDate);
+            
+            // Age Range
+            const startAge = totalAge;
+            const endAge = totalAge + p.years;
+
+            // Check Active
+            const isActive = (today >= startDate && today < endDate);
+
+            // Render Timeline Item
+            const div = document.createElement('div');
+            div.className = `t-item ${isActive ? 'active' : ''}`;
+            
+            const iconColor = p.id === 'moon' ? '#333' : 'currentColor';
+
+            div.innerHTML = `
+                <div class="t-marker" style="border-color:${p.color}; ${isActive ? 'background:'+p.color : ''}">
+                    <svg style="color:${isActive ? '#fff' : '#ccc'}"><use href="#icon-${p.id}"></use></svg>
+                </div>
+                <div class="t-content" style="border-left-color:${p.color}">
+                    <div class="t-head">
+                        <span class="t-name" style="color:${p.color}">${p.name}</span>
+                        <span style="font-weight:bold; color:#555;">อายุ ${startAge} - ${endAge}</span>
+                    </div>
+                    <div class="t-dates">${formatDate(startDate)} ถึง ${formatDate(endDate)}</div>
+                </div>
+            `;
+            timeline.appendChild(div);
+
+            // Update Dashboard if Active
+            if (isActive) {
+                activeFound = true;
+                dash.style.background = p.color;
+                dash.style.color = (p.id === 'moon') ? '#333' : '#fff';
+                
+                document.getElementById('d-icon').innerHTML = `<svg style="fill:${(p.id === 'moon') ? '#333' : '#fff'}"><use href="#icon-${p.id}"></use></svg>`;
+                document.getElementById('d-name').innerText = p.name;
+                document.getElementById('d-age').innerText = `ช่วงอายุ ${startAge} - ${endAge} ปี`;
+                
+                document.getElementById('d-offering').innerHTML = `
+                    <strong>บูชาด้วยกำลัง ${p.items} (ใช้ของ ${p.items} อย่าง):</strong><br>
+                    ธูป ${p.items} ดอก, เทียน ${p.items} เล่ม, ดอกไม้ ${p.items} ดอก, เงิน ${p.items} บาท, ธง ${p.items} ผืน
+                `;
+
+                setTimeout(() => div.scrollIntoView({behavior:'smooth', block:'center'}), 200);
+            }
+
+            totalAge += p.years;
+            ptr = (ptr + 1) % 8; // Cyclic Increment
+        }
+    }
+
+    function formatDate(d) {
+        const m = THAI_MONTHS[d.getMonth()];
+        const y = d.getFullYear() + 543;
+        return `${d.getDate()} ${m} ${y}`;
+    }
+</script>
+
+</body>
+</html>
