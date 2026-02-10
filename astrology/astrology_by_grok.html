@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เครื่องคำนวณพระเสวยอายุ (มหาทักษาเทวดาเสวยอายุ)</title>
+    <style>
+        body { font-family: sans-serif; max-width: 900px; margin: 20px auto; background: #f8f8f8; color: #333; }
+        h1 { text-align: center; }
+        form { text-align: center; margin: 30px; }
+        input, select, button { font-size: 1.1em; padding: 8px; margin: 5px; }
+        button { background: #d35400; color: white; border: none; cursor: pointer; }
+        #result { margin-top: 40px; }
+        table { width: 100%; border-collapse: collapse; margin: 30px 0; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        th { background: #eee; }
+        .timeline { display: flex; height: 80px; border: 2px solid #333; border-radius: 8px; overflow: hidden; margin: 40px 0; position: relative; }
+        .period { display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-shadow: 1px 1px 2px black; font-weight: bold; position: relative; }
+        .icon { width: 40px; height: 40px; margin-bottom: 5px; }
+        .age-label { font-size: 0.8em; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); }
+        .white-text { color: #333; text-shadow: none; }
+    </style>
+</head>
+<body>
+    <h1>เครื่องคำนวณพระเสวยอายุ</h1>
+    <p style="text-align:center;">ป้อนวันเกิดเพื่อดูลำดับพระเสวยอายุตลอดชีวิตจนถึง 108 ปี (ตามหลักมหาทักษา)</p>
+
+    <form id="birthForm">
+        <label>วันเกิด:
+            <select id="day" required></select>
+            <select id="month" required></select>
+            <input type="number" id="year" placeholder="ปี (พ.ศ. หรือ ค.ศ.)" min="1800" max="3000" required>
+        </label>
+        <label><input type="checkbox" id="isBE"> ปี พ.ศ. (ถ้าไม่ติ๊ก = ค.ศ.)</label><br><br>
+        <button type="submit">คำนวณ</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        // Populate day and month selects
+        const daySelect = document.getElementById('day');
+        const monthSelect = document.getElementById('month');
+        const monthsThai = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+        for (let i = 1; i <= 31; i++) {
+            const opt = document.createElement('option');
+            opt.value = i; opt.textContent = i;
+            daySelect.appendChild(opt);
+        }
+        monthsThai.forEach((m, i) => {
+            const opt = document.createElement('option');
+            opt.value = i+1; opt.textContent = m;
+            monthSelect.appendChild(opt);
+        });
+
+        // Planet data
+        const planets = ['พระอาทิตย์', 'พระจันทร์', 'พระอังคาร', 'พระพุธ', 'พระเสาร์', 'พระพฤหัสบดี', 'พระราหู', 'พระศุกร์'];
+        const durations = [6, 15, 8, 17, 10, 19, 12, 21];
+        const colors = {
+            'พระอาทิตย์': '#e74c3c',   // red
+            'พระจันทร์': '#ecf0f1',    // light gray (white background hard to read)
+            'พระอังคาร': '#ff69b4',   // hot pink
+            'พระพุธ': '#2ecc71',       // green
+            'พระเสาร์': '#2c3e50',     // dark navy (black too dark)
+            'พระพฤหัสบดี': '#f39c12', // orange-yellow
+            'พระราหู': '#8e44ad',      // purple
+            'พระศุกร์': '#3498db'     // blue
+        };
+
+        const dayToIndex = { 0:0, 1:1, 2:2, 3:3, 4:5, 5:7, 6:4 }; // Sun=0, Mon=1, ..., Thu=5 (Jupiter), Fri=7 (Venus), Sat=4 (Saturn)
+
+        // Simple SVG icons
+        function getIcon(planet) {
+            const svgs = {
+                'พระอาทิตย์': '<circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="25" cy="25" r="8" fill="currentColor"/>',
+                'พระจันทร์': '<path d="M25 5 Q40 25 25 45 Q10 25 25 5" fill="currentColor"/>',
+                'พระอังคาร': '<circle cx="25" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="3"/><line x1="25" y1="20" x2="35" y2="10" stroke="currentColor" stroke-width="3"/>',
+                'พระพุธ': '<circle cx="25" cy="15" r="12" fill="none" stroke="currentColor" stroke-width="3"/><line x1="25" y1="27" x2="25" y2="40" stroke="currentColor" stroke-width="3"/><path d="M20 35 L30 35" stroke="currentColor" stroke-width="3"/>',
+                'พระเสาร์': '<path d="M10 30 Q25 10 40 30" fill="none" stroke="currentColor" stroke-width="4"/><line x1="10" y1="35" x2="40" y2="35" stroke="currentColor" stroke-width="3"/>',
+                'พระพฤหัสบดี': '<path d="M10 40 L25 10 L40 40" fill="none" stroke="currentColor" stroke-width="4"/><line x1="25" y1="10" x2="25" y2="30" stroke="currentColor" stroke-width="3"/>',
+                'พระราหู': '<circle cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="4"/><path d="M10 10 Q25 30 40 10" fill="none" stroke="currentColor" stroke-width="3"/>',
+                'พระศุกร์': '<circle cx="25" cy="15" r="12" fill="none" stroke="currentColor" stroke-width="3"/><line x1="25" y1="27" x2="25" y2="40" stroke="currentColor" stroke-width="3"/>'
+            };
+            const path = svgs[planet] || '';
+            return `<svg class="icon" viewBox="0 0 50 50" fill="none">${path}</svg>`;
+        }
+
+        // Format date to Thai
+        function formatDate(date) {
+            if (!(date instanceof Date) || isNaN(date)) return '-';
+            const d = date.getDate();
+            const m = monthsThai[date.getMonth()];
+            const yBE = date.getFullYear() + 543;
+            return `${d} ${m} ${yBE}`;
+        }
+
+        document.getElementById('birthForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const day = parseInt(document.getElementById('day').value);
+            const month = parseInt(document.getElementById('month').value) - 1;
+            let year = parseInt(document.getElementById('year').value);
+            const isBE = document.getElementById('isBE').checked;
+            if (isBE) year -= 543;
+
+            const birthDate = new Date(year, month, day);
+            if (isNaN(birthDate)) {
+                alert('วันที่ไม่ถูกต้อง');
+                return;
+            }
+
+            const dow = birthDate.getDay();
+            const startIndex = dayToIndex[dow];
+
+            let currentDate = new Date(birthDate);
+            let cumAge = 0;
+            let html = '<h2>ผลการคำนวณ</h2>';
+            html += `<p>วันเกิด: ${formatDate(birthDate)} (วัน${['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'][dow]})</p>`;
+            html += '<table><tr><th>ช่วงอายุ</th><th>พระเสวยอายุ</th><th>ระยะ (ปี)</th><th>เริ่ม</th><th>สิ้นสุด</th></tr>';
+
+            const timelinePeriods = [];
+
+            for (let i = 0; i < 8; i++) {
+                const pIdx = (startIndex + i) % 8;
+                const planet = planets[pIdx];
+                const dur = durations[pIdx];
+                const startD = new Date(currentDate);
+                const endD = new Date(currentDate);
+                endD.setFullYear(currentDate.getFullYear() + dur);
+
+                const ageStart = cumAge;
+                const ageEnd = cumAge + dur;
+
+                html += `<tr style="background:${colors[planet]}; color:${planet === 'พระจันทร์' ? '#000' : '#fff'};">
+                    <td>${ageStart}–${ageEnd}</td>
+                    <td>${getIcon(planet)}${planet}</td>
+                    <td>${dur}</td>
+                    <td>${formatDate(startD)}</td>
+                    <td>${formatDate(endD)}</td>
+                </tr>`;
+
+                timelinePeriods.push({planet, dur, color: colors[planet], icon: getIcon(planet), ageStart, ageEnd});
+
+                currentDate = endD;
+                cumAge += dur;
+            }
+            html += '</table>';
+
+            // Timeline bar
+            html += '<div class="timeline">';
+            timelinePeriods.forEach(p => {
+                const widthPct = (p.dur / 108 * 100).toFixed(4);
+                const textClass = p.planet === 'พระจันทร์' || p.planet === 'พระเสาร์' ? 'white-text' : '';
+                html += `<div class="period" style="flex:${p.dur}; background:${p.color};">
+                    ${p.icon}
+                    <div>${p.planet}<br>${p.dur} ปี</div>
+                    <div class="age-label ${textClass}">${p.ageStart}–${p.ageEnd}</div>
+                </div>`;
+            });
+            html += '</div>';
+
+            document.getElementById('result').innerHTML = html;
+        });
+    </script>
+</body>
+</html>
