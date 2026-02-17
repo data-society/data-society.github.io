@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light dark">
     <meta name="description"
-        content="Walkr Galactic Mission Dependency Network - Interactive visualization of 16 pending missions and 6 critical planetary bottlenecks">
+        content="Walkr Galactic Mission Dependency Network - Interactive visualization of 16 pending missions, 4 resolved missions, and 7 planetary sector hubs">
     <title>Walkr Galactic Mission Network | Xenoeconomic Atlas</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,17 +17,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 
     <style>
-        /* ============================================
-           CSS CUSTOM PROPERTIES & DESIGN TOKENS
-           ============================================ */
         :root {
-            /* Space Theme Colors */
             --space-void: #050510;
             --space-deep: #0a0a1a;
             --space-nebula: #1a1a3e;
             --space-dust: #2d2d5a;
 
-            /* Status Colors */
             --blocked-primary: #ff4757;
             --blocked-secondary: #ff6b7a;
             --blocked-glow: rgba(255, 71, 87, 0.4);
@@ -41,64 +36,39 @@
             --resolved-secondary: #7df9ff;
             --resolved-glow: rgba(0, 212, 255, 0.4);
 
-            /* Accent Colors */
             --cyber-blue: #00d4ff;
             --cyber-purple: #a855f7;
             --cyber-pink: #ec4899;
             --cyber-gold: #fbbf24;
 
-            /* Gradients */
             --gradient-blocked: linear-gradient(135deg, #ff4757 0%, #ff6b7a 50%, #ff8a94 100%);
             --gradient-available: linear-gradient(135deg, #2ed573 0%, #7bed9f 100%);
             --gradient-mission: linear-gradient(135deg, #ffa502 0%, #ffcc00 100%);
             --gradient-resolved: linear-gradient(135deg, #00d4ff 0%, #7df9ff 100%);
-            --gradient-space: linear-gradient(135deg, #050510 0%, #1a1a3e 50%, #0a0a1a 100%);
             --gradient-header: linear-gradient(90deg, #00d4ff 0%, #a855f7 50%, #ec4899 100%);
 
-            /* Text Colors */
             --text-primary: #f1f5f9;
             --text-secondary: #94a3b8;
             --text-muted: #64748b;
 
-            /* UI Colors */
             --card-bg: rgba(26, 26, 62, 0.8);
             --card-border: rgba(100, 116, 139, 0.3);
             --card-hover: rgba(45, 45, 90, 0.9);
 
-            /* Shadows */
-            --shadow-glow-red: 0 0 30px rgba(255, 71, 87, 0.5);
-            --shadow-glow-green: 0 0 30px rgba(46, 213, 115, 0.5);
-            --shadow-glow-gold: 0 0 30px rgba(255, 165, 2, 0.5);
-            --shadow-glow-blue: 0 0 30px rgba(0, 212, 255, 0.5);
-
-            /* Layout */
             --header-height: 70px;
             --sidebar-width: 360px;
             --panel-width: 400px;
 
-            /* Animation */
             --animation-fast: 0.15s;
             --animation-normal: 0.3s;
-            --animation-slow: 0.5s;
             --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
-            /* Border Radius */
             --radius-sm: 0.375rem;
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
             --radius-xl: 1rem;
-            --radius-2xl: 1.5rem;
-
-            /* Antigravity Motion Variables */
-            --ring-x: 50;
-            --ring-y: 50;
-            --animation-tick: 0;
-            --ring-radius: 200px;
         }
 
-        /* ============================================
-           CSS RESET & BASE STYLES
-           ============================================ */
         *,
         *::before,
         *::after {
@@ -123,9 +93,6 @@
             min-height: 100vh;
         }
 
-        /* ============================================
-           LOADING OVERLAY
-           ============================================ */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -202,12 +169,23 @@
         }
 
         @keyframes ringPulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.2; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.2;
+            }
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .loading-text {
@@ -231,18 +209,29 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
         @keyframes typewriter {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
         }
 
-        /* ============================================
-           ANTIGRAVITY PARTICLE RING BACKGROUND
-           ============================================ */
         #particle-ring-canvas {
             position: fixed;
             top: 0;
@@ -255,12 +244,17 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            #particle-ring-canvas { display: none; }
+            #particle-ring-canvas {
+                display: none;
+            }
+
             body::before {
                 content: '';
                 position: fixed;
-                top: 0; left: 0;
-                width: 100%; height: 100%;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
                 background: radial-gradient(ellipse at center,
                         rgba(0, 212, 255, 0.1) 0%,
                         rgba(168, 85, 247, 0.05) 30%,
@@ -270,23 +264,21 @@
             }
         }
 
-        /* ============================================
-           STARFIELD BACKGROUND
-           ============================================ */
         #starfield {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1;
             pointer-events: none;
         }
 
-        /* ============================================
-           HEADER
-           ============================================ */
         header {
             position: fixed;
-            top: 0; left: 0; right: 0;
+            top: 0;
+            left: 0;
+            right: 0;
             height: var(--header-height);
             background: rgba(5, 5, 16, 0.95);
             backdrop-filter: blur(20px);
@@ -300,7 +292,9 @@
             transition: transform 0.3s var(--ease-out-expo);
         }
 
-        header.hidden-header { transform: translateY(-100%); }
+        header.hidden-header {
+            transform: translateY(-100%);
+        }
 
         .header-brand {
             display: flex;
@@ -309,7 +303,8 @@
         }
 
         .brand-logo {
-            width: 44px; height: 44px;
+            width: 44px;
+            height: 44px;
             background: var(--gradient-header);
             border-radius: var(--radius-lg);
             display: flex;
@@ -320,12 +315,15 @@
         }
 
         @keyframes logoFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
 
-        @media (prefers-reduced-motion: reduce) {
-            @keyframes logoFloat { 0%, 100% { transform: translateY(0); } }
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
         }
 
         .brand-text {
@@ -395,7 +393,8 @@
         }
 
         .control-btn {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             border-radius: var(--radius-lg);
             background: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -415,9 +414,6 @@
             transform: translateY(-2px);
         }
 
-        /* ============================================
-           MAIN LAYOUT
-           ============================================ */
         .app-container {
             display: flex;
             height: 100vh;
@@ -426,9 +422,6 @@
             z-index: 2;
         }
 
-        /* ============================================
-           SIDEBAR (Table of Contents)
-           ============================================ */
         .sidebar {
             width: var(--sidebar-width);
             background: rgba(5, 5, 16, 0.95);
@@ -460,6 +453,29 @@
             color: var(--text-muted);
         }
 
+        .sheet-link {
+            display: inline-block;
+            margin-top: 0.75rem;
+            color: var(--cyber-blue);
+            font-size: 0.75rem;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .sheet-link:hover {
+            text-decoration: underline;
+        }
+
+        .sheet-meta {
+            margin-top: 0.75rem;
+            display: grid;
+            gap: 0.2rem;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.4;
+        }
+
         .sidebar-summary {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -475,8 +491,13 @@
             text-align: center;
         }
 
-        .summary-card.blocked { border-color: rgba(255, 71, 87, 0.3); }
-        .summary-card.resolved { border-color: rgba(0, 212, 255, 0.3); }
+        .summary-card.blocked {
+            border-color: rgba(255, 71, 87, 0.3);
+        }
+
+        .summary-card.resolved {
+            border-color: rgba(0, 212, 255, 0.3);
+        }
 
         .summary-value {
             font-family: 'JetBrains Mono', monospace;
@@ -484,8 +505,13 @@
             font-weight: 700;
         }
 
-        .summary-card.blocked .summary-value { color: var(--blocked-primary); }
-        .summary-card.resolved .summary-value { color: var(--resolved-primary); }
+        .summary-card.blocked .summary-value {
+            color: var(--blocked-primary);
+        }
+
+        .summary-card.resolved .summary-value {
+            color: var(--resolved-primary);
+        }
 
         .summary-label {
             font-size: 0.65rem;
@@ -494,8 +520,9 @@
             letter-spacing: 1px;
         }
 
-        /* Cluster Navigation */
-        .cluster-nav { padding: 1rem; }
+        .cluster-nav {
+            padding: 1rem;
+        }
 
         .cluster-section-title {
             font-family: 'Orbitron', monospace;
@@ -513,7 +540,8 @@
 
         .cluster-section-title::before {
             content: '';
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
         }
 
@@ -527,7 +555,9 @@
             box-shadow: 0 0 10px var(--resolved-glow);
         }
 
-        .cluster-item { margin-bottom: 0.75rem; }
+        .cluster-item {
+            margin-bottom: 0.75rem;
+        }
 
         .cluster-header {
             display: flex;
@@ -541,18 +571,27 @@
             transition: all var(--animation-fast) ease;
         }
 
-        .cluster-header:hover { background: var(--card-hover); }
+        .cluster-header:hover {
+            background: var(--card-hover);
+        }
 
         .cluster-header.blocked:hover,
-        .cluster-header.blocked.active { border-color: var(--blocked-primary); }
+        .cluster-header.blocked.active {
+            border-color: var(--blocked-primary);
+        }
 
         .cluster-header.resolved:hover,
-        .cluster-header.resolved.active { border-color: var(--resolved-primary); }
+        .cluster-header.resolved.active {
+            border-color: var(--resolved-primary);
+        }
 
-        .cluster-header.active { box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); }
+        .cluster-header.active {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
 
         .cluster-icon {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -561,8 +600,13 @@
             flex-shrink: 0;
         }
 
-        .cluster-icon.blocked { background: var(--gradient-blocked); }
-        .cluster-icon.resolved { background: var(--gradient-resolved); }
+        .cluster-icon.blocked {
+            background: var(--gradient-blocked);
+        }
+
+        .cluster-icon.resolved {
+            background: var(--gradient-resolved);
+        }
 
         .cluster-info {
             flex: 1;
@@ -583,8 +627,13 @@
             font-family: 'JetBrains Mono', monospace;
         }
 
-        .cluster-resource.blocked { color: var(--blocked-secondary); }
-        .cluster-resource.resolved { color: var(--resolved-secondary); }
+        .cluster-resource.blocked {
+            color: var(--blocked-secondary);
+        }
+
+        .cluster-resource.resolved {
+            color: var(--resolved-secondary);
+        }
 
         .cluster-badge {
             font-size: 0.7rem;
@@ -594,10 +643,14 @@
             color: white;
         }
 
-        .cluster-badge.blocked { background: var(--blocked-primary); }
-        .cluster-badge.resolved { background: var(--resolved-primary); }
+        .cluster-badge.blocked {
+            background: var(--blocked-primary);
+        }
 
-        /* Mission List */
+        .cluster-badge.resolved {
+            background: var(--resolved-primary);
+        }
+
         .mission-list {
             padding-left: 1.5rem;
             margin-top: 0.5rem;
@@ -610,8 +663,15 @@
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .mission-item {
@@ -637,7 +697,8 @@
         }
 
         .mission-dot {
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: var(--mission-primary);
             flex-shrink: 0;
@@ -662,7 +723,6 @@
             flex-shrink: 0;
         }
 
-        /* Legend */
         .sidebar-legend {
             padding: 1.5rem;
             border-top: 1px solid var(--card-border);
@@ -691,23 +751,36 @@
         }
 
         .legend-dot {
-            width: 12px; height: 12px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
         }
 
-        .legend-dot.blocked { background: var(--blocked-primary); box-shadow: 0 0 10px var(--blocked-glow); }
-        .legend-dot.mission { background: var(--mission-primary); box-shadow: 0 0 10px var(--mission-glow); }
-        .legend-dot.available { background: var(--available-primary); box-shadow: 0 0 10px var(--available-glow); }
-        .legend-dot.resolved { background: var(--resolved-primary); box-shadow: 0 0 10px var(--resolved-glow); }
+        .legend-dot.blocked {
+            background: var(--blocked-primary);
+            box-shadow: 0 0 10px var(--blocked-glow);
+        }
+
+        .legend-dot.mission {
+            background: var(--mission-primary);
+            box-shadow: 0 0 10px var(--mission-glow);
+        }
+
+        .legend-dot.available {
+            background: var(--available-primary);
+            box-shadow: 0 0 10px var(--available-glow);
+        }
+
+        .legend-dot.resolved {
+            background: var(--resolved-primary);
+            box-shadow: 0 0 10px var(--resolved-glow);
+        }
 
         .legend-label {
             font-size: 0.8rem;
             color: var(--text-secondary);
         }
 
-        /* ============================================
-           MAIN VISUALIZATION AREA
-           ============================================ */
         .viz-container {
             flex: 1;
             position: relative;
@@ -715,16 +788,19 @@
         }
 
         #galaxy-viz {
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             cursor: grab;
         }
 
-        #galaxy-viz:active { cursor: grabbing; }
+        #galaxy-viz:active {
+            cursor: grabbing;
+        }
 
-        /* Zoom Controls */
         .zoom-controls {
             position: absolute;
-            bottom: 2rem; right: 2rem;
+            bottom: 2rem;
+            right: 2rem;
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
@@ -732,7 +808,8 @@
         }
 
         .zoom-btn {
-            width: 44px; height: 44px;
+            width: 44px;
+            height: 44px;
             border-radius: var(--radius-lg);
             background: rgba(5, 5, 16, 0.9);
             border: 1px solid var(--card-border);
@@ -752,7 +829,6 @@
             color: var(--cyber-blue);
         }
 
-        /* View Mode Toggle */
         .view-toggle {
             position: absolute;
             top: 1.5rem;
@@ -790,15 +866,15 @@
             background: rgba(255, 255, 255, 0.05);
         }
 
-        /* Filter Pills */
         .filter-pills {
             position: absolute;
-            top: 1.5rem; right: 2rem;
+            top: 1.5rem;
+            right: 2rem;
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
             z-index: 20;
-            max-width: 500px;
+            max-width: 620px;
             justify-content: flex-end;
         }
 
@@ -816,7 +892,9 @@
             white-space: nowrap;
         }
 
-        .filter-pill:hover { border-color: var(--cyber-blue); }
+        .filter-pill:hover {
+            border-color: var(--cyber-blue);
+        }
 
         .filter-pill.active {
             background: var(--cyber-blue);
@@ -829,9 +907,6 @@
             border-color: var(--resolved-primary);
         }
 
-        /* ============================================
-           DETAIL PANEL
-           ============================================ */
         .detail-panel {
             width: var(--panel-width);
             background: rgba(5, 5, 16, 0.98);
@@ -843,7 +918,9 @@
             backdrop-filter: blur(20px);
         }
 
-        .detail-panel.open { transform: translateX(0); }
+        .detail-panel.open {
+            transform: translateX(0);
+        }
 
         .panel-header {
             padding: 1.5rem;
@@ -851,15 +928,28 @@
             position: relative;
         }
 
-        .panel-header.blocked { background: linear-gradient(180deg, rgba(255, 71, 87, 0.1) 0%, transparent 100%); }
-        .panel-header.resolved { background: linear-gradient(180deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%); }
-        .panel-header.mission { background: linear-gradient(180deg, rgba(255, 165, 2, 0.1) 0%, transparent 100%); }
-        .panel-header.available { background: linear-gradient(180deg, rgba(46, 213, 115, 0.1) 0%, transparent 100%); }
+        .panel-header.blocked {
+            background: linear-gradient(180deg, rgba(255, 71, 87, 0.1) 0%, transparent 100%);
+        }
+
+        .panel-header.resolved {
+            background: linear-gradient(180deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%);
+        }
+
+        .panel-header.mission {
+            background: linear-gradient(180deg, rgba(255, 165, 2, 0.1) 0%, transparent 100%);
+        }
+
+        .panel-header.available {
+            background: linear-gradient(180deg, rgba(46, 213, 115, 0.1) 0%, transparent 100%);
+        }
 
         .panel-close {
             position: absolute;
-            top: 1rem; right: 1rem;
-            width: 32px; height: 32px;
+            top: 1rem;
+            right: 1rem;
+            width: 32px;
+            height: 32px;
             border-radius: var(--radius-md);
             background: transparent;
             border: 1px solid var(--card-border);
@@ -878,7 +968,8 @@
         }
 
         .panel-planet-image {
-            width: 80px; height: 80px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             margin-bottom: 1rem;
             border: 3px solid var(--card-border);
@@ -916,38 +1007,73 @@
             letter-spacing: 1px;
         }
 
-        .panel-status.blocked { background: rgba(255, 71, 87, 0.2); color: var(--blocked-primary); border: 1px solid var(--blocked-primary); }
-        .panel-status.available { background: rgba(46, 213, 115, 0.2); color: var(--available-primary); border: 1px solid var(--available-primary); }
-        .panel-status.mission { background: rgba(255, 165, 2, 0.2); color: var(--mission-primary); border: 1px solid var(--mission-primary); }
-        .panel-status.resolved { background: rgba(0, 212, 255, 0.2); color: var(--resolved-primary); border: 1px solid var(--resolved-primary); }
+        .panel-status.blocked {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--blocked-primary);
+            border: 1px solid var(--blocked-primary);
+        }
+
+        .panel-status.available {
+            background: rgba(46, 213, 115, 0.2);
+            color: var(--available-primary);
+            border: 1px solid var(--available-primary);
+        }
+
+        .panel-status.mission {
+            background: rgba(255, 165, 2, 0.2);
+            color: var(--mission-primary);
+            border: 1px solid var(--mission-primary);
+        }
+
+        .panel-status.resolved {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--resolved-primary);
+            border: 1px solid var(--resolved-primary);
+        }
 
         .panel-status-dot {
-            width: 8px; height: 8px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             animation: blink 1.5s ease-in-out infinite;
         }
 
         @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            .panel-status-dot { animation: none; }
+        .panel-status.blocked .panel-status-dot {
+            background: var(--blocked-primary);
         }
 
-        .panel-status.blocked .panel-status-dot { background: var(--blocked-primary); }
-        .panel-status.available .panel-status-dot { background: var(--available-primary); }
-        .panel-status.mission .panel-status-dot { background: var(--mission-primary); }
-        .panel-status.resolved .panel-status-dot { background: var(--resolved-primary); }
+        .panel-status.available .panel-status-dot {
+            background: var(--available-primary);
+        }
 
-        /* Panel Content Sections */
+        .panel-status.mission .panel-status-dot {
+            background: var(--mission-primary);
+        }
+
+        .panel-status.resolved .panel-status-dot {
+            background: var(--resolved-primary);
+        }
+
         .panel-section {
             padding: 1.5rem;
             border-bottom: 1px solid var(--card-border);
         }
 
-        .panel-section:last-child { border-bottom: none; }
+        .panel-section:last-child {
+            border-bottom: none;
+        }
 
         .panel-section-title {
             font-family: 'Orbitron', monospace;
@@ -964,12 +1090,12 @@
 
         .panel-section-title::before {
             content: '';
-            width: 4px; height: 4px;
+            width: 4px;
+            height: 4px;
             background: var(--cyber-blue);
             border-radius: 50%;
         }
 
-        /* Lore Card */
         .lore-card {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
             border: 1px solid rgba(0, 212, 255, 0.2);
@@ -994,7 +1120,6 @@
             margin-right: 0.25rem;
         }
 
-        /* Resource Stats */
         .resource-stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1010,7 +1135,9 @@
             transition: all var(--animation-fast) ease;
         }
 
-        .resource-stat:hover { border-color: var(--cyber-blue); }
+        .resource-stat:hover {
+            border-color: var(--cyber-blue);
+        }
 
         .resource-stat-value {
             font-family: 'JetBrains Mono', monospace;
@@ -1030,7 +1157,6 @@
             margin-top: 0.25rem;
         }
 
-        /* Connected Nodes List */
         .connected-list {
             display: flex;
             flex-direction: column;
@@ -1056,7 +1182,8 @@
         }
 
         .connected-item-icon {
-            width: 32px; height: 32px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1065,10 +1192,25 @@
             flex-shrink: 0;
         }
 
-        .connected-item-icon.mission { background: rgba(255, 165, 2, 0.2); border: 1px solid var(--mission-primary); }
-        .connected-item-icon.available { background: rgba(46, 213, 115, 0.2); border: 1px solid var(--available-primary); }
-        .connected-item-icon.blocked { background: rgba(255, 71, 87, 0.2); border: 1px solid var(--blocked-primary); }
-        .connected-item-icon.resolved { background: rgba(0, 212, 255, 0.2); border: 1px solid var(--resolved-primary); }
+        .connected-item-icon.mission {
+            background: rgba(255, 165, 2, 0.2);
+            border: 1px solid var(--mission-primary);
+        }
+
+        .connected-item-icon.available {
+            background: rgba(46, 213, 115, 0.2);
+            border: 1px solid var(--available-primary);
+        }
+
+        .connected-item-icon.blocked {
+            background: rgba(255, 71, 87, 0.2);
+            border: 1px solid var(--blocked-primary);
+        }
+
+        .connected-item-icon.resolved {
+            background: rgba(0, 212, 255, 0.2);
+            border: 1px solid var(--resolved-primary);
+        }
 
         .connected-item-info {
             flex: 1;
@@ -1094,11 +1236,21 @@
             flex-shrink: 0;
         }
 
-        .connected-item-badge.cubes { background: rgba(251, 191, 36, 0.2); color: var(--cyber-gold); }
-        .connected-item-badge.resource { background: rgba(46, 213, 115, 0.2); color: var(--available-primary); }
-        .connected-item-badge.missing { background: rgba(255, 71, 87, 0.2); color: var(--blocked-primary); }
+        .connected-item-badge.cubes {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--cyber-gold);
+        }
 
-        /* Priority Card */
+        .connected-item-badge.resource {
+            background: rgba(46, 213, 115, 0.2);
+            color: var(--available-primary);
+        }
+
+        .connected-item-badge.missing {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--blocked-primary);
+        }
+
         .priority-card {
             background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, rgba(255, 165, 2, 0.1) 100%);
             border: 1px solid var(--blocked-primary);
@@ -1119,7 +1271,8 @@
         }
 
         .priority-icon {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             background: var(--gradient-blocked);
             border-radius: var(--radius-lg);
             display: flex;
@@ -1128,7 +1281,9 @@
             font-size: 1.25rem;
         }
 
-        .priority-card.resolved .priority-icon { background: var(--gradient-resolved); }
+        .priority-card.resolved .priority-icon {
+            background: var(--gradient-resolved);
+        }
 
         .priority-title {
             font-family: 'Orbitron', monospace;
@@ -1137,7 +1292,9 @@
             color: var(--blocked-primary);
         }
 
-        .priority-card.resolved .priority-title { color: var(--resolved-primary); }
+        .priority-card.resolved .priority-title {
+            color: var(--resolved-primary);
+        }
 
         .priority-subtitle {
             font-size: 0.75rem;
@@ -1171,9 +1328,6 @@
             letter-spacing: 1px;
         }
 
-        /* ============================================
-           TOOLTIP
-           ============================================ */
         .tooltip {
             position: absolute;
             padding: 1rem 1.25rem;
@@ -1189,7 +1343,9 @@
             transition: opacity var(--animation-fast) ease;
         }
 
-        .tooltip.visible { opacity: 1; }
+        .tooltip.visible {
+            opacity: 1;
+        }
 
         .tooltip-header {
             display: flex;
@@ -1201,7 +1357,8 @@
         }
 
         .tooltip-icon {
-            width: 40px; height: 40px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -1209,10 +1366,21 @@
             font-size: 1.2rem;
         }
 
-        .tooltip-icon.blocked { background: var(--gradient-blocked); }
-        .tooltip-icon.mission { background: var(--gradient-mission); }
-        .tooltip-icon.available { background: var(--gradient-available); }
-        .tooltip-icon.resolved { background: var(--gradient-resolved); }
+        .tooltip-icon.blocked {
+            background: var(--gradient-blocked);
+        }
+
+        .tooltip-icon.mission {
+            background: var(--gradient-mission);
+        }
+
+        .tooltip-icon.available {
+            background: var(--gradient-available);
+        }
+
+        .tooltip-icon.resolved {
+            background: var(--gradient-resolved);
+        }
 
         .tooltip-title {
             font-family: 'Orbitron', monospace;
@@ -1240,7 +1408,10 @@
             border-top: 1px dashed var(--card-border);
         }
 
-        .tooltip-stat-label { color: var(--text-muted); font-size: 0.8rem; }
+        .tooltip-stat-label {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
 
         .tooltip-stat-value {
             font-family: 'JetBrains Mono', monospace;
@@ -1248,21 +1419,45 @@
             color: var(--cyber-gold);
         }
 
-        .tooltip-stat-value.missing { color: var(--blocked-primary); }
-        .tooltip-stat-value.available { color: var(--available-primary); }
+        .tooltip-stat-value.missing {
+            color: var(--blocked-primary);
+        }
 
-        /* ============================================
-           SVG STYLES
-           ============================================ */
-        .node-blocked { filter: drop-shadow(0 0 20px rgba(255, 71, 87, 0.6)); }
-        .node-mission { filter: drop-shadow(0 0 12px rgba(255, 165, 2, 0.5)); }
-        .node-available { filter: drop-shadow(0 0 10px rgba(46, 213, 115, 0.5)); }
-        .node-resolved { filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6)); }
+        .tooltip-stat-value.available {
+            color: var(--available-primary);
+        }
 
-        .link-missing { stroke: var(--blocked-primary); stroke-dasharray: 8, 4; opacity: 0.6; }
-        .link-available { stroke: var(--available-primary); opacity: 0.4; }
-        .link-mission { stroke: var(--mission-primary); opacity: 0.5; }
-        .link-resolved { stroke: var(--resolved-primary); opacity: 0.5; }
+        .node-blocked {
+            filter: drop-shadow(0 0 20px rgba(255, 71, 87, 0.6));
+        }
+
+        .node-mission {
+            filter: drop-shadow(0 0 12px rgba(255, 165, 2, 0.5));
+        }
+
+        .node-available {
+            filter: drop-shadow(0 0 10px rgba(46, 213, 115, 0.5));
+        }
+
+        .node-resolved {
+            filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6));
+        }
+
+        .link-missing {
+            stroke: var(--blocked-primary);
+            stroke-dasharray: 8, 4;
+            opacity: 0.6;
+        }
+
+        .link-available {
+            stroke: var(--available-primary);
+            opacity: 0.4;
+        }
+
+        .link-resolved {
+            stroke: var(--resolved-primary);
+            opacity: 0.5;
+        }
 
         .node-label {
             font-family: 'Inter', sans-serif;
@@ -1281,15 +1476,23 @@
             pointer-events: none;
         }
 
-        .flow-particle { fill: var(--available-primary); opacity: 0.8; }
-
-        @keyframes nodePulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 71, 87, 0.6)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(255, 71, 87, 0.8)); }
+        .flow-particle {
+            fill: var(--available-primary);
+            opacity: 0.8;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            @keyframes nodePulse { 0%, 100% { transform: scale(1); } }
+        @keyframes nodePulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 15px rgba(255, 71, 87, 0.6));
+            }
+
+            50% {
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 25px rgba(255, 71, 87, 0.8));
+            }
         }
 
         .node-blocked-pulse {
@@ -1297,9 +1500,6 @@
             transform-origin: center;
         }
 
-        /* ============================================
-           RESPONSIVE DESIGN
-           ============================================ */
         @media (max-width: 1200px) {
             .sidebar {
                 position: fixed;
@@ -1309,14 +1509,21 @@
                 transform: translateX(-100%);
                 z-index: 60;
             }
-            .sidebar.open { transform: translateX(0); }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
             .detail-panel {
                 position: fixed;
                 right: 0;
                 top: var(--header-height);
                 height: calc(100vh - var(--header-height));
             }
-            .header-stats { display: none; }
+
+            .header-stats {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1325,50 +1532,71 @@
                 --sidebar-width: 100%;
                 --panel-width: 100%;
             }
-            .brand-subtitle { display: none; }
-            .view-toggle { top: auto; bottom: 5rem; left: 1rem; transform: none; }
-            .filter-pills { display: none; }
-            .zoom-controls { bottom: 1rem; right: 1rem; }
+
+            .brand-subtitle {
+                display: none;
+            }
+
+            .view-toggle {
+                top: auto;
+                bottom: 5rem;
+                left: 1rem;
+                transform: none;
+            }
+
+            .filter-pills {
+                display: none;
+            }
+
+            .zoom-controls {
+                bottom: 1rem;
+                right: 1rem;
+            }
         }
 
-        /* ============================================
-           ACCESSIBILITY
-           ============================================ */
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
+
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
         }
 
-        :focus-visible { outline: 2px solid var(--cyber-blue); outline-offset: 2px; }
+        :focus-visible {
+            outline: 2px solid var(--cyber-blue);
+            outline-offset: 2px;
+        }
 
         .sr-only {
-            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-            overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
     </style>
 </head>
 
 <body>
-    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loading-overlay">
         <div class="loading-ring"></div>
         <div class="loading-ring"></div>
         <div class="loading-ring"></div>
         <div class="loading-spinner"></div>
         <div class="loading-text">Initializing Galactic Network...</div>
-        <div class="loading-subtext">Scanning 6 Sector Bottlenecks • 18 Mission Vectors</div>
+        <div class="loading-subtext">Scanning 7 Sector Hubs • 20 Mission Vectors</div>
     </div>
 
-    <!-- Antigravity Particle Ring Background -->
     <canvas id="particle-ring-canvas"></canvas>
-
-    <!-- Starfield Background -->
     <canvas id="starfield"></canvas>
 
-    <!-- Header -->
     <header id="main-header">
         <div class="header-brand">
             <div class="brand-logo">🌌</div>
@@ -1380,11 +1608,11 @@
 
         <div class="header-stats">
             <div class="stat-item">
-                <div class="stat-value" id="total-missions">14</div>
-                <div class="stat-label">Blocked Missions</div>
+                <div class="stat-value" id="total-missions">16</div>
+                <div class="stat-label">Pending Missions</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value" id="total-blockers">4</div>
+                <div class="stat-value" id="total-blockers">5</div>
                 <div class="stat-label">Blocked Planets</div>
             </div>
             <div class="stat-item resolved">
@@ -1392,7 +1620,7 @@
                 <div class="stat-label">Resolved</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value" id="total-cubes">264</div>
+                <div class="stat-value" id="total-cubes">311</div>
                 <div class="stat-label">Total Cubes</div>
             </div>
         </div>
@@ -1404,16 +1632,20 @@
         </div>
     </header>
 
-    <!-- Main Application Container -->
     <div class="app-container">
-        <!-- Sidebar -->
         <nav class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-title">Mission Clusters</div>
-                <div class="sidebar-subtitle">4 Blocked • 2 Resolved • 18 Missions</div>
+                <div class="sidebar-subtitle">5 Blocked • 2 Resolved • 20 Missions</div>
+                <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1-yodRyNEXR_fgqjz5hWCu9uq5r1iThDsj_2826uslzU/edit?gid=373512802#gid=373512802" target="_blank" rel="noopener noreferrer">Updated Planet Resource Table ↗</a>
+                <div class="sheet-meta">
+                    <div>PA #177 • Official #0112 • Silent Star • Joy</div>
+                    <div>PA #308 • Official #0088 • Crown Circus • Ticket</div>
+                    <div>PA #192 • Official #0070 • Popcorn Prison • Popcorn</div>
+                </div>
                 <div class="sidebar-summary">
                     <div class="summary-card blocked">
-                        <div class="summary-value">205</div>
+                        <div class="summary-value">252</div>
                         <div class="summary-label">Blocked Cubes</div>
                     </div>
                     <div class="summary-card resolved">
@@ -1423,9 +1655,7 @@
                 </div>
             </div>
 
-            <div class="cluster-nav" id="cluster-nav">
-                <!-- Clusters populated by JavaScript -->
-            </div>
+            <div class="cluster-nav" id="cluster-nav"></div>
 
             <div class="sidebar-legend">
                 <div class="legend-title">Node Types</div>
@@ -1450,7 +1680,6 @@
             </div>
         </nav>
 
-        <!-- Main Visualization Area -->
         <div class="viz-container">
             <div class="view-toggle">
                 <button class="view-btn active" data-view="force">Force</button>
@@ -1458,12 +1687,12 @@
                 <button class="view-btn" data-view="cluster">Cluster</button>
             </div>
 
-            <!-- Filter Pills - UPDATED: Reed → Story, Aluminum & Signal now resolved -->
             <div class="filter-pills">
                 <button class="filter-pill active" data-filter="all">All</button>
                 <button class="filter-pill" data-filter="pumpkins">🎃 Pumpkins</button>
                 <button class="filter-pill" data-filter="sakura">🌸 Sakura</button>
                 <button class="filter-pill" data-filter="hieroglyphs">𓂀 Hieroglyphs</button>
+                <button class="filter-pill" data-filter="reed">🌾 Reed</button>
                 <button class="filter-pill" data-filter="story">📖 Story</button>
                 <button class="filter-pill resolved-filter" data-filter="aluminum">🥫 Aluminum ✓</button>
                 <button class="filter-pill resolved-filter" data-filter="signal">📡 Signal ✓</button>
@@ -1478,7 +1707,6 @@
             </div>
         </div>
 
-        <!-- Detail Panel -->
         <aside class="detail-panel" id="detail-panel">
             <div class="panel-header" id="panel-header-container">
                 <button class="panel-close" id="panel-close" aria-label="Close panel">✕</button>
@@ -1526,18 +1754,15 @@
         </aside>
     </div>
 
-    <!-- Tooltip -->
     <div class="tooltip" id="tooltip">
         <div class="tooltip-header">
             <div class="tooltip-icon blocked" id="tooltip-icon">🎃</div>
             <div>
                 <div class="tooltip-title" id="tooltip-title">Planet Name</div>
-                <div class="tooltip-subtitle" id="tooltip-subtitle">Official #43</div>
+                <div class="tooltip-subtitle" id="tooltip-subtitle">Official #0043</div>
             </div>
         </div>
-        <div class="tooltip-content" id="tooltip-content">
-            Description of the planet and its resources.
-        </div>
+        <div class="tooltip-content" id="tooltip-content">Description of the planet and its resources.</div>
         <div class="tooltip-stat">
             <span class="tooltip-stat-label" id="tooltip-stat-label">Resource Needed</span>
             <span class="tooltip-stat-value" id="tooltip-stat-value">18,800</span>
@@ -1545,13 +1770,7 @@
     </div>
 
     <script>
-        // ============================================
-        // DATA CONFIGURATION — UPDATED 2026-02-17
-        // Changes: Reed→Story cluster, Aluminum now resolved,
-        // new feeder planets, Crown Circus dual-feeds
-        // ============================================
         const DATA = {
-            // ── Blocked & Resolved Planets (Central Hubs) ──
             blockedPlanets: [
                 {
                     id: 'witchs-den',
@@ -1563,8 +1782,7 @@
                     cluster: 'pumpkins',
                     priority: 1,
                     status: 'blocked',
-                    lore: "Deep within the cauldron-shaped valleys, geological layers of starchy silicates form the foundation for the galaxy's most prized pumpkin cultivation. The creamy core of this planet pulses with autumnal energy.",
-                    imageUrl: null
+                    lore: "Deep within the cauldron-shaped valleys, geological layers of starchy silicates form the foundation for the galaxy's most prized pumpkin cultivation."
                 },
                 {
                     id: 'sakura-temple',
@@ -1576,8 +1794,7 @@
                     cluster: 'sakura',
                     priority: 2,
                     status: 'blocked',
-                    lore: "Ancient cherry blossom trees have evolved to bloom eternally on this sacred world. The petals contain rare compounds essential for traditional confectionery across the galaxy.",
-                    imageUrl: null
+                    lore: 'Ancient cherry blossom trees have evolved to bloom eternally on this sacred world.'
                 },
                 {
                     id: 'crocodile-riverside',
@@ -1589,23 +1806,32 @@
                     cluster: 'hieroglyphs',
                     priority: 3,
                     status: 'blocked',
-                    lore: "The sandstone cliffs along the great river are inscribed with ancient symbols that hold the key to unlocking archaeological mysteries throughout the cosmos.",
-                    imageUrl: null
+                    lore: 'Sandstone cliffs along the great river are inscribed with symbols that unlock archaeological missions.'
                 },
                 {
                     id: 'beaver-dam',
                     name: 'Beaver Dam',
+                    officialId: 197,
+                    resource: 'Reed',
+                    resourceNeeded: 5600,
+                    icon: '🦫',
+                    cluster: 'reed',
+                    priority: 4,
+                    status: 'blocked',
+                    lore: 'An intricate network of lodges and wetlands producing reeds for habitat and instrument crafting missions.'
+                },
+                {
+                    id: 'film-base',
+                    name: 'Film Base',
                     officialId: 198,
                     resource: 'Story',
                     resourceNeeded: 1800,
-                    icon: '📖',
+                    icon: '🎬',
                     cluster: 'story',
-                    priority: 4,
+                    priority: 5,
                     status: 'blocked',
-                    lore: "A whimsical world of woven narratives where beavers are master storytellers. Their dam is a living library of tales, producing Story essence needed for creative missions across the galaxy.",
-                    imageUrl: null
+                    lore: 'A cinematic production world where narrative essence is synthesized for media and ticketing missions.'
                 },
-                // ── Resolved Planets ──
                 {
                     id: 'self-service-rest-stop',
                     name: 'Self-Service Rest Stop',
@@ -1617,8 +1843,7 @@
                     cluster: 'aluminum',
                     priority: 0,
                     status: 'resolved',
-                    lore: "An industrial marvel where infinite recyclability has been perfected. Now colonized at PA #379, the aluminum processing facilities supply packaging materials to countless food production worlds. Status: HARVESTING.",
-                    imageUrl: null
+                    lore: 'Now colonized at PA #379 and harvesting aluminum can resources for food packaging missions.'
                 },
                 {
                     id: 'hyperdimension-network',
@@ -1631,14 +1856,11 @@
                     cluster: 'signal',
                     priority: 0,
                     status: 'resolved',
-                    lore: "A nexus of quantum entanglement arrays that broadcast across dimensional barriers. Now colonized at PA #377, the signal waves enable instantaneous communication throughout the galaxy. Status: HARVESTING.",
-                    imageUrl: null
+                    lore: 'Now colonized at PA #377 and harvesting cross-dimensional communication signal.'
                 }
             ],
 
-            // ── Missions (Secondary Nodes) ──
             missions: [
-                // Pumpkin Cluster (6 missions, 109 Cubes — BLOCKED)
                 { id: 'pumpkin-man', name: 'Pumpkin Man', cluster: 'pumpkins', cubes: 19, icon: '🎃', blockedBy: 'witchs-den', resourceNeeded: 3600 },
                 { id: 'pumpkin-lantern', name: 'Pumpkin Lantern', cluster: 'pumpkins', cubes: 9, icon: '🏮', blockedBy: 'witchs-den', resourceNeeded: 2400 },
                 { id: 'halloween', name: 'Halloween', cluster: 'pumpkins', cubes: 23, icon: '👻', blockedBy: 'witchs-den', resourceNeeded: 4400 },
@@ -1646,81 +1868,71 @@
                 { id: 'flying-pumpkin', name: 'Flying Pumpkin', cluster: 'pumpkins', cubes: 18, icon: '🎈', blockedBy: 'witchs-den', resourceNeeded: 1400 },
                 { id: 'autumn-harvest', name: 'Autumn Harvest', cluster: 'pumpkins', cubes: 20, icon: '🍂', blockedBy: 'witchs-den', resourceNeeded: 3000 },
 
-                // Sakura Cluster (4 missions, 46 Cubes — BLOCKED)
                 { id: 'salted-sakura', name: 'Salted Sakura', cluster: 'sakura', cubes: 9, icon: '🧂', blockedBy: 'sakura-temple', resourceNeeded: 1000 },
                 { id: 'japanese-cooking', name: 'Japanese Cooking', cluster: 'sakura', cubes: 18, icon: '🍳', blockedBy: 'sakura-temple', resourceNeeded: 1200 },
                 { id: 'sakura-bean-balls', name: 'Sakura Bean Balls', cluster: 'sakura', cubes: 5, icon: '🍡', blockedBy: 'sakura-temple', resourceNeeded: 600 },
                 { id: 'wagashi-box', name: 'Wagashi Box', cluster: 'sakura', cubes: 14, icon: '🎁', blockedBy: 'sakura-temple', resourceNeeded: 1200 },
 
-                // Hieroglyphs Cluster (2 missions, 36 Cubes — BLOCKED)
                 { id: 'rune-stones', name: 'Rune Stones', cluster: 'hieroglyphs', cubes: 25, icon: '🪨', blockedBy: 'crocodile-riverside', resourceNeeded: 3800 },
                 { id: 'museum-entry-ticket', name: 'Museum Entry Ticket', cluster: 'hieroglyphs', cubes: 11, icon: '🎫', blockedBy: 'crocodile-riverside', resourceNeeded: 3800 },
 
-                // Story Cluster (2 missions, 14 Cubes — BLOCKED, NEW)
-                { id: 'comedy-film', name: 'Comedy Film', cluster: 'story', cubes: 5, icon: '🎬', blockedBy: 'beaver-dam', resourceNeeded: 800 },
-                { id: 'movie-ticket', name: 'Movie Ticket', cluster: 'story', cubes: 9, icon: '🎟️', blockedBy: 'beaver-dam', resourceNeeded: 1000 },
+                { id: 'reed-hut', name: 'Reed Hut', cluster: 'reed', cubes: 25, icon: '🏠', blockedBy: 'beaver-dam', resourceNeeded: 3800 },
+                { id: 'reed-pipe', name: 'Reed Pipe', cluster: 'reed', cubes: 22, icon: '🎵', blockedBy: 'beaver-dam', resourceNeeded: 1800 },
 
-                // Aluminum Cluster (2 missions, 34 Cubes — RESOLVED)
+                { id: 'comedy-film', name: 'Comedy Film', cluster: 'story', cubes: 5, icon: '🎬', blockedBy: 'film-base', resourceNeeded: 800 },
+                { id: 'movie-ticket', name: 'Movie Ticket', cluster: 'story', cubes: 9, icon: '🎟️', blockedBy: 'film-base', resourceNeeded: 1000 },
+
                 { id: 'canned-coffee', name: 'Canned Coffee', cluster: 'aluminum', cubes: 11, icon: '☕', blockedBy: 'self-service-rest-stop', status: 'available', resourceNeeded: 1000 },
                 { id: 'canned-pineapple', name: 'Canned Pineapple', cluster: 'aluminum', cubes: 23, icon: '🍍', blockedBy: 'self-service-rest-stop', status: 'available', resourceNeeded: 1200 },
 
-                // Signal Cluster (2 missions, 25 Cubes — RESOLVED)
                 { id: 'radio-station', name: 'Radio Station', cluster: 'signal', cubes: 7, icon: '📻', blockedBy: 'hyperdimension-network', status: 'available', resourceNeeded: 800 },
                 { id: 'sports-broadcast', name: 'Sports Broadcast', cluster: 'signal', cubes: 18, icon: '📺', blockedBy: 'hyperdimension-network', status: 'available', resourceNeeded: 1000 }
             ],
 
-            // ── Available Resource Planets (Tertiary Nodes) ──
             availablePlanets: [
-                // Pumpkin Cluster Resources
                 { id: 'snow-world', name: 'Snow World', paId: 11, resource: 'Snow', amount: 4000, icon: '❄️', providesTo: ['pumpkin-man'], cluster: 'pumpkins', lore: 'Crystalline ice formations provide essential cooling for pumpkin preservation.' },
-                { id: 'heart-of-flames', name: 'Heart of Flames', paId: 40, resource: 'Fire', amount: 1200, icon: '🔥', providesTo: ['pumpkin-lantern'], cluster: 'pumpkins', lore: 'Volcanic energy powers the eternal flames within jack-o-lanterns.' },
-                { id: 'sugar-rush', name: 'Sugar Rush', paId: 66, resource: 'Candy', amount: 3200, icon: '🍬', providesTo: ['halloween'], cluster: 'pumpkins', lore: "Sweet crystalline deposits fuel the galaxy's confectionery industry." },
-                { id: 'zombie-cortex', name: 'Zombie Cortex', paId: 300, resource: 'Blood', amount: 1600, icon: '🧠', providesTo: ['halloween'], cluster: 'pumpkins', lore: 'Neural networks of the undead provide unique biological resources.' },
-                { id: 'sunset-savanna', name: 'Sunset Savanna', paId: 116, resource: 'Wheat', amount: 2800, icon: '🌾', providesTo: ['pumpkin-pie'], cluster: 'pumpkins', lore: 'Golden grasslands produce the finest flour for pastry crusts.' },
-                { id: 'eagles-nest', name: "Eagle's Nest", paId: 41, resource: 'Eggs', amount: 1200, icon: '🥚', providesTo: ['pumpkin-pie'], cluster: 'pumpkins', lore: 'High-altitude nests produce the richest eggs for baking.' },
-                { id: 'angel-ruins', name: 'Angel Ruins', paId: 17, resource: 'Feathers', amount: 1000, icon: '🪶', providesTo: ['flying-pumpkin'], cluster: 'pumpkins', lore: 'Ancient celestial artifacts provide anti-gravity properties.' },
-                { id: 'autumn-forest', name: 'Autumn Forest', paId: 376, resource: 'Maple Leaf', amount: 1000, icon: '🍁', providesTo: ['autumn-harvest'], cluster: 'pumpkins', lore: 'Deciduous ecosystems cycle nutrients for bountiful harvests.' },
+                { id: 'heart-of-flames', name: 'Heart of Flames', paId: 40, resource: 'Fire', amount: 1200, icon: '🔥', providesTo: ['pumpkin-lantern'], cluster: 'pumpkins', lore: 'Volcanic energy powers jack-o-lantern flames.' },
+                { id: 'sugar-rush', name: 'Sugar Rush', paId: 66, resource: 'Candy', amount: 3200, icon: '🍬', providesTo: ['halloween'], cluster: 'pumpkins', lore: 'Sweet crystalline deposits fuel confectionery output.' },
+                { id: 'zombie-cortex', name: 'Zombie Cortex', paId: 300, resource: 'Blood', amount: 1600, icon: '🧠', providesTo: ['halloween'], cluster: 'pumpkins', lore: 'Undead neural networks provide unique bio-resources.' },
+                { id: 'sunset-savanna', name: 'Sunset Savanna', paId: 116, resource: 'Wheat', amount: 2800, icon: '🌾', providesTo: ['pumpkin-pie'], cluster: 'pumpkins', lore: 'Golden grasslands produce flour-grade grain.' },
+                { id: 'eagles-nest', name: "Eagle's Nest", paId: 41, resource: 'Eggs', amount: 1200, icon: '🥚', providesTo: ['pumpkin-pie'], cluster: 'pumpkins', lore: 'High-altitude nests produce rich baking eggs.' },
+                { id: 'angel-ruins', name: 'Angel Ruins', paId: 17, resource: 'Feathers', amount: 1000, icon: '🪶', providesTo: ['flying-pumpkin'], cluster: 'pumpkins', lore: 'Artifacts provide anti-gravity properties.' },
+                { id: 'autumn-forest', name: 'Autumn Forest', paId: 376, resource: 'Maple Leaf', amount: 1000, icon: '🍁', providesTo: ['autumn-harvest'], cluster: 'pumpkins', lore: 'Seasonal ecosystems support harvest cycles.' },
 
-                // Sakura Cluster Resources
-                { id: 'waving-ocean', name: 'Waving Ocean', paId: 28, resource: 'Salt', amount: 800, icon: '🌊', providesTo: ['salted-sakura'], cluster: 'sakura', lore: 'Mineral-rich tides deposit precious sea salt crystals.' },
-                { id: 'sushi-mountain', name: 'Sushi Mountain', paId: 108, resource: 'Salmon Roe', amount: 1000, icon: '🍣', providesTo: ['japanese-cooking'], cluster: 'sakura', lore: "Terraced paddies produce the galaxy's finest ingredients for sushi." },
-                { id: 'black-white', name: 'Black & White', paId: 114, resource: 'Bamboo', amount: 1400, icon: '🎋', providesTo: ['japanese-cooking'], cluster: 'sakura', lore: 'Dual-toned forests provide sustainable bamboo resources.' },
-                { id: 'dessert-saturn', name: 'Dessert Saturn', paId: 27, resource: 'Bean', amount: 400, icon: '🫘', providesTo: ['sakura-bean-balls'], cluster: 'sakura', lore: 'Core composed of creamy center; inhabited by Bean Men who cultivate sweet adzuki.' },
-                { id: 'juicy-peach-paradise', name: 'Juicy Peach Paradise', paId: 327, resource: 'Dumplings', amount: 1600, icon: '🥟', providesTo: ['wagashi-box'], cluster: 'sakura', lore: 'Orchards of succulent stone fruits flavor traditional sweets.' },
-                { id: 'matcha-valley', name: 'Matcha Valley', paId: 188, resource: 'Matcha', amount: 1200, icon: '🍵', providesTo: ['wagashi-box'], cluster: 'sakura', lore: 'Shade-grown tea leaves are ground into ceremonial powder.' },
+                { id: 'waving-ocean', name: 'Waving Ocean', paId: 28, resource: 'Salt', amount: 800, icon: '🌊', providesTo: ['salted-sakura'], cluster: 'sakura', lore: 'Mineral-rich tides deposit sea salt.' },
+                { id: 'sushi-mountain', name: 'Sushi Mountain', paId: 108, resource: 'Salmon Roe', amount: 1000, icon: '🍣', providesTo: ['japanese-cooking'], cluster: 'sakura', lore: 'Terraced paddies support premium cuisine.' },
+                { id: 'black-white', name: 'Black & White', paId: 114, resource: 'Bamboo', amount: 1400, icon: '🎋', providesTo: ['japanese-cooking'], cluster: 'sakura', lore: 'Dual-tone forests provide sustainable bamboo.' },
+                { id: 'dessert-saturn', name: 'Dessert Saturn', paId: 27, resource: 'Bean', amount: 400, icon: '🫘', providesTo: ['sakura-bean-balls'], cluster: 'sakura', lore: 'Bean-rich core supports adzuki harvests.' },
+                { id: 'juicy-peach-paradise', name: 'Juicy Peach Paradise', paId: 327, resource: 'Dumplings', amount: 1600, icon: '🥟', providesTo: ['wagashi-box'], cluster: 'sakura', lore: 'Orchards flavor traditional sweets.' },
+                { id: 'matcha-valley', name: 'Matcha Valley', paId: 188, resource: 'Matcha', amount: 1200, icon: '🍵', providesTo: ['wagashi-box'], cluster: 'sakura', lore: 'Shade-grown tea leaves produce ceremonial matcha.' },
 
-                // Hieroglyphs Cluster Resources
-                { id: 'red-bricks-brick-co', name: 'Red Bricks Brick Co.', paId: 225, resource: 'Red Bricks', amount: 1200, icon: '🧱', providesTo: ['rune-stones'], cluster: 'hieroglyphs', lore: 'Industrial kilns produce building materials for ancient monuments.' },
-                { id: 'crown-circus', name: 'Crown Circus', paId: 308, resource: 'Tickets', amount: 1000, icon: '🎪', providesTo: ['museum-entry-ticket', 'movie-ticket'], cluster: 'hieroglyphs', lore: 'Royal entertainment venues attract visitors and distribute tickets for exhibitions and cinemas alike.' },
+                { id: 'red-bricks-brick-co', name: 'Red Bricks Brick Co.', paId: 225, resource: 'Red Bricks', amount: 1200, icon: '🧱', providesTo: ['rune-stones'], cluster: 'hieroglyphs', lore: 'Kilns produce monument-grade materials.' },
+                { id: 'crown-circus', name: 'Crown Circus', paId: 308, resource: 'Ticket', amount: 400, icon: '🎪', providesTo: ['museum-entry-ticket', 'movie-ticket'], cluster: 'hieroglyphs', lore: 'Royal entertainment venues distribute access tickets.' },
 
-                // Story Cluster Resources (NEW)
-                { id: 'silent-star', name: 'Silent Star', paId: 177, resource: 'Joy', amount: 200, icon: '⭐', providesTo: ['comedy-film'], cluster: 'story', lore: 'A hushed world of gentle light where pure Joy crystallizes in the atmosphere, essential for comedic arts.' },
-                { id: 'popcorn-prison', name: 'Popcorn Prison', paId: 192, resource: 'Popcorn', amount: 400, icon: '🍿', providesTo: ['movie-ticket'], cluster: 'story', lore: 'Corn-based penitentiary where kernels undergo high-pressure transformation into fluffy popcorn for cinema consumption.' },
+                { id: 'vine-source', name: 'Vineyard Plains', paId: 0, resource: 'Vines', amount: 1200, icon: '🍇', providesTo: ['reed-hut'], cluster: 'reed', lore: 'Vine fields provide binding fibers for reed structures.' },
+                { id: 'cello-valley', name: 'Cello Valley', paId: 175, resource: 'Notes', amount: 2600, icon: '🎻', providesTo: ['reed-pipe'], cluster: 'reed', lore: 'Acoustic fields generate note resonance for instrument crafting.' },
 
-                // Aluminum Cluster Resources (RESOLVED)
-                { id: 'somnia-basin', name: 'Somnia Basin', paId: 7, resource: 'Coffee Beans', amount: 1200, icon: '☕', providesTo: ['canned-coffee'], cluster: 'aluminum', lore: 'Subconscious energy powers the caffeine extraction process.' },
-                { id: 'pineapple-foothills', name: 'Pineapple Foothills', paId: 150, resource: 'Pineapples', amount: 3400, icon: '🍍', providesTo: ['canned-pineapple'], cluster: 'aluminum', lore: 'Tropical slopes cultivate the sweetest canned fruit.' },
+                { id: 'silent-star', name: 'Silent Star', paId: 177, resource: 'Joy', amount: 200, icon: '⭐', providesTo: ['comedy-film'], cluster: 'story', lore: 'Gentle light crystallizes pure Joy for cinematic missions.' },
+                { id: 'popcorn-prison', name: 'Popcorn Prison', paId: 192, resource: 'Popcorn', amount: 400, icon: '🍿', providesTo: ['movie-ticket'], cluster: 'story', lore: 'Kernels transform under pressure into cinema-grade popcorn.' },
 
-                // Signal Cluster Resources (RESOLVED)
-                { id: 'cello-valley', name: 'Cello Valley', paId: 175, resource: 'Notes', amount: 2600, icon: '🎻', providesTo: ['radio-station'], cluster: 'signal', lore: 'Acoustic resonance chambers amplify musical frequencies for broadcast across the cosmos.' },
-                { id: 'infinite-racing', name: 'Infinite Racing', paId: 77, resource: 'Speed', amount: 800, icon: '🏎️', providesTo: ['sports-broadcast'], cluster: 'signal', lore: 'High-velocity events generate exciting sports content.' },
-                { id: 'race-track-party', name: 'Race Track Party', paId: 215, resource: 'Excitement', amount: 400, icon: '🎉', providesTo: ['sports-broadcast'], cluster: 'signal', lore: 'Celebratory atmospheres enhance viewer engagement.' }
+                { id: 'somnia-basin', name: 'Somnia Basin', paId: 7, resource: 'Coffee Beans', amount: 1200, icon: '☕', providesTo: ['canned-coffee'], cluster: 'aluminum', lore: 'Subconscious energy powers caffeine extraction.' },
+                { id: 'pineapple-foothills', name: 'Pineapple Foothills', paId: 150, resource: 'Pineapples', amount: 3400, icon: '🍍', providesTo: ['canned-pineapple'], cluster: 'aluminum', lore: 'Tropical slopes cultivate canning-grade fruit.' },
+
+                { id: 'infinite-racing', name: 'Infinite Racing', paId: 77, resource: 'Speed', amount: 800, icon: '🏎️', providesTo: ['sports-broadcast'], cluster: 'signal', lore: 'High-velocity events generate sports content.' },
+                { id: 'race-track-party', name: 'Race Track Party', paId: 215, resource: 'Excitement', amount: 400, icon: '🎉', providesTo: ['sports-broadcast'], cluster: 'signal', lore: 'Celebratory atmospheres increase engagement.' }
             ],
 
-            // ── Cluster Metadata ──
             clusters: {
-                pumpkins:    { name: 'Pumpkin Cluster',     color: '#ff6b35', totalCubes: 109, status: 'blocked' },
-                sakura:      { name: 'Sakura Cluster',      color: '#ffb7c5', totalCubes: 46,  status: 'blocked' },
-                hieroglyphs: { name: 'Hieroglyphs Cluster', color: '#d4a574', totalCubes: 36,  status: 'blocked' },
-                story:       { name: 'Story Cluster',       color: '#b088f9', totalCubes: 14,  status: 'blocked' },
-                aluminum:    { name: 'Aluminum Cluster',    color: '#00d4ff', totalCubes: 34,  status: 'resolved' },
-                signal:      { name: 'Signal Cluster',      color: '#00d4ff', totalCubes: 25,  status: 'resolved' }
+                pumpkins: { name: 'Pumpkin Cluster', color: '#ff6b35', totalCubes: 109, status: 'blocked' },
+                sakura: { name: 'Sakura Cluster', color: '#ffb7c5', totalCubes: 46, status: 'blocked' },
+                hieroglyphs: { name: 'Hieroglyphs Cluster', color: '#d4a574', totalCubes: 36, status: 'blocked' },
+                reed: { name: 'Reed Cluster', color: '#8fbc8f', totalCubes: 47, status: 'blocked' },
+                story: { name: 'Story Cluster', color: '#b088f9', totalCubes: 14, status: 'blocked' },
+                aluminum: { name: 'Aluminum Cluster', color: '#00d4ff', totalCubes: 34, status: 'resolved' },
+                signal: { name: 'Signal Cluster', color: '#00d4ff', totalCubes: 25, status: 'resolved' }
             }
         };
 
-        // ============================================
-        // CONFIGURATION
-        // ============================================
         const CONFIG = {
             nodeRadius: { blocked: 50, resolved: 45, mission: 28, available: 18 },
             forces: { charge: -1000, linkDistance: 140, collisionPadding: 25 },
@@ -1728,9 +1940,6 @@
             colors: { blocked: '#ff4757', mission: '#ffa502', available: '#2ed573', resolved: '#00d4ff' }
         };
 
-        // ============================================
-        // STATE MANAGEMENT
-        // ============================================
         let state = {
             currentView: 'force',
             currentFilter: 'all',
@@ -1742,23 +1951,26 @@
             reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
         };
 
-        // ============================================
-        // UTILITY FUNCTIONS
-        // ============================================
         function debounce(func, wait) {
             let timeout;
             return function executedFunction(...args) {
-                const later = () => { clearTimeout(timeout); func(...args); };
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
                 clearTimeout(timeout);
                 timeout = setTimeout(later, wait);
             };
         }
 
-        function formatNumber(num) { return num.toLocaleString(); }
+        function formatNumber(num) {
+            return num.toLocaleString();
+        }
 
-        // ============================================
-        // ANTIGRAVITY PARTICLE RING SYSTEM
-        // ============================================
+        function formatOfficialId(id) {
+            return String(id).padStart(4, '0');
+        }
+
         function initParticleRing() {
             if (state.reducedMotion) return;
 
@@ -1774,17 +1986,18 @@
             function resize() {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
-                initP();
+                initParticles();
             }
 
-            function initP() {
+            function initParticles() {
                 particles = [];
-                const count = Math.min(120, Math.floor((canvas.width * canvas.height) / 15000));
-                for (let i = 0; i < count; i++) {
-                    const angle = (i / count) * Math.PI * 2;
+                const particleCount = Math.min(120, Math.floor((canvas.width * canvas.height) / 15000));
+                for (let i = 0; i < particleCount; i++) {
+                    const angle = (i / particleCount) * Math.PI * 2;
                     const baseRadius = Math.min(canvas.width, canvas.height) * 0.25;
                     particles.push({
-                        angle, baseRadius: baseRadius + Math.random() * 100 - 50,
+                        angle,
+                        baseRadius: baseRadius + Math.random() * 100 - 50,
                         radiusOffset: Math.random() * Math.PI * 2,
                         speed: 0.0005 + Math.random() * 0.001,
                         size: 1 + Math.random() * 3,
@@ -1808,6 +2021,7 @@
             function animate() {
                 ctx.fillStyle = 'rgba(5, 5, 16, 0.15)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
+
                 targetX += (mouseX - targetX) * 0.05;
                 targetY += (mouseY - targetY) * 0.05;
                 tick += 0.01;
@@ -1815,46 +2029,48 @@
 
                 particles.forEach(p => {
                     p.angle += p.speed;
-                    const pulseR = Math.sin(tick * 2 + p.radiusOffset) * 20;
-                    const r = (p.baseRadius + pulseR) * breathScale;
-                    const cix = (targetX - canvas.width / 2) * 0.1;
-                    const ciy = (targetY - canvas.height / 2) * 0.1;
-                    const x = targetX + Math.cos(p.angle) * r + cix;
-                    const y = targetY + Math.sin(p.angle) * r + ciy;
-                    const po = p.opacity * (0.5 + 0.5 * Math.sin(tick * p.pulseSpeed + p.pulseOffset));
+                    const pulseRadius = Math.sin(tick * 2 + p.radiusOffset) * 20;
+                    const radius = (p.baseRadius + pulseRadius) * breathScale;
+                    const influenceX = (targetX - canvas.width / 2) * 0.1;
+                    const influenceY = (targetY - canvas.height / 2) * 0.1;
+                    const x = targetX + Math.cos(p.angle) * radius + influenceX;
+                    const y = targetY + Math.sin(p.angle) * radius + influenceY;
+                    const opacity = p.opacity * (0.5 + 0.5 * Math.sin(tick * p.pulseSpeed + p.pulseOffset));
 
                     ctx.beginPath();
                     ctx.arc(x, y, p.size, 0, Math.PI * 2);
-                    ctx.fillStyle = getColor(p.color, po);
+                    ctx.fillStyle = getColor(p.color, opacity);
                     ctx.fill();
 
                     ctx.beginPath();
                     ctx.arc(x, y, p.size * 3, 0, Math.PI * 2);
-                    const g = ctx.createRadialGradient(x, y, 0, x, y, p.size * 3);
-                    g.addColorStop(0, getColor(p.color, po * 0.3));
-                    g.addColorStop(1, 'transparent');
-                    ctx.fillStyle = g;
+                    const gradient = ctx.createRadialGradient(x, y, 0, x, y, p.size * 3);
+                    gradient.addColorStop(0, getColor(p.color, opacity * 0.3));
+                    gradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = gradient;
                     ctx.fill();
                 });
 
-                const cg = ctx.createRadialGradient(targetX, targetY, 0, targetX, targetY, 150);
-                cg.addColorStop(0, 'rgba(0, 212, 255, 0.1)');
-                cg.addColorStop(0.5, 'rgba(168, 85, 247, 0.05)');
-                cg.addColorStop(1, 'transparent');
-                ctx.fillStyle = cg;
+                const centerGradient = ctx.createRadialGradient(targetX, targetY, 0, targetX, targetY, 150);
+                centerGradient.addColorStop(0, 'rgba(0, 212, 255, 0.1)');
+                centerGradient.addColorStop(0.5, 'rgba(168, 85, 247, 0.05)');
+                centerGradient.addColorStop(1, 'transparent');
+                ctx.fillStyle = centerGradient;
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
+
                 requestAnimationFrame(animate);
             }
 
-            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+            document.addEventListener('mousemove', e => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
             window.addEventListener('resize', debounce(resize, 150));
             resize();
             animate();
         }
 
-        // ============================================
-        // STARFIELD BACKGROUND
-        // ============================================
         function initStarfield() {
             const canvas = document.getElementById('starfield');
             const ctx = canvas.getContext('2d');
@@ -1867,9 +2083,12 @@
                 const count = Math.floor((canvas.width * canvas.height) / 10000);
                 for (let i = 0; i < count; i++) {
                     stars.push({
-                        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-                        size: Math.random() * 1.5 + 0.5, speed: Math.random() * 0.2 + 0.05,
-                        opacity: Math.random() * 0.8 + 0.2, twinkle: Math.random() * Math.PI * 2
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: Math.random() * 1.5 + 0.5,
+                        speed: Math.random() * 0.2 + 0.05,
+                        opacity: Math.random() * 0.8 + 0.2,
+                        twinkle: Math.random() * Math.PI * 2
                     });
                 }
             }
@@ -1877,18 +2096,25 @@
             function animate() {
                 ctx.fillStyle = 'rgba(5, 5, 16, 0.1)';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                stars.forEach(s => {
-                    if (!state.reducedMotion) s.twinkle += 0.015;
-                    const op = s.opacity * (0.5 + 0.5 * Math.sin(s.twinkle));
+
+                stars.forEach(star => {
+                    if (!state.reducedMotion) star.twinkle += 0.015;
+                    const opacity = star.opacity * (0.5 + 0.5 * Math.sin(star.twinkle));
+
                     ctx.beginPath();
-                    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255, 255, 255, ${op})`;
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
                     ctx.fill();
+
                     if (!state.reducedMotion) {
-                        s.y += s.speed * 0.05;
-                        if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; }
+                        star.y += star.speed * 0.05;
+                        if (star.y > canvas.height) {
+                            star.y = 0;
+                            star.x = Math.random() * canvas.width;
+                        }
                     }
                 });
+
                 requestAnimationFrame(animate);
             }
 
@@ -1897,9 +2123,6 @@
             animate();
         }
 
-        // ============================================
-        // DATA PROCESSING
-        // ============================================
         function processData() {
             const nodes = [];
             const links = [];
@@ -1909,7 +2132,8 @@
                     ...planet,
                     type: planet.status === 'resolved' ? 'resolved' : 'blocked',
                     radius: planet.status === 'resolved' ? CONFIG.nodeRadius.resolved : CONFIG.nodeRadius.blocked,
-                    fx: null, fy: null
+                    fx: null,
+                    fy: null
                 });
             });
 
@@ -1920,8 +2144,10 @@
                     type: 'mission',
                     resolved: isResolved,
                     radius: Math.max(18, Math.min(40, mission.cubes * 1.4)),
-                    fx: null, fy: null
+                    fx: null,
+                    fy: null
                 });
+
                 links.push({
                     source: mission.blockedBy,
                     target: mission.id,
@@ -1935,8 +2161,10 @@
                     ...planet,
                     type: 'available',
                     radius: CONFIG.nodeRadius.available,
-                    fx: null, fy: null
+                    fx: null,
+                    fy: null
                 });
+
                 planet.providesTo.forEach(missionId => {
                     links.push({
                         source: planet.id,
@@ -1952,9 +2180,6 @@
             return { nodes, links };
         }
 
-        // ============================================
-        // D3 VISUALIZATION
-        // ============================================
         function initVisualization() {
             const svg = d3.select('#galaxy-viz');
             const container = document.querySelector('.viz-container');
@@ -1968,40 +2193,50 @@
 
             state.zoom = d3.zoom()
                 .scaleExtent([0.2, 5])
-                .on('zoom', (event) => { g.attr('transform', event.transform); });
+                .on('zoom', event => {
+                    g.attr('transform', event.transform);
+                });
+
             svg.call(state.zoom);
 
             const { nodes, links } = processData();
 
-            // Gradient definitions
             const defs = svg.append('defs');
 
-            const bgr = defs.append('radialGradient').attr('id', 'blocked-gradient');
-            bgr.append('stop').attr('offset', '0%').attr('stop-color', '#ff6b7a');
-            bgr.append('stop').attr('offset', '100%').attr('stop-color', '#ff4757');
+            const blockedGradient = defs.append('radialGradient').attr('id', 'blocked-gradient');
+            blockedGradient.append('stop').attr('offset', '0%').attr('stop-color', '#ff6b7a');
+            blockedGradient.append('stop').attr('offset', '100%').attr('stop-color', '#ff4757');
 
-            const rgr = defs.append('radialGradient').attr('id', 'resolved-gradient');
-            rgr.append('stop').attr('offset', '0%').attr('stop-color', '#7df9ff');
-            rgr.append('stop').attr('offset', '100%').attr('stop-color', '#00d4ff');
+            const resolvedGradient = defs.append('radialGradient').attr('id', 'resolved-gradient');
+            resolvedGradient.append('stop').attr('offset', '0%').attr('stop-color', '#7df9ff');
+            resolvedGradient.append('stop').attr('offset', '100%').attr('stop-color', '#00d4ff');
 
-            const mgr = defs.append('radialGradient').attr('id', 'mission-gradient');
-            mgr.append('stop').attr('offset', '0%').attr('stop-color', '#ffcc00');
-            mgr.append('stop').attr('offset', '100%').attr('stop-color', '#ffa502');
+            const missionGradient = defs.append('radialGradient').attr('id', 'mission-gradient');
+            missionGradient.append('stop').attr('offset', '0%').attr('stop-color', '#ffcc00');
+            missionGradient.append('stop').attr('offset', '100%').attr('stop-color', '#ffa502');
 
-            const agr = defs.append('radialGradient').attr('id', 'available-gradient');
-            agr.append('stop').attr('offset', '0%').attr('stop-color', '#7bed9f');
-            agr.append('stop').attr('offset', '100%').attr('stop-color', '#2ed573');
+            const availableGradient = defs.append('radialGradient').attr('id', 'available-gradient');
+            availableGradient.append('stop').attr('offset', '0%').attr('stop-color', '#7bed9f');
+            availableGradient.append('stop').attr('offset', '100%').attr('stop-color', '#2ed573');
 
             const glowFilter = defs.append('filter')
-                .attr('id', 'glow').attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+                .attr('id', 'glow')
+                .attr('x', '-50%')
+                .attr('y', '-50%')
+                .attr('width', '200%')
+                .attr('height', '200%');
+
             glowFilter.append('feGaussianBlur').attr('stdDeviation', '5').attr('result', 'coloredBlur');
             const glowMerge = glowFilter.append('feMerge');
             glowMerge.append('feMergeNode').attr('in', 'coloredBlur');
             glowMerge.append('feMergeNode').attr('in', 'SourceGraphic');
 
-            // Links
-            const link = g.append('g').attr('class', 'links')
-                .selectAll('line').data(links).enter().append('line')
+            const link = g.append('g')
+                .attr('class', 'links')
+                .selectAll('line')
+                .data(links)
+                .enter()
+                .append('line')
                 .attr('class', d => `link link-${d.type}`)
                 .attr('stroke', d => {
                     if (d.type === 'missing') return CONFIG.colors.blocked;
@@ -2012,9 +2247,12 @@
                 .attr('stroke-dasharray', d => d.type === 'missing' ? '8,4' : (d.type === 'resolved' ? '4,4' : 'none'))
                 .attr('opacity', d => d.type === 'missing' ? 0.6 : (d.type === 'resolved' ? 0.5 : 0.4));
 
-            // Nodes
-            const node = g.append('g').attr('class', 'nodes')
-                .selectAll('g').data(nodes).enter().append('g')
+            const node = g.append('g')
+                .attr('class', 'nodes')
+                .selectAll('g')
+                .data(nodes)
+                .enter()
+                .append('g')
                 .attr('class', d => `node node-${d.type}${d.resolved ? ' node-resolved-mission' : ''}`)
                 .attr('cursor', 'pointer')
                 .call(d3.drag()
@@ -2072,26 +2310,36 @@
                 .on('mouseout', handleNodeMouseOut)
                 .on('click', handleNodeClick);
 
-            // Force simulation
             state.simulation = d3.forceSimulation(nodes)
                 .force('link', d3.forceLink(links).id(d => d.id).distance(CONFIG.forces.linkDistance))
                 .force('charge', d3.forceManyBody().strength(CONFIG.forces.charge))
                 .force('center', d3.forceCenter(width / 2, height / 2))
                 .force('collision', d3.forceCollide().radius(d => d.radius + CONFIG.forces.collisionPadding))
                 .on('tick', () => {
-                    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y)
-                        .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+                    link
+                        .attr('x1', d => d.source.x)
+                        .attr('y1', d => d.source.y)
+                        .attr('x2', d => d.target.x)
+                        .attr('y2', d => d.target.y);
+
                     node.attr('transform', d => `translate(${d.x},${d.y})`);
                 });
 
             function dragstarted(event, d) {
                 if (!event.active) state.simulation.alphaTarget(0.3).restart();
-                d.fx = d.x; d.fy = d.y;
+                d.fx = d.x;
+                d.fy = d.y;
             }
-            function dragged(event, d) { d.fx = event.x; d.fy = event.y; }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
             function dragended(event, d) {
                 if (!event.active) state.simulation.alphaTarget(0);
-                d.fx = null; d.fy = null;
+                d.fx = null;
+                d.fy = null;
             }
 
             setTimeout(() => {
@@ -2100,25 +2348,29 @@
                 const midY = bounds.y + bounds.height / 2;
                 const scale = 0.7 / Math.max(bounds.width / width, bounds.height / height);
                 const translate = [width / 2 - scale * midX, height / 2 - scale * midY];
-                svg.transition().duration(750)
-                    .call(state.zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+
+                svg.transition()
+                    .duration(750)
+                    .call(state.zoom.transform, d3.zoomIdentity
+                        .translate(translate[0], translate[1])
+                        .scale(scale));
             }, 1500);
 
-            if (!state.reducedMotion) initFlowParticles(g, links, nodes);
+            if (!state.reducedMotion) initFlowParticles(g, links);
         }
 
-        // ============================================
-        // FLOW PARTICLES ANIMATION
-        // ============================================
-        function initFlowParticles(g, links, nodes) {
+        function initFlowParticles(g, links) {
             const particleGroup = g.append('g').attr('class', 'flow-particles');
             const availableLinks = links.filter(l => l.type === 'available');
 
             availableLinks.forEach(link => {
                 for (let i = 0; i < 2; i++) {
                     const particle = particleGroup.append('circle')
-                        .attr('class', 'flow-particle').attr('r', 3)
-                        .attr('fill', CONFIG.colors.available).attr('opacity', 0);
+                        .attr('class', 'flow-particle')
+                        .attr('r', 3)
+                        .attr('fill', CONFIG.colors.available)
+                        .attr('opacity', 0);
+
                     animateParticle(particle, link, i * 1000);
                 }
             });
@@ -2126,22 +2378,36 @@
 
         function animateParticle(particle, link, delay) {
             const duration = 3000 + Math.random() * 2000;
+
             function animate() {
                 const source = typeof link.source === 'object' ? link.source : state.nodes.find(n => n.id === link.source);
                 const target = typeof link.target === 'object' ? link.target : state.nodes.find(n => n.id === link.target);
                 if (!source || !target) return;
-                particle.attr('cx', source.x).attr('cy', source.y).attr('opacity', 0)
-                    .transition().delay(delay).duration(200).attr('opacity', 0.8)
-                    .transition().duration(duration).ease(d3.easeLinear).attr('cx', target.x).attr('cy', target.y)
-                    .transition().duration(200).attr('opacity', 0)
-                    .on('end', () => { if (!state.reducedMotion) setTimeout(animate, Math.random() * 2000); });
+
+                particle
+                    .attr('cx', source.x)
+                    .attr('cy', source.y)
+                    .attr('opacity', 0)
+                    .transition()
+                    .delay(delay)
+                    .duration(200)
+                    .attr('opacity', 0.8)
+                    .transition()
+                    .duration(duration)
+                    .ease(d3.easeLinear)
+                    .attr('cx', target.x)
+                    .attr('cy', target.y)
+                    .transition()
+                    .duration(200)
+                    .attr('opacity', 0)
+                    .on('end', () => {
+                        if (!state.reducedMotion) setTimeout(animate, Math.random() * 2000);
+                    });
             }
+
             animate();
         }
 
-        // ============================================
-        // NODE INTERACTIONS
-        // ============================================
         function handleNodeMouseOver(event, d) {
             const tooltip = document.getElementById('tooltip');
             const tooltipIcon = document.getElementById('tooltip-icon');
@@ -2156,7 +2422,7 @@
             tooltipTitle.textContent = d.name;
 
             if (d.type === 'blocked') {
-                tooltipSubtitle.textContent = `Official #${d.officialId}`;
+                tooltipSubtitle.textContent = `Official #${formatOfficialId(d.officialId)}`;
                 tooltipContent.textContent = d.lore ? d.lore.substring(0, 120) + '...' : 'Critical bottleneck planet.';
                 tooltipStatLabel.textContent = 'Missing Resource';
                 tooltipStatValue.textContent = `${formatNumber(d.resourceNeeded)} ${d.resource}`;
@@ -2186,6 +2452,7 @@
             tooltip.style.left = `${Math.min(rect.right + 15, window.innerWidth - 320)}px`;
             tooltip.style.top = `${Math.max(10, rect.top)}px`;
             tooltip.classList.add('visible');
+
             highlightConnections(d);
         }
 
@@ -2208,16 +2475,19 @@
 
             const connectedIds = new Set([d.id]);
             state.links.forEach(link => {
-                const sid = typeof link.source === 'object' ? link.source.id : link.source;
-                const tid = typeof link.target === 'object' ? link.target.id : link.target;
-                if (sid === d.id || tid === d.id) { connectedIds.add(sid); connectedIds.add(tid); }
+                const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+                const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+                if (sourceId === d.id || targetId === d.id) {
+                    connectedIds.add(sourceId);
+                    connectedIds.add(targetId);
+                }
             });
 
             svg.selectAll('.node').filter(n => connectedIds.has(n.id)).style('opacity', 1);
             svg.selectAll('.link').filter(l => {
-                const sid = typeof l.source === 'object' ? l.source.id : l.source;
-                const tid = typeof l.target === 'object' ? l.target.id : l.target;
-                return sid === d.id || tid === d.id;
+                const sourceId = typeof l.source === 'object' ? l.source.id : l.source;
+                const targetId = typeof l.target === 'object' ? l.target.id : l.target;
+                return sourceId === d.id || targetId === d.id;
             }).style('opacity', 0.9);
         }
 
@@ -2227,9 +2497,6 @@
             svg.selectAll('.link').style('opacity', d => d.type === 'missing' ? 0.6 : (d.type === 'resolved' ? 0.5 : 0.4));
         }
 
-        // ============================================
-        // DETAIL PANEL
-        // ============================================
         function openDetailPanel(d) {
             const panel = document.getElementById('detail-panel');
             const panelHeader = document.getElementById('panel-header-container');
@@ -2238,12 +2505,12 @@
             panelHeader.className = `panel-header ${d.type}`;
 
             const panelStatus = document.getElementById('panel-status');
-            panelStatus.className = `panel-status ${d.type}`;
             const panelId = document.getElementById('panel-id');
             const panelStatusText = document.getElementById('panel-status-text');
+            panelStatus.className = `panel-status ${d.type}`;
 
             if (d.type === 'blocked') {
-                panelId.textContent = `Official #${d.officialId} • ${d.resource}`;
+                panelId.textContent = `Official #${formatOfficialId(d.officialId)} • ${d.resource}`;
                 panelStatusText.textContent = 'UNCOLONIZED';
             } else if (d.type === 'resolved') {
                 panelId.textContent = `PA #${d.paId || d.officialId} • ${d.resource}`;
@@ -2269,6 +2536,7 @@
                     <div class="resource-stat"><div class="resource-stat-value">${getBlockedMissionCount(d.id)}</div><div class="resource-stat-label">Missions Blocked</div></div>
                     <div class="resource-stat"><div class="resource-stat-value">${getBlockedCubesTotal(d.id)}</div><div class="resource-stat-label">Total Cubes</div></div>
                     <div class="resource-stat"><div class="resource-stat-value">#${d.priority}</div><div class="resource-stat-label">Priority Rank</div></div>`;
+
                 prioritySection.style.display = 'block';
                 priorityCard.className = 'priority-card';
                 document.getElementById('priority-title').textContent = `Priority ${d.priority}`;
@@ -2280,6 +2548,7 @@
                 panelStats.innerHTML = `
                     <div class="resource-stat"><div class="resource-stat-value">${getResolvedMissionCount(d.id)}</div><div class="resource-stat-label">Missions Unlocked</div></div>
                     <div class="resource-stat"><div class="resource-stat-value">${getResolvedCubesTotal(d.id)}</div><div class="resource-stat-label">Cubes Available</div></div>`;
+
                 prioritySection.style.display = 'block';
                 priorityCard.className = 'priority-card resolved';
                 document.getElementById('priority-title').textContent = 'RESOLVED';
@@ -2314,7 +2583,10 @@
             panelConnections.querySelectorAll('.connected-item').forEach(item => {
                 item.addEventListener('click', () => {
                     const node = state.nodes.find(n => n.id === item.dataset.id);
-                    if (node) { openDetailPanel(node); focusOnNode(node); }
+                    if (node) {
+                        openDetailPanel(node);
+                        focusOnNode(node);
+                    }
                 });
             });
 
@@ -2331,7 +2603,9 @@
         }
 
         function getBlockedCubesTotal(blockedId) {
-            return DATA.missions.filter(m => m.blockedBy === blockedId && m.status !== 'available').reduce((s, m) => s + m.cubes, 0);
+            return DATA.missions
+                .filter(m => m.blockedBy === blockedId && m.status !== 'available')
+                .reduce((sum, m) => sum + m.cubes, 0);
         }
 
         function getResolvedMissionCount(resolvedId) {
@@ -2339,7 +2613,9 @@
         }
 
         function getResolvedCubesTotal(resolvedId) {
-            return DATA.missions.filter(m => m.blockedBy === resolvedId).reduce((s, m) => s + m.cubes, 0);
+            return DATA.missions
+                .filter(m => m.blockedBy === resolvedId)
+                .reduce((sum, m) => sum + m.cubes, 0);
         }
 
         function getResourceProvidersCount(missionId) {
@@ -2348,29 +2624,42 @@
 
         function getConnectedNodes(d) {
             const connections = [];
+
             if (d.type === 'blocked' || d.type === 'resolved') {
                 DATA.missions.filter(m => m.blockedBy === d.id).forEach(m => {
                     connections.push({
-                        id: m.id, name: m.name, icon: m.icon, type: 'mission',
+                        id: m.id,
+                        name: m.name,
+                        icon: m.icon,
+                        type: 'mission',
                         detail: d.type === 'resolved' ? 'Available Mission' : 'Pending Mission',
-                        badge: `${m.cubes} ⚡`, badgeType: 'cubes'
+                        badge: `${m.cubes} ⚡`,
+                        badgeType: 'cubes'
                     });
                 });
             } else if (d.type === 'mission') {
                 const blocker = DATA.blockedPlanets.find(p => p.id === d.blockedBy);
                 if (blocker) {
                     connections.push({
-                        id: blocker.id, name: blocker.name, icon: blocker.icon,
+                        id: blocker.id,
+                        name: blocker.name,
+                        icon: blocker.icon,
                         type: blocker.status === 'resolved' ? 'resolved' : 'blocked',
                         detail: blocker.status === 'resolved' ? 'Resource Planet' : 'Blocking Planet',
                         badge: blocker.status === 'resolved' ? 'HARVESTING' : `${formatNumber(blocker.resourceNeeded)}`,
                         badgeType: blocker.status === 'resolved' ? 'resource' : 'missing'
                     });
                 }
+
                 DATA.availablePlanets.filter(p => p.providesTo.includes(d.id)).forEach(p => {
                     connections.push({
-                        id: p.id, name: p.name, icon: p.icon, type: 'available',
-                        detail: `Provides ${p.resource}`, badge: formatNumber(p.amount), badgeType: 'resource'
+                        id: p.id,
+                        name: p.name,
+                        icon: p.icon,
+                        type: 'available',
+                        detail: `Provides ${p.resource}`,
+                        badge: formatNumber(p.amount),
+                        badgeType: 'resource'
                     });
                 });
             } else {
@@ -2378,12 +2667,18 @@
                     const mission = DATA.missions.find(m => m.id === missionId);
                     if (mission) {
                         connections.push({
-                            id: mission.id, name: mission.name, icon: mission.icon, type: 'mission',
-                            detail: 'Supplies To', badge: `${mission.cubes} ⚡`, badgeType: 'cubes'
+                            id: mission.id,
+                            name: mission.name,
+                            icon: mission.icon,
+                            type: 'mission',
+                            detail: 'Supplies To',
+                            badge: `${mission.cubes} ⚡`,
+                            badgeType: 'cubes'
                         });
                     }
                 });
             }
+
             return connections;
         }
 
@@ -2391,30 +2686,32 @@
             const svg = d3.select('#galaxy-viz');
             const width = svg.node().clientWidth;
             const height = svg.node().clientHeight;
-            svg.transition().duration(750)
-                .call(state.zoom.transform, d3.zoomIdentity.translate(width / 2, height / 2).scale(1.5).translate(-node.x, -node.y));
+
+            svg.transition()
+                .duration(750)
+                .call(state.zoom.transform, d3.zoomIdentity
+                    .translate(width / 2, height / 2)
+                    .scale(1.5)
+                    .translate(-node.x, -node.y));
         }
 
-        // ============================================
-        // SIDEBAR NAVIGATION
-        // ============================================
         function initSidebar() {
             const clusterNav = document.getElementById('cluster-nav');
             const blockedClusters = DATA.blockedPlanets.filter(p => p.status === 'blocked');
             const resolvedClusters = DATA.blockedPlanets.filter(p => p.status === 'resolved');
 
             if (blockedClusters.length > 0) {
-                const bt = document.createElement('div');
-                bt.className = 'cluster-section-title blocked';
-                bt.textContent = 'BLOCKED SECTORS';
-                clusterNav.appendChild(bt);
+                const blockedTitle = document.createElement('div');
+                blockedTitle.className = 'cluster-section-title blocked';
+                blockedTitle.textContent = 'BLOCKED SECTORS';
+                clusterNav.appendChild(blockedTitle);
             }
 
             blockedClusters.forEach(planet => {
                 const missions = DATA.missions.filter(m => m.blockedBy === planet.id);
-                const ci = document.createElement('div');
-                ci.className = 'cluster-item';
-                ci.innerHTML = `
+                const clusterItem = document.createElement('div');
+                clusterItem.className = 'cluster-item';
+                clusterItem.innerHTML = `
                     <div class="cluster-header blocked" data-cluster="${planet.id}">
                         <div class="cluster-icon blocked">${planet.icon}</div>
                         <div class="cluster-info">
@@ -2431,21 +2728,21 @@
                                 <div class="mission-cubes">${m.cubes} ⚡</div>
                             </div>`).join('')}
                     </div>`;
-                clusterNav.appendChild(ci);
+                clusterNav.appendChild(clusterItem);
             });
 
             if (resolvedClusters.length > 0) {
-                const rt = document.createElement('div');
-                rt.className = 'cluster-section-title resolved';
-                rt.textContent = 'RESOLVED SECTORS';
-                clusterNav.appendChild(rt);
+                const resolvedTitle = document.createElement('div');
+                resolvedTitle.className = 'cluster-section-title resolved';
+                resolvedTitle.textContent = 'RESOLVED SECTORS';
+                clusterNav.appendChild(resolvedTitle);
             }
 
             resolvedClusters.forEach(planet => {
                 const missions = DATA.missions.filter(m => m.blockedBy === planet.id);
-                const ci = document.createElement('div');
-                ci.className = 'cluster-item';
-                ci.innerHTML = `
+                const clusterItem = document.createElement('div');
+                clusterItem.className = 'cluster-item';
+                clusterItem.innerHTML = `
                     <div class="cluster-header resolved" data-cluster="${planet.id}">
                         <div class="cluster-icon resolved">${planet.icon}</div>
                         <div class="cluster-info">
@@ -2462,7 +2759,7 @@
                                 <div class="mission-cubes">${m.cubes} ⚡</div>
                             </div>`).join('')}
                     </div>`;
-                clusterNav.appendChild(ci);
+                clusterNav.appendChild(clusterItem);
             });
 
             document.querySelectorAll('.cluster-header').forEach(header => {
@@ -2471,16 +2768,23 @@
                     const missionList = document.getElementById(`missions-${clusterId}`);
                     header.classList.toggle('active');
                     missionList.classList.toggle('expanded');
+
                     const node = state.nodes.find(n => n.id === clusterId);
-                    if (node) { openDetailPanel(node); focusOnNode(node); }
+                    if (node) {
+                        openDetailPanel(node);
+                        focusOnNode(node);
+                    }
                 });
             });
 
             document.querySelectorAll('.mission-item').forEach(item => {
-                item.addEventListener('click', (e) => {
+                item.addEventListener('click', e => {
                     e.stopPropagation();
                     const node = state.nodes.find(n => n.id === item.dataset.mission);
-                    if (node) { openDetailPanel(node); focusOnNode(node); }
+                    if (node) {
+                        openDetailPanel(node);
+                        focusOnNode(node);
+                    }
                 });
             });
         }
@@ -2510,28 +2814,31 @@
             }
         }
 
-        // ============================================
-        // CONTROLS & FILTERS
-        // ============================================
         function initControls() {
             document.getElementById('zoom-in').addEventListener('click', () => {
                 d3.select('#galaxy-viz').transition().duration(300).call(state.zoom.scaleBy, 1.3);
             });
+
             document.getElementById('zoom-out').addEventListener('click', () => {
                 d3.select('#galaxy-viz').transition().duration(300).call(state.zoom.scaleBy, 0.7);
             });
+
             document.getElementById('zoom-reset').addEventListener('click', () => {
                 d3.select('#galaxy-viz').transition().duration(500).call(state.zoom.transform, d3.zoomIdentity);
             });
+
             document.getElementById('panel-close').addEventListener('click', closeDetailPanel);
+
             document.getElementById('sidebar-toggle').addEventListener('click', () => {
                 document.getElementById('sidebar').classList.toggle('open');
             });
+
             document.getElementById('reset-view').addEventListener('click', () => {
                 d3.select('#galaxy-viz').transition().duration(500).call(state.zoom.transform, d3.zoomIdentity);
                 closeDetailPanel();
                 resetHighlights();
             });
+
             document.getElementById('fullscreen-toggle').addEventListener('click', () => {
                 if (!document.fullscreenElement) document.documentElement.requestFullscreen();
                 else document.exitFullscreen();
@@ -2556,7 +2863,7 @@
             });
 
             let scrollDirection = 'up';
-            document.querySelector('.viz-container').addEventListener('wheel', (e) => {
+            document.querySelector('.viz-container').addEventListener('wheel', e => {
                 const header = document.getElementById('main-header');
                 if (e.deltaY > 0 && scrollDirection !== 'down') {
                     scrollDirection = 'down';
@@ -2578,19 +2885,21 @@
                 const angleStep = (2 * Math.PI) / centralNodes.length;
                 centralNodes.forEach((node, i) => {
                     const angle = i * angleStep - Math.PI / 2;
-                    node.fx = width / 2 + Math.cos(angle) * 180;
-                    node.fy = height / 2 + Math.sin(angle) * 180;
+                    node.fx = width / 2 + Math.cos(angle) * 200;
+                    node.fy = height / 2 + Math.sin(angle) * 200;
                 });
                 state.simulation.alpha(0.5).restart();
             } else if (state.currentView === 'cluster') {
                 const clusterCenters = {
-                    pumpkins:    { x: width * 0.15, y: height * 0.3 },
-                    sakura:      { x: width * 0.85, y: height * 0.3 },
-                    hieroglyphs: { x: width * 0.5,  y: height * 0.15 },
-                    story:       { x: width * 0.15, y: height * 0.7 },
-                    aluminum:    { x: width * 0.5,  y: height * 0.85 },
-                    signal:      { x: width * 0.85, y: height * 0.7 }
+                    pumpkins: { x: width * 0.14, y: height * 0.28 },
+                    sakura: { x: width * 0.86, y: height * 0.28 },
+                    hieroglyphs: { x: width * 0.5, y: height * 0.12 },
+                    reed: { x: width * 0.12, y: height * 0.72 },
+                    story: { x: width * 0.38, y: height * 0.84 },
+                    aluminum: { x: width * 0.64, y: height * 0.84 },
+                    signal: { x: width * 0.88, y: height * 0.72 }
                 };
+
                 state.nodes.forEach(node => {
                     if (node.cluster && clusterCenters[node.cluster]) {
                         const c = clusterCenters[node.cluster];
@@ -2598,10 +2907,19 @@
                         node.fy = c.y + (Math.random() - 0.5) * 120;
                     }
                 });
+
                 state.simulation.alpha(0.5).restart();
-                setTimeout(() => { state.nodes.forEach(n => { n.fx = null; n.fy = null; }); }, 2000);
+                setTimeout(() => {
+                    state.nodes.forEach(n => {
+                        n.fx = null;
+                        n.fy = null;
+                    });
+                }, 2000);
             } else {
-                state.nodes.forEach(n => { n.fx = null; n.fy = null; });
+                state.nodes.forEach(n => {
+                    n.fx = null;
+                    n.fy = null;
+                });
                 state.simulation.alpha(0.5).restart();
             }
         }
@@ -2617,30 +2935,29 @@
             }
         }
 
-        // ============================================
-        // RESIZE HANDLER
-        // ============================================
         function initResizeHandler() {
             const debouncedResize = debounce(() => {
                 const svg = d3.select('#galaxy-viz');
                 const container = document.querySelector('.viz-container');
-                const w = container.clientWidth, h = container.clientHeight;
-                svg.attr('width', w).attr('height', h);
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                svg.attr('width', width).attr('height', height);
+
                 if (state.simulation) {
-                    state.simulation.force('center', d3.forceCenter(w / 2, h / 2));
+                    state.simulation.force('center', d3.forceCenter(width / 2, height / 2));
                     state.simulation.alpha(0.3).restart();
                 }
             }, 150);
+
             window.addEventListener('resize', debouncedResize);
         }
 
-        // ============================================
-        // INITIALIZATION
-        // ============================================
         function init() {
             const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
             state.reducedMotion = mq.matches;
-            mq.addEventListener('change', () => { state.reducedMotion = mq.matches; });
+            mq.addEventListener('change', () => {
+                state.reducedMotion = mq.matches;
+            });
 
             initParticleRing();
             initStarfield();
@@ -2649,17 +2966,18 @@
             initControls();
             initResizeHandler();
 
-            // Compute header stats dynamically
             const blockedMissions = DATA.missions.filter(m => m.status !== 'available');
             const resolvedMissions = DATA.missions.filter(m => m.status === 'available');
-            const totalCubes = DATA.missions.reduce((s, m) => s + m.cubes, 0);
+            const totalCubes = DATA.missions.reduce((sum, m) => sum + m.cubes, 0);
 
             document.getElementById('total-missions').textContent = blockedMissions.length;
             document.getElementById('total-blockers').textContent = DATA.blockedPlanets.filter(p => p.status === 'blocked').length;
             document.getElementById('total-resolved').textContent = resolvedMissions.length;
             document.getElementById('total-cubes').textContent = totalCubes;
 
-            setTimeout(() => { document.getElementById('loading-overlay').classList.add('hidden'); }, 2000);
+            setTimeout(() => {
+                document.getElementById('loading-overlay').classList.add('hidden');
+            }, 2000);
         }
 
         if (document.readyState === 'loading') {
@@ -2669,7 +2987,9 @@
         }
 
         window.addEventListener('load', () => {
-            setTimeout(() => { if (state.simulation) state.simulation.alpha(0.3).restart(); }, 500);
+            setTimeout(() => {
+                if (state.simulation) state.simulation.alpha(0.3).restart();
+            }, 500);
         });
     </script>
 </body>
