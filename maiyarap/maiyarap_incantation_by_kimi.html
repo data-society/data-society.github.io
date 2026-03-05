@@ -1,0 +1,1492 @@
+<!DOCTYPE html><html lang="th"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>คาถาอาราธนาตะกรุดไมยราพณ์สะกดทัพ หลวงพ่อกุน</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&amp;family=Crimson+Text:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        heritage: {
+                            50: '#faf8f3',
+                            100: '#f4f0e6',
+                            200: '#e8ddc7',
+                            300: '#d9c6a3',
+                            400: '#c8ab7d',
+                            500: '#b8935a',
+                            600: '#a67c48',
+                            700: '#8a653c',
+                            800: '#715336',
+                            900: '#5c442e'
+                        },
+                        gold: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f'
+                        }
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'body': ['Crimson Text', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .toc-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #faf8f3 0%, #f4f0e6 100%);
+            border-right: 2px solid #e8ddc7;
+            overflow-y: auto;
+            z-index: 1000;
+            padding: 2rem 1.5rem;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .toc-link {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            padding-left: 1rem;
+        }
+        
+        .toc-link:hover, .toc-link.active {
+            border-left-color: #f59e0b;
+            background-color: rgba(245, 158, 11, 0.1);
+            padding-left: 1.25rem;
+        }
+        
+        .hero-overlay {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(92, 68, 46, 0.8) 100%);
+        }
+        
+        .mantra-text {
+            font-family: 'Playfair Display', serif;
+            line-height: 2.2;
+            letter-spacing: 0.05em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 1024px) {
+            .toc-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .toc-sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+        
+        .citation-link {
+            color: #d97706;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px dotted #d97706;
+            transition: all 0.2s ease;
+        }
+        
+        .citation-link:hover {
+            color: #b45309;
+            border-bottom-style: solid;
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, #f59e0b 0%, #e8ddc7 50%, #f59e0b 100%);
+            margin: 3rem 0;
+        }
+    </style>
+  <base target="_blank">
+</head>
+
+  <body class="bg-heritage-50 text-heritage-900 font-body overflow-x-hidden">
+    <!-- Table of Contents Sidebar -->
+    <nav class="toc-sidebar">
+      <div class="mb-8">
+        <h2 class="font-display text-xl font-bold text-heritage-800 mb-4">สารบัญ</h2>
+      </div>
+      <div class="space-y-2">
+        <a href="#introduction" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">บทนำ</a>
+        <a href="#main-chant" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">คาถาหลัก</a>
+        <a href="#meaning" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">ความหมายและที่มา</a>
+        <a href="#yantra" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">ยันต์ยมสลักเกล้า</a>
+        <a href="#ritual" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">พิธีกรรม</a>
+        <a href="#usage" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">วิธีการใช้</a>
+        <a href="#cautions" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">ข้อห้าม</a>
+        <a href="#history" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">ประวัติหลวงพ่อกุน</a>
+        <a href="#powers" class="toc-link block py-2 text-sm text-heritage-700 hover:text-heritage-900">พุทธคุณ</a>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-heritage-200">
+        <p class="text-xs text-heritage-600 leading-relaxed">
+          เอกสารนี้รวบรวมจากตำราโบราณและประวัติการใช้งานจริง
+        </p>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu Toggle -->
+    <button id="mobile-menu-toggle" class="lg:hidden fixed top-4 left-4 z-50 bg-gold-600 text-white p-3 rounded-lg shadow-lg">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="relative min-h-screen flex items-center">
+        <div class="absolute inset-0">
+          <img src="https://kimi-web-img.moonshot.cn/img/p1.itc.cn/b81c1428a0a99f7714998afaa6875c63a3ff0238.jpeg" alt="ตะกรุดโบราณยันต์เกลียววน" class="w-full h-full object-cover" size="large" aspect="wide" style="photo" query="ตะกรุดโบราณ" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+          <div class="hero-overlay absolute inset-0"></div>
+        </div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-4 md:px-8 py-12 md:py-20">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-8 lg:gap-8 items-center">
+            <!-- Title Section -->
+            <div class="lg:col-span-7">
+              <h1 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-tight mb-6">
+                <span class="italic text-gold-300">คาถาอาราธนา</span>
+                <br/>
+                ตะกรุดไมยราพณ์
+                <br/>
+                <span class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl">สะกดทัพ</span>
+              </h1>
+              <p class="text-lg md:text-xl text-heritage-100 leading-relaxed mb-8">
+                วิชาอาคมโบราณแห่งหลวงพ่อกุน วัดพระนอน
+                <br/>
+                จังหวัดเพชรบุรี
+              </p>
+              <div class="flex items-center space-x-4 text-heritage-200">
+                <i class="fas fa-om text-gold-400 text-2xl"></i>
+                <span class="text-lg">โอม สิทธิการ กูระงับพรหม...</span>
+              </div>
+            </div>
+
+            <!-- Key Highlights -->
+            <div class="lg:col-span-5">
+              <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-8 border border-white/20">
+                <h3 class="font-display text-xl md:text-2xl font-bold text-gold-300 mb-6">หัวใจสำคัญ</h3>
+                <div class="space-y-4">
+                  <div class="flex items-start space-x-3">
+                    <i class="fas fa-scroll text-gold-400 mt-1"></i>
+                    <div>
+                      <h4 class="font-semibold text-white">คาถา</h4>
+                      <p class="text-heritage-200 text-sm">ครอบคลุมการระงับทุกระดับชั้น</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <i class="fas fa-pen-nib text-gold-400 mt-1"></i>
+                    <div>
+                      <h4 class="font-semibold text-white">ยันต์</h4>
+                      <p class="text-heritage-200 text-sm">ยมสลักเกล้าจากสมุดจีนสีเขียว</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <i class="fas fa-clock text-gold-400 mt-1"></i>
+                    <div>
+                      <h4 class="font-semibold text-white">เวลา</h4>
+                      <p class="text-heritage-200 text-sm">ปลุกเสกนาน 3 ปีต่อดอก</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <i class="fas fa-shield-alt text-gold-400 mt-1"></i>
+                    <div>
+                      <h4 class="font-semibold text-white">พุทธคุณ</h4>
+                      <p class="text-heritage-200 text-sm">มหาปราบ มหาระงับ</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Introduction -->
+      <section id="introduction" class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">บทนำ</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto mb-6"></div>
+          </div>
+
+          <div class="prose prose-lg max-w-none text-heritage-700 leading-relaxed">
+            <p class="text-xl mb-8 font-light">
+              การศึกษาคาถาอาราธนาตะกรุดไมยราพณ์สะกดทัพของหลวงพ่อกุน วัดพระนอน จังหวัดเพชรบุรี
+              เป็นการสำรวจวิชาอาคมโบราณที่มีรากฐานลึกในตำนานรามเกียรติ์และวัฒนธรรมไทย
+            </p>
+
+            <div class="bg-heritage-50 border-l-4 border-gold-500 p-6 my-8">
+              <blockquote class="text-lg italic font-display text-heritage-800">
+                &#34;ตะกรุดนี้นับเป็นตะกรุดที่มหาชนต้องการเป็นเจ้าของมากที่สุด หายากที่สุด
+                และมีราคาแพงที่สุดของเมืองไทยในอดีต&#34;
+              </blockquote>
+              <cite class="block mt-4 text-sm text-heritage-600">— จากบันทึกตำนาน</cite>
+            </div>
+
+            <p>
+              วิชาอาคมนี้มีความพิเศษตรงที่ผสมผสานระหว่างความเชื่อทางพราหมณ์ พุทธศาสนา
+              และวัฒนธรรมพื้นเมืองเข้าด้วยกัน ก่อให้เกิดเป็นวิชาที่มีพลังในการระงับ สะกด
+              และปราบปรามศัตรูได้อย่างมีประสิทธิภาพ
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Main Chant -->
+      <section id="main-chant" class="py-16 bg-gradient-to-br from-heritage-50 to-gold-50">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">คาถาอาราธนาตะกรุดไมยราพณ์สะกดทัพ</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Complete Chant -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+              <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6 flex items-center">
+                <i class="fas fa-scroll text-gold-600 mr-3"></i>
+                คาถาหลัก (ฉบับสมบูรณ์)
+              </h3>
+
+              <div class="bg-heritage-50 rounded-lg p-6 mb-6">
+                <div class="mantra-text text-heritage-800 text-lg leading-relaxed">
+                  <strong>โอม สิทธิการ กูระงับพรหม กูระงับเทพ ระงับภิเภก ระงับองคต ระงับสุรเสนสูนคาน ระงับชมพูพาน ระงับโหนและทหารทั้งสิบแปดตน ระงับทั้งวานรทั้งเจ็ดสระโบกขรณี ระงับสุริหลห มาร ระงับเสือหมูหมีแลกวางทรายทั้งหลายทั้งพัง ระงับปิสังภาระหก ระงับฝูงนกลายเหยี่ยวแร้งกา ระงับกากพาสาและขี้หนอน ระงับทั้งมังกรและกระเส้น ระงับสิงสัตตนาท ระงับกระเบนแลฉนาก ระงับฝูงราหู ระงับศัตรูทั้งหลาย ระงับทั้งชายแลหญิง ระงับทั้งฟ้าแลดิน ระงับทั้งสายสิญจน์และเส้นหญ้า ระงับทั้งผีภูตแลระงับเทพดา ทั้งฉกามาบัดดล ระงับทั้งพรหมโสมพัตรทั้งสิบหกชั้นฟ้า ระงับผู้ข้าสรรพศัตรู โอมระงับ มหาระงับ สรรพระงับ สิทธิสวาโหม สวาหาย สวาหะ ฯ</strong>
+                </div>
+              </div>
+
+              <div class="text-sm text-heritage-600">
+                <p class="mb-2">
+                  <strong>แหล่งข้อมูล:</strong>
+                  <a href="https://prakumkrong.com/16530/" class="citation-link" target="_blank">ประกุมกรอง</a>,
+                  <a href="https://www.s-amulet.com/th/products/502535-%E0%B8%95%E0%B8%B0%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%94%E0%B8%AA%E0%B8%B8%E0%B8%94%E0%B8%A2%E0%B8%AD%E0%B8%94-%E0%B9%84%E0%B8%A1%E0%B8%A2%E0%B8%A3%E0%B8%B2%E0%B8%9E%E0%B8%AA%E0%B8%B0%E0%B8%81%E0%B8%94%E0%B8%97%E0%B8%B1%E0%B8%9E" class="citation-link" target="_blank">S-Amulet</a>
+                </p>
+              </div>
+            </div>
+
+            <!-- Chant Structure Analysis -->
+            <div class="space-y-6">
+              <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h3 class="font-display text-xl font-bold text-heritage-800 mb-4">โครงสร้างคาถา</h3>
+                <div class="space-y-4">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-3 h-3 bg-gold-500 rounded-full mt-2"></div>
+                    <div>
+                      <h4 class="font-semibold text-heritage-800">โอม สิทธิการ</h4>
+                      <p class="text-sm text-heritage-600">การเปิดคาถาและอัญเชิญพลังวิเศษ</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-3 h-3 bg-gold-500 rounded-full mt-2"></div>
+                    <div>
+                      <h4 class="font-semibold text-heritage-800">กูระงับพรหม กูระงับเทพ</h4>
+                      <p class="text-sm text-heritage-600">การยืนยันตัวเองว่ามีอำนาจในการระงับ</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-3 h-3 bg-gold-500 rounded-full mt-2"></div>
+                    <div>
+                      <h4 class="font-semibold text-heritage-800">ระงับสิ่งต่างๆ ตามลำดับชั้น</h4>
+                      <p class="text-sm text-heritage-600">ตั้งแต่พรหมเทพไปจนถึงสัตว์ร้ายและศัตรู</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start space-x-3">
+                    <div class="w-3 h-3 bg-gold-500 rounded-full mt-2"></div>
+                    <div>
+                      <h4 class="font-semibold text-heritage-800">มหาระงับ สรรพระงับ</h4>
+                      <p class="text-sm text-heritage-600">การสรุปพลังการระงับสูงสุด</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h3 class="font-display text-xl font-bold text-heritage-800 mb-4">คำอธิบาย</h3>
+                <ul class="space-y-3 text-heritage-700">
+                  <li class="flex items-start space-x-2">
+                    <i class="fas fa-circle text-gold-500 text-xs mt-2"></i>
+                    <span><strong>สิทธิการ:</strong> ผู้มีอำนาจวิเศษในการกระทำ</span>
+                  </li>
+                  <li class="flex items-start space-x-2">
+                    <i class="fas fa-circle text-gold-500 text-xs mt-2"></i>
+                    <span><strong>ระงับ:</strong> หยุดยั้ง, ทำให้นิ่ง, หมดสติ</span>
+                  </li>
+                  <li class="flex items-start space-x-2">
+                    <i class="fas fa-circle text-gold-500 text-xs mt-2"></i>
+                    <span><strong>มหาระงับ:</strong> การระงับอย่างยิ่งใหญ่</span>
+                  </li>
+                  <li class="flex items-start space-x-2">
+                    <i class="fas fa-circle text-gold-500 text-xs mt-2"></i>
+                    <span><strong>สรรพระงับ:</strong> การระงับทั้งปวง</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Meaning and Origins -->
+      <section id="meaning" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">ความหมายและที่มา</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto mb-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Ramayana Connection -->
+            <div class="bg-gradient-to-br from-heritage-50 to-gold-50 rounded-2xl p-8">
+              <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6 flex items-center">
+                <i class="fas fa-book-open text-gold-600 mr-3"></i>
+                รากฐานจากตำนานรามเกียรติ์
+              </h3>
+
+              <div class="mb-6">
+                <img src="https://kimi-web-img.moonshot.cn/img/upload.wikimedia.org/ba9992e223b261cf1f9c5488b7647bfadaa7e7ac.jpg" alt="หนุมานในตำนานรามเกียรติ์" class="w-full h-48 object-cover rounded-lg mb-4" size="medium" aspect="wide" query="หนุมาน รามเกียรติ์" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              </div>
+
+              <div class="space-y-4 text-heritage-700">
+                <p>
+                  คาถาไมยราพสะกดทัพมีรากฐานมาจากตำนานรามเกียรติ์ ตอนที่หนุมานใช้วิชาสะกดเพื่อช่วยเหลือพระรามและพระลักษณ์
+                  <a href="https://www.thaprachan.com/amulet_detail/WE29021643" class="citation-link" target="_blank">[วัดท่าพระจันทร์]</a>
+                </p>
+
+                <div class="bg-white rounded-lg p-4 border-l-4 border-gold-500">
+                  <h4 class="font-semibold text-heritage-800 mb-2">ตอนหนุมานสะกดพระเวทย์</h4>
+                  <p class="text-sm italic">
+                    หนุมานใช้วิชาสะกดเหล่ายักษ์ให้หลับสนิท จนสามารถเข้าไปจับเศียรทศกัณฐ์ผูกติดกับผมนางมณโฑได้สำเร็จ
+                  </p>
+                </div>
+
+                <p>
+                  ชื่อ <strong>&#34;ไมยราพ&#34;</strong> มาจากอสูรกายผู้ครอบครองบาดาลในตำนาน ที่หนุมานต้องต่อสู้เพื่อเอาชนะ
+                  <a href="https://www.s-amulet.com/th/products/502535-%E0%B8%95%E0%B8%B0%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%94%E0%B8%AA%E0%B8%B8%E0%B8%94%E0%B8%A2%E0%B8%AD%E0%B8%94-%E0%B9%84%E0%B8%A1%E0%B8%A2%E0%B8%A3%E0%B8%B2%E0%B8%9E%E0%B8%AA%E0%B8%B0%E0%B8%81%E0%B8%94%E0%B8%97%E0%B8%B1%E0%B8%9E" class="citation-link" target="_blank">[S-Amulet]</a>
+                </p>
+              </div>
+            </div>
+
+            <!-- Key Terms Analysis -->
+            <div class="space-y-6">
+              <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <h3 class="font-display text-xl font-bold text-heritage-800 mb-4">การวิเคราะห์คำสำคัญ</h3>
+
+                <div class="space-y-4">
+                  <div class="border-b border-heritage-200 pb-4">
+                    <h4 class="font-semibold text-heritage-800 mb-2">สิทธิการ</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                      <div>
+                        <strong>รากศัพท์:</strong> สันสกฤต siddhi (สิทธิ) + kara (การ)
+                      </div>
+                      <div>
+                        <strong>ความหมาย:</strong> ผู้มีอำนาจวิเศษในการกระทำ
+                      </div>
+                      <div>
+                        <strong>บทบาท:</strong> เปิดคาถาและอัญเชิญพลัง
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="border-b border-heritage-200 pb-4">
+                    <h4 class="font-semibold text-heritage-800 mb-2">ระงับ</h4>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <strong>ระดับกายภาพ:</strong> หยุดการเคลื่อนไหว
+                      </div>
+                      <div>
+                        <strong>ระดับจิตใจ:</strong> ทำให้หลับ หมดสติ
+                      </div>
+                      <div>
+                        <strong>ระดับอำนาจ:</strong> ยับยั้งอิทธิพล
+                      </div>
+                      <div>
+                        <strong>ระดับธาตุ:</strong> ควบคุมธรรมชาติ
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 class="font-semibold text-heritage-800 mb-2">มหาระงับ และ สรรพระงับ</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                      <div>
+                        <strong>มหาระงับ:</strong> การระงับอย่างยิ่งใหญ่ สูงสุด
+                      </div>
+                      <div>
+                        <strong>สรรพระงับ:</strong> การระงับทั้งปวง ทุกสรรพสิ่ง
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-gold-50 rounded-2xl p-6">
+                <h3 class="font-display text-xl font-bold text-heritage-800 mb-4">ลักษณะเด่นของคาถา</h3>
+                <ul class="space-y-3 text-heritage-700">
+                  <li class="flex items-start space-x-3">
+                    <i class="fas fa-check-circle text-gold-600 mt-1"></i>
+                    <div>
+                      <strong>การใช้คำว่า &#34;ระงับ&#34; ซ้ำหลายครั้ง:</strong>
+                      <p class="text-sm mt-1">สร้างพลังงานการระงับสะสมผ่านการท่องซ้ำ (ชัมมนต์)</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i class="fas fa-check-circle text-gold-600 mt-1"></i>
+                    <div>
+                      <strong>ครอบคลุมทุกระดับของการระงับ:</strong>
+                      <p class="text-sm mt-1">ตั้งแต่พรหม เทพ ไปจนถึงสัตว์ วัตถุ ศัตรู</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i class="fas fa-check-circle text-gold-600 mt-1"></i>
+                    <div>
+                      <strong>การสรุปด้วย &#34;มหาระงับ สรรพระงับ&#34;:</strong>
+                      <p class="text-sm mt-1">ย้ำถึงอานุภาพสูงสุดของพลังการระงับ</p>
+                    </div>
+                  </li>
+                  <li class="flex items-start space-x-3">
+                    <i class="fas fa-check-circle text-gold-600 mt-1"></i>
+                    <div>
+                      <strong>โครงสร้างจากสูงต่ำ:</strong>
+                      <p class="text-sm mt-1">สะท้อนลำดับชั้นจักรวาลตามคติพราหมณ์</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Yantra Section -->
+      <section id="yantra" class="py-16 bg-gradient-to-br from-heritage-50 to-gold-50">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">ยันต์ยมสลักเกล้า</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto mb-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Yantra Image -->
+            <div class="lg:col-span-1">
+              <div class="bg-white rounded-2xl p-6 shadow-lg">
+                <div class="mb-6">
+                  <img src="https://kimi-web-img.moonshot.cn/img/palungjit.org/aee07fca5500f003017db617f4d577f6dd612af0" alt="ยันต์ยมสลักเกล้าบนตะกรุดโบราณ" class="w-full h-64 object-cover rounded-lg" size="medium" aspect="wide" color="brown" style="photo" query="ยันต์ยมสลักเกล้า" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+                </div>
+                <h3 class="font-display text-xl font-bold text-heritage-800 mb-4">ลักษณะยันต์</h3>
+                <div class="space-y-3 text-sm text-heritage-700">
+                  <div class="flex items-start space-x-2">
+                    <i class="fas fa-circle text-gold-500 text-xs mt-1"></i>
+                    <span><strong>ต้นแบบ:</strong> สมุดจีนสีเขียว</span>
+                  </div>
+                  <div class="flex items-start space-x-2">
+                    <i class="fas fa-circle text-gold-500 text-xs mt-1"></i>
+                    <span><strong>องค์ประกอบ:</strong> รูปหนุมานและอักขระเลขยันต์</span>
+                  </div>
+                  <div class="flex items-start space-x-2">
+                    <i class="fas fa-circle text-gold-500 text-xs mt-1"></i>
+                    <span><strong>การสร้าง:</strong> เหล็กจารทั้งสองด้าน</span>
+                  </div>
+                </div>
+                <div class="mt-4 text-xs text-heritage-600">
+                  <p>แหล่งข้อมูล:
+                    <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=153&amp;product-id=4774" class="citation-link" target="_blank">ครูเอ็งรังไทย</a>,
+                    <a href="http://www.bansomdet.99wat.com/product/245192/%E0%B8%95%E0%B8%B0%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%94%E0%B9%84%E0%B8%A1%E0%B8%A2%E0%B8%A3%E0%B8%B2%E0%B8%9E%E0%B8%AA%E0%B8%B0%E0%B8%81%E0%B8%94%E0%B8%97%E0%B8%B1%E0%B8%9E%20%E0%B8%AB%E0%B8%A5%E0%B8%A7%E0%B8%87%E0%B8%9E%E0%B9%88%E0%B8%AD%E0%B8%81" class="citation-link" target="_blank">บ้านสมเด็จ</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Yantra Details -->
+            <div class="lg:col-span-2 space-y-6">
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6">องค์ประกอบของยันต์</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="space-y-4">
+                    <div class="border-l-4 border-gold-500 pl-4">
+                      <h4 class="font-semibold text-heritage-800 mb-2">รูปตัวละครจากรามเกียรติ์</h4>
+                      <p class="text-sm text-heritage-700">
+                        รูปหนุมานถวายแหวน หรือหนุมานในท่าต่างๆ
+                        เป็นสัญลักษณ์แห่งการสะกดและความจงรักภักดี
+                      </p>
+                    </div>
+
+                    <div class="border-l-4 border-gold-500 pl-4">
+                      <h4 class="font-semibold text-heritage-800 mb-2">อักขระเลขยันต์</h4>
+                      <p class="text-sm text-heritage-700">
+                        ยันต์ยมสลักเกล้าที่มีพลังการระงับและสะกด
+                        เป็นอักขระวิเศษตามตำราโบราณ
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="space-y-4">
+                    <div class="border-l-4 border-gold-500 pl-4">
+                      <h4 class="font-semibold text-heritage-800 mb-2">การลงเหล็กจาร</h4>
+                      <p class="text-sm text-heritage-700">
+                        ลงทั้งด้านนอกและด้านในของตะกรุด
+                        เพื่อความสมบูรณ์ของพลัง
+                      </p>
+                    </div>
+
+                    <div class="border-l-4 border-gold-500 pl-4">
+                      <h4 class="font-semibold text-heritage-800 mb-2">การพอกผงยา</h4>
+                      <p class="text-sm text-heritage-700">
+                        ผงยามหาระงับที่เสกแล้ว
+                        เพื่อเพิ่มพลังการสะกด
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6">ความหมายของยันต์</h3>
+
+                <div class="space-y-6">
+                  <div class="bg-heritage-50 rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-3 flex items-center">
+                      <i class="fas fa-magic text-gold-600 mr-2"></i>
+                      สัญลักษณ์แห่งการสะกด
+                    </h4>
+                    <p class="text-heritage-700 text-sm leading-relaxed">
+                      ยันต์ยมสลักเกล้าเป็นสัญลักษณ์ที่แสดงถึงอำนาจในการทำให้ฝ่ายตรงข้ามหลับหรือหมดสติ
+                      โดยเฉพาะอย่างยิ่งเมื่อใช้ร่วมกับคาถาไมยราพสะกดทัพ
+                    </p>
+                  </div>
+
+                  <div class="bg-gold-50 rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-3 flex items-center">
+                      <i class="fas fa-link text-gold-600 mr-2"></i>
+                      ความเชื่อมโยงกับพลังหนุมาน
+                    </h4>
+                    <p class="text-heritage-700 text-sm leading-relaxed">
+                      การที่ยันต์บนตะกรุดมีรูปหนุมานเป็นหลัก แสดงถึงการรับพลังจากหนุมานผู้มีวิชาสะกดอันทรงพลัง
+                      หนุมานไม่เพียงแต่มีกำลังกายที่ยิ่งใหญ่เท่านั้น แต่ยังมีวิชาคาถาและเวทมนตร์หลายอย่าง
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Ritual Section -->
+      <section id="ritual" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">พิธีกรรมและการใช้คาถา</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto mb-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Preparation -->
+            <div class="space-y-8">
+              <div class="bg-gradient-to-br from-heritage-50 to-gold-50 rounded-2xl p-8">
+                <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6 flex items-center">
+                  <i class="fas fa-leaf text-gold-600 mr-3"></i>
+                  การเตรียมตัว
+                </h3>
+
+                <div class="space-y-6">
+                  <div class="bg-white rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-3">การเตรียมใบไม้รู้นอน</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                      <div class="text-center">
+                        <div class="bg-gold-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                          <span class="font-bold text-gold-700">108</span>
+                        </div>
+                        <p class="font-semibold">รวบรวม</p>
+                        <p class="text-heritage-600">ใบไม้รู้นอน 108 ชนิด</p>
+                      </div>
+                      <div class="text-center">
+                        <div class="bg-gold-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                          <i class="fas fa-sun text-gold-700"></i>
+                        </div>
+                        <p class="font-semibold">ตากแดด</p>
+                        <p class="text-heritage-600">ตากให้แห้งอย่างสมดุล</p>
+                      </div>
+                      <div class="text-center">
+                        <div class="bg-gold-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-2">
+                          <i class="fas fa-mortar-pestle text-gold-700"></i>
+                        </div>
+                        <p class="font-semibold">บดผง</p>
+                        <p class="text-heritage-600">บดให้ละเอียด</p>
+                      </div>
+                    </div>
+                    <p class="text-xs text-heritage-600 mt-4">
+                      แหล่งข้อมูล: <a href="https://prakumkrong.com/16530/" class="citation-link" target="_blank">ประกุมกรอง</a>
+                    </p>
+                  </div>
+
+                  <div class="bg-white rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-3">การเซ่นไหว้ครูวิชา</h4>
+                    <div class="space-y-3">
+                      <div class="flex justify-between items-center">
+                        <span class="text-heritage-700">บายศรีปากชาม</span>
+                        <span class="bg-gold-100 px-3 py-1 rounded-full text-sm font-semibold text-gold-700">1 คู่</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <span class="text-heritage-700">เป็ด</span>
+                        <span class="bg-gold-100 px-3 py-1 rounded-full text-sm font-semibold text-gold-700">1 ตัว</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <span class="text-heritage-700">สุราขาว</span>
+                        <span class="bg-gold-100 px-3 py-1 rounded-full text-sm font-semibold text-gold-700">1 ขวด</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <span class="text-heritage-700">เครื่องสังขยา</span>
+                        <span class="bg-gold-100 px-3 py-1 rounded-full text-sm font-semibold text-gold-700">ตามสมควร</span>
+                      </div>
+                    </div>
+                    <p class="text-xs text-heritage-600 mt-4">
+                      ต้องเซ่น <strong>ครูวิชาไมยราพ</strong>, <strong>ผีเจ้าป่าช้า</strong>, และ <strong>ผีภูตเจ้าเปรต</strong>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Process -->
+            <div class="space-y-8">
+              <div class="bg-gradient-to-br from-gold-50 to-heritage-50 rounded-2xl p-8">
+                <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6 flex items-center">
+                  <i class="fas fa-hands-praying text-gold-600 mr-3"></i>
+                  กระบวนการเสกคาถา
+                </h3>
+
+                <div class="space-y-6">
+                  <div class="bg-white rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-4">สถานที่และเวลา</h4>
+                    <div class="overflow-x-auto">
+                      <table class="w-full text-sm">
+                        <thead>
+                          <tr class="border-b border-heritage-200">
+                            <th class="text-left py-2 text-heritage-800">รูปแบบ</th>
+                            <th class="text-left py-2 text-heritage-800">สถานที่</th>
+                            <th class="text-left py-2 text-heritage-800">จำนวน</th>
+                            <th class="text-left py-2 text-heritage-800">เวลา</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr class="border-b border-heritage-100">
+                            <td class="py-2 text-heritage-700">เสกผงยามหาระงับ</td>
+                            <td class="py-2 text-heritage-700">ป่าช้า</td>
+                            <td class="py-2 text-heritage-700">33 จบ</td>
+                            <td class="py-2 text-heritage-700">ยามค่ำ</td>
+                          </tr>
+                          <tr>
+                            <td class="py-2 text-heritage-700">เสกผงยาติดตัว</td>
+                            <td class="py-2 text-heritage-700">ไม่ระบุ</td>
+                            <td class="py-2 text-heritage-700">7 คาบ</td>
+                            <td class="py-2 text-heritage-700">ก่อนใช้งาน</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <p class="text-xs text-heritage-600 mt-4">
+                      แหล่งข้อมูล: <a href="https://prakumkrong.com/16530/" class="citation-link" target="_blank">ประกุมกรอง</a>
+                    </p>
+                  </div>
+
+                  <div class="bg-white rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-4">การใช้กล้องเป่า</h4>
+                    <div class="space-y-3">
+                      <div class="flex items-start space-x-3">
+                        <i class="fas fa-circle text-gold-500 text-xs mt-2"></i>
+                        <div>
+                          <strong class="text-heritage-800">เสกกล้องเป่า:</strong>
+                          <span class="text-heritage-700 text-sm"> 9 คาบ</span>
+                        </div>
+                      </div>
+                      <div class="flex items-start space-x-3">
+                        <i class="fas fa-circle text-gold-500 text-xs mt-2"></i>
+                        <div>
+                          <strong class="text-heritage-800">วิธีใช้:</strong>
+                          <span class="text-heritage-700 text-sm"> เป่ากระจายเหนือลม</span>
+                        </div>
+                      </div>
+                      <div class="flex items-start space-x-3">
+                        <i class="fas fa-circle text-gold-500 text-xs mt-2"></i>
+                        <div>
+                          <strong class="text-heritage-800">ผลลัพธ์:</strong>
+                          <span class="text-heritage-700 text-sm"> ให้พัดไปต้องผู้ใด ผู้นั้นหลับสิ้น</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-white rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-4">การอธิษฐานจิต</h4>
+                    <div class="space-y-3">
+                      <div class="bg-heritage-50 rounded p-3">
+                        <strong class="text-heritage-800 text-sm">ตั้งนะโม:</strong>
+                        <p class="text-heritage-700 text-sm">3 จบ เพื่อสร้างสมาธิและความบริสุทธิ์จิต</p>
+                      </div>
+                      <div class="bg-heritage-50 rounded p-3">
+                        <strong class="text-heritage-800 text-sm">อธิษฐานให้ระงับสิ้น:</strong>
+                        <p class="text-heritage-700 text-sm">กำหนดจิตให้ชัดเจนว่าต้องการระงับสิ่งใด</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Usage Section -->
+      <section id="usage" class="py-16 bg-gradient-to-br from-heritage-50 to-gold-50">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">วิธีการใช้ตะกรุดไมยราพณ์สะกดทัพ</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto mb-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Carrying -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+              <div class="text-center mb-6">
+                <div class="bg-gold-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-user-shield text-gold-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-heritage-800">การพกพาติดตัว</h3>
+              </div>
+
+              <div class="space-y-4 text-sm text-heritage-700">
+                <div class="bg-heritage-50 rounded p-4">
+                  <h4 class="font-semibold text-heritage-800 mb-2 text-base">การพกผงยามหาระงับ</h4>
+                  <ul class="space-y-2">
+                    <li class="flex items-start space-x-2">
+                      <i class="fas fa-check text-gold-600 text-xs mt-1"></i>
+                      <span>เสกผงยา 7 คาบ ก่อนนำติดตัว</span>
+                    </li>
+                    <li class="flex items-start space-x-2">
+                      <i class="fas fa-check text-gold-600 text-xs mt-1"></i>
+                      <span>ใช้ร่วมกับตะกรุดอื่นเพื่อเพิ่มพลัง</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="bg-gold-50 rounded p-4">
+                  <h4 class="font-semibold text-heritage-800 mb-2 text-base">การใช้กับตะกรุดนิทรามหาจังงัง</h4>
+                  <p>
+                    ผงยามหาระงับสามารถใช้พอกตะกรุดนิทรามหาจังงัง
+                    เพื่อเพิ่มพลังการสะกดให้แก่กล้ายิ่งขึ้น
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-4 text-xs text-heritage-600">
+                <p>แหล่งข้อมูล: <a href="https://prakumkrong.com/16530/" class="citation-link" target="_blank">ประกุมกรอง</a>
+                </p>
+              </div>
+            </div>
+
+            <!-- House Entry -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+              <div class="text-center mb-6">
+                <div class="bg-gold-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-home text-gold-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-heritage-800">การใช้ในการขึ้นบ้าน</h3>
+              </div>
+
+              <div class="space-y-4">
+                <div class="bg-heritage-50 rounded p-4">
+                  <h4 class="font-semibold text-heritage-800 mb-3 text-base">ขั้นตอนการขึ้นบ้าน</h4>
+                  <ol class="space-y-2 text-sm text-heritage-700">
+                    <li class="flex items-start space-x-2">
+                      <span class="bg-gold-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">1</span>
+                      <span>จับที่บันไดของบ้านเป้าหมาย</span>
+                    </li>
+                    <li class="flex items-start space-x-2">
+                      <span class="bg-gold-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">2</span>
+                      <span>สวดคาถา 3 จบ</span>
+                    </li>
+                    <li class="flex items-start space-x-2">
+                      <span class="bg-gold-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">3</span>
+                      <span>ใช้คาถาพิเศษ</span>
+                    </li>
+                  </ol>
+                </div>
+
+                <div class="bg-gold-50 rounded p-4">
+                  <h4 class="font-semibold text-heritage-800 mb-2 text-base">คาถาที่ใช้</h4>
+                  <div class="text-sm italic text-heritage-700 font-display leading-relaxed">
+                    &#34;พระอาทิตย์ชุบขนกูเป็นขนเพชร กูจะระเห็จขึ้นบนจอมเขา อมระงับเชิงระงับได...&#34;
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 text-xs text-heritage-600">
+                <p>แหล่งข้อมูล: <a href="https://prakumkrong.com/16530/" class="citation-link" target="_blank">ประกุมกรอง</a>
+                </p>
+              </div>
+            </div>
+
+            <!-- Attraction -->
+            <div class="bg-white rounded-2xl p-8 shadow-lg">
+              <div class="text-center mb-6">
+                <div class="bg-gold-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-heart text-gold-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-heritage-800">ด้านมหาเสน่ห์</h3>
+              </div>
+
+              <div class="space-y-4 text-sm text-heritage-700">
+                <div class="bg-heritage-50 rounded p-4">
+                  <h4 class="font-semibold text-heritage-800 mb-2 text-base">เข้าหาผู้หญิงโดยไม่ร้อง</h4>
+                  <p>
+                    ตะกรุดมีพุทธคุณด้านมหาเสน่ห์
+                    ทำให้ผู้ใช้สามารถเข้าหาผู้หญิงได้โดยไม่ถูกปฏิเสธหรือขัดขวาง
+                  </p>
+                </div>
+
+                <div class="bg-gold-50 rounded p-4">
+                  <h4 class="font-semibold text-heritage-800 mb-2 text-base">ตัวอย่างจากประวัติ</h4>
+                  <blockquote class="italic text-heritage-700 text-sm border-l-4 border-gold-500 pl-3">
+                    &#34;นายเปี่ยม สังข์ทอง บ้านลาด มีภรรยาสาวถึง 3 คน
+                    เพราะพกตะกรุดของหลวงพ่อกุนติดตัวไว้&#34;
+                  </blockquote>
+                </div>
+              </div>
+
+              <div class="mt-4 text-xs text-heritage-600">
+                <p>แหล่งข้อมูล: <a href="https://prakumkrong.com/16530/" class="citation-link" target="_blank">ประกุมกรอง</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Real Examples -->
+          <div class="mt-12 bg-gradient-to-r from-heritage-50 to-gold-50 rounded-2xl p-8">
+            <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6 text-center">ตัวอย่างจากประวัติ</h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div class="bg-white rounded-lg p-6">
+                <h4 class="font-semibold text-heritage-800 mb-3 flex items-center">
+                  <i class="fas fa-user-check text-gold-600 mr-2"></i>
+                  กรณีนายฉิม ศาสตรา
+                </h4>
+                <blockquote class="italic text-heritage-700 text-sm leading-relaxed mb-3">
+                  &#34;นายฉิม ศาสตรา บ้านขนอน ได้นำตะกรุดไมยราพณ์สะกดทัพไปทดลองขึ้นบ้านญาติที่บ้านกำ
+                  โดยสามารถเข้าไปในบ้าน หุงข้าวต้มแกงกินจนอิ่ม และเจ้าของบ้านไม่ตื่นรู้เลย&#34;
+                </blockquote>
+                <p class="text-xs text-heritage-600">แสดงให้เห็นประสิทธิภาพในการทำให้หลับสนิท</p>
+              </div>
+
+              <div class="bg-white rounded-lg p-6">
+                <h4 class="font-semibold text-heritage-800 mb-3 flex items-center">
+                  <i class="fas fa-heart text-gold-600 mr-2"></i>
+                  กรณีนายเปี่ยม สังข์ทอง
+                </h4>
+                <blockquote class="italic text-heritage-700 text-sm leading-relaxed mb-3">
+                  &#34;นายเปี่ยม สังข์ทอง บ้านลาด มีภรรยาสาวถึง 3 คน
+                  เพราะพกตะกรุดของหลวงพ่อกุนติดตัวไว้&#34;
+                </blockquote>
+                <p class="text-xs text-heritage-600">แสดงให้เห็นพลังมหาเสน่ห์</p>
+              </div>
+            </div>
+
+            <div class="mt-4 text-center">
+              <p class="text-xs text-heritage-600">
+                แหล่งข้อมูล: <a href="https://prakumkrong.com/16530/" class="citation-link" target="_blank">ประกุมกรอง</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Cautions Section -->
+      <section id="cautions" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">ข้อห้ามและข้อควรระวัง</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto mb-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Prohibitions -->
+            <div class="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <div class="bg-red-500 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                  <i class="fas fa-exclamation-triangle text-white"></i>
+                </div>
+                <h3 class="font-display text-2xl font-bold text-red-800">ข้อห้ามในการใช้วิชา</h3>
+              </div>
+
+              <div class="space-y-6">
+                <div class="bg-white rounded-lg p-6 border-l-4 border-red-500">
+                  <h4 class="font-semibold text-red-800 mb-3 text-lg">ห้ามใช้ทำลายชาติ ศาสนา พระมหากษัตริย์</h4>
+                  <blockquote class="italic text-red-700 mb-4 text-sm leading-relaxed">
+                    &#34;หากผู้ใดเอาไปใช้ในทางทำลายชาติ ศาสนา พระมหากษัตริย์แล้วไซร์
+                    ท่านว่าต้องตายโหงภายในสามวันเจ็ดวัน&#34;
+                  </blockquote>
+                  <p class="text-xs text-red-600">
+                    ข้อห้ามนี้สะท้อนให้เห็นถึงกรอบจริยธรรมในวิชาอาคมไทย
+                  </p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6">
+                  <h4 class="font-semibold text-red-800 mb-3 text-lg">ผลกรรมจากการใช้ผิดทาง</h4>
+                  <ul class="space-y-2 text-sm text-red-700">
+                    <li class="flex items-start space-x-2">
+                      <i class="fas fa-skull-crossbones text-red-500 text-xs mt-1"></i>
+                      <span>การใช้เพื่อทำร้ายผู้อื่นหรือแสวงหาประโยชน์อย่างไม่เป็นธรรม</span>
+                    </li>
+                    <li class="flex items-start space-x-2">
+                      <i class="fas fa-skull-crossbones text-red-500 text-xs mt-1"></i>
+                      <span>มีผลกรรมตามมาอย่างรวดเร็วและรุนแรง</span>
+                    </li>
+                    <li class="flex items-start space-x-2">
+                      <i class="fas fa-skull-crossbones text-red-500 text-xs mt-1"></i>
+                      <span>อาจเกิดการเจ็บป่วย อุบัติเหตุ หรือความล้มเหลวในชีวิต</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Precepts -->
+            <div class="bg-gradient-to-br from-green-50 to-teal-50 rounded-2xl p-8">
+              <div class="flex items-center mb-6">
+                <div class="bg-green-500 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                  <i class="fas fa-dharmachakra text-white"></i>
+                </div>
+                <h3 class="font-display text-2xl font-bold text-green-800">การรักษาศีล</h3>
+              </div>
+
+              <div class="space-y-6">
+                <div class="bg-white rounded-lg p-6">
+                  <h4 class="font-semibold text-green-800 mb-3 text-lg">การอาราธนาศีลห้า</h4>
+                  <div class="space-y-3 text-sm text-green-700">
+                    <div class="flex items-start space-x-2">
+                      <i class="fas fa-ban text-green-500 text-xs mt-1"></i>
+                      <span>งดเว้นจากการฆ่าสัตว์</span>
+                    </div>
+                    <div class="flex items-start space-x-2">
+                      <i class="fas fa-ban text-green-500 text-xs mt-1"></i>
+                      <span>งดเว้นจากการลักทรัพย์</span>
+                    </div>
+                    <div class="flex items-start space-x-2">
+                      <i class="fas fa-ban text-green-500 text-xs mt-1"></i>
+                      <span>งดเว้นจากการประพฤติผิดในกาม</span>
+                    </div>
+                    <div class="flex items-start space-x-2">
+                      <i class="fas fa-ban text-green-500 text-xs mt-1"></i>
+                      <span>งดเว้นจากการพูดเท็จ</span>
+                    </div>
+                    <div class="flex items-start space-x-2">
+                      <i class="fas fa-ban text-green-500 text-xs mt-1"></i>
+                      <span>งดเว้นจากการดื่มสุราเมรัย</span>
+                    </div>
+                  </div>
+                  <p class="text-xs text-green-600 mt-3">
+                    สำหรับผู้ปฏิบัติทั่วไป
+                  </p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6">
+                  <h4 class="font-semibold text-green-800 mb-3 text-lg">การอาราธนาศีลแปด</h4>
+                  <div class="space-y-3 text-sm text-green-700">
+                    <div class="flex items-start space-x-2">
+                      <i class="fas fa-plus text-green-500 text-xs mt-1"></i>
+                      <span>ศีลห้า + งดอาหารวิกาล</span>
+                    </div>
+                    <div class="flex items-start space-x-2">
+                      <i class="fas fa-plus text-green-500 text-xs mt-1"></i>
+                      <span>งดฟ้อนรำขับร้องประโคมดนตรี</span>
+                    </div>
+                    <div class="flex items-start space-x-2">
+                      <i class="fas fa-plus text-green-500 text-xs mt-1"></i>
+                      <span>งดเครื่องประดับอันหรูหรา</span>
+                    </div>
+                  </div>
+                  <p class="text-xs text-green-600 mt-3">
+                    สำหรับผู้ปฏิบัติพิธีขั้นสูง
+                  </p>
+                </div>
+
+                <div class="bg-white rounded-lg p-6 border-l-4 border-green-500">
+                  <h4 class="font-semibold text-green-800 mb-2 text-base">ความสำคัญของศีล</h4>
+                  <p class="text-green-700 text-sm leading-relaxed">
+                    การรักษาศีลเป็นพื้นฐานสำคัญที่ทำให้คาถาและตะกรุดมีอานุภาพ
+                    หากผู้ใช้ไม่มีศีลธรรมเป็นที่ตั้ง พลังของวิชาอาจไม่สำเร็จผล
+                    หรือกลับมาทำอันตรายแก่ตนเอง
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- History Section -->
+      <section id="history" class="py-16 bg-gradient-to-br from-heritage-50 to-gold-50">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">ประวัติหลวงพ่อกุน วัดพระนอน</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto mb-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Biography -->
+            <div class="space-y-8">
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <div class="flex items-center mb-6">
+                  <div class="bg-gold-100 rounded-full w-16 h-16 flex items-center justify-center mr-4">
+                    <i class="fas fa-user-graduate text-gold-700 text-2xl"></i>
+                  </div>
+                  <h3 class="font-display text-2xl font-bold text-heritage-800">ประวัติโดยสังเขป</h3>
+                </div>
+
+                <div class="space-y-4">
+                  <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="bg-heritage-50 rounded p-3">
+                      <strong class="text-heritage-800">ชื่อเต็ม:</strong>
+                      <p class="text-heritage-700">พระครูสุชาตเมธาจารย์</p>
+                    </div>
+                    <div class="bg-heritage-50 rounded p-3">
+                      <strong class="text-heritage-800">ชื่อเล่น:</strong>
+                      <p class="text-heritage-700">หลวงพ่อกุน</p>
+                    </div>
+                  </div>
+
+                  <div class="bg-heritage-50 rounded p-4">
+                    <strong class="text-heritage-800">วันเกิด:</strong>
+                    <p class="text-heritage-700">วันพุธ เดือน 6 ปีวอก พ.ศ. 2403</p>
+                  </div>
+
+                  <div class="bg-heritage-50 rounded p-4">
+                    <strong class="text-heritage-800">บ้านเกิด:</strong>
+                    <p class="text-heritage-700">บ้านหนองกาทอง ตำบลโรงเข้ จังหวัดเพชรบุรี</p>
+                  </div>
+
+                  <div class="bg-heritage-50 rounded p-4">
+                    <strong class="text-heritage-800">มรณภาพ:</strong>
+                    <p class="text-heritage-700">พ.ศ. 2463 (อายุ 60 ปี 40 พรรษา)</p>
+                  </div>
+
+                  <div class="bg-gold-50 rounded p-4">
+                    <strong class="text-heritage-800">สถานที่บรรพชา:</strong>
+                    <p class="text-heritage-700">วัดวังบัว (ทั้งสามเณรและภิกษุ)</p>
+                  </div>
+                </div>
+
+                <div class="mt-4 text-xs text-heritage-600">
+                  <p>แหล่งข้อมูล: <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=153&amp;product-id=4774" class="citation-link" target="_blank">ครูเอ็งรังไทย</a>,
+                    <a href="https://www.taradpra.com/itemDetail.aspx?itemNo=1193440&amp;storeNameEng=ouiwatkang&amp;storeNo=6348" class="citation-link" target="_blank">ตลาดพระ</a>
+                  </p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="font-display text-xl font-bold text-heritage-800 mb-6">ความเชี่ยวชาญด้านตะกรุด</h3>
+                <div class="space-y-4">
+                  <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-500">
+                    <blockquote class="italic text-red-700 text-sm leading-relaxed">
+                      &#34;ตะกรุดไมยราพณ์สะกดทัพของหลวงพ่อกุนนับเป็นตะกรุดที่มหาชนต้องการเป็นเจ้าของมากที่สุด
+                      หายากที่สุด และมีราคาแพงที่สุดของเมืองไทยในอดีต&#34;
+                    </blockquote>
+                  </div>
+
+                  <div class="bg-heritage-50 rounded p-4">
+                    <p class="text-heritage-700 text-sm leading-relaxed">
+                      ความหายากและความต้องการสูงทำให้ตะกรุดนี้มีมูลค่าสูงลิ่วในตลาดพระเครื่อง
+                      โดยเฉพาะในยุคที่การค้าขายพระเครื่องเฟื่องฟู
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-4 text-xs text-heritage-600">
+                  <p>แหล่งข้อมูล: <a href="https://www.watthakhanun.com/webboard/showthread.php?t=11319" class="citation-link" target="_blank">วัดท่าขนุน</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Creation Process -->
+            <div class="space-y-8">
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6 flex items-center">
+                  <i class="fas fa-hammer text-gold-600 mr-3"></i>
+                  กระบวนการสร้างตะกรุด
+                </h3>
+
+                <div class="space-y-6">
+                  <div class="bg-heritage-50 rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-4">การปลุกเสก</h4>
+                    <div class="space-y-3 text-sm">
+                      <div class="flex justify-between items-center border-b border-heritage-200 pb-2">
+                        <span class="text-heritage-700">ลงอักขระเลขยันต์</span>
+                        <span class="bg-gold-100 px-3 py-1 rounded-full text-xs font-semibold text-gold-700">เสาร์ 5</span>
+                      </div>
+                      <div class="flex justify-between items-center border-b border-heritage-200 pb-2">
+                        <span class="text-heritage-700">ปลุกเสกในป่าช้า</span>
+                        <span class="bg-gold-100 px-3 py-1 rounded-full text-xs font-semibold text-gold-700">7 แห่ง</span>
+                      </div>
+                      <div class="flex justify-between items-center">
+                        <span class="text-heritage-700">รอคืนวันเพ็ญ</span>
+                        <span class="bg-gold-100 px-3 py-1 rounded-full text-xs font-semibold text-gold-700">เดือน 12</span>
+                      </div>
+                    </div>
+                    <p class="text-xs text-heritage-600 mt-3">
+                      ป่าช้า 7 แห่ง รวม วัดพระนอน, วัดพลับ, วัดแก่นเหล็ก
+                    </p>
+                  </div>
+
+                  <div class="bg-gold-50 rounded-lg p-6">
+                    <h4 class="font-semibold text-heritage-800 mb-4">การทำซ้ำในวันเพ็ญเดือน 12</h4>
+                    <div class="space-y-4">
+                      <div class="bg-white rounded p-4">
+                        <h5 class="font-semibold text-heritage-800 mb-2">ขั้นตอน</h5>
+                        <ol class="space-y-2 text-sm text-heritage-700">
+                          <li class="flex items-start space-x-2">
+                            <i class="fas fa-eraser text-gold-600 text-xs mt-1"></i>
+                            <span>ถูลบรอยเหล็กจารด้วยสะบ้ามอญ</span>
+                          </li>
+                          <li class="flex items-start space-x-2">
+                            <i class="fas fa-pen-nib text-gold-600 text-xs mt-1"></i>
+                            <span>ลงเหล็กจารใหม่</span>
+                          </li>
+                          <li class="flex items-start space-x-2">
+                            <i class="fas fa-redo text-gold-600 text-xs mt-1"></i>
+                            <span>ทำซ้ำเมื่อถึงวันเพ็ญเดือน 12 ต่อมา</span>
+                          </li>
+                        </ol>
+                      </div>
+
+                      <div class="bg-red-50 rounded-lg p-4 border border-red-200">
+                        <div class="flex items-center mb-2">
+                          <i class="fas fa-clock text-red-600 mr-2"></i>
+                          <strong class="text-red-800">ระยะเวลา</strong>
+                        </div>
+                        <p class="text-red-700 text-sm">
+                          ต้องทำซ้ำ <strong>3 ครั้ง</strong> จึงจะได้ตะกรุด 1 ดอกที่สมบูรณ์
+                          <br/>
+                          <span class="text-xs">นั่นหมายความว่า ตะกรุด 1 ดอกใช้เวลาปลุกเสกถึง 3 ปี</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-4 text-xs text-heritage-600">
+                  <p>แหล่งข้อมูล: <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=153&amp;product-id=4774" class="citation-link" target="_blank">ครูเอ็งรังไทย</a>,
+                    <a href="https://www.taradpra.com/itemDetail.aspx?itemNo=1193440&amp;storeNameEng=ouiwatkang&amp;storeNo=6348" class="citation-link" target="_blank">ตลาดพระ</a>
+                  </p>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-2xl p-8 shadow-lg">
+                <h3 class="font-display text-xl font-bold text-heritage-800 mb-6">การเปรียบเทียบกับตะกรุดอื่น</h3>
+
+                <div class="space-y-4">
+                  <div class="bg-heritage-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-heritage-800 mb-2">ตะกรุดมหาระงับของหลวงพ่อคง</h4>
+                    <p class="text-sm text-heritage-700 mb-2">
+                      วัดบางกะพ้อม มีความเชื่อมโยงกับตะกรุดของหลวงพ่อกุน
+                      โดยอาจใช้ตำราเดียวกัน
+                    </p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                      <div class="bg-white rounded p-2">
+                        <strong class="text-heritage-800">หลวงพ่อกุน:</strong>
+                        <p class="text-heritage-600">เน้นการสะกดให้หลับ</p>
+                      </div>
+                      <div class="bg-white rounded p-2">
+                        <strong class="text-heritage-800">หลวงพ่อคง:</strong>
+                        <p class="text-heritage-600">เน้นการระงับเรื่องไม่ดี</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-gold-50 rounded-lg p-4">
+                    <h4 class="font-semibold text-heritage-800 mb-2">ตะกรุดมหาโสฬสของหลวงปู่เอี่ยม</h4>
+                    <p class="text-sm text-heritage-700">
+                      วัดสะพานสูง ปัจจุบันได้แทนที่ตะกรุดไมยราพณ์สะกดทัพ
+                      ในฐานะตะกรุดที่มีราคาแพงที่สุดของเมืองไทย
+                    </p>
+                  </div>
+                </div>
+
+                <div class="mt-4 text-xs text-heritage-600">
+                  <p>แหล่งข้อมูล: <a href="https://www.watthakhanun.com/webboard/showthread.php?t=11319" class="citation-link" target="_blank">วัดท่าขนุน</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="section-divider"></div>
+
+      <!-- Powers Section -->
+      <section id="powers" class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="text-center mb-12">
+            <h2 class="font-display text-4xl font-bold text-heritage-800 mb-6">พุทธคุณของตะกรุดไมยราพณ์สะกดทัพ</h2>
+            <div class="w-24 h-1 bg-gold-500 mx-auto mb-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Defense -->
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200">
+              <div class="text-center mb-6">
+                <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-shield-alt text-blue-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-blue-800">ด้านคงกระพัน</h3>
+              </div>
+              <div class="text-blue-700 text-sm leading-relaxed">
+                <p>
+                  ตะกรุดมีพุทธคุณด้านคงกระพัน หรือการป้องกันอันตรายจากอาวุธและภัยพิบัติต่างๆ
+                  ผู้พกตะกรุดจะได้รับความคุ้มครองให้ปลอดภัยจากอันตรายที่อาจเกิดขึ้น
+                </p>
+              </div>
+            </div>
+
+            <!-- Attraction -->
+            <div class="bg-gradient-to-br from-pink-50 to-rose-50 rounded-2xl p-8 border border-pink-200">
+              <div class="text-center mb-6">
+                <div class="bg-pink-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-heart text-pink-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-pink-800">ด้านเมตตามหานิยม</h3>
+              </div>
+              <div class="text-pink-700 text-sm leading-relaxed">
+                <p>
+                  พุทธคุณด้านเมตตามหานิยมทำให้ผู้ใช้ตะกรุดได้รับความรักใคร่และเมตตาจากผู้คนรอบข้าง
+                  เป็นที่ชื่นชอบและนับถือของผู้ที่พบเห็น
+                </p>
+              </div>
+            </div>
+
+            <!-- Charm -->
+            <div class="bg-gradient-to-br from-purple-50 to-violet-50 rounded-2xl p-8 border border-purple-200">
+              <div class="text-center mb-6">
+                <div class="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-magic text-purple-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-purple-800">ด้านมหาเสน่ห์</h3>
+              </div>
+              <div class="text-purple-700 text-sm leading-relaxed">
+                <p>
+                  ตะกรุดมีพุทธคุณด้านมหาเสน่ห์ ทำให้ผู้ใช้มีความน่าดึงดูดใจต่อเพศตรงข้าม
+                  สามารถเข้าหาและสร้างความสัมพันธ์ได้โดยไม่ถูกปฏิเสธ
+                  ดังตัวอย่างนายเปี่ยม สังข์ทอง ที่มีภรรยาสาวถึง 3 คน
+                </p>
+              </div>
+            </div>
+
+            <!-- Sleep -->
+            <div class="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-8 border border-teal-200">
+              <div class="text-center mb-6">
+                <div class="bg-teal-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-bed text-teal-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-teal-800">ด้านมหานิทราและมหาสะกด</h3>
+              </div>
+              <div class="text-teal-700 text-sm leading-relaxed">
+                <p>
+                  พุทธคุณที่โดดเด่นคือมหานิทราและมหาสะกด
+                  ทำให้ผู้อื่นหลับสนิทหรือหมดสติ
+                  ผู้ใช้สามารถขึ้นไปในบ้านของผู้อื่นโดยที่เจ้าของบ้านไม่ตื่นรู้
+                  ดังตัวอย่างนายฉิม ศาสตราที่สามารถเข้าไปหุงข้าวต้มแกงกินในบ้านญาติได้
+                </p>
+              </div>
+            </div>
+
+            <!-- Subjugation -->
+            <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 border border-orange-200">
+              <div class="text-center mb-6">
+                <div class="bg-orange-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-fist-raised text-orange-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-orange-800">ด้านมหาปราบ</h3>
+              </div>
+              <div class="text-orange-700 text-sm leading-relaxed">
+                <p>
+                  มหาปราบหมายถึงการปราบปรามศัตรู สิ่งชั่วร้าย
+                  หรืออำนาจฝ่ายตรงข้ามให้ยอมจำนน
+                  ผู้ใช้ตะกรุดจะมีพลังในการเอาชนะอุปสรรคและศัตรูทั้งปวง
+                </p>
+              </div>
+            </div>
+
+            <!-- Suppression -->
+            <div class="bg-gradient-to-br from-red-50 to-rose-50 rounded-2xl p-8 border border-red-200">
+              <div class="text-center mb-6">
+                <div class="bg-red-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-hand-paper text-red-700 text-2xl"></i>
+                </div>
+                <h3 class="font-display text-xl font-bold text-red-800">ด้านมหาระงับ</h3>
+              </div>
+              <div class="text-red-700 text-sm leading-relaxed">
+                <p>
+                  มหาระงับหมายถึงการระงับ หยุดยั้ง
+                  หรือทำให้อำนาจของฝ่ายตรงข้ามเป็นอัตถี
+                  เป็นการป้องกันไม่ให้เหตุร้ายเกิดขึ้น
+                  หรือหยุดยั้งเหตุร้ายที่กำลังดำเนินอยู่
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="mt-12 bg-gradient-to-r from-heritage-100 to-gold-100 rounded-2xl p-8">
+            <div class="text-center">
+              <h3 class="font-display text-2xl font-bold text-heritage-800 mb-6">สรุปพุทธคุณ</h3>
+              <p class="text-heritage-700 leading-relaxed max-w-4xl mx-auto">
+                ตะกรุดไมยราพณ์สะกดทัพเป็นวิชาอาคมที่สมบูรณ์แบบ
+                ครอบคลุมทั้งด้านป้องกันตนเอง (คงกระพัน)
+                การสร้างเสน่ห์และความนิยม (เมตตามหานิยม มหาเสน่ห์)
+                การควบคุมสถานการณ์ (มหานิทรา มหาสะกด)
+                และการปราบปรามศัตรู (มหาปราบ มหาระงับ)
+                ทำให้เป็นวิชาที่ครอบคลุมในทุกด้านของชีวิต
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-heritage-800 text-heritage-100 py-12">
+        <div class="max-w-6xl mx-auto px-8">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h3 class="font-display text-xl font-bold text-white mb-4">ข้อมูลเพิ่มเติม</h3>
+              <ul class="space-y-2 text-sm">
+                <li>
+                  <a href="https://prakumkrong.com/16530/" class="citation-link">ประกุมกรอง - คาถาอาราธนาตะกรุด</a>
+                </li>
+                <li>
+                  <a href="https://www.s-amulet.com/th/products/502535-%E0%B8%95%E0%B8%B0%E0%B8%81%E0%B8%A3%E0%B8%B8%E0%B8%94%E0%B8%AA%E0%B8%B8%E0%B8%94%E0%B8%A2%E0%B8%AD%E0%B8%94-%E0%B9%84%E0%B8%A1%E0%B8%A2%E0%B8%A3%E0%B8%B2%E0%B8%9E%E0%B8%AA%E0%B8%B0%E0%B8%81%E0%B8%94%E0%B8%97%E0%B8%B1%E0%B8%9E" class="citation-link">S-Amulet - ตะกรุดไมยราพสะกดทัพ</a>
+                </li>
+                <li>
+                  <a href="http://www.kruengrangthai.com/shop-detail.php?shop-id=153&amp;product-id=4774" class="citation-link">ครูเอ็งรังไทย - หลวงพ่อกุน</a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-display text-xl font-bold text-white mb-4">การอ้างอิง</h3>
+              <p class="text-sm leading-relaxed">
+                เอกสารนี้รวบรวมจากตำราโบราณและแหล่งข้อมูลที่น่าเชื่อถือ
+                โดยมุ่งเน้นการอนุรักษ์และเผยแพร่ความรู้ด้านวัฒนธรรมไทย
+              </p>
+            </div>
+            <div>
+              <h3 class="font-display text-xl font-bold text-white mb-4">คำเตือน</h3>
+              <p class="text-sm leading-relaxed">
+                วิชาอาคมควรใช้ด้วยความระมัดระวังและมีศีลธรรมเป็นที่ตั้ง
+                การใช้ในทางที่ผิดอาจมีผลกรรมตามมา
+              </p>
+            </div>
+          </div>
+          <div class="border-t border-heritage-700 mt-8 pt-8 text-center">
+            <p class="text-sm">
+              © 2024 การศึกษาวิชาอาคมโบราณแห่งหลวงพ่อกุน วัดพระนอน
+            </p>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const tocSidebar = document.querySelector('.toc-sidebar');
+        
+        mobileMenuToggle.addEventListener('click', () => {
+            tocSidebar.classList.toggle('open');
+        });
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!tocSidebar.contains(e.target) && !mobileMenuToggle.contains(e.target)) {
+                tocSidebar.classList.remove('open');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    tocSidebar.classList.remove('open');
+                }
+            });
+        });
+
+        // Active section highlighting
+        const sections = document.querySelectorAll('section[id]');
+        const tocLinks = document.querySelectorAll('.toc-link');
+
+        function updateActiveSection() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveSection);
+        updateActiveSection(); // Initial call
+    </script>
+  
+
+</body></html>
