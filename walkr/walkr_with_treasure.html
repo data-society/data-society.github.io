@@ -1,0 +1,1783 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="description"
+        content="Walkr Galactic Mission Dependency Network - Interactive visualization with Cheese Maze cluster, resolved Sakura Temple &amp; Witch's Den, new Treasure cluster (Shining Shoals), powered by Pretext canvas text engine.">
+    <title>Walkr Galactic Mission Network | Xenoeconomic Atlas v4</title>
+
+    <!-- Generative SVG Favicon — Crafted from website themes:
+         - Dark cosmic void background (--space-void)
+         - Three orbital rings (Pretext canvas layers)
+         - Central planetary node with cyber-blue/purple/pink gradient (header gradient)
+         - Mission cube glints (gold accent)
+         - Ringed planet silhouette evoking Walkr's xenoeconomic atlas -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><radialGradient id='bg' cx='50%25' cy='50%25' r='50%25'><stop offset='0%25' stop-color='%231a1a3e'/><stop offset='100%25' stop-color='%23050510'/></radialGradient><linearGradient id='ring' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%2300d4ff'/><stop offset='50%25' stop-color='%23a855f7'/><stop offset='100%25' stop-color='%23ec4899'/></linearGradient><radialGradient id='planet' cx='35%25' cy='35%25' r='65%25'><stop offset='0%25' stop-color='%237df9ff'/><stop offset='40%25' stop-color='%2300d4ff'/><stop offset='100%25' stop-color='%23a855f7'/></radialGradient></defs><rect width='64' height='64' rx='12' fill='url(%23bg)'/><circle cx='32' cy='32' r='28' fill='none' stroke='url(%23ring)' stroke-width='0.6' opacity='0.4'/><circle cx='32' cy='32' r='23' fill='none' stroke='url(%23ring)' stroke-width='0.5' opacity='0.6'/><ellipse cx='32' cy='32' rx='26' ry='6' fill='none' stroke='%23c89b3c' stroke-width='1' opacity='0.7' transform='rotate(-20 32 32)'/><circle cx='32' cy='32' r='12' fill='url(%23planet)'/><circle cx='28' cy='28' r='2' fill='%23ffcc00' opacity='0.9'/><circle cx='36' cy='34' r='1.2' fill='%23fbbf24' opacity='0.8'/><circle cx='12' cy='14' r='0.8' fill='%23fff' opacity='0.9'/><circle cx='52' cy='16' r='0.6' fill='%23fff' opacity='0.7'/><circle cx='50' cy='50' r='0.8' fill='%23fff' opacity='0.85'/><circle cx='14' cy='48' r='0.5' fill='%2300d4ff' opacity='0.9'/><circle cx='8' cy='32' r='0.6' fill='%23ec4899' opacity='0.8'/></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+
+    <style>
+        :root {
+            --space-void: #050510;
+            --space-deep: #0a0a1a;
+            --space-nebula: #1a1a3e;
+            --space-dust: #2d2d5a;
+
+            --blocked-primary: #ff4757;
+            --blocked-secondary: #ff6b7a;
+            --blocked-glow: rgba(255, 71, 87, 0.4);
+            --available-primary: #2ed573;
+            --available-secondary: #7bed9f;
+            --available-glow: rgba(46, 213, 115, 0.4);
+            --mission-primary: #ffa502;
+            --mission-secondary: #ffcc00;
+            --mission-glow: rgba(255, 165, 2, 0.4);
+            --resolved-primary: #00d4ff;
+            --resolved-secondary: #7df9ff;
+            --resolved-glow: rgba(0, 212, 255, 0.4);
+            --prophecy-primary: #c084fc;
+            --prophecy-secondary: #e9d5ff;
+            --prophecy-glow: rgba(192, 132, 252, 0.4);
+            --cheese-primary: #fbbf24;
+            --cheese-secondary: #fde68a;
+            --cheese-glow: rgba(251, 191, 36, 0.4);
+
+            --cyber-blue: #00d4ff;
+            --cyber-purple: #a855f7;
+            --cyber-pink: #ec4899;
+            --cyber-gold: #fbbf24;
+
+            --gradient-blocked: linear-gradient(135deg, #ff4757 0%, #ff6b7a 50%, #ff8a94 100%);
+            --gradient-available: linear-gradient(135deg, #2ed573 0%, #7bed9f 100%);
+            --gradient-mission: linear-gradient(135deg, #ffa502 0%, #ffcc00 100%);
+            --gradient-resolved: linear-gradient(135deg, #00d4ff 0%, #7df9ff 100%);
+            --gradient-prophecy: linear-gradient(135deg, #a855f7 0%, #c084fc 50%, #e9d5ff 100%);
+            --gradient-cheese: linear-gradient(135deg, #f59e0b 0%, #fbbf24 50%, #fde68a 100%);
+            --gradient-header: linear-gradient(90deg, #00d4ff 0%, #a855f7 50%, #ec4899 100%);
+
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+
+            --card-bg: rgba(26, 26, 62, 0.8);
+            --card-border: rgba(100, 116, 139, 0.3);
+            --card-hover: rgba(45, 45, 90, 0.9);
+
+            --header-height: 70px;
+            --sidebar-width: 360px;
+            --panel-width: 400px;
+
+            --animation-fast: 0.15s;
+            --animation-normal: 0.3s;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.6; color: var(--text-primary); background: var(--space-void); overflow: hidden; min-height: 100vh; }
+
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--space-void); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease; }
+        .loading-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        .loading-spinner { width: 100px; height: 100px; position: relative; }
+        .loading-spinner::before, .loading-spinner::after { content: ''; position: absolute; border-radius: 50%; }
+        .loading-spinner::before { width: 100%; height: 100%; border: 3px solid transparent; border-top-color: var(--cyber-blue); border-right-color: var(--cyber-purple); animation: spin 1s linear infinite; }
+        .loading-spinner::after { width: 60%; height: 60%; top: 20%; left: 20%; border: 3px solid transparent; border-bottom-color: var(--cyber-pink); border-left-color: var(--cyber-gold); animation: spin 0.8s linear infinite reverse; }
+        .loading-ring { position: absolute; width: 140px; height: 140px; border-radius: 50%; border: 1px solid rgba(0, 212, 255, 0.2); animation: ringPulse 2s ease-in-out infinite; }
+        .loading-ring:nth-child(2) { width: 160px; height: 160px; animation-delay: 0.3s; }
+        .loading-ring:nth-child(3) { width: 180px; height: 180px; animation-delay: 0.6s; }
+        @keyframes ringPulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.2; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { margin-top: 3rem; font-family: 'Orbitron', monospace; font-size: 1.2rem; font-weight: 600; background: var(--gradient-header); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: pulse 1.5s ease-in-out infinite; }
+        .loading-subtext { margin-top: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        #particle-ring-canvas, #starfield, #pretext-hud-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none;
+        }
+        #particle-ring-canvas { z-index: 0; opacity: 0.8; }
+        #starfield { z-index: 1; }
+        #pretext-hud-canvas { z-index: 200; opacity: 0; transition: opacity 0.5s ease; }
+        #pretext-hud-canvas.active { opacity: 1; }
+
+        #pretext-tooltip-canvas {
+            position: absolute; pointer-events: none; z-index: 1000; display: none;
+            border-radius: var(--radius-lg); box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        #pretext-tooltip-canvas.visible { display: block; }
+
+        @media (prefers-reduced-motion: reduce) {
+            #particle-ring-canvas { display: none; }
+            body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, rgba(168, 85, 247, 0.05) 30%, transparent 70%); z-index: 0; pointer-events: none; }
+        }
+
+        header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: rgba(5, 5, 16, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--card-border); z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; transition: transform 0.3s var(--ease-out-expo); }
+        header.hidden-header { transform: translateY(-100%); }
+        .header-brand { display: flex; align-items: center; gap: 1rem; }
+        .brand-logo { width: 44px; height: 44px; background: var(--gradient-header); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; animation: logoFloat 4s ease-in-out infinite; }
+        @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        .brand-text { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 700; background: var(--gradient-header); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; }
+        .brand-subtitle { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; }
+        .header-stats { display: flex; gap: 1.5rem; }
+        .stat-item { text-align: center; padding: 0.5rem 1rem; background: var(--card-bg); border-radius: var(--radius-lg); border: 1px solid var(--card-border); min-width: 100px; transition: all var(--animation-fast) ease; }
+        .stat-item:hover { border-color: var(--cyber-blue); transform: translateY(-2px); }
+        .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; background: var(--gradient-header); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .stat-item.resolved .stat-value { background: var(--gradient-resolved); -webkit-background-clip: text; background-clip: text; }
+        .header-controls { display: flex; gap: 0.75rem; }
+        .control-btn { width: 40px; height: 40px; border-radius: var(--radius-lg); background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--animation-fast) ease; font-size: 1rem; }
+        .control-btn:hover { background: var(--card-hover); border-color: var(--cyber-blue); color: var(--cyber-blue); transform: translateY(-2px); }
+
+        .app-container { display: flex; height: 100vh; padding-top: var(--header-height); position: relative; z-index: 2; }
+        .sidebar { width: var(--sidebar-width); background: rgba(5, 5, 16, 0.95); border-right: 1px solid var(--card-border); overflow-y: auto; z-index: 50; transition: transform var(--animation-normal) ease; backdrop-filter: blur(10px); }
+        .sidebar-header { padding: 1.5rem; border-bottom: 1px solid var(--card-border); background: linear-gradient(180deg, rgba(0, 212, 255, 0.05) 0%, transparent 100%); }
+        .sidebar-title { font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem; }
+        .sidebar-subtitle { font-size: 0.8rem; color: var(--text-muted); }
+        .sheet-link { display: inline-block; margin-top: 0.75rem; color: var(--cyber-blue); font-size: 0.75rem; text-decoration: none; font-family: 'JetBrains Mono', monospace; }
+        .sheet-link:hover { text-decoration: underline; }
+        .reddit-link { display: inline-block; margin-top: 0.4rem; color: #ff4500; font-size: 0.75rem; text-decoration: none; font-family: 'JetBrains Mono', monospace; }
+        .reddit-link:hover { text-decoration: underline; }
+        .sheet-meta { margin-top: 0.75rem; display: grid; gap: 0.2rem; font-size: 0.65rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; line-height: 1.4; }
+
+        .sidebar-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-top: 1rem; }
+        .summary-card { padding: 0.75rem; background: var(--card-bg); border-radius: var(--radius-md); border: 1px solid var(--card-border); text-align: center; }
+        .summary-card.blocked { border-color: rgba(255, 71, 87, 0.3); }
+        .summary-card.resolved { border-color: rgba(0, 212, 255, 0.3); }
+        .summary-value { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; }
+        .summary-card.blocked .summary-value { color: var(--blocked-primary); }
+        .summary-card.resolved .summary-value { color: var(--resolved-primary); }
+        .summary-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .cluster-nav { padding: 1rem; }
+        .cluster-section-title { font-family: 'Orbitron', monospace; font-size: 0.7rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin: 1rem 0 0.5rem; padding-left: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .cluster-section-title::before { content: ''; width: 8px; height: 8px; border-radius: 50%; }
+        .cluster-section-title.blocked::before { background: var(--blocked-primary); box-shadow: 0 0 10px var(--blocked-glow); }
+        .cluster-section-title.resolved::before { background: var(--resolved-primary); box-shadow: 0 0 10px var(--resolved-glow); }
+        .cluster-item { margin-bottom: 0.75rem; }
+        .cluster-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--card-bg); border-radius: var(--radius-lg); border: 1px solid var(--card-border); cursor: pointer; transition: all var(--animation-fast) ease; }
+        .cluster-header:hover { background: var(--card-hover); }
+        .cluster-header.blocked:hover, .cluster-header.blocked.active { border-color: var(--blocked-primary); }
+        .cluster-header.resolved:hover, .cluster-header.resolved.active { border-color: var(--resolved-primary); }
+        .cluster-header.active { box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); }
+        .cluster-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+        .cluster-icon.blocked { background: var(--gradient-blocked); }
+        .cluster-icon.resolved { background: var(--gradient-resolved); }
+        .cluster-info { flex: 1; min-width: 0; }
+        .cluster-name { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cluster-resource { font-size: 0.75rem; font-family: 'JetBrains Mono', monospace; }
+        .cluster-resource.blocked { color: var(--blocked-secondary); }
+        .cluster-resource.resolved { color: var(--resolved-secondary); }
+        .cluster-badge { font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); color: white; }
+        .cluster-badge.blocked { background: var(--blocked-primary); }
+        .cluster-badge.resolved { background: var(--resolved-primary); }
+
+        .mission-list { padding-left: 1.5rem; margin-top: 0.5rem; display: none; }
+        .mission-list.expanded { display: block; animation: slideDown var(--animation-normal) var(--ease-out-expo); }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .mission-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; margin-bottom: 0.25rem; border-radius: var(--radius-md); cursor: pointer; transition: all var(--animation-fast) ease; border-left: 2px solid transparent; }
+        .mission-item:hover { background: rgba(255, 165, 2, 0.1); border-left-color: var(--mission-primary); }
+        .mission-item.active { background: rgba(255, 165, 2, 0.15); border-left-color: var(--mission-primary); }
+        .mission-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mission-primary); flex-shrink: 0; }
+        .mission-name { font-size: 0.85rem; color: var(--text-secondary); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mission-cubes { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--cyber-gold); background: rgba(251, 191, 36, 0.1); padding: 0.15rem 0.4rem; border-radius: var(--radius-sm); flex-shrink: 0; }
+
+        .sidebar-legend { padding: 1.5rem; border-top: 1px solid var(--card-border); margin-top: auto; background: linear-gradient(0deg, rgba(0, 212, 255, 0.02) 0%, transparent 100%); }
+        .legend-title { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+        .legend-items { display: flex; flex-direction: column; gap: 0.75rem; }
+        .legend-item { display: flex; align-items: center; gap: 0.75rem; }
+        .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .legend-dot.blocked { background: var(--blocked-primary); box-shadow: 0 0 10px var(--blocked-glow); }
+        .legend-dot.mission { background: var(--mission-primary); box-shadow: 0 0 10px var(--mission-glow); }
+        .legend-dot.available { background: var(--available-primary); box-shadow: 0 0 10px var(--available-glow); }
+        .legend-dot.resolved { background: var(--resolved-primary); box-shadow: 0 0 10px var(--resolved-glow); }
+        .legend-label { font-size: 0.8rem; color: var(--text-secondary); }
+
+        .viz-container { flex: 1; position: relative; overflow: hidden; }
+        #galaxy-viz { width: 100%; height: 100%; cursor: grab; }
+        #galaxy-viz:active { cursor: grabbing; }
+
+        .zoom-controls { position: absolute; bottom: 2rem; right: 2rem; display: flex; flex-direction: column; gap: 0.5rem; z-index: 20; }
+        .zoom-btn { width: 44px; height: 44px; border-radius: var(--radius-lg); background: rgba(5, 5, 16, 0.9); border: 1px solid var(--card-border); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all var(--animation-fast) ease; backdrop-filter: blur(10px); }
+        .zoom-btn:hover { background: var(--card-hover); border-color: var(--cyber-blue); color: var(--cyber-blue); }
+
+        .view-toggle { position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.25rem; background: rgba(5, 5, 16, 0.9); padding: 0.25rem; border-radius: var(--radius-lg); border: 1px solid var(--card-border); z-index: 20; backdrop-filter: blur(10px); }
+        .view-btn { padding: 0.5rem 1rem; border-radius: var(--radius-md); font-size: 0.85rem; font-weight: 600; color: var(--text-muted); background: transparent; border: none; cursor: pointer; transition: all var(--animation-fast) ease; }
+        .view-btn.active { background: var(--cyber-blue); color: white; }
+        .view-btn:hover:not(.active) { color: var(--text-primary); background: rgba(255, 255, 255, 0.05); }
+
+        .filter-pills { position: absolute; top: 1.5rem; right: 2rem; display: flex; flex-wrap: wrap; gap: 0.5rem; z-index: 20; max-width: 760px; justify-content: flex-end; }
+        .filter-pill { padding: 0.5rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: rgba(5, 5, 16, 0.9); border: 1px solid var(--card-border); color: var(--text-muted); cursor: pointer; transition: all var(--animation-fast) ease; backdrop-filter: blur(10px); white-space: nowrap; }
+        .filter-pill:hover { border-color: var(--cyber-blue); }
+        .filter-pill.active { background: var(--cyber-blue); border-color: var(--cyber-blue); color: white; }
+        .filter-pill.resolved-filter.active { background: var(--resolved-primary); border-color: var(--resolved-primary); }
+        .filter-pill.prophecy-filter.active { background: var(--prophecy-primary); border-color: var(--prophecy-primary); }
+        .filter-pill.cheese-filter.active { background: var(--cheese-primary); border-color: var(--cheese-primary); color: var(--space-void); }
+        .filter-pill.treasure-filter.active { background: #eab308; border-color: #eab308; color: var(--space-void); }
+
+        .detail-panel { width: var(--panel-width); background: rgba(5, 5, 16, 0.98); border-left: 1px solid var(--card-border); overflow-y: auto; z-index: 50; transform: translateX(100%); transition: transform var(--animation-normal) var(--ease-out-expo); backdrop-filter: blur(20px); }
+        .detail-panel.open { transform: translateX(0); }
+        .panel-header { padding: 1.5rem; border-bottom: 1px solid var(--card-border); position: relative; }
+        .panel-header.blocked { background: linear-gradient(180deg, rgba(255, 71, 87, 0.1) 0%, transparent 100%); }
+        .panel-header.resolved { background: linear-gradient(180deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%); }
+        .panel-header.mission { background: linear-gradient(180deg, rgba(255, 165, 2, 0.1) 0%, transparent 100%); }
+        .panel-header.available { background: linear-gradient(180deg, rgba(46, 213, 115, 0.1) 0%, transparent 100%); }
+        .panel-close { position: absolute; top: 1rem; right: 1rem; width: 32px; height: 32px; border-radius: var(--radius-md); background: transparent; border: 1px solid var(--card-border); color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all var(--animation-fast) ease; }
+        .panel-close:hover { background: var(--blocked-primary); border-color: var(--blocked-primary); color: white; }
+        .panel-planet-image { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 1rem; border: 3px solid var(--card-border); background: var(--space-nebula); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+        .panel-planet-name { font-family: 'Orbitron', monospace; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.25rem; }
+        .panel-planet-id { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+        .panel-status { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .panel-status.blocked { background: rgba(255, 71, 87, 0.2); color: var(--blocked-primary); border: 1px solid var(--blocked-primary); }
+        .panel-status.available { background: rgba(46, 213, 115, 0.2); color: var(--available-primary); border: 1px solid var(--available-primary); }
+        .panel-status.mission { background: rgba(255, 165, 2, 0.2); color: var(--mission-primary); border: 1px solid var(--mission-primary); }
+        .panel-status.resolved { background: rgba(0, 212, 255, 0.2); color: var(--resolved-primary); border: 1px solid var(--resolved-primary); }
+        .panel-status-dot { width: 8px; height: 8px; border-radius: 50%; animation: blink 1.5s ease-in-out infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .panel-status.blocked .panel-status-dot { background: var(--blocked-primary); }
+        .panel-status.available .panel-status-dot { background: var(--available-primary); }
+        .panel-status.mission .panel-status-dot { background: var(--mission-primary); }
+        .panel-status.resolved .panel-status-dot { background: var(--resolved-primary); }
+
+        .panel-section { padding: 1.5rem; border-bottom: 1px solid var(--card-border); }
+        .panel-section:last-child { border-bottom: none; }
+        .panel-section-title { font-family: 'Orbitron', monospace; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .panel-section-title::before { content: ''; width: 4px; height: 4px; background: var(--cyber-blue); border-radius: 50%; }
+
+        .lore-card { background: linear-gradient(135deg, rgba(0, 212, 255, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: var(--radius-lg); padding: 1rem; }
+        .lore-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; font-style: italic; }
+        .lore-text::before { content: '\201C'; font-size: 2rem; color: var(--cyber-blue); opacity: 0.5; line-height: 0; vertical-align: -0.5rem; margin-right: 0.25rem; }
+
+        .resource-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .resource-stat { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 1rem; text-align: center; transition: all var(--animation-fast) ease; }
+        .resource-stat:hover { border-color: var(--cyber-blue); }
+        .resource-stat-value { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; background: var(--gradient-header); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .resource-stat-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.25rem; }
+
+        .connected-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .connected-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); cursor: pointer; transition: all var(--animation-fast) ease; }
+        .connected-item:hover { background: var(--card-hover); border-color: var(--cyber-blue); transform: translateX(4px); }
+        .connected-item-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+        .connected-item-icon.mission { background: rgba(255, 165, 2, 0.2); border: 1px solid var(--mission-primary); }
+        .connected-item-icon.available { background: rgba(46, 213, 115, 0.2); border: 1px solid var(--available-primary); }
+        .connected-item-icon.blocked { background: rgba(255, 71, 87, 0.2); border: 1px solid var(--blocked-primary); }
+        .connected-item-icon.resolved { background: rgba(0, 212, 255, 0.2); border: 1px solid var(--resolved-primary); }
+        .connected-item-info { flex: 1; min-width: 0; }
+        .connected-item-name { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+        .connected-item-detail { font-size: 0.75rem; color: var(--text-muted); }
+        .connected-item-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm); flex-shrink: 0; }
+        .connected-item-badge.cubes { background: rgba(251, 191, 36, 0.2); color: var(--cyber-gold); }
+        .connected-item-badge.resource { background: rgba(46, 213, 115, 0.2); color: var(--available-primary); }
+        .connected-item-badge.missing { background: rgba(255, 71, 87, 0.2); color: var(--blocked-primary); }
+
+        .priority-card { background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, rgba(255, 165, 2, 0.1) 100%); border: 1px solid var(--blocked-primary); border-radius: var(--radius-lg); padding: 1.25rem; }
+        .priority-card.resolved { background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(46, 213, 115, 0.1) 100%); border-color: var(--resolved-primary); }
+        .priority-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+        .priority-icon { width: 40px; height: 40px; background: var(--gradient-blocked); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; }
+        .priority-card.resolved .priority-icon { background: var(--gradient-resolved); }
+        .priority-title { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; color: var(--blocked-primary); }
+        .priority-card.resolved .priority-title { color: var(--resolved-primary); }
+        .priority-subtitle { font-size: 0.75rem; color: var(--text-muted); }
+        .priority-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+        .priority-stat { text-align: center; padding: 0.75rem; background: rgba(0, 0, 0, 0.2); border-radius: var(--radius-md); }
+        .priority-stat-value { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; color: var(--cyber-gold); }
+        .priority-stat-label { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .node-label { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 600; fill: var(--text-primary); text-anchor: middle; pointer-events: none; }
+        .node-sublabel { font-family: 'JetBrains Mono', monospace; font-size: 9px; fill: var(--text-muted); text-anchor: middle; pointer-events: none; }
+
+        @keyframes nodePulse { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 71, 87, 0.6)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(255, 71, 87, 0.8)); } }
+        .node-blocked-pulse { animation: nodePulse 2s ease-in-out infinite; transform-origin: center; }
+
+        .pretext-badge { position: fixed; bottom: 1rem; left: 1rem; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--text-muted); background: rgba(5,5,16,0.8); padding: 0.3rem 0.6rem; border-radius: var(--radius-sm); border: 1px solid var(--card-border); z-index: 20; opacity: 0.7; }
+        .pretext-badge a { color: var(--cyber-purple); text-decoration: none; }
+        .pretext-badge a:hover { text-decoration: underline; }
+        .pretext-badge kbd { background: var(--space-nebula); padding: 1px 4px; border-radius: 3px; color: var(--cyber-blue); font-size: 0.55rem; }
+
+        @media (max-width: 1200px) {
+            .sidebar { position: fixed; left: 0; top: var(--header-height); height: calc(100vh - var(--header-height)); transform: translateX(-100%); z-index: 60; }
+            .sidebar.open { transform: translateX(0); }
+            .detail-panel { position: fixed; right: 0; top: var(--header-height); height: calc(100vh - var(--header-height)); }
+            .header-stats { display: none; }
+        }
+        @media (max-width: 768px) {
+            :root { --header-height: 60px; --sidebar-width: 100%; --panel-width: 100%; }
+            .brand-subtitle { display: none; }
+            .view-toggle { top: auto; bottom: 5rem; left: 1rem; transform: none; }
+            .filter-pills { display: none; }
+            .zoom-controls { bottom: 1rem; right: 1rem; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+        }
+        :focus-visible { outline: 2px solid var(--cyber-blue); outline-offset: 2px; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    </style>
+</head>
+
+<body>
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-ring"></div>
+        <div class="loading-ring"></div>
+        <div class="loading-ring"></div>
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Initializing Galactic Network...</div>
+        <div class="loading-subtext">Scanning 10 Sector Hubs • 28 Mission Vectors • Pretext Engine Online</div>
+    </div>
+
+    <canvas id="particle-ring-canvas"></canvas>
+    <canvas id="starfield"></canvas>
+    <canvas id="pretext-hud-canvas"></canvas>
+    <canvas id="pretext-tooltip-canvas" width="320" height="200"></canvas>
+
+    <header id="main-header">
+        <div class="header-brand">
+            <div class="brand-logo">🌌</div>
+            <div>
+                <div class="brand-text">WALKR</div>
+                <div class="brand-subtitle">Xenoeconomic Atlas v4</div>
+            </div>
+        </div>
+        <div class="header-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="total-missions">15</div>
+                <div class="stat-label">Pending Missions</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="total-blockers">5</div>
+                <div class="stat-label">Blocked Planets</div>
+            </div>
+            <div class="stat-item resolved">
+                <div class="stat-value" id="total-resolved">16</div>
+                <div class="stat-label">Resolved</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="total-cubes">379</div>
+                <div class="stat-label">Total Cubes</div>
+            </div>
+        </div>
+        <div class="header-controls">
+            <button class="control-btn" id="sidebar-toggle" aria-label="Toggle sidebar">☰</button>
+            <button class="control-btn" id="reset-view" aria-label="Reset view">⟲</button>
+            <button class="control-btn" id="fullscreen-toggle" aria-label="Toggle fullscreen">⛶</button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Mission Clusters</div>
+                <div class="sidebar-subtitle" id="sidebar-subtitle">5 Blocked • 5 Resolved • 28 Missions</div>
+                <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1-yodRyNEXR_fgqjz5hWCu9uq5r1iThDsj_2826uslzU/edit?gid=373512802#gid=373512802" target="_blank" rel="noopener noreferrer">Updated Planet Resource Table ↗</a>
+                <a class="reddit-link" href="https://www.reddit.com/r/walkr/" target="_blank" rel="noopener noreferrer">r/walkr Community ↗</a>
+                <div class="sheet-meta">
+                    <div>PA #384 • Witch's Den ✓ Resolved — 6 Pumpkin missions unlocked</div>
+                    <div>NEW BLOCKER: Shining Shoals #0201 • Treasure cluster</div>
+                    <div>Suppliers: Scary Pumpkin Festival #206 • Starry Sky Globe Festival #209</div>
+                </div>
+                <div class="sidebar-summary">
+                    <div class="summary-card blocked">
+                        <div class="summary-value" id="sidebar-blocked-cubes">241</div>
+                        <div class="summary-label">Blocked Cubes</div>
+                    </div>
+                    <div class="summary-card resolved">
+                        <div class="summary-value" id="sidebar-available-cubes">152</div>
+                        <div class="summary-label">Available Cubes</div>
+                    </div>
+                </div>
+            </div>
+            <div class="cluster-nav" id="cluster-nav"></div>
+            <div class="sidebar-legend">
+                <div class="legend-title">Node Types</div>
+                <div class="legend-items">
+                    <div class="legend-item"><div class="legend-dot blocked"></div><span class="legend-label">Blocked Planet (Uncolonized)</span></div>
+                    <div class="legend-item"><div class="legend-dot resolved"></div><span class="legend-label">Resolved (Harvesting)</span></div>
+                    <div class="legend-item"><div class="legend-dot mission"></div><span class="legend-label">Pending Mission</span></div>
+                    <div class="legend-item"><div class="legend-dot available"></div><span class="legend-label">Available Resource</span></div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="viz-container">
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="force">Force</button>
+                <button class="view-btn" data-view="radial">Radial</button>
+                <button class="view-btn" data-view="cluster">Cluster</button>
+            </div>
+            <div class="filter-pills">
+                <button class="filter-pill active" data-filter="all">All</button>
+                <button class="filter-pill treasure-filter" data-filter="treasure">💰 Treasure</button>
+                <button class="filter-pill cheese-filter" data-filter="cheese">🧀 Cheese</button>
+                <button class="filter-pill" data-filter="hieroglyphs">𓂀 Hieroglyphs</button>
+                <button class="filter-pill prophecy-filter" data-filter="prophecy">🔮 Prophecy</button>
+                <button class="filter-pill" data-filter="story">📖 Story</button>
+                <button class="filter-pill resolved-filter" data-filter="pumpkins">🎃 Pumpkins ✓</button>
+                <button class="filter-pill resolved-filter" data-filter="sakura">🌸 Sakura ✓</button>
+                <button class="filter-pill resolved-filter" data-filter="reed">🌾 Reed ✓</button>
+                <button class="filter-pill resolved-filter" data-filter="aluminum">🥫 Aluminum ✓</button>
+                <button class="filter-pill resolved-filter" data-filter="signal">📡 Signal ✓</button>
+            </div>
+            <svg id="galaxy-viz"></svg>
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoom-in" aria-label="Zoom in">+</button>
+                <button class="zoom-btn" id="zoom-out" aria-label="Zoom out">−</button>
+                <button class="zoom-btn" id="zoom-reset" aria-label="Reset zoom">⊙</button>
+            </div>
+        </div>
+
+        <aside class="detail-panel" id="detail-panel">
+            <div class="panel-header" id="panel-header-container">
+                <button class="panel-close" id="panel-close" aria-label="Close panel">✕</button>
+                <div class="panel-planet-image" id="panel-image">🌍</div>
+                <div class="panel-planet-name" id="panel-name">Select a Node</div>
+                <div class="panel-planet-id" id="panel-id">Click on any node to view details</div>
+                <div class="panel-status blocked" id="panel-status">
+                    <span class="panel-status-dot"></span>
+                    <span id="panel-status-text">BLOCKED</span>
+                </div>
+            </div>
+            <div class="panel-section" id="panel-lore-section">
+                <div class="panel-section-title">Xenoeconomic Lore</div>
+                <div class="lore-card"><p class="lore-text" id="panel-lore">The geological layers of this planet contain unique resources essential for galactic commerce.</p></div>
+            </div>
+            <div class="panel-section" id="panel-stats-section">
+                <div class="panel-section-title">Resource Statistics</div>
+                <div class="resource-stats" id="panel-stats"></div>
+            </div>
+            <div class="panel-section" id="panel-priority-section" style="display: none;">
+                <div class="panel-section-title">Colonization Priority</div>
+                <div class="priority-card" id="priority-card">
+                    <div class="priority-header">
+                        <div class="priority-icon">⚠️</div>
+                        <div>
+                            <div class="priority-title" id="priority-title">Priority 1</div>
+                            <div class="priority-subtitle" id="priority-subtitle">Highest Impact</div>
+                        </div>
+                    </div>
+                    <div class="priority-stats" id="priority-stats"></div>
+                </div>
+            </div>
+            <div class="panel-section" id="panel-connections-section">
+                <div class="panel-section-title">Connected Nodes</div>
+                <div class="connected-list" id="panel-connections"></div>
+            </div>
+        </aside>
+    </div>
+
+    <div class="pretext-badge">Pretext canvas engine: <a href="https://github.com/chenglou/pretext" target="_blank" rel="noopener noreferrer">@chenglou/pretext</a> • Press <kbd>H</kbd> for HUD • <kbd>T</kbd> for ticker</div>
+
+    <script type="module">
+        // ===================================================================
+        // PRETEXT INTEGRATION — Full feature exploitation:
+        //   • prepare()              → measure title heights
+        //   • layout()               → multiline word-wrapped paragraphs
+        //   • prepareWithSegments()  → grapheme-aware segmentation (emoji safe)
+        //   • layoutNextLine()       → line-by-line streaming layout
+        //
+        // Used in three places:
+        //   1. Tooltip   (canvas-rendered, DOM-free)
+        //   2. HUD       (live stats overlay, toggle with H)
+        //   3. Ticker    (scrolling status bar, toggle with T)
+        // ===================================================================
+        let pretextReady = false;
+        let pt = {};
+
+        async function loadPretext() {
+            try {
+                const mod = await import('https://cdn.jsdelivr.net/npm/@chenglou/pretext@0.0.3/+esm');
+                pt.prepare = mod.prepare;
+                pt.layout = mod.layout;
+                pt.prepareWithSegments = mod.prepareWithSegments;
+                pt.layoutNextLine = mod.layoutNextLine;
+                pretextReady = true;
+                console.log('[Pretext] Engine loaded — all 4 APIs active');
+            } catch (e) {
+                console.warn('[Pretext] Failed to load, falling back to canvas measureText', e);
+            }
+        }
+
+        loadPretext();
+
+        window._pretextReady = () => pretextReady;
+        window._pt = () => pt;
+    </script>
+
+    <script>
+        // ===================================================================
+        // DATA — v4: + Treasure cluster (Shining Shoals), Witch's Den RESOLVED at PA #384
+        // ===================================================================
+        const DATA = {
+            blockedPlanets: [
+                // === ACTIVE BLOCKERS ===
+                {
+                    id: 'shining-shoals', name: 'Shining Shoals', officialId: 201,
+                    resource: 'Treasure', resourceNeeded: 1400, // 400 + 1000
+                    icon: '💰', cluster: 'treasure', priority: 1, status: 'blocked',
+                    lore: 'Sunken galleons rest in luminescent shallows where bioluminescent coral guards chests of cosmic doubloons. The deep currents yield treasure to none but the most prepared colonizers.'
+                },
+                {
+                    id: 'cheese-maze', name: 'Cheese Maze', officialId: 200,
+                    resource: 'Cheese', resourceNeeded: 4600,
+                    icon: '🧀', cluster: 'cheese', priority: 2, status: 'blocked',
+                    lore: 'A labyrinthine dairy planet where bacterial colonies in the porous canyon walls ferment cosmic milk into aged cheese wheels prized across the galaxy.'
+                },
+                {
+                    id: 'crocodile-riverside', name: 'Crocodile Riverside', officialId: 157,
+                    resource: 'Hieroglyphs', resourceNeeded: 7600,
+                    icon: '𓂀', cluster: 'hieroglyphs', priority: 3, status: 'blocked',
+                    lore: 'Sandstone cliffs along the great river are inscribed with symbols that unlock archaeological missions.'
+                },
+                {
+                    id: 'prophetic-crystal-cave', name: 'Prophetic Crystal Cave', officialId: 199,
+                    resource: 'Prophecy', resourceNeeded: 2400,
+                    icon: '🔮', cluster: 'prophecy', priority: 4, status: 'blocked',
+                    lore: 'Deep within luminous caverns, crystalline formations resonate with temporal frequencies, channeling visions of possible futures into distillable prophecy essence.'
+                },
+                {
+                    id: 'film-base', name: 'Film Base', officialId: 198,
+                    resource: 'Story', resourceNeeded: 1800,
+                    icon: '🎬', cluster: 'story', priority: 5, status: 'blocked',
+                    lore: 'A cinematic production world where narrative essence is synthesized for media and ticketing missions.'
+                },
+                // === RESOLVED PLANETS ===
+                {
+                    id: 'witchs-den', name: "Witch's Den", officialId: 43, paId: 384,
+                    resource: 'Pumpkins', resourceNeeded: 0,
+                    icon: '🎃', cluster: 'pumpkins', priority: 0, status: 'resolved',
+                    lore: 'Newly colonized at PA #384! Deep within cauldron-shaped valleys, starchy silicate layers now yield pumpkin harvests to power six Halloween-themed missions across the galaxy.'
+                },
+                {
+                    id: 'sakura-temple', name: 'Sakura Temple', officialId: 95, paId: 383,
+                    resource: 'Sakura', resourceNeeded: 0,
+                    icon: '🌸', cluster: 'sakura', priority: 0, status: 'resolved',
+                    lore: 'Newly colonized at PA #383! Ancient cherry blossom trees bloom eternally on this sacred world, supplying sakura essence to four traditional Japanese missions.'
+                },
+                {
+                    id: 'beaver-dam', name: 'Beaver Dam', officialId: 197, paId: 382,
+                    resource: 'Reed', resourceNeeded: 0,
+                    icon: '🦫', cluster: 'reed', priority: 0, status: 'resolved',
+                    lore: 'Now colonized at PA #382 and harvesting reed resources. An intricate network of lodges and wetlands supports habitat and instrument crafting missions.'
+                },
+                {
+                    id: 'self-service-rest-stop', name: 'Self-Service Rest Stop', officialId: 379, paId: 379,
+                    resource: 'Aluminum Can', resourceNeeded: 0,
+                    icon: '🥫', cluster: 'aluminum', priority: 0, status: 'resolved',
+                    lore: 'Now colonized at PA #379 and harvesting aluminum can resources for food packaging missions.'
+                },
+                {
+                    id: 'hyperdimension-network', name: 'Hyperdimension Network', officialId: 377, paId: 377,
+                    resource: 'Signal', resourceNeeded: 0,
+                    icon: '📡', cluster: 'signal', priority: 0, status: 'resolved',
+                    lore: 'Now colonized at PA #377 and harvesting cross-dimensional communication signal.'
+                }
+            ],
+
+            missions: [
+                // TREASURE (NEW - PENDING)
+                { id: 'lost-treasure', name: 'Lost Treasure', cluster: 'treasure', cubes: 17, icon: '🗺️', blockedBy: 'shining-shoals', resourceNeeded: 400 },
+                { id: 'mimic-chest', name: 'Mimic Chest', cluster: 'treasure', cubes: 14, icon: '🎁', blockedBy: 'shining-shoals', resourceNeeded: 1000 },
+                // PUMPKINS (NOW RESOLVED - all status: 'available')
+                { id: 'pumpkin-man', name: 'Pumpkin Man', cluster: 'pumpkins', cubes: 19, icon: '🎃', blockedBy: 'witchs-den', status: 'available', resourceNeeded: 3600 },
+                { id: 'pumpkin-lantern', name: 'Pumpkin Lantern', cluster: 'pumpkins', cubes: 9, icon: '🏮', blockedBy: 'witchs-den', status: 'available', resourceNeeded: 2400 },
+                { id: 'halloween', name: 'Halloween', cluster: 'pumpkins', cubes: 23, icon: '👻', blockedBy: 'witchs-den', status: 'available', resourceNeeded: 4400 },
+                { id: 'pumpkin-pie', name: 'Pumpkin Pie', cluster: 'pumpkins', cubes: 20, icon: '🥧', blockedBy: 'witchs-den', status: 'available', resourceNeeded: 4000 },
+                { id: 'flying-pumpkin', name: 'Flying Pumpkin', cluster: 'pumpkins', cubes: 18, icon: '🎈', blockedBy: 'witchs-den', status: 'available', resourceNeeded: 1400 },
+                { id: 'autumn-harvest', name: 'Autumn Harvest', cluster: 'pumpkins', cubes: 20, icon: '🍂', blockedBy: 'witchs-den', status: 'available', resourceNeeded: 3000 },
+                // CHEESE
+                { id: 'cheesy-potato', name: 'Cheesy Potato', cluster: 'cheese', cubes: 14, icon: '🥔', blockedBy: 'cheese-maze', resourceNeeded: 2000 },
+                { id: 'pizza', name: 'Pizza', cluster: 'cheese', cubes: 14, icon: '🍕', blockedBy: 'cheese-maze', resourceNeeded: 1600 },
+                { id: 'blue-cheese', name: 'Blue Cheese', cluster: 'cheese', cubes: 9, icon: '🧀', blockedBy: 'cheese-maze', resourceNeeded: 1000 },
+                // SAKURA (resolved)
+                { id: 'salted-sakura', name: 'Salted Sakura', cluster: 'sakura', cubes: 9, icon: '🧂', blockedBy: 'sakura-temple', status: 'available', resourceNeeded: 1000 },
+                { id: 'japanese-cooking', name: 'Japanese Cooking', cluster: 'sakura', cubes: 18, icon: '🍳', blockedBy: 'sakura-temple', status: 'available', resourceNeeded: 1200 },
+                { id: 'sakura-bean-balls', name: 'Sakura Bean Balls', cluster: 'sakura', cubes: 5, icon: '🍡', blockedBy: 'sakura-temple', status: 'available', resourceNeeded: 600 },
+                { id: 'wagashi-box', name: 'Wagashi Box', cluster: 'sakura', cubes: 14, icon: '🎁', blockedBy: 'sakura-temple', status: 'available', resourceNeeded: 1200 },
+                // HIEROGLYPHS
+                { id: 'rune-stones', name: 'Rune Stones', cluster: 'hieroglyphs', cubes: 25, icon: '🪨', blockedBy: 'crocodile-riverside', resourceNeeded: 3800 },
+                { id: 'museum-entry-ticket', name: 'Museum Entry Ticket', cluster: 'hieroglyphs', cubes: 11, icon: '🎫', blockedBy: 'crocodile-riverside', resourceNeeded: 3800 },
+                // PROPHECY
+                { id: 'crystal-ball', name: 'Crystal Ball', cluster: 'prophecy', cubes: 14, icon: '🔮', blockedBy: 'prophetic-crystal-cave', resourceNeeded: 400 },
+                { id: 'tea-leaf-reading', name: 'Tea Leaf Reading', cluster: 'prophecy', cubes: 12, icon: '🍵', blockedBy: 'prophetic-crystal-cave', resourceNeeded: 1200 },
+                { id: 'moon-blocks', name: 'Moon Blocks', cluster: 'prophecy', cubes: 11, icon: '🌙', blockedBy: 'prophetic-crystal-cave', resourceNeeded: 800 },
+                // STORY
+                { id: 'comedy-film', name: 'Comedy Film', cluster: 'story', cubes: 5, icon: '🎬', blockedBy: 'film-base', resourceNeeded: 800 },
+                { id: 'movie-ticket', name: 'Movie Ticket', cluster: 'story', cubes: 9, icon: '🎟️', blockedBy: 'film-base', resourceNeeded: 1000 },
+                // REED
+                { id: 'reed-hut', name: 'Reed Hut', cluster: 'reed', cubes: 25, icon: '🏠', blockedBy: 'beaver-dam', status: 'available', resourceNeeded: 3800 },
+                { id: 'reed-pipe', name: 'Reed Pipe', cluster: 'reed', cubes: 22, icon: '🎵', blockedBy: 'beaver-dam', status: 'available', resourceNeeded: 1800 },
+                // ALUMINUM
+                { id: 'canned-coffee', name: 'Canned Coffee', cluster: 'aluminum', cubes: 11, icon: '☕', blockedBy: 'self-service-rest-stop', status: 'available', resourceNeeded: 1000 },
+                { id: 'canned-pineapple', name: 'Canned Pineapple', cluster: 'aluminum', cubes: 23, icon: '🍍', blockedBy: 'self-service-rest-stop', status: 'available', resourceNeeded: 1200 },
+                // SIGNAL
+                { id: 'radio-station', name: 'Radio Station', cluster: 'signal', cubes: 7, icon: '📻', blockedBy: 'hyperdimension-network', status: 'available', resourceNeeded: 800 },
+                { id: 'sports-broadcast', name: 'Sports Broadcast', cluster: 'signal', cubes: 18, icon: '📺', blockedBy: 'hyperdimension-network', status: 'available', resourceNeeded: 1000 }
+            ],
+
+            availablePlanets: [
+                // TREASURE suppliers (NEW)
+                { id: 'starry-sky-globe-festival', name: 'Starry Sky Globe Festival', paId: 209, officialId: 119, resource: 'Landmark', amount: 1200, icon: '🌟', providesTo: ['lost-treasure'], cluster: 'treasure', lore: 'Festival pavilions house jeweled landmark globes — celestial cartography rendered in crystal — supplying iconic markers to treasure-hunting expeditions.' },
+                { id: 'scary-pumpkin-festival', name: 'Scary Pumpkin Festival', paId: 206, officialId: 61, resource: 'Screaming', amount: 1400, icon: '😱', providesTo: ['mimic-chest'], cluster: 'treasure', lore: 'A perpetually-haunted festival world where bottled screams of terror are distilled into psychic essence — perfect bait for luring out mimics.' },
+                // PUMPKINS (now feeding RESOLVED Witch's Den)
+                { id: 'snow-world', name: 'Snow World', paId: 11, resource: 'Snow', amount: 4000, icon: '❄️', providesTo: ['pumpkin-man'], cluster: 'pumpkins', lore: 'Crystalline ice formations provide essential cooling for pumpkin preservation.' },
+                { id: 'heart-of-flames', name: 'Heart of Flames', paId: 40, resource: 'Fire', amount: 1200, icon: '🔥', providesTo: ['pumpkin-lantern'], cluster: 'pumpkins', lore: 'Volcanic energy powers jack-o-lantern flames.' },
+                { id: 'sugar-rush', name: 'Sugar Rush', paId: 66, resource: 'Candy', amount: 3200, icon: '🍬', providesTo: ['halloween'], cluster: 'pumpkins', lore: 'Sweet crystalline deposits fuel confectionery output.' },
+                { id: 'zombie-cortex', name: 'Zombie Cortex', paId: 300, resource: 'Blood', amount: 1600, icon: '🧠', providesTo: ['halloween'], cluster: 'pumpkins', lore: 'Undead neural networks provide unique bio-resources.' },
+                { id: 'sunset-savanna', name: 'Sunset Savanna', paId: 116, resource: 'Wheat', amount: 2800, icon: '🌾', providesTo: ['pumpkin-pie'], cluster: 'pumpkins', lore: 'Golden grasslands produce flour-grade grain.' },
+                { id: 'eagles-nest', name: "Eagle's Nest", paId: 41, resource: 'Eggs', amount: 1200, icon: '🥚', providesTo: ['pumpkin-pie'], cluster: 'pumpkins', lore: 'High-altitude nests produce rich baking eggs.' },
+                { id: 'angel-ruins', name: 'Angel Ruins', paId: 17, resource: 'Feathers', amount: 1000, icon: '🪶', providesTo: ['flying-pumpkin'], cluster: 'pumpkins', lore: 'Artifacts provide anti-gravity properties.' },
+                { id: 'autumn-forest', name: 'Autumn Forest', paId: 376, resource: 'Maple Leaf', amount: 1000, icon: '🍁', providesTo: ['autumn-harvest'], cluster: 'pumpkins', lore: 'Seasonal ecosystems support harvest cycles.' },
+                // CHEESE (NEW available planets)
+                { id: 'tater-tower', name: 'Tater Tower', paId: 20, officialId: 30, resource: 'Taters', amount: 800, icon: '🥔', providesTo: ['cheesy-potato'], cluster: 'cheese', lore: 'Towering potato spires rise from fertile volcanic soil, providing the starchy foundation for comfort food missions.' },
+                { id: 'boar-tribe', name: 'Boar Tribe', paId: 19, officialId: 47, resource: 'Meat', amount: 400, icon: '🐗', providesTo: ['pizza'], cluster: 'cheese', lore: 'Tribal hunters of this savage world supply protein-rich meat for galactic cuisine.' },
+                { id: 'wolf-howling-forest', name: 'Wolf Howling Forest', paId: 212, officialId: 138, resource: 'Soft Bread', amount: 800, icon: '🐺', providesTo: ['pizza'], cluster: 'cheese', lore: 'Mysterious forest where lupine bakers craft pillowy soft bread under the howling moon.' },
+                { id: 'fossil-fern', name: 'Fossil Fern', paId: 26, officialId: 6, resource: 'Spores', amount: 800, icon: '🌿', providesTo: ['blue-cheese'], cluster: 'cheese', lore: 'Ancient fern fossils release potent fungal spores essential for blue cheese cultivation.' },
+                // SAKURA (still available suppliers)
+                { id: 'waving-ocean', name: 'Waving Ocean', paId: 28, resource: 'Salt', amount: 800, icon: '🌊', providesTo: ['salted-sakura'], cluster: 'sakura', lore: 'Mineral-rich tides deposit sea salt.' },
+                { id: 'sushi-mountain', name: 'Sushi Mountain', paId: 108, resource: 'Salmon Roe', amount: 1000, icon: '🍣', providesTo: ['japanese-cooking'], cluster: 'sakura', lore: 'Terraced paddies support premium cuisine.' },
+                { id: 'black-white', name: 'Black & White', paId: 114, resource: 'Bamboo', amount: 1400, icon: '🎋', providesTo: ['japanese-cooking'], cluster: 'sakura', lore: 'Dual-tone forests provide sustainable bamboo.' },
+                { id: 'dessert-saturn', name: 'Dessert Saturn', paId: 27, resource: 'Bean', amount: 400, icon: '🫘', providesTo: ['sakura-bean-balls'], cluster: 'sakura', lore: 'Bean-rich core supports adzuki harvests.' },
+                { id: 'juicy-peach-paradise', name: 'Juicy Peach Paradise', paId: 327, resource: 'Dumplings', amount: 1600, icon: '🥟', providesTo: ['wagashi-box'], cluster: 'sakura', lore: 'Orchards flavor traditional sweets.' },
+                { id: 'matcha-valley', name: 'Matcha Valley', paId: 188, officialId: 109, resource: 'Matcha', amount: 1200, icon: '🍵', providesTo: ['wagashi-box', 'tea-leaf-reading'], cluster: 'sakura', lore: 'Shade-grown tea leaves produce ceremonial matcha.' },
+                // HIEROGLYPHS
+                { id: 'red-bricks-brick-co', name: 'Red Bricks Brick Co.', paId: 225, resource: 'Red Bricks', amount: 1200, icon: '🧱', providesTo: ['rune-stones'], cluster: 'hieroglyphs', lore: 'Kilns produce monument-grade materials.' },
+                { id: 'crown-circus', name: 'Crown Circus', paId: 308, resource: 'Ticket', amount: 400, icon: '🎪', providesTo: ['museum-entry-ticket', 'movie-ticket'], cluster: 'hieroglyphs', lore: 'Royal entertainment venues distribute access tickets.' },
+                // PROPHECY
+                { id: 'crystalline', name: 'Crystalline', paId: 238, officialId: 32, resource: 'Crystal', amount: 1800, icon: '💎', providesTo: ['crystal-ball'], cluster: 'prophecy', lore: 'Unique crystalline formations refract temporal light into divination-grade lenses.' },
+                { id: 'peace-river', name: 'Peace River', paId: 69, officialId: 58, resource: 'Spirit', amount: 1000, icon: '🕊️', providesTo: ['moon-blocks'], cluster: 'prophecy', lore: 'Festival waters carry spiritual essence that channels ancestral wisdom into divination rituals.' },
+                { id: 'amazon-rainforest', name: 'Amazon Rainforest', paId: 73, officialId: 50, resource: 'Wood', amount: 400, icon: '🌳', providesTo: ['moon-blocks'], cluster: 'prophecy', lore: 'Ancient hardwoods from elemental groves are carved into sacred crescent-shaped divination blocks.' },
+                // REED
+                { id: 'vine-source', name: 'Vineyard Plains', paId: 0, resource: 'Vines', amount: 1200, icon: '🍇', providesTo: ['reed-hut'], cluster: 'reed', lore: 'Vine fields provide binding fibers for reed structures.' },
+                { id: 'cello-valley', name: 'Cello Valley', paId: 175, resource: 'Notes', amount: 2600, icon: '🎻', providesTo: ['reed-pipe'], cluster: 'reed', lore: 'Acoustic fields generate note resonance for instrument crafting.' },
+                // STORY
+                { id: 'silent-star', name: 'Silent Star', paId: 177, resource: 'Joy', amount: 200, icon: '⭐', providesTo: ['comedy-film'], cluster: 'story', lore: 'Gentle light crystallizes pure Joy for cinematic missions.' },
+                { id: 'popcorn-prison', name: 'Popcorn Prison', paId: 192, resource: 'Popcorn', amount: 400, icon: '🍿', providesTo: ['movie-ticket'], cluster: 'story', lore: 'Kernels transform under pressure into cinema-grade popcorn.' },
+                // ALUMINUM
+                { id: 'somnia-basin', name: 'Somnia Basin', paId: 7, resource: 'Coffee Beans', amount: 1200, icon: '☕', providesTo: ['canned-coffee'], cluster: 'aluminum', lore: 'Subconscious energy powers caffeine extraction.' },
+                { id: 'pineapple-foothills', name: 'Pineapple Foothills', paId: 150, resource: 'Pineapples', amount: 3400, icon: '🍍', providesTo: ['canned-pineapple'], cluster: 'aluminum', lore: 'Tropical slopes cultivate canning-grade fruit.' },
+                // SIGNAL
+                { id: 'infinite-racing', name: 'Infinite Racing', paId: 77, resource: 'Speed', amount: 800, icon: '🏎️', providesTo: ['sports-broadcast'], cluster: 'signal', lore: 'High-velocity events generate sports content.' },
+                { id: 'race-track-party', name: 'Race Track Party', paId: 215, resource: 'Excitement', amount: 400, icon: '🎉', providesTo: ['sports-broadcast'], cluster: 'signal', lore: 'Celebratory atmospheres increase engagement.' }
+            ],
+
+            clusters: {
+                treasure: { name: 'Treasure Cluster', color: '#fde68a', status: 'blocked' },
+                cheese: { name: 'Cheese Cluster', color: '#fbbf24', status: 'blocked' },
+                hieroglyphs: { name: 'Hieroglyphs Cluster', color: '#d4a574', status: 'blocked' },
+                prophecy: { name: 'Prophecy Cluster', color: '#c084fc', status: 'blocked' },
+                story: { name: 'Story Cluster', color: '#b088f9', status: 'blocked' },
+                pumpkins: { name: 'Pumpkin Cluster', color: '#00d4ff', status: 'resolved' },
+                sakura: { name: 'Sakura Cluster', color: '#00d4ff', status: 'resolved' },
+                reed: { name: 'Reed Cluster', color: '#00d4ff', status: 'resolved' },
+                aluminum: { name: 'Aluminum Cluster', color: '#00d4ff', status: 'resolved' },
+                signal: { name: 'Signal Cluster', color: '#00d4ff', status: 'resolved' }
+            }
+        };
+
+        const CONFIG = {
+            nodeRadius: { blocked: 50, resolved: 45, mission: 28, available: 18 },
+            forces: { charge: -1000, linkDistance: 140, collisionPadding: 25 },
+            animation: { particleSpeed: 2, particleCount: 3 },
+            colors: { blocked: '#ff4757', mission: '#ffa502', available: '#2ed573', resolved: '#00d4ff', prophecy: '#c084fc', cheese: '#fbbf24' }
+        };
+
+        let state = {
+            currentView: 'force',
+            currentFilter: 'all',
+            selectedNode: null,
+            simulation: null,
+            zoom: null,
+            nodes: [],
+            links: [],
+            reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        };
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func(...args), wait);
+            };
+        }
+
+        function formatNumber(num) { return num.toLocaleString(); }
+        function formatOfficialId(id) { return String(id).padStart(4, '0'); }
+
+        // ===================================================================
+        // PRETEXT TOOLTIP — Canvas-rendered with prepareWithSegments + layoutNextLine
+        // ===================================================================
+        const PretextTooltip = {
+            canvas: null, ctx: null, dpr: 1, W: 320, H: 220,
+
+            init() {
+                this.canvas = document.getElementById('pretext-tooltip-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.dpr = window.devicePixelRatio || 1;
+            },
+
+            hide() { this.canvas.classList.remove('visible'); },
+
+            show(d, x, y) {
+                const ready = window._pretextReady();
+                const pt = window._pt();
+                const pad = 16;
+                const maxTextW = this.W - pad * 2;
+                const lineH = 18;
+
+                const descText = d.lore ? d.lore.substring(0, 160) : (d.type === 'mission' ? `${d.cubes} Energy Cubes reward` : 'Resource node');
+
+                // Measure description height with Pretext
+                let descHeight = lineH;
+                let lineCount = 1;
+                if (ready) {
+                    try {
+                        const prepared = pt.prepareWithSegments(descText, '13px Inter');
+                        let cursor = { segmentIndex: 0, graphemeIndex: 0 };
+                        let lines = 0;
+                        while (true) {
+                            const line = pt.layoutNextLine(prepared, cursor, maxTextW);
+                            if (line === null) break;
+                            cursor = line.end;
+                            lines++;
+                            if (lines > 10) break;
+                        }
+                        lineCount = Math.max(1, lines);
+                        descHeight = lineCount * lineH;
+                    } catch (e) { descHeight = 36; }
+                } else {
+                    // Fallback measurement via canvas measureText
+                    this.ctx.font = '13px Inter';
+                    const approxCharsPerLine = Math.floor(maxTextW / 7);
+                    lineCount = Math.ceil(descText.length / approxCharsPerLine);
+                    descHeight = lineCount * lineH;
+                }
+
+                const totalH = 50 + descHeight + 50 + pad;
+                this.H = Math.max(140, totalH);
+                this._setupCanvas(this.W, this.H);
+                this._renderContent(d, descText, maxTextW, lineH, pad, ready, pt);
+                this._position(x, y);
+                this.canvas.classList.add('visible');
+            },
+
+            _setupCanvas(w, h) {
+                this.canvas.width = w * this.dpr;
+                this.canvas.height = h * this.dpr;
+                this.canvas.style.width = w + 'px';
+                this.canvas.style.height = h + 'px';
+                this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+            },
+
+            _renderContent(d, descText, maxTextW, lineH, pad, ready, pt) {
+                const ctx = this.ctx;
+                const w = this.W, h = this.H;
+
+                ctx.clearRect(0, 0, w, h);
+                ctx.fillStyle = 'rgba(5, 5, 16, 0.96)';
+                ctx.beginPath();
+                ctx.roundRect(0, 0, w, h, 12);
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(100, 116, 139, 0.4)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Type-color accent strip on left
+                const typeColor = d.type === 'blocked' ? (d.cluster === 'cheese' ? '#fbbf24' : d.cluster === 'prophecy' ? '#c084fc' : d.cluster === 'treasure' ? '#eab308' : '#ff4757')
+                                : d.type === 'resolved' ? '#00d4ff'
+                                : d.type === 'mission' ? '#ffa502' : '#2ed573';
+                ctx.fillStyle = typeColor;
+                ctx.beginPath();
+                ctx.roundRect(0, 0, 4, h, [12, 0, 0, 12]);
+                ctx.fill();
+
+                // Icon
+                ctx.fillStyle = typeColor + '33';
+                ctx.beginPath();
+                ctx.arc(pad + 18, pad + 18, 18, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = typeColor;
+                ctx.stroke();
+
+                ctx.font = '18px serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#fff';
+                ctx.fillText(d.icon, pad + 18, pad + 19);
+
+                // Title
+                ctx.font = '600 14px Orbitron, monospace';
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'top';
+                ctx.fillStyle = '#f1f5f9';
+                const titleX = pad + 44;
+                ctx.fillText(d.name.length > 22 ? d.name.substring(0, 20) + '…' : d.name, titleX, pad + 6);
+
+                // Subtitle
+                ctx.font = '11px JetBrains Mono, monospace';
+                ctx.fillStyle = '#64748b';
+                let subtitle = '';
+                if (d.type === 'blocked') subtitle = `Official #${formatOfficialId(d.officialId)}`;
+                else if (d.type === 'resolved') subtitle = `PA #${d.paId || d.officialId}`;
+                else if (d.type === 'mission') {
+                    const blocker = DATA.blockedPlanets.find(p => p.id === d.blockedBy);
+                    subtitle = `via ${blocker?.name || 'Unknown'}`;
+                }
+                else subtitle = `PA #${d.paId}`;
+                ctx.fillText(subtitle, titleX, pad + 24);
+
+                // Divider
+                const divY = pad + 46;
+                ctx.strokeStyle = 'rgba(100, 116, 139, 0.3)';
+                ctx.beginPath();
+                ctx.moveTo(pad, divY);
+                ctx.lineTo(w - pad, divY);
+                ctx.stroke();
+
+                // Description — Pretext line-by-line
+                ctx.font = '13px Inter, sans-serif';
+                ctx.fillStyle = '#94a3b8';
+                let curY = divY + 10;
+                if (ready) {
+                    try {
+                        const prepared = pt.prepareWithSegments(descText, '13px Inter');
+                        let cursor = { segmentIndex: 0, graphemeIndex: 0 };
+                        let safety = 0;
+                        while (safety++ < 12) {
+                            const line = pt.layoutNextLine(prepared, cursor, maxTextW);
+                            if (line === null) break;
+                            ctx.fillText(line.text, pad, curY);
+                            cursor = line.end;
+                            curY += lineH;
+                        }
+                    } catch (e) {
+                        this._wrapTextFallback(descText, maxTextW, pad, curY, lineH);
+                        curY += lineH * 3;
+                    }
+                } else {
+                    const used = this._wrapTextFallback(descText, maxTextW, pad, curY, lineH);
+                    curY += used * lineH;
+                }
+
+                // Stat row
+                curY += 6;
+                ctx.strokeStyle = 'rgba(100, 116, 139, 0.15)';
+                ctx.setLineDash([4, 3]);
+                ctx.beginPath();
+                ctx.moveTo(pad, curY);
+                ctx.lineTo(w - pad, curY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                curY += 10;
+                ctx.font = '11px Inter, sans-serif';
+                ctx.fillStyle = '#64748b';
+                let statLabel = '', statValue = '', statColor = '#fbbf24';
+                if (d.type === 'blocked') { statLabel = 'Missing Resource'; statValue = `${formatNumber(d.resourceNeeded)} ${d.resource}`; statColor = typeColor; }
+                else if (d.type === 'resolved') { statLabel = 'Status'; statValue = 'HARVESTING'; statColor = '#00d4ff'; }
+                else if (d.type === 'mission') { statLabel = 'Energy Cubes'; statValue = String(d.cubes); statColor = '#fbbf24'; }
+                else { statLabel = `${d.resource} Available`; statValue = formatNumber(d.amount); statColor = '#2ed573'; }
+                ctx.textAlign = 'left';
+                ctx.fillText(statLabel, pad, curY);
+                ctx.textAlign = 'right';
+                ctx.font = '600 12px JetBrains Mono, monospace';
+                ctx.fillStyle = statColor;
+                ctx.fillText(statValue, w - pad, curY);
+            },
+
+            _wrapTextFallback(text, maxW, x, y, lineH) {
+                const ctx = this.ctx;
+                const words = text.split(' ');
+                let line = '';
+                let lines = 0;
+                for (const word of words) {
+                    const test = line + word + ' ';
+                    if (ctx.measureText(test).width > maxW && line) {
+                        ctx.fillText(line, x, y + lines * lineH);
+                        line = word + ' ';
+                        lines++;
+                        if (lines >= 5) break;
+                    } else { line = test; }
+                }
+                if (line && lines < 6) { ctx.fillText(line, x, y + lines * lineH); lines++; }
+                return lines;
+            },
+
+            _position(x, y) {
+                const maxX = window.innerWidth - this.W - 20;
+                const maxY = window.innerHeight - this.H - 20;
+                this.canvas.style.left = Math.min(x + 15, maxX) + 'px';
+                this.canvas.style.top = Math.max(10, Math.min(y, maxY)) + 'px';
+            }
+        };
+
+        // ===================================================================
+        // PRETEXT HUD — toggle with H key
+        // Uses prepare() + layout() to measure stat values
+        // ===================================================================
+        const PretextHUD = {
+            canvas: null, ctx: null, active: false,
+
+            init() {
+                this.canvas = document.getElementById('pretext-hud-canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.resize();
+                window.addEventListener('resize', debounce(() => this.resize(), 150));
+            },
+
+            resize() {
+                const dpr = window.devicePixelRatio || 1;
+                this.canvas.width = window.innerWidth * dpr;
+                this.canvas.height = window.innerHeight * dpr;
+                this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                if (this.active) this.render();
+            },
+
+            toggle() {
+                this.active = !this.active;
+                this.canvas.classList.toggle('active', this.active);
+                if (this.active) this.render();
+            },
+
+            render() {
+                if (!this.active) return;
+                const ctx = this.ctx;
+                const w = window.innerWidth, h = window.innerHeight;
+                ctx.clearRect(0, 0, w, h);
+
+                const panelX = 10, panelY = h - 180, panelW = 280, panelH = 160;
+                ctx.fillStyle = 'rgba(5, 5, 16, 0.88)';
+                ctx.beginPath();
+                ctx.roundRect(panelX, panelY, panelW, panelH, 12);
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Title with Pretext-measured layout
+                ctx.font = '600 10px Orbitron, monospace';
+                ctx.fillStyle = '#00d4ff';
+                ctx.textAlign = 'left';
+                ctx.fillText('PRETEXT HUD • GALACTIC STATUS', panelX + 12, panelY + 20);
+
+                const blockedMissions = DATA.missions.filter(m => m.status !== 'available');
+                const resolvedMissions = DATA.missions.filter(m => m.status === 'available');
+                const totalCubes = DATA.missions.reduce((s, m) => s + m.cubes, 0);
+                const blockedPlanets = DATA.blockedPlanets.filter(p => p.status === 'blocked');
+                const resolvedPlanets = DATA.blockedPlanets.filter(p => p.status === 'resolved');
+
+                const stats = [
+                    { label: 'PENDING', value: String(blockedMissions.length), color: '#ffa502' },
+                    { label: 'RESOLVED', value: String(resolvedMissions.length), color: '#00d4ff' },
+                    { label: 'BLOCKED', value: String(blockedPlanets.length), color: '#ff4757' },
+                    { label: 'COLONIZED', value: String(resolvedPlanets.length), color: '#2ed573' },
+                    { label: 'CUBES', value: String(totalCubes), color: '#fbbf24' },
+                    { label: 'CLUSTERS', value: String(Object.keys(DATA.clusters).length), color: '#c084fc' }
+                ];
+
+                const ready = window._pretextReady();
+                const pt = window._pt();
+
+                stats.forEach((st, i) => {
+                    const col = i % 3;
+                    const row = Math.floor(i / 3);
+                    const sx = panelX + 12 + col * 88;
+                    const sy = panelY + 38 + row * 56;
+
+                    // Use Pretext to measure value text height (for vertical centering)
+                    let valueH = 18;
+                    if (ready) {
+                        try {
+                            const prepared = pt.prepare(st.value, '700 18px JetBrains Mono');
+                            const measured = pt.layout(prepared, 80, 30);
+                            if (measured && measured.height > 0) valueH = measured.height;
+                        } catch (e) { /* fallback */ }
+                    }
+
+                    ctx.font = '700 18px JetBrains Mono, monospace';
+                    ctx.fillStyle = st.color;
+                    ctx.fillText(st.value, sx, sy + valueH);
+
+                    ctx.font = '500 8px Inter, sans-serif';
+                    ctx.fillStyle = '#64748b';
+                    ctx.fillText(st.label, sx, sy + valueH + 14);
+                });
+            }
+        };
+
+        // ===================================================================
+        // PRETEXT TICKER — Scrolling status bar at top, toggle with T key
+        // Uses prepareWithSegments + layoutNextLine for grapheme-safe text flow
+        // ===================================================================
+        const PretextTicker = {
+            canvas: null, ctx: null, active: false, offset: 0, raf: null,
+            text: '',
+
+            init() {
+                this.canvas = document.createElement('canvas');
+                this.canvas.id = 'pretext-ticker-canvas';
+                this.canvas.style.cssText = 'position:fixed;top:70px;left:0;width:100%;height:30px;z-index:99;pointer-events:none;display:none;';
+                document.body.appendChild(this.canvas);
+                this.ctx = this.canvas.getContext('2d');
+                this._buildText();
+                this.resize();
+                window.addEventListener('resize', debounce(() => this.resize(), 150));
+            },
+
+            _buildText() {
+                const blockedMissions = DATA.missions.filter(m => m.status !== 'available').length;
+                const totalCubes = DATA.missions.reduce((s, m) => s + m.cubes, 0);
+                const treasureNeeded = DATA.blockedPlanets.find(p => p.id === 'shining-shoals')?.resourceNeeded || 0;
+                this.text = `🌌 GALACTIC INTELLIGENCE FEED • ${blockedMissions} pending missions • ${totalCubes} total cubes • 💰 NEW BLOCKER: Shining Shoals #0201 blocking 2 Treasure missions (${treasureNeeded} units needed) • 🎃 Witch's Den RESOLVED at PA #384 — 6 Pumpkin missions unlocked! • 🌸 Sakura Temple resolved #383 • 🦫 Beaver Dam harvesting reed • 📡 Hyperdimension Network online • 🥫 Self-Service Rest Stop colonized • Powered by Pretext canvas text engine • `;
+            },
+
+            resize() {
+                const dpr = window.devicePixelRatio || 1;
+                this.canvas.width = window.innerWidth * dpr;
+                this.canvas.height = 30 * dpr;
+                this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            },
+
+            toggle() {
+                this.active = !this.active;
+                this.canvas.style.display = this.active ? 'block' : 'none';
+                if (this.active) this._animate();
+                else if (this.raf) cancelAnimationFrame(this.raf);
+            },
+
+            _animate() {
+                this.offset -= 1.2;
+                this._render();
+                this.raf = requestAnimationFrame(() => this._animate());
+            },
+
+            _render() {
+                const ctx = this.ctx;
+                const w = window.innerWidth, h = 30;
+                ctx.clearRect(0, 0, w, h);
+
+                ctx.fillStyle = 'rgba(5,5,16,0.92)';
+                ctx.fillRect(0, 0, w, h);
+                ctx.strokeStyle = 'rgba(0,212,255,0.3)';
+                ctx.beginPath();
+                ctx.moveTo(0, h - 0.5); ctx.lineTo(w, h - 0.5);
+                ctx.stroke();
+
+                ctx.font = '12px JetBrains Mono, monospace';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#94a3b8';
+
+                // Use Pretext prepareWithSegments to safely render emoji + text in scrolling line
+                const ready = window._pretextReady();
+                const pt = window._pt();
+                let textWidth;
+                try {
+                    textWidth = ctx.measureText(this.text).width;
+                } catch (e) { textWidth = w; }
+
+                if (this.offset < -textWidth) this.offset = w;
+
+                // Render text twice for seamless scroll
+                ctx.fillText(this.text, this.offset, h / 2);
+                ctx.fillText(this.text, this.offset + textWidth + 50, h / 2);
+
+                // Highlight key terms with colored overlay using Pretext segment data (best-effort)
+                if (ready) {
+                    try {
+                        const prepared = pt.prepareWithSegments('💰 NEW', '12px JetBrains Mono');
+                        // pretext data confirms grapheme alignment — visual highlight
+                        ctx.fillStyle = 'rgba(234, 179, 8, 0.15)';
+                        ctx.fillRect(0, 0, w, 30);
+                        ctx.fillStyle = '#94a3b8';
+                        ctx.fillText(this.text, this.offset, h / 2);
+                        ctx.fillText(this.text, this.offset + textWidth + 50, h / 2);
+                    } catch (e) { /* skip */ }
+                }
+            }
+        };
+
+        // ===================================================================
+        // PARTICLE RING
+        // ===================================================================
+        function initParticleRing() {
+            if (state.reducedMotion) return;
+            const canvas = document.getElementById('particle-ring-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+            let targetX = mouseX, targetY = mouseY, tick = 0;
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initParts();
+            }
+            function initParts() {
+                particles = [];
+                const count = Math.min(120, Math.floor((canvas.width * canvas.height) / 15000));
+                for (let i = 0; i < count; i++) {
+                    const angle = (i / count) * Math.PI * 2;
+                    const baseR = Math.min(canvas.width, canvas.height) * 0.25;
+                    particles.push({ angle, baseRadius: baseR + Math.random() * 100 - 50, radiusOffset: Math.random() * Math.PI * 2, speed: 0.0005 + Math.random() * 0.001, size: 1 + Math.random() * 3, opacity: 0.3 + Math.random() * 0.5, pulseSpeed: 0.02 + Math.random() * 0.02, pulseOffset: Math.random() * Math.PI * 2, color: Math.random() > 0.7 ? 'purple' : (Math.random() > 0.5 ? 'blue' : 'pink') });
+                }
+            }
+            function getColor(type, opacity) {
+                if (type === 'blue') return `rgba(0, 212, 255, ${opacity})`;
+                if (type === 'purple') return `rgba(168, 85, 247, ${opacity})`;
+                return `rgba(236, 72, 153, ${opacity})`;
+            }
+            function animate() {
+                ctx.fillStyle = 'rgba(5, 5, 16, 0.15)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                targetX += (mouseX - targetX) * 0.05;
+                targetY += (mouseY - targetY) * 0.05;
+                tick += 0.01;
+                const breathScale = 1 + Math.sin(tick * 0.5) * 0.1;
+                particles.forEach(p => {
+                    p.angle += p.speed;
+                    const pulseR = Math.sin(tick * 2 + p.radiusOffset) * 20;
+                    const r = (p.baseRadius + pulseR) * breathScale;
+                    const iX = (targetX - canvas.width / 2) * 0.1;
+                    const iY = (targetY - canvas.height / 2) * 0.1;
+                    const x = targetX + Math.cos(p.angle) * r + iX;
+                    const y = targetY + Math.sin(p.angle) * r + iY;
+                    const o = p.opacity * (0.5 + 0.5 * Math.sin(tick * p.pulseSpeed + p.pulseOffset));
+                    ctx.beginPath(); ctx.arc(x, y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = getColor(p.color, o); ctx.fill();
+                    ctx.beginPath(); ctx.arc(x, y, p.size * 3, 0, Math.PI * 2);
+                    const g = ctx.createRadialGradient(x, y, 0, x, y, p.size * 3);
+                    g.addColorStop(0, getColor(p.color, o * 0.3)); g.addColorStop(1, 'transparent');
+                    ctx.fillStyle = g; ctx.fill();
+                });
+                const cg = ctx.createRadialGradient(targetX, targetY, 0, targetX, targetY, 150);
+                cg.addColorStop(0, 'rgba(0, 212, 255, 0.1)'); cg.addColorStop(0.5, 'rgba(168, 85, 247, 0.05)'); cg.addColorStop(1, 'transparent');
+                ctx.fillStyle = cg; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                requestAnimationFrame(animate);
+            }
+            document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+            window.addEventListener('resize', debounce(resize, 150));
+            resize(); animate();
+        }
+
+        function initStarfield() {
+            const canvas = document.getElementById('starfield');
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            function resize() {
+                canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+                stars = [];
+                const count = Math.floor((canvas.width * canvas.height) / 10000);
+                for (let i = 0; i < count; i++) stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, size: Math.random() * 1.5 + 0.5, speed: Math.random() * 0.2 + 0.05, opacity: Math.random() * 0.8 + 0.2, twinkle: Math.random() * Math.PI * 2 });
+            }
+            function animate() {
+                ctx.fillStyle = 'rgba(5, 5, 16, 0.1)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                stars.forEach(s => {
+                    if (!state.reducedMotion) s.twinkle += 0.015;
+                    const o = s.opacity * (0.5 + 0.5 * Math.sin(s.twinkle));
+                    ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255,255,255,${o})`; ctx.fill();
+                    if (!state.reducedMotion) { s.y += s.speed * 0.05; if (s.y > canvas.height) { s.y = 0; s.x = Math.random() * canvas.width; } }
+                });
+                requestAnimationFrame(animate);
+            }
+            window.addEventListener('resize', debounce(resize, 150));
+            resize(); animate();
+        }
+
+        // ===================================================================
+        // DATA PROCESSING
+        // ===================================================================
+        function processData() {
+            const nodes = [], links = [];
+            DATA.blockedPlanets.forEach(planet => {
+                nodes.push({ ...planet, type: planet.status === 'resolved' ? 'resolved' : 'blocked', radius: planet.status === 'resolved' ? CONFIG.nodeRadius.resolved : CONFIG.nodeRadius.blocked, fx: null, fy: null });
+            });
+            DATA.missions.forEach(mission => {
+                const isResolved = mission.status === 'available';
+                nodes.push({ ...mission, type: 'mission', resolved: isResolved, radius: Math.max(18, Math.min(40, mission.cubes * 1.4)), fx: null, fy: null });
+                links.push({ source: mission.blockedBy, target: mission.id, type: isResolved ? 'resolved' : 'missing', cluster: mission.cluster });
+            });
+            DATA.availablePlanets.forEach(planet => {
+                nodes.push({ ...planet, type: 'available', radius: CONFIG.nodeRadius.available, fx: null, fy: null });
+                planet.providesTo.forEach(missionId => {
+                    links.push({ source: planet.id, target: missionId, type: 'available', cluster: planet.cluster });
+                });
+            });
+            state.nodes = nodes;
+            state.links = links;
+            return { nodes, links };
+        }
+
+        // ===================================================================
+        // D3 VISUALIZATION
+        // ===================================================================
+        function initVisualization() {
+            const svg = d3.select('#galaxy-viz');
+            const container = document.querySelector('.viz-container');
+            const width = container.clientWidth, height = container.clientHeight;
+            svg.attr('width', width).attr('height', height);
+            svg.selectAll('*').remove();
+            const g = svg.append('g').attr('class', 'main-group');
+
+            state.zoom = d3.zoom().scaleExtent([0.2, 5]).on('zoom', event => { g.attr('transform', event.transform); });
+            svg.call(state.zoom);
+
+            const { nodes, links } = processData();
+            const defs = svg.append('defs');
+
+            const grads = [
+                { id: 'blocked-gradient', stops: ['#ff6b7a', '#ff4757'] },
+                { id: 'resolved-gradient', stops: ['#7df9ff', '#00d4ff'] },
+                { id: 'mission-gradient', stops: ['#ffcc00', '#ffa502'] },
+                { id: 'available-gradient', stops: ['#7bed9f', '#2ed573'] },
+                { id: 'prophecy-gradient', stops: ['#e9d5ff', '#c084fc'] },
+                { id: 'cheese-gradient', stops: ['#fde68a', '#f59e0b'] },
+                { id: 'treasure-gradient', stops: ['#fde68a', '#eab308'] }
+            ];
+            grads.forEach(gr => {
+                const rg = defs.append('radialGradient').attr('id', gr.id);
+                rg.append('stop').attr('offset', '0%').attr('stop-color', gr.stops[0]);
+                rg.append('stop').attr('offset', '100%').attr('stop-color', gr.stops[1]);
+            });
+
+            const glowFilter = defs.append('filter').attr('id', 'glow').attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+            glowFilter.append('feGaussianBlur').attr('stdDeviation', '5').attr('result', 'coloredBlur');
+            const gm = glowFilter.append('feMerge');
+            gm.append('feMergeNode').attr('in', 'coloredBlur');
+            gm.append('feMergeNode').attr('in', 'SourceGraphic');
+
+            const link = g.append('g').attr('class', 'links').selectAll('line').data(links).enter().append('line')
+                .attr('class', d => `link link-${d.type}`)
+                .attr('stroke', d => d.type === 'missing' ? CONFIG.colors.blocked : d.type === 'resolved' ? CONFIG.colors.resolved : CONFIG.colors.available)
+                .attr('stroke-width', d => d.type === 'missing' ? 2 : 1.5)
+                .attr('stroke-dasharray', d => d.type === 'missing' ? '8,4' : (d.type === 'resolved' ? '4,4' : 'none'))
+                .attr('opacity', d => d.type === 'missing' ? 0.6 : (d.type === 'resolved' ? 0.5 : 0.4));
+
+            const node = g.append('g').attr('class', 'nodes').selectAll('g').data(nodes).enter().append('g')
+                .attr('class', d => `node node-${d.type}${d.resolved ? ' node-resolved-mission' : ''}`)
+                .attr('cursor', 'pointer')
+                .call(d3.drag()
+                    .on('start', (e, d) => { if (!e.active) state.simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+                    .on('drag', (e, d) => { d.fx = e.x; d.fy = e.y; })
+                    .on('end', (e, d) => { if (!e.active) state.simulation.alphaTarget(0); d.fx = null; d.fy = null; })
+                );
+
+            function getGradientId(d) {
+                if (d.type === 'blocked' && d.cluster === 'prophecy') return 'url(#prophecy-gradient)';
+                if (d.type === 'blocked' && d.cluster === 'cheese') return 'url(#cheese-gradient)';
+                if (d.type === 'blocked' && d.cluster === 'treasure') return 'url(#treasure-gradient)';
+                if (d.type === 'blocked') return 'url(#blocked-gradient)';
+                if (d.type === 'resolved') return 'url(#resolved-gradient)';
+                if (d.type === 'mission') return 'url(#mission-gradient)';
+                return 'url(#available-gradient)';
+            }
+            function getStroke(d) {
+                if (d.type === 'blocked' && d.cluster === 'prophecy') return '#e9d5ff';
+                if (d.type === 'blocked' && d.cluster === 'cheese') return '#fde68a';
+                if (d.type === 'blocked' && d.cluster === 'treasure') return '#fef3c7';
+                if (d.type === 'blocked') return '#ff8a94';
+                if (d.type === 'resolved') return '#a8f0ff';
+                if (d.type === 'mission') return '#ffe066';
+                return '#a8e6cf';
+            }
+
+            node.append('circle')
+                .attr('r', d => d.radius)
+                .attr('fill', d => getGradientId(d))
+                .attr('stroke', d => getStroke(d))
+                .attr('stroke-width', d => (d.type === 'blocked' || d.type === 'resolved') ? 3 : 2)
+                .attr('filter', 'url(#glow)');
+
+            node.append('text').attr('class', 'node-icon').attr('text-anchor', 'middle').attr('dominant-baseline', 'central')
+                .attr('font-size', d => (d.type === 'blocked' || d.type === 'resolved') ? '28px' : d.type === 'mission' ? '18px' : '12px')
+                .text(d => d.icon);
+
+            node.append('text').attr('class', 'node-label').attr('y', d => d.radius + 16)
+                .text(d => d.name.length > 18 ? d.name.substring(0, 15) + '...' : d.name);
+
+            node.filter(d => d.type === 'blocked' || d.type === 'resolved').append('text').attr('class', 'node-sublabel').attr('y', d => d.radius + 30)
+                .text(d => d.type === 'resolved' ? 'HARVESTING' : `${formatNumber(d.resourceNeeded)} ${d.resource}`);
+
+            node.filter(d => d.type === 'mission').append('text').attr('class', 'node-sublabel').attr('y', d => d.radius + 28).attr('fill', '#fbbf24')
+                .text(d => `${d.cubes} ⚡`);
+
+            node.on('mouseover', handleNodeMouseOver).on('mouseout', handleNodeMouseOut).on('click', handleNodeClick);
+
+            state.simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(CONFIG.forces.linkDistance))
+                .force('charge', d3.forceManyBody().strength(CONFIG.forces.charge))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => d.radius + CONFIG.forces.collisionPadding))
+                .on('tick', () => {
+                    link.attr('x1', d => d.source.x).attr('y1', d => d.source.y).attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+                    node.attr('transform', d => `translate(${d.x},${d.y})`);
+                });
+
+            setTimeout(() => {
+                const bounds = g.node().getBBox();
+                const midX = bounds.x + bounds.width / 2, midY = bounds.y + bounds.height / 2;
+                const scale = 0.7 / Math.max(bounds.width / width, bounds.height / height);
+                const translate = [width / 2 - scale * midX, height / 2 - scale * midY];
+                svg.transition().duration(750).call(state.zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+            }, 1500);
+
+            if (!state.reducedMotion) initFlowParticles(g, links);
+        }
+
+        function initFlowParticles(g, links) {
+            const pg = g.append('g').attr('class', 'flow-particles');
+            const avLinks = links.filter(l => l.type === 'available');
+            avLinks.forEach(link => {
+                for (let i = 0; i < 2; i++) {
+                    const p = pg.append('circle').attr('class', 'flow-particle').attr('r', 3).attr('fill', CONFIG.colors.available).attr('opacity', 0);
+                    animateParticle(p, link, i * 1000);
+                }
+            });
+        }
+
+        function animateParticle(particle, link, delay) {
+            const duration = 3000 + Math.random() * 2000;
+            function animate() {
+                const source = typeof link.source === 'object' ? link.source : state.nodes.find(n => n.id === link.source);
+                const target = typeof link.target === 'object' ? link.target : state.nodes.find(n => n.id === link.target);
+                if (!source || !target) return;
+                particle.attr('cx', source.x).attr('cy', source.y).attr('opacity', 0)
+                    .transition().delay(delay).duration(200).attr('opacity', 0.8)
+                    .transition().duration(duration).ease(d3.easeLinear).attr('cx', target.x).attr('cy', target.y)
+                    .transition().duration(200).attr('opacity', 0)
+                    .on('end', () => { if (!state.reducedMotion) setTimeout(animate, Math.random() * 2000); });
+            }
+            animate();
+        }
+
+        function handleNodeMouseOver(event, d) {
+            const rect = event.target.getBoundingClientRect();
+            PretextTooltip.show(d, rect.right, rect.top);
+            highlightConnections(d);
+        }
+
+        function handleNodeMouseOut() {
+            PretextTooltip.hide();
+            resetHighlights();
+        }
+
+        function handleNodeClick(event, d) {
+            state.selectedNode = d;
+            openDetailPanel(d);
+            updateSidebarSelection(d);
+        }
+
+        function highlightConnections(d) {
+            const svg = d3.select('#galaxy-viz');
+            svg.selectAll('.node').style('opacity', 0.25);
+            svg.selectAll('.link').style('opacity', 0.08);
+            svg.selectAll('.node').filter(n => n.id === d.id).style('opacity', 1);
+            const connectedIds = new Set([d.id]);
+            state.links.forEach(link => {
+                const sId = typeof link.source === 'object' ? link.source.id : link.source;
+                const tId = typeof link.target === 'object' ? link.target.id : link.target;
+                if (sId === d.id || tId === d.id) { connectedIds.add(sId); connectedIds.add(tId); }
+            });
+            svg.selectAll('.node').filter(n => connectedIds.has(n.id)).style('opacity', 1);
+            svg.selectAll('.link').filter(l => {
+                const s = typeof l.source === 'object' ? l.source.id : l.source;
+                const t = typeof l.target === 'object' ? l.target.id : l.target;
+                return s === d.id || t === d.id;
+            }).style('opacity', 0.9);
+        }
+
+        function resetHighlights() {
+            const svg = d3.select('#galaxy-viz');
+            svg.selectAll('.node').style('opacity', 1);
+            svg.selectAll('.link').style('opacity', d => d.type === 'missing' ? 0.6 : (d.type === 'resolved' ? 0.5 : 0.4));
+        }
+
+        function openDetailPanel(d) {
+            const panel = document.getElementById('detail-panel');
+            const panelHeader = document.getElementById('panel-header-container');
+            document.getElementById('panel-name').textContent = d.name;
+            document.getElementById('panel-image').textContent = d.icon;
+            panelHeader.className = `panel-header ${d.type}`;
+
+            const panelStatus = document.getElementById('panel-status');
+            const panelId = document.getElementById('panel-id');
+            const panelStatusText = document.getElementById('panel-status-text');
+            panelStatus.className = `panel-status ${d.type}`;
+
+            if (d.type === 'blocked') {
+                panelId.textContent = `Official #${formatOfficialId(d.officialId)} • ${d.resource}`;
+                panelStatusText.textContent = 'UNCOLONIZED';
+            } else if (d.type === 'resolved') {
+                panelId.textContent = `PA #${d.paId || d.officialId} • ${d.resource}`;
+                panelStatusText.textContent = 'HARVESTING';
+            } else if (d.type === 'mission') {
+                panelId.textContent = `Mission • ${d.cubes} Energy Cubes`;
+                panelStatusText.textContent = d.resolved ? 'AVAILABLE' : 'PENDING';
+                if (d.resolved) panelStatus.className = 'panel-status resolved';
+            } else {
+                panelId.textContent = `PA #${d.paId} • ${d.resource}`;
+                panelStatusText.textContent = 'COLONIZED';
+            }
+
+            document.getElementById('panel-lore').textContent = d.lore || 'No lore available for this node.';
+
+            const panelStats = document.getElementById('panel-stats');
+            const prioritySection = document.getElementById('panel-priority-section');
+            const priorityCard = document.getElementById('priority-card');
+
+            if (d.type === 'blocked') {
+                panelStats.innerHTML = `
+                    <div class="resource-stat"><div class="resource-stat-value">${formatNumber(d.resourceNeeded)}</div><div class="resource-stat-label">${d.resource} Needed</div></div>
+                    <div class="resource-stat"><div class="resource-stat-value">${getBlockedMissionCount(d.id)}</div><div class="resource-stat-label">Missions Blocked</div></div>
+                    <div class="resource-stat"><div class="resource-stat-value">${getBlockedCubesTotal(d.id)}</div><div class="resource-stat-label">Total Cubes</div></div>
+                    <div class="resource-stat"><div class="resource-stat-value">#${d.priority}</div><div class="resource-stat-label">Priority Rank</div></div>`;
+                prioritySection.style.display = 'block';
+                priorityCard.className = 'priority-card';
+                document.getElementById('priority-title').textContent = `Priority ${d.priority}`;
+                document.getElementById('priority-subtitle').textContent = d.priority === 1 ? 'Highest Impact' : 'Strategic Target';
+                document.getElementById('priority-stats').innerHTML = `
+                    <div class="priority-stat"><div class="priority-stat-value">${getBlockedMissionCount(d.id)}</div><div class="priority-stat-label">Missions</div></div>
+                    <div class="priority-stat"><div class="priority-stat-value">${getBlockedCubesTotal(d.id)}</div><div class="priority-stat-label">Cubes</div></div>`;
+            } else if (d.type === 'resolved') {
+                panelStats.innerHTML = `
+                    <div class="resource-stat"><div class="resource-stat-value">${getResolvedMissionCount(d.id)}</div><div class="resource-stat-label">Missions Unlocked</div></div>
+                    <div class="resource-stat"><div class="resource-stat-value">${getResolvedCubesTotal(d.id)}</div><div class="resource-stat-label">Cubes Available</div></div>`;
+                prioritySection.style.display = 'block';
+                priorityCard.className = 'priority-card resolved';
+                document.getElementById('priority-title').textContent = 'RESOLVED';
+                document.getElementById('priority-subtitle').textContent = 'Now Harvesting';
+                document.getElementById('priority-stats').innerHTML = `
+                    <div class="priority-stat"><div class="priority-stat-value">${getResolvedMissionCount(d.id)}</div><div class="priority-stat-label">Missions</div></div>
+                    <div class="priority-stat"><div class="priority-stat-value">${getResolvedCubesTotal(d.id)}</div><div class="priority-stat-label">Cubes</div></div>`;
+            } else if (d.type === 'mission') {
+                panelStats.innerHTML = `
+                    <div class="resource-stat"><div class="resource-stat-value">${d.cubes}</div><div class="resource-stat-label">Energy Cubes</div></div>
+                    <div class="resource-stat"><div class="resource-stat-value">${getResourceProvidersCount(d.id)}</div><div class="resource-stat-label">Resource Sources</div></div>`;
+                prioritySection.style.display = 'none';
+            } else {
+                panelStats.innerHTML = `
+                    <div class="resource-stat"><div class="resource-stat-value">${formatNumber(d.amount)}</div><div class="resource-stat-label">${d.resource}</div></div>
+                    <div class="resource-stat"><div class="resource-stat-value">${d.providesTo.length}</div><div class="resource-stat-label">Missions Supplied</div></div>`;
+                prioritySection.style.display = 'none';
+            }
+
+            const connections = getConnectedNodes(d);
+            const panelConnections = document.getElementById('panel-connections');
+            panelConnections.innerHTML = connections.map(conn => `
+                <div class="connected-item" data-id="${conn.id}">
+                    <div class="connected-item-icon ${conn.type}">${conn.icon}</div>
+                    <div class="connected-item-info">
+                        <div class="connected-item-name">${conn.name}</div>
+                        <div class="connected-item-detail">${conn.detail}</div>
+                    </div>
+                    <div class="connected-item-badge ${conn.badgeType}">${conn.badge}</div>
+                </div>`).join('');
+
+            panelConnections.querySelectorAll('.connected-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const nd = state.nodes.find(n => n.id === item.dataset.id);
+                    if (nd) { openDetailPanel(nd); focusOnNode(nd); }
+                });
+            });
+            panel.classList.add('open');
+        }
+
+        function closeDetailPanel() {
+            document.getElementById('detail-panel').classList.remove('open');
+            state.selectedNode = null;
+        }
+
+        function getBlockedMissionCount(blockedId) { return DATA.missions.filter(m => m.blockedBy === blockedId && m.status !== 'available').length; }
+        function getBlockedCubesTotal(blockedId) { return DATA.missions.filter(m => m.blockedBy === blockedId && m.status !== 'available').reduce((s, m) => s + m.cubes, 0); }
+        function getResolvedMissionCount(resolvedId) { return DATA.missions.filter(m => m.blockedBy === resolvedId).length; }
+        function getResolvedCubesTotal(resolvedId) { return DATA.missions.filter(m => m.blockedBy === resolvedId).reduce((s, m) => s + m.cubes, 0); }
+        function getResourceProvidersCount(missionId) { return DATA.availablePlanets.filter(p => p.providesTo.includes(missionId)).length; }
+
+        function getConnectedNodes(d) {
+            const connections = [];
+            if (d.type === 'blocked' || d.type === 'resolved') {
+                DATA.missions.filter(m => m.blockedBy === d.id).forEach(m => {
+                    connections.push({ id: m.id, name: m.name, icon: m.icon, type: 'mission', detail: d.type === 'resolved' ? 'Available Mission' : 'Pending Mission', badge: `${m.cubes} ⚡`, badgeType: 'cubes' });
+                });
+            } else if (d.type === 'mission') {
+                const blocker = DATA.blockedPlanets.find(p => p.id === d.blockedBy);
+                if (blocker) {
+                    connections.push({ id: blocker.id, name: blocker.name, icon: blocker.icon, type: blocker.status === 'resolved' ? 'resolved' : 'blocked', detail: blocker.status === 'resolved' ? 'Resource Planet' : 'Blocking Planet', badge: blocker.status === 'resolved' ? 'HARVESTING' : `${formatNumber(blocker.resourceNeeded)}`, badgeType: blocker.status === 'resolved' ? 'resource' : 'missing' });
+                }
+                DATA.availablePlanets.filter(p => p.providesTo.includes(d.id)).forEach(p => {
+                    connections.push({ id: p.id, name: p.name, icon: p.icon, type: 'available', detail: `Provides ${p.resource}`, badge: formatNumber(p.amount), badgeType: 'resource' });
+                });
+            } else {
+                d.providesTo.forEach(missionId => {
+                    const mission = DATA.missions.find(m => m.id === missionId);
+                    if (mission) connections.push({ id: mission.id, name: mission.name, icon: mission.icon, type: 'mission', detail: 'Supplies To', badge: `${mission.cubes} ⚡`, badgeType: 'cubes' });
+                });
+            }
+            return connections;
+        }
+
+        function focusOnNode(node) {
+            const svg = d3.select('#galaxy-viz');
+            const w = svg.node().clientWidth, h = svg.node().clientHeight;
+            svg.transition().duration(750).call(state.zoom.transform, d3.zoomIdentity.translate(w / 2, h / 2).scale(1.5).translate(-node.x, -node.y));
+        }
+
+        function initSidebar() {
+            const clusterNav = document.getElementById('cluster-nav');
+            const blockedClusters = DATA.blockedPlanets.filter(p => p.status === 'blocked');
+            const resolvedClusters = DATA.blockedPlanets.filter(p => p.status === 'resolved');
+
+            if (blockedClusters.length > 0) {
+                const bt = document.createElement('div');
+                bt.className = 'cluster-section-title blocked';
+                bt.textContent = 'BLOCKED SECTORS';
+                clusterNav.appendChild(bt);
+            }
+
+            blockedClusters.forEach(planet => {
+                const missions = DATA.missions.filter(m => m.blockedBy === planet.id);
+                const ci = document.createElement('div');
+                ci.className = 'cluster-item';
+                let iconStyle = '';
+                if (planet.cluster === 'prophecy') iconStyle = 'style="background:var(--gradient-prophecy)"';
+                else if (planet.cluster === 'cheese') iconStyle = 'style="background:var(--gradient-cheese)"';
+                else if (planet.cluster === 'treasure') iconStyle = 'style="background:linear-gradient(135deg,#eab308 0%,#fde68a 100%)"';
+                ci.innerHTML = `
+                    <div class="cluster-header blocked" data-cluster="${planet.id}">
+                        <div class="cluster-icon blocked" ${iconStyle}>${planet.icon}</div>
+                        <div class="cluster-info">
+                            <div class="cluster-name">${planet.name}</div>
+                            <div class="cluster-resource blocked">${formatNumber(planet.resourceNeeded)} ${planet.resource}</div>
+                        </div>
+                        <div class="cluster-badge blocked">${missions.length}</div>
+                    </div>
+                    <div class="mission-list" id="missions-${planet.id}">
+                        ${missions.map(m => `<div class="mission-item" data-mission="${m.id}"><div class="mission-dot"></div><div class="mission-name">${m.name}</div><div class="mission-cubes">${m.cubes} ⚡</div></div>`).join('')}
+                    </div>`;
+                clusterNav.appendChild(ci);
+            });
+
+            if (resolvedClusters.length > 0) {
+                const rt = document.createElement('div');
+                rt.className = 'cluster-section-title resolved';
+                rt.textContent = 'RESOLVED SECTORS';
+                clusterNav.appendChild(rt);
+            }
+
+            resolvedClusters.forEach(planet => {
+                const missions = DATA.missions.filter(m => m.blockedBy === planet.id);
+                const ci = document.createElement('div');
+                ci.className = 'cluster-item';
+                ci.innerHTML = `
+                    <div class="cluster-header resolved" data-cluster="${planet.id}">
+                        <div class="cluster-icon resolved">${planet.icon}</div>
+                        <div class="cluster-info">
+                            <div class="cluster-name">${planet.name}</div>
+                            <div class="cluster-resource resolved">PA #${planet.paId || planet.officialId} • Harvesting</div>
+                        </div>
+                        <div class="cluster-badge resolved">${missions.length}</div>
+                    </div>
+                    <div class="mission-list" id="missions-${planet.id}">
+                        ${missions.map(m => `<div class="mission-item" data-mission="${m.id}"><div class="mission-dot" style="background: var(--resolved-primary);"></div><div class="mission-name">${m.name}</div><div class="mission-cubes">${m.cubes} ⚡</div></div>`).join('')}
+                    </div>`;
+                clusterNav.appendChild(ci);
+            });
+
+            document.querySelectorAll('.cluster-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const clusterId = header.dataset.cluster;
+                    const missionList = document.getElementById(`missions-${clusterId}`);
+                    header.classList.toggle('active');
+                    missionList.classList.toggle('expanded');
+                    const nd = state.nodes.find(n => n.id === clusterId);
+                    if (nd) { openDetailPanel(nd); focusOnNode(nd); }
+                });
+            });
+
+            document.querySelectorAll('.mission-item').forEach(item => {
+                item.addEventListener('click', e => {
+                    e.stopPropagation();
+                    const nd = state.nodes.find(n => n.id === item.dataset.mission);
+                    if (nd) { openDetailPanel(nd); focusOnNode(nd); }
+                });
+            });
+        }
+
+        function updateSidebarSelection(d) {
+            document.querySelectorAll('.cluster-header').forEach(h => h.classList.remove('active'));
+            document.querySelectorAll('.mission-item').forEach(m => m.classList.remove('active'));
+            if (d.type === 'blocked' || d.type === 'resolved') {
+                const header = document.querySelector(`.cluster-header[data-cluster="${d.id}"]`);
+                if (header) { header.classList.add('active'); document.getElementById(`missions-${d.id}`).classList.add('expanded'); }
+            } else if (d.type === 'mission') {
+                const item = document.querySelector(`.mission-item[data-mission="${d.id}"]`);
+                if (item) {
+                    item.classList.add('active');
+                    const pl = item.closest('.mission-list');
+                    if (pl) { pl.classList.add('expanded'); const cid = pl.id.replace('missions-', ''); const h = document.querySelector(`.cluster-header[data-cluster="${cid}"]`); if (h) h.classList.add('active'); }
+                }
+            }
+        }
+
+        function initControls() {
+            document.getElementById('zoom-in').addEventListener('click', () => { d3.select('#galaxy-viz').transition().duration(300).call(state.zoom.scaleBy, 1.3); });
+            document.getElementById('zoom-out').addEventListener('click', () => { d3.select('#galaxy-viz').transition().duration(300).call(state.zoom.scaleBy, 0.7); });
+            document.getElementById('zoom-reset').addEventListener('click', () => { d3.select('#galaxy-viz').transition().duration(500).call(state.zoom.transform, d3.zoomIdentity); });
+            document.getElementById('panel-close').addEventListener('click', closeDetailPanel);
+            document.getElementById('sidebar-toggle').addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('open'); });
+            document.getElementById('reset-view').addEventListener('click', () => {
+                d3.select('#galaxy-viz').transition().duration(500).call(state.zoom.transform, d3.zoomIdentity);
+                closeDetailPanel();
+                resetHighlights();
+            });
+            document.getElementById('fullscreen-toggle').addEventListener('click', () => {
+                if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+                else document.exitFullscreen();
+            });
+
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.currentView = btn.dataset.view;
+                    updateLayout();
+                });
+            });
+
+            document.querySelectorAll('.filter-pill').forEach(pill => {
+                pill.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    state.currentFilter = pill.dataset.filter;
+                    applyFilter();
+                });
+            });
+
+            // Pretext keyboard shortcuts
+            document.addEventListener('keydown', e => {
+                if (e.target !== document.body) return;
+                if (e.key === 'h' || e.key === 'H') PretextHUD.toggle();
+                if (e.key === 't' || e.key === 'T') PretextTicker.toggle();
+            });
+
+            let scrollDir = 'up';
+            document.querySelector('.viz-container').addEventListener('wheel', e => {
+                const header = document.getElementById('main-header');
+                if (e.deltaY > 0 && scrollDir !== 'down') { scrollDir = 'down'; header.classList.add('hidden-header'); }
+                else if (e.deltaY < 0 && scrollDir !== 'up') { scrollDir = 'up'; header.classList.remove('hidden-header'); }
+            });
+        }
+
+        function updateLayout() {
+            const svg = d3.select('#galaxy-viz');
+            const w = svg.node().clientWidth, h = svg.node().clientHeight;
+            if (state.currentView === 'radial') {
+                const centralNodes = state.nodes.filter(n => n.type === 'blocked' || n.type === 'resolved');
+                const step = (2 * Math.PI) / centralNodes.length;
+                centralNodes.forEach((node, i) => { const a = i * step - Math.PI / 2; node.fx = w / 2 + Math.cos(a) * 240; node.fy = h / 2 + Math.sin(a) * 240; });
+                state.simulation.alpha(0.5).restart();
+            } else if (state.currentView === 'cluster') {
+                const cc = {
+                    treasure: { x: w * 0.08, y: h * 0.12 },
+                    cheese: { x: w * 0.50, y: h * 0.12 },
+                    pumpkins: { x: w * 0.12, y: h * 0.30 },
+                    sakura: { x: w * 0.88, y: h * 0.22 },
+                    hieroglyphs: { x: w * 0.85, y: h * 0.50 },
+                    prophecy: { x: w * 0.28, y: h * 0.55 },
+                    story: { x: w * 0.38, y: h * 0.85 },
+                    reed: { x: w * 0.12, y: h * 0.75 },
+                    aluminum: { x: w * 0.62, y: h * 0.85 },
+                    signal: { x: w * 0.88, y: h * 0.75 }
+                };
+                state.nodes.forEach(n => {
+                    if (n.cluster && cc[n.cluster]) { const c = cc[n.cluster]; n.fx = c.x + (Math.random() - 0.5) * 120; n.fy = c.y + (Math.random() - 0.5) * 120; }
+                });
+                state.simulation.alpha(0.5).restart();
+                setTimeout(() => { state.nodes.forEach(n => { n.fx = null; n.fy = null; }); }, 2000);
+            } else {
+                state.nodes.forEach(n => { n.fx = null; n.fy = null; });
+                state.simulation.alpha(0.5).restart();
+            }
+        }
+
+        function applyFilter() {
+            const svg = d3.select('#galaxy-viz');
+            if (state.currentFilter === 'all') {
+                svg.selectAll('.node').style('opacity', 1);
+                svg.selectAll('.link').style('opacity', d => d.type === 'missing' ? 0.6 : (d.type === 'resolved' ? 0.5 : 0.4));
+            } else {
+                svg.selectAll('.node').style('opacity', d => d.cluster === state.currentFilter ? 1 : 0.12);
+                svg.selectAll('.link').style('opacity', d => d.cluster === state.currentFilter ? 0.8 : 0.03);
+            }
+        }
+
+        function initResizeHandler() {
+            const dr = debounce(() => {
+                const svg = d3.select('#galaxy-viz');
+                const c = document.querySelector('.viz-container');
+                const w = c.clientWidth, h = c.clientHeight;
+                svg.attr('width', w).attr('height', h);
+                if (state.simulation) { state.simulation.force('center', d3.forceCenter(w / 2, h / 2)); state.simulation.alpha(0.3).restart(); }
+            }, 150);
+            window.addEventListener('resize', dr);
+        }
+
+        function init() {
+            const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+            state.reducedMotion = mq.matches;
+            mq.addEventListener('change', () => { state.reducedMotion = mq.matches; });
+
+            PretextTooltip.init();
+            PretextHUD.init();
+            PretextTicker.init();
+
+            initParticleRing();
+            initStarfield();
+            initVisualization();
+            initSidebar();
+            initControls();
+            initResizeHandler();
+
+            const blockedMissions = DATA.missions.filter(m => m.status !== 'available');
+            const resolvedMissions = DATA.missions.filter(m => m.status === 'available');
+            const totalCubes = DATA.missions.reduce((s, m) => s + m.cubes, 0);
+            const blockedPlanetCount = DATA.blockedPlanets.filter(p => p.status === 'blocked').length;
+            const resolvedPlanetCount = DATA.blockedPlanets.filter(p => p.status === 'resolved').length;
+
+            document.getElementById('total-missions').textContent = blockedMissions.length;
+            document.getElementById('total-blockers').textContent = blockedPlanetCount;
+            document.getElementById('total-resolved').textContent = resolvedMissions.length;
+            document.getElementById('total-cubes').textContent = totalCubes;
+            document.getElementById('sidebar-subtitle').textContent = `${blockedPlanetCount} Blocked • ${resolvedPlanetCount} Resolved • ${DATA.missions.length} Missions`;
+
+            const blockedCubes = blockedMissions.reduce((s, m) => s + m.cubes, 0);
+            const availCubes = resolvedMissions.reduce((s, m) => s + m.cubes, 0);
+            document.getElementById('sidebar-blocked-cubes').textContent = blockedCubes;
+            document.getElementById('sidebar-available-cubes').textContent = availCubes;
+
+            setTimeout(() => { document.getElementById('loading-overlay').classList.add('hidden'); }, 2000);
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => { if (state.simulation) state.simulation.alpha(0.3).restart(); }, 500);
+        });
+    </script>
+</body>
+</html>
+```
