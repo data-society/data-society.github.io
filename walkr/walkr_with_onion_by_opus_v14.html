@@ -167,7 +167,8 @@
         .brand-logo { width: 44px; height: 44px; background: var(--gradient-header); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; animation: logoFloat 4s ease-in-out infinite; flex-shrink: 0; }
         @keyframes logoFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
         .brand-text { font-family: 'Orbitron', monospace; font-size: 1.4rem; font-weight: 700; background: var(--gradient-header); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; }
-        .brand-subtitle { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
+        .brand-subtitle { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .header-brand > div:last-child { min-width: 0; }
         .brand-subtitle b { color: var(--frontier-secondary); font-weight: 600; }
         .header-stats { display: flex; gap: 1rem; }
         .stat-item { text-align: center; padding: 0.5rem 0.9rem; background: var(--card-bg); border-radius: var(--radius-lg); border: 1px solid var(--card-border); min-width: 96px; transition: all var(--animation-fast) ease; cursor: pointer; }
@@ -531,6 +532,9 @@
         .noscript { position: fixed; inset: 0; z-index: 10001; background: var(--space-void); display: flex; align-items: center; justify-content: center; padding: 2rem; text-align: center; color: var(--text-secondary); }
 
         /* ---- responsive ---- */
+        /* v13 painted the subtitle under the stat tiles from 1201 to ~1597px: drop the long word and tighten there */
+        @media (max-width: 1700px) { .header-brand { flex-shrink: 0; } .brand-long { display: none; } .brand-subtitle { letter-spacing: 2px; } .header-stats { gap: 0.6rem; } }
+        @media (max-width: 1320px) { .brand-mid { display: none; } .brand-subtitle { letter-spacing: 1.5px; } .header-stats { gap: 0.45rem; min-width: 0; } .header-stats .stat-item { min-width: 0; padding: 0.4rem 0.5rem; } }
         @media (max-width: 1400px) {
             .header-stats .stat-item { min-width: 84px; padding: 0.4rem 0.6rem; }
             .stat-value { font-size: 1.2rem; }
@@ -2512,7 +2516,7 @@
             <div class="brand-logo" aria-hidden="true">🌌</div>
             <div>
                 <div class="brand-text">WALKR</div>
-                <div class="brand-subtitle">Xenoeconomic Atlas v14 · <b>Onion Rings</b></div>
+                <div class="brand-subtitle"><span class="brand-long">Xenoeconomic </span><span class="brand-mid">Atlas </span>v14 · <b>Onion Rings</b></div>
             </div>
         </div>
         <div class="header-stats" id="header-stats" aria-label="Ledger totals"></div>
