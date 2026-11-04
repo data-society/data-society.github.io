@@ -129,6 +129,8 @@
         .skip-link { position: fixed; top: -80px; left: 12px; z-index: 10000; padding: 0.6rem 1rem; background: var(--cyber-blue); color: var(--space-void); border-radius: var(--radius-md); font-weight: 700; text-decoration: none; }
         .skip-link:focus { top: 12px; }
         :focus-visible { outline: 2px solid var(--cyber-blue); outline-offset: 2px; }
+        /* a row that Tab scrolls into its list keeps room for that ring */
+        .queue-row, .upgrade-row, .cluster-header, .mission-item, .mission-row, .connected-item, button.catalog-row { scroll-margin-block: 6px; }
 
         /* ---- loading overlay ---- */
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--space-void); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease; }
@@ -363,7 +365,7 @@
         .link { pointer-events: none; }
 
         /* ---- mission list view ---- */
-        .list-view { position: absolute; inset: 0; overflow-y: auto; padding: 5.25rem 2rem 2rem; z-index: 10; scrollbar-width: thin; scrollbar-color: var(--space-dust) transparent; }
+        .list-view { position: absolute; inset: 0; overflow-y: auto; padding: 5.25rem 2rem 4rem; scroll-padding-bottom: 3.5rem; z-index: 10; scrollbar-width: thin; scrollbar-color: var(--space-dust) transparent; }
         .list-tools { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
         .list-search { flex: 1; min-width: 220px; background: var(--card-bg); border: 1px solid var(--card-border); color: var(--text-primary); border-radius: var(--radius-md); padding: 0.55rem 0.75rem; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
         .list-search:focus { outline: none; border-color: var(--cyber-blue); }
@@ -509,7 +511,8 @@
         .catalog-slots { font-size: 0.72rem; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; }
         .sources-body { overflow-y: auto; max-height: 70vh; padding: 1.25rem 1.5rem 1.5rem; font-size: 0.8rem; line-height: 1.65; color: var(--text-secondary); scrollbar-width: thin; scrollbar-color: var(--space-dust) transparent; }
         .sources-body h3 { font-family: 'Orbitron', monospace; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin: 1.25rem 0 0.6rem; }
-        .sources-body h3:first-child { margin-top: 0; }
+        .sources-body h3:first-child, .sources-body .sources-lede + h3 { margin-top: 0; }
+        .sources-lede { display: none; }
         .sources-body p { margin-bottom: 0.6rem; }
         .sources-body a { color: var(--cyber-blue); }
         .sources-body a.helper { color: var(--copper-secondary); font-weight: 600; }
@@ -520,6 +523,7 @@
         .source-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 0.85rem 1rem; margin-bottom: 0.6rem; }
         .source-card strong { display: block; margin-bottom: 0.2rem; }
         .source-card small { display: block; color: var(--text-muted); font-size: 0.7rem; line-height: 1.55; margin-top: 0.25rem; }
+        .source-card a { overflow-wrap: anywhere; }
         .quality-list { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem; }
         .quality-group-title { font-family: 'Orbitron', monospace; font-size: 0.66rem; font-weight: 700; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; margin-top: 0.5rem; }
         .quality-item { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 0.75rem 0.9rem; font-size: 0.75rem; line-height: 1.55; }
@@ -561,12 +565,20 @@
             .list-view { padding-top: 5.5rem; }
         }
         /* 769-1200px: the fixed 400px panel lies over the right of the map; while it is open, the map controls,
-           the hint and the list stay beside it (v13 left the zoom buttons and the last pills under it) */
+           the hint and the list stay beside it (v13 left the zoom buttons and the last pills under it). The hint
+           also stops short of the moved zoom buttons, and the shortcut badge (the panel would cover its right
+           half, the zoom buttons its top) steps aside */
         @media (min-width: 769px) and (max-width: 1200px) {
             .app-container.panel-open .map-overlay-top, .app-container.panel-open .zoom-controls { right: calc(var(--panel-width) + 1rem); }
-            .app-container.panel-open .graph-hint { max-width: calc(100% - var(--panel-width) - 3rem); }
+            .app-container.panel-open .graph-hint { max-width: calc(100% - var(--panel-width) - 3rem - 44px); }
+            .app-container.panel-open .atlas-badge { display: none; }
             .app-container.panel-open .list-view { right: var(--panel-width); }
         }
+        /* 1201-1320px with the sidebar and the panel both open, the map is narrower than the badge plus the zoom buttons */
+        @media (min-width: 1201px) and (max-width: 1320px) { .app-container.panel-open > .sidebar:not(.collapsed) ~ .viz-container .atlas-badge { display: none; } }
+        /* short screens (landscape phones): the zoom column rose into the top bar, so a tap on + applied a sector
+           filter; the buttons sit in a row and the hint (already hidden on phones) gives way */
+        @media (max-height: 500px) { .zoom-controls { flex-direction: row; } .graph-hint { display: none; } }
         @media (max-width: 768px) {
             :root { --header-height: 60px; --sidebar-width: min(360px, 88vw); --panel-width: 100%; }
             header { padding: 0 0.75rem; gap: 0.5rem; }
@@ -581,13 +593,25 @@
             .graph-hint { display: none; }
             .zoom-controls { bottom: 1rem; right: 1rem; }
             .atlas-badge { display: none; }
-            .list-view { padding: 5rem 1rem 1.5rem; }
+            .list-view { padding: 5rem 1rem 1.5rem; scroll-padding-bottom: 0; }
             .mission-row { grid-template-columns: 28px minmax(0, 1fr); }
             .mission-row .row-end { grid-column: 2; flex-direction: row; align-items: center; }
             dialog.atlas-dialog { width: calc(100vw - 16px); max-width: calc(100vw - 16px); max-height: 92vh; margin: 4vh auto auto; }
         }
         @media (max-width: 480px) { #fullscreen-toggle { display: none; } }
         @media (max-width: 360px) { .brand-text { letter-spacing: 0; font-size: 0.9rem; } .header-controls { gap: 0.2rem; } }
+        /* short or narrow screens (landscape phones, 320px): the fixed dialog head and tools left the catalog list
+           under two rows; they tighten, the catalog subtitle (repeated in Sources) keeps one line, and the Sources
+           note moves into the scrolling body */
+        @media (max-height: 480px), (max-width: 360px) {
+            dialog.atlas-dialog .dialog-head { padding: 0.75rem 1rem; }
+            dialog.atlas-dialog .dialog-tools { padding: 0.6rem 1rem; gap: 0.5rem; }
+            dialog.atlas-dialog .sources-body { padding: 0.9rem 1rem 1.1rem; }
+            #catalog-meta { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }
+            #sources-meta { display: none; }
+            .sources-body .sources-lede { display: block; font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
+        }
+        @media (max-height: 480px) { dialog.atlas-dialog .catalog-search { min-width: 7rem; } }
         @media (max-width: 320px) { header { padding: 0 0.5rem; gap: 0.35rem; } .header-brand { gap: 0.4rem; } .brand-logo { width: 30px; height: 30px; font-size: 1rem; } .control-btn { width: 30px; height: 30px; } .header-controls { gap: 0.15rem; } }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
@@ -2656,7 +2680,7 @@
         <div class="dialog-head">
             <div>
                 <div class="dialog-title">SOURCES, ASSUMPTIONS &amp; INTEGRITY</div>
-                <div class="dialog-subtitle">Sheet M is canonical for mission position, name and requirement slots; the planet registry supplies planet identity. Status, cube rewards, quantities, PA numbers, clusters and lore are dated player annotations. Every number on this page is derived from the embedded ledger at load and checked below.</div>
+                <div class="dialog-subtitle" id="sources-meta">Sheet M is canonical for mission position, name and requirement slots; the planet registry supplies planet identity. Status, cube rewards, quantities, PA numbers, clusters and lore are dated player annotations. Every number on this page is derived from the embedded ledger at load and checked below.</div>
             </div>
             <button class="panel-close" id="sources-close" aria-label="Close">✕</button>
         </div>
@@ -3050,33 +3074,38 @@ THIS SOFTWARE.
             else this.sim.alpha(alpha).restart();
         }
         /* keyboard focus never lands on an invisible node: pan (no zoom change) when it sits off-screen, under the
-           map controls or under the 769-1200px panel, and bring it to the middle of what is left visible */
+           map controls, the HUD or the panel (above 1200px: where the opening panel will be), and bring it to the
+           middle of what is left visible */
         reveal(d) {
             const t = d3.zoomTransform(this.svgEl), x = t.applyX(d.x), y = t.applyY(d.y), pad = d.radius * t.k + 24;
             const overlay = document.getElementById('map-overlay-top'), top = overlay && !overlay.hidden ? overlay.offsetHeight + 12 : 0;
-            const vw = this.visibleW(), box = this.svgEl.getBoundingClientRect();
+            const vw = this.visibleW(true), box = this.svgEl.getBoundingClientRect();
             const inside = x >= pad && x <= vw - pad && y >= top + pad && y <= this.h - pad;
             const hit = inside ? document.elementFromPoint(box.left + x, box.top + y) : null;
-            if (hit && this.svgEl.contains(hit)) return this;
-            (reduced() ? this.svg : this.svg.transition().duration(300)).call(this.zoom.translateTo, d.x, d.y, [vw / 2, (top + this.h) / 2]);
+            if (hit && this.svgEl.contains(hit) && !HUD.covers(box.left + x, box.top + y, pad)) return this;
+            (reduced() ? this.svg : this.svg.transition().duration(300).on('end.keep', () => this.keepInView(d))).call(this.zoom.translateTo, d.x, d.y, [vw / 2, (top + this.h) / 2]);
             this.userZoomed = true;
             return this;
         }
-        /* map width the detail panel leaves visible: it lies over the map at 769-1200px, sits beside it above, covers it on phones */
-        visibleW() {
+        /* map width the detail panel leaves visible: it lies over the map at 769-1200px and covers it on phones; above
+           1200px it sits beside the map, which narrows during the panel's 0.3s slide (settled: the width once it ends) */
+        visibleW(settled = false) {
             const p = document.getElementById('detail-panel');
-            if (!p || !p.classList.contains('open') || getComputedStyle(p).position !== 'fixed') return this.w;
+            if (!p || !p.classList.contains('open')) return this.w;
+            const cs = getComputedStyle(p);
+            if (cs.position !== 'fixed') return settled ? Math.max(240, Math.round(this.container.getBoundingClientRect().width + Math.min(0, parseFloat(cs.marginRight) || 0))) : this.w;
             const edge = document.documentElement.clientWidth - p.offsetWidth - this.svgEl.getBoundingClientRect().left;
             return edge >= 240 && edge < this.w ? Math.round(edge) : this.w;
         }
-        /* after the visible map area changes, a keyboard-focused node stays on screen */
-        keepInView() {
+        /* after the visible map area changes, or a pan or zoom ends (focus may have moved on while it ran, and reveal()
+           judged that node mid-flight), a keyboard-focused node stays on screen; skip is the node the move was for */
+        keepInView(skip) {
             const a = document.activeElement;
-            if (a && a !== this.svgEl && this.svgEl.contains(a) && a.matches('.node:focus-visible')) this.reveal(d3.select(a).datum());
+            if (a && a !== this.svgEl && this.svgEl.contains(a) && a.matches('.node:focus-visible')) { const d = d3.select(a).datum(); if (d !== skip) this.reveal(d); }
             return this;
         }
-        /* the 769-1200px panel opened or closed over the map: an untouched view refits to the uncovered part,
-           a zoomed or panned one keeps the record (or the keyboard focus) visible */
+        /* the panel opened or closed: at 769-1200px (over the map) an untouched view refits to the uncovered part; there
+           and above 1200px (beside the map) a zoomed or panned one keeps the record (or the keyboard focus) visible */
         reframe(id) {
             if (!this.userZoomed) return this.fit(this.filterIds());
             const n = id ? this.byId.get(id) : null;
@@ -3159,12 +3188,14 @@ THIS SOFTWARE.
         focusOn(id) {
             const n = this.byId.get(id); if (!n) return this;
             const { h } = this.size();
-            const t = d3.zoomIdentity.translate(this.visibleW() / 2, (h + 40) / 2).scale(1.4).translate(-n.x, -n.y);
-            (reduced() ? this.svg : this.svg.transition().duration(650)).call(this.zoom.transform, t);
+            const t = d3.zoomIdentity.translate(this.visibleW(true) / 2, (h + 40) / 2).scale(1.4).translate(-n.x, -n.y);
+            (reduced() ? this.svg : this.svg.transition().duration(650).on('end.keep', () => this.keepInView(n))).call(this.zoom.transform, t);
             this.userZoomed = true;
             return this;
         }
-        zoomBy(k) { this.svg.transition().duration(reduced() ? 0 : 300).call(this.zoom.scaleBy, k); this.userZoomed = true; return this; }
+        /* about the middle of the map the panel leaves visible (v13 zoomed about the whole map's middle, which lies at or
+           under the 769-1200px panel's edge, so each + slid the visible part off to the left) */
+        zoomBy(k) { this.svg.transition().duration(reduced() ? 0 : 300).call(this.zoom.scaleBy, k, [this.visibleW() / 2, this.h / 2]); this.userZoomed = true; return this; }
         resetZoom() { this.userZoomed = false; return this.fit(this.filterIds()); }
         observe() {
             this.lastSize = [this.w, this.h];
@@ -3179,11 +3210,15 @@ THIS SOFTWARE.
         }
         resized() {
             const { w, h } = this.size();
+            /* a zoomed or panned view stays where the user, reveal() or focusOn() left it: re-centring the reheated layout
+               slid every world by half the width change (200px times the zoom as the panel opens above 1200px), past the
+               panel or under the sidebar. setMode() and the next untouched resize refresh the centring forces */
+            if (this.userZoomed) return this.keepInView();
             if (this.mode !== 'cluster') this.sim.force('center', d3.forceCenter(w / 2, h / 2));
             this.gravity(w, h);
             if (this.mode === 'cluster') { const c = this.clusterCentres(w, h); this.sim.force('x', d3.forceX(n => (c[n.cluster] || { x: w / 2 }).x).strength(0.12)).force('y', d3.forceY(n => (c[n.cluster] || { y: h / 2 }).y).strength(0.12)); }
             if (!reduced()) this.sim.alpha(0.12).restart();
-            if (!this.userZoomed) this.fit(this.filterIds(), false); else this.keepInView();
+            this.fit(this.filterIds(), false);
         }
 
         /* flow particles: one rAF loop, delta-timed, seeded, paused when the
@@ -3299,9 +3334,13 @@ THIS SOFTWARE.
         init() { this.c = $('hud-canvas'); this.ctx = this.c.getContext('2d'); this.active = false; this.resize(); window.addEventListener('resize', debounce(() => this.resize(), 150)); },
         resize() { const dpr = Math.min(2, window.devicePixelRatio || 1); this.c.width = window.innerWidth * dpr; this.c.height = window.innerHeight * dpr; this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); if (this.active) this.render(); },
         toggle() { this.active = !this.active; this.c.classList.toggle('active', this.active); if (this.active) this.render(); },
+        /* the panel render() paints; reveal() counts a node under it as hidden (the canvas takes no pointer events,
+           so a hit test sees through it) */
+        box() { return { x: 10, y: window.innerHeight - 180, w: 280, h: 160 }; },
+        covers(x, y, pad = 0) { if (!this.active) return false; const b = this.box(); return x > b.x - pad && x < b.x + b.w + pad && y > b.y - pad && y < b.y + b.h + pad; },
         render() {
             if (!this.active) return;
-            const ctx = this.ctx, h = window.innerHeight, x = 10, y = h - 180, pw = 280, ph = 160;
+            const ctx = this.ctx, h = window.innerHeight, { x, y, w: pw, h: ph } = this.box();
             ctx.clearRect(0, 0, window.innerWidth, h);
             ctx.fillStyle = 'rgba(5, 5, 16, 0.88)'; ctx.beginPath(); ctx.roundRect(x, y, pw, ph, 12); ctx.fill();
             ctx.strokeStyle = 'rgba(0, 212, 255, 0.4)'; ctx.lineWidth = 1; ctx.stroke();
@@ -3637,7 +3676,7 @@ THIS SOFTWARE.
         syncOverlays();
         /* the activated control was re-rendered (panel) or hidden (drawer), or the panel now covers the page (phone) */
         if (fromPanel || fromDrawer || phone.matches) $('panel-close').focus({ preventScroll: true });
-        if (graph) { graph.select(id); if (locate) graph.focusOn(id); else if (state.mode === 'map' && overlayPanel()) graph.reframe(id); }
+        if (graph) { graph.select(id); if (locate) graph.focusOn(id); else if (state.mode === 'map' && !phone.matches && (overlayPanel() || graph.userZoomed)) graph.reframe(id); }
     }
     /* Overlays (v14): whatever is closed or covered leaves the tab order. v13 let Tab walk into the closed
        panel (scrolling the app 800px sideways), the off-canvas drawer, and content under an open drawer or
@@ -3648,8 +3687,32 @@ THIS SOFTWARE.
         panel.toggleAttribute('inert', !panelOpen || drawerOpen);
         sb.toggleAttribute('inert', narrow.matches ? !drawerOpen : sb.classList.contains('collapsed'));
         $('viz-container').toggleAttribute('inert', drawerOpen || (phone.matches && panelOpen));
-        panel.parentElement.classList.toggle('panel-open', panelOpen);
+        const app = panel.parentElement, list = $('list-view');
+        if (app.classList.contains('panel-open') !== panelOpen && !list.hidden) holdListRow(list);
+        app.classList.toggle('panel-open', panelOpen);
+        keepListRow();
     }
+    /* the list's rows re-wrap when the panel opens or closes beside it, at once at 769-1200px and during the 0.3s slide
+       above: the open record's row (else the focused or first visible one) keeps its place on screen. Chrome's scroll
+       anchoring keeps the top row instead, so a clicked row lower down slid away (at 769-1200px with its focus ring) */
+    let listHold = null;
+    function holdListRow(list) {
+        const lb = list.getBoundingClientRect(), seen = r => { const b = r.getBoundingClientRect(); return b.bottom > lb.top && b.top < Math.min(lb.bottom, innerHeight); };
+        const rows = [...list.querySelectorAll('.mission-row')], a = document.activeElement;
+        const row = rows.find(r => r.dataset.detail === state.selectedId && seen(r)) || (rows.includes(a) && seen(a) ? a : null) || rows.find(seen);
+        listHold = row ? { row, top: row.getBoundingClientRect().top, until: performance.now() + 700 } : null;
+    }
+    function keepListRow() {
+        const h = listHold, list = $('list-view');
+        if (!h) return;
+        if (!h.row.isConnected || list.hidden || performance.now() > h.until) { listHold = null; return; }
+        const dy = h.row.getBoundingClientRect().top - h.top;
+        if (Math.abs(dy) >= 0.5) list.scrollTop += dy;
+    }
+    /* the hold gives way to the user: focus that lands elsewhere in the list (the #list-search fallback, the skip
+       link, a Tab) scrolls itself into view, and a wheel, touch, press or key there scrolls the list as asked */
+    $('list-view').addEventListener('focusin', e => { if (listHold && e.target !== listHold.row) listHold = null; });
+    ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(t => $('list-view').addEventListener(t, () => { listHold = null; }, { passive: true }));
     /* focus returns to the opener only when it is usable and actually visible; otherwise to the map or list */
     function restoreFocus(el) {
         const usable = el && el.isConnected && typeof el.focus === 'function' && el.tabIndex >= 0 && !el.closest('[inert], [hidden], [aria-hidden="true"], dialog:not([open])');
@@ -3695,7 +3758,7 @@ THIS SOFTWARE.
         $('list-view').hidden = !list;
         ['galaxy-viz', 'zoom-controls', 'view-toggle', 'filter-pills', 'graph-hint'].forEach(id => $(id).toggleAttribute('hidden', list));
         $('skip-link').textContent = list ? 'Skip to the mission list' : 'Skip to the mission map';
-        if (list) $('list-view').style.paddingTop = ($('map-overlay-top').offsetHeight + 40) + 'px';
+        if (list) { const lv = $('list-view'); lv.style.paddingTop = lv.style.scrollPaddingTop = ($('map-overlay-top').offsetHeight + 40) + 'px'; }
         if (state.graphError) $('map-fallback').hidden = list;
         if (list) { renderList(); graph?.stopParticles(); } else { graph?.resized(); graph?.startParticles(); }
     }
@@ -3778,7 +3841,7 @@ THIS SOFTWARE.
         const linkCls = l => l.addedIn ? ' class="helper"' : '';
         const passing = checks.filter(c => c.ok).length;
         const N14 = META.newInV14, R14 = hubs.get(N14.resolved.hub), R14ms = missionsOfHub.get(R14.id) || [];
-        $('sources-body').innerHTML = `
+        $('sources-body').innerHTML = `<p class="sources-lede">${esc($('sources-meta').textContent)}</p>
             <h3>Preserved snapshots, clearly dated</h3>
             <p>This revision keeps every prior observation and adds three from one player report of ${esc(META.observations.onionAssignment)}: the ${esc(hubs.get(N14.hub).resource)} assignment (${esc(listJoin(N14.missions.map(id => missions.get(id).name)))}), the colonization of ${esc(R14.name)} (Official #${pad4(R14.officialId)}, PA #${R14.paId}) and the completion of ${esc(listJoin(N14.resolved.missions.map(id => missions.get(id).name)))}. A revision date is not a gameplay refresh.</p>
             <div class="source-card"><strong>Mission definitions · Sheet M · ${esc(CATALOG.meta.retrievedOn)}</strong><a href="${esc(CATALOG.meta.sheetUrl)}" target="_blank" rel="noopener noreferrer">${esc(CATALOG.meta.sheetTitle)} ↗</a><small>${CATALOG.missions.length} ordered missions. Position, name and requirement slots are canonical; the registry supplies planet identity; status, rewards and quantities are player annotations.</small></div>
@@ -3893,13 +3956,22 @@ THIS SOFTWARE.
             if (phone.matches && $('detail-panel').classList.contains('open')) closeDetail();
             (state.mode === 'list' ? $('list-search') : $('galaxy-viz')).focus();
         });
-        /* a focused pill scrolls fully into its strip, ring included: focus() leaves a half-visible pill where it is */
-        $('filter-pills').addEventListener('focusin', e => {
-            const pill = e.target.closest('.filter-pill'), s = e.currentTarget; if (!pill || s.scrollWidth <= s.clientWidth) return;
+        /* a pill reached by keyboard scrolls fully into its strip, ring included (focus() leaves a half-visible pill where it
+           is), and stays in view when the strip turns into one scrolling row (crossing 1200px) or narrows beside the panel.
+           A pressed pill scrolls in once the click is done: scrolling at mousedown moved it out from under the press */
+        const showPill = pill => {
+            const s = $('filter-pills'); if (!pill || s.scrollWidth <= s.clientWidth) return;
             const pr = pill.getBoundingClientRect(), sr = s.getBoundingClientRect(), room = 8;
             if (pr.right > sr.right - room) s.scrollLeft += pr.right - sr.right + room;
             else if (pr.left < sr.left + room) s.scrollLeft -= sr.left + room - pr.left;
-        });
+        };
+        const keyPill = () => { const a = document.activeElement; return a && a.matches('#filter-pills .filter-pill:focus-visible') ? a : null; };
+        $('filter-pills').addEventListener('focusin', () => showPill(keyPill()));
+        $('filter-pills').addEventListener('click', e => showPill(e.target.closest('.filter-pill')));
+        if (typeof ResizeObserver === 'function') {
+            new ResizeObserver(() => showPill(keyPill())).observe($('filter-pills'));
+            new ResizeObserver(keepListRow).observe($('list-view'));
+        }
         /* print (v14): the page-wide print map scales the on-screen view instead of cropping it at the paper edge */
         addEventListener('beforeprint', () => { if (graph && state.mode === 'map') graph.svg.attr('viewBox', `0 0 ${graph.w} ${graph.h}`).attr('preserveAspectRatio', 'xMidYMin meet'); });
         addEventListener('afterprint', () => { if (graph) graph.svg.attr('viewBox', null).attr('preserveAspectRatio', null); });
@@ -3946,7 +4018,7 @@ THIS SOFTWARE.
             }
             if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
             if (e.key === '/') { e.preventDefault(); openDialog('catalog-dialog', 'catalog-search'); }
-            else if (e.key === 'h' || e.key === 'H') HUD.toggle();
+            else if (e.key === 'h' || e.key === 'H') { HUD.toggle(); graph?.keepInView(); }
             else if (e.key === 't' || e.key === 'T') Ticker.toggle();
         });
         document.addEventListener('visibilitychange', () => { if (!graph) return; if (document.hidden) graph.stopParticles(); else if (state.mode === 'map') graph.startParticles(); });
