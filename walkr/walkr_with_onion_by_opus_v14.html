@@ -242,8 +242,8 @@
         .upg-art { width: 26px; height: 26px; flex: none; }
         .upg-art svg { width: 100%; height: 100%; display: block; }
         .upg-info { flex: 1; min-width: 0; }
-        .upg-name { display: block; font-size: 0.7rem; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .upg-pa { color: var(--text-muted); font-size: 0.62rem; margin-left: 0.25rem; }
+        .upg-name { display: block; font-size: 0.7rem; color: var(--text-primary); overflow-wrap: anywhere; }
+        .upg-pa { color: var(--text-muted); font-size: 0.62rem; margin-left: 0.25rem; white-space: nowrap; }
         .upg-bar { display: block; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.08); margin-top: 3px; overflow: hidden; }
         .upg-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, #fbbf24, #fde68a); }
         .upg-cost { font-size: 0.64rem; font-family: 'Orbitron', monospace; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
@@ -294,7 +294,7 @@
         .mission-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mission-primary); flex-shrink: 0; }
         .mission-dot.available { background: var(--resolved-primary); }
         .mission-dot.completed { background: var(--cyber-gold); }
-        .mission-name { font-size: 0.85rem; color: var(--text-secondary); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mission-name { font-size: 0.85rem; color: var(--text-secondary); flex: 1; min-width: 0; overflow-wrap: anywhere; }
         .mission-item.is-complete .mission-name { color: var(--text-muted); }
         .mission-cubes { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--cyber-gold); background: rgba(251, 191, 36, 0.1); padding: 0.15rem 0.4rem; border-radius: var(--radius-sm); flex-shrink: 0; }
 
@@ -485,6 +485,9 @@
         /* ---- dialogs ---- */
         dialog.atlas-dialog { background: rgba(10, 10, 26, 0.97); color: var(--text-primary); border: 1px solid var(--card-border); border-radius: var(--radius-xl); padding: 0; width: min(800px, 94vw); max-height: 86vh; margin: 7vh auto auto; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65); }
         dialog.atlas-dialog::backdrop { background: rgba(5, 5, 16, 0.72); backdrop-filter: blur(4px); }
+        dialog.atlas-dialog[open] { display: flex; flex-direction: column; overflow: hidden; }
+        dialog.atlas-dialog .dialog-head, dialog.atlas-dialog .dialog-tools { flex-shrink: 0; }
+        dialog.atlas-dialog .catalog-list, dialog.atlas-dialog .sources-body { flex: 0 1 auto; min-height: 0; }
         .dialog-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--card-border); background: linear-gradient(180deg, rgba(0, 212, 255, 0.06) 0%, transparent 100%); }
         .dialog-head .panel-close { position: static; flex-shrink: 0; }
         .dialog-title { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; letter-spacing: 1px; }
@@ -553,9 +556,16 @@
             .sidebar.collapsed { display: block; }
             .detail-panel { position: fixed; right: 0; top: var(--header-height); height: calc(100vh - var(--header-height)); height: calc(100dvh - var(--header-height)); margin-right: 0; }
             .header-stats { display: none; }
-            .filter-pills { flex-basis: 100%; max-width: none; margin-left: 0; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 0.3rem; scrollbar-width: none; }
+            .filter-pills { flex-basis: 100%; max-width: none; margin: -4px 0 0 -4px; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; padding: 4px 4px 0.3rem; scrollbar-width: none; }
             .filter-pills::-webkit-scrollbar { display: none; }
             .list-view { padding-top: 5.5rem; }
+        }
+        /* 769-1200px: the fixed 400px panel lies over the right of the map; while it is open, the map controls,
+           the hint and the list stay beside it (v13 left the zoom buttons and the last pills under it) */
+        @media (min-width: 769px) and (max-width: 1200px) {
+            .app-container.panel-open .map-overlay-top, .app-container.panel-open .zoom-controls { right: calc(var(--panel-width) + 1rem); }
+            .app-container.panel-open .graph-hint { max-width: calc(100% - var(--panel-width) - 3rem); }
+            .app-container.panel-open .list-view { right: var(--panel-width); }
         }
         @media (max-width: 768px) {
             :root { --header-height: 60px; --sidebar-width: min(360px, 88vw); --panel-width: 100%; }
@@ -592,12 +602,13 @@
             .viz-container:has(> .list-view:not([hidden])) { height: auto; overflow: visible; }
             .skip-link { display: none !important; }
             .mission-row, .catalog-row { break-inside: avoid; }
+            .list-view { --text-primary: #0f172a; --text-secondary: #334155; --text-muted: #475569; --mission-primary: #9a5b00; --resolved-primary: #006b80; --cyber-gold: #7a5a00; }
         }
     </style>
 </head>
 
 <body>
-    <a class="skip-link" href="#galaxy-viz">Skip to the mission map</a>
+    <a class="skip-link" id="skip-link" href="#galaxy-viz">Skip to the mission map</a>
     <div class="loading-overlay" id="loading-overlay">
         <div class="loading-ring"></div>
         <div class="loading-ring"></div>
@@ -2736,6 +2747,7 @@ THIS SOFTWARE.
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     const narrow = matchMedia('(max-width: 1200px)');
     const phone = matchMedia('(max-width: 768px)');   /* the detail panel is full-width here */
+    const overlayPanel = () => narrow.matches && !phone.matches;   /* 769-1200px: the panel lies over the right of the map */
     const reduced = () => motion.matches;
     const slug = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     const listJoin = a => a.length < 3 ? a.join(' and ') : a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1];
@@ -3037,15 +3049,40 @@ THIS SOFTWARE.
             if (reduced()) { this.sim.alpha(alpha); this.sim.stop(); this.sim.tick(240); this.positions(); if (!this.userZoomed) this.fit(this.filterIds(), false); }
             else this.sim.alpha(alpha).restart();
         }
-        /* keyboard focus never lands on an invisible node: pan (no zoom change) when it sits off-screen */
+        /* keyboard focus never lands on an invisible node: pan (no zoom change) when it sits off-screen, under the
+           map controls or under the 769-1200px panel, and bring it to the middle of what is left visible */
         reveal(d) {
             const t = d3.zoomTransform(this.svgEl), x = t.applyX(d.x), y = t.applyY(d.y), pad = d.radius * t.k + 24;
             const overlay = document.getElementById('map-overlay-top'), top = overlay && !overlay.hidden ? overlay.offsetHeight + 12 : 0;
-            if (x >= pad && x <= this.w - pad && y >= top + pad && y <= this.h - pad) return this;
-            (reduced() ? this.svg : this.svg.transition().duration(300)).call(this.zoom.translateTo, d.x, d.y);
+            const vw = this.visibleW(), box = this.svgEl.getBoundingClientRect();
+            const inside = x >= pad && x <= vw - pad && y >= top + pad && y <= this.h - pad;
+            const hit = inside ? document.elementFromPoint(box.left + x, box.top + y) : null;
+            if (hit && this.svgEl.contains(hit)) return this;
+            (reduced() ? this.svg : this.svg.transition().duration(300)).call(this.zoom.translateTo, d.x, d.y, [vw / 2, (top + this.h) / 2]);
             this.userZoomed = true;
             return this;
         }
+        /* map width the detail panel leaves visible: it lies over the map at 769-1200px, sits beside it above, covers it on phones */
+        visibleW() {
+            const p = document.getElementById('detail-panel');
+            if (!p || !p.classList.contains('open') || getComputedStyle(p).position !== 'fixed') return this.w;
+            const edge = document.documentElement.clientWidth - p.offsetWidth - this.svgEl.getBoundingClientRect().left;
+            return edge >= 240 && edge < this.w ? Math.round(edge) : this.w;
+        }
+        /* after the visible map area changes, a keyboard-focused node stays on screen */
+        keepInView() {
+            const a = document.activeElement;
+            if (a && a !== this.svgEl && this.svgEl.contains(a) && a.matches('.node:focus-visible')) this.reveal(d3.select(a).datum());
+            return this;
+        }
+        /* the 769-1200px panel opened or closed over the map: an untouched view refits to the uncovered part,
+           a zoomed or panned one keeps the record (or the keyboard focus) visible */
+        reframe(id) {
+            if (!this.userZoomed) return this.fit(this.filterIds());
+            const n = id ? this.byId.get(id) : null;
+            return n ? this.reveal(n) : this.keepInView();
+        }
+        focusNode(id) { const el = this.nodeSel.filter(d => d.id === id).node(); if (el && el.tabIndex >= 0) el.focus({ preventScroll: true }); return this; }
         gravity(w, h) {
             if (this.mode === 'force') this.sim.force('x', d3.forceX(w / 2).strength(0.08)).force('y', d3.forceY(h / 2).strength(0.08));
             return this;
@@ -3106,23 +3143,23 @@ THIS SOFTWARE.
             });
         }
         fit(ids, animate = true) {
-            const { w, h } = this.size();
+            const { h } = this.size(), vw = this.visibleW();
             const ns = this.nodes.filter(n => !ids || ids.has(n.id));
             if (!ns.length) return this;
             let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
             ns.forEach(n => { x0 = Math.min(x0, n.x - 70); x1 = Math.max(x1, n.x + 70); y0 = Math.min(y0, n.y - n.radius - 12); y1 = Math.max(y1, n.y + n.radius + 44); });
             const overlay = document.getElementById('map-overlay-top');
             const top = (overlay && !overlay.hidden ? overlay.offsetHeight + 24 : 0) + 20, bottom = 64, pad = 20;
-            const k = Math.max(0.12, Math.min(1.8, (w - pad * 2) / Math.max(1, x1 - x0), (h - top - bottom - pad * 2) / Math.max(1, y1 - y0)));
-            const t = d3.zoomIdentity.translate(w / 2 - (x0 + x1) / 2 * k, top + (h - top - bottom) / 2 - (y0 + y1) / 2 * k).scale(k);
+            const k = Math.max(0.12, Math.min(1.8, (vw - pad * 2) / Math.max(1, x1 - x0), (h - top - bottom - pad * 2) / Math.max(1, y1 - y0)));
+            const t = d3.zoomIdentity.translate(vw / 2 - (x0 + x1) / 2 * k, top + (h - top - bottom) / 2 - (y0 + y1) / 2 * k).scale(k);
             (animate && !reduced() ? this.svg.transition().duration(650) : this.svg).call(this.zoom.transform, t);
             this.userZoomed = false;
             return this;
         }
         focusOn(id) {
             const n = this.byId.get(id); if (!n) return this;
-            const { w, h } = this.size();
-            const t = d3.zoomIdentity.translate(w / 2, (h + 40) / 2).scale(1.4).translate(-n.x, -n.y);
+            const { h } = this.size();
+            const t = d3.zoomIdentity.translate(this.visibleW() / 2, (h + 40) / 2).scale(1.4).translate(-n.x, -n.y);
             (reduced() ? this.svg : this.svg.transition().duration(650)).call(this.zoom.transform, t);
             this.userZoomed = true;
             return this;
@@ -3146,7 +3183,7 @@ THIS SOFTWARE.
             this.gravity(w, h);
             if (this.mode === 'cluster') { const c = this.clusterCentres(w, h); this.sim.force('x', d3.forceX(n => (c[n.cluster] || { x: w / 2 }).x).strength(0.12)).force('y', d3.forceY(n => (c[n.cluster] || { y: h / 2 }).y).strength(0.12)); }
             if (!reduced()) this.sim.alpha(0.12).restart();
-            if (!this.userZoomed) this.fit(this.filterIds(), false);
+            if (!this.userZoomed) this.fit(this.filterIds(), false); else this.keepInView();
         }
 
         /* flow particles: one rAF loop, delta-timed, seeded, paused when the
@@ -3309,7 +3346,7 @@ THIS SOFTWARE.
             ctx.clearRect(0, 0, w, h); ctx.fillStyle = 'rgba(5,5,16,0.92)'; ctx.fillRect(0, 0, w, h);
             ctx.strokeStyle = 'rgba(0,212,255,0.3)'; ctx.beginPath(); ctx.moveTo(0, h - 0.5); ctx.lineTo(w, h - 0.5); ctx.stroke();
             ctx.font = '12px JetBrains Mono, monospace'; ctx.textBaseline = 'middle'; ctx.textAlign = 'left'; ctx.fillStyle = '#94a3b8';
-            if (this.offset < -this.textW) this.offset = w;
+            if (this.offset < -(this.textW + 50)) this.offset += this.textW + 50;
             ctx.fillText(this.text, this.offset, h / 2); ctx.fillText(this.text, this.offset + this.textW + 50, h / 2);
         }
     };
@@ -3600,7 +3637,7 @@ THIS SOFTWARE.
         syncOverlays();
         /* the activated control was re-rendered (panel) or hidden (drawer), or the panel now covers the page (phone) */
         if (fromPanel || fromDrawer || phone.matches) $('panel-close').focus({ preventScroll: true });
-        if (graph) { graph.select(id); if (locate) graph.focusOn(id); }
+        if (graph) { graph.select(id); if (locate) graph.focusOn(id); else if (state.mode === 'map' && overlayPanel()) graph.reframe(id); }
     }
     /* Overlays (v14): whatever is closed or covered leaves the tab order. v13 let Tab walk into the closed
        panel (scrolling the app 800px sideways), the off-canvas drawer, and content under an open drawer or
@@ -3611,6 +3648,7 @@ THIS SOFTWARE.
         panel.toggleAttribute('inert', !panelOpen || drawerOpen);
         sb.toggleAttribute('inert', narrow.matches ? !drawerOpen : sb.classList.contains('collapsed'));
         $('viz-container').toggleAttribute('inert', drawerOpen || (phone.matches && panelOpen));
+        panel.parentElement.classList.toggle('panel-open', panelOpen);
     }
     /* focus returns to the opener only when it is usable and actually visible; otherwise to the map or list */
     function restoreFocus(el) {
@@ -3621,13 +3659,13 @@ THIS SOFTWARE.
             if (hit && (hit === el || el.contains(hit))) { el.focus({ preventScroll: true }); return; }
         }
         const fallback = state.mode === 'list' ? $('list-search') : $('galaxy-viz');
-        if (!fallback.closest('[inert], [hidden]')) fallback.focus({ preventScroll: true });
+        if (!fallback.closest('[inert], [hidden]')) fallback.focus({ preventScroll: state.mode !== 'list' });
     }
     let detailOpener = null;
     function closeDetail() {
         const hadFocus = $('detail-panel').contains(document.activeElement), back = detailOpener;
         $('detail-panel').classList.remove('open'); syncOverlays();
-        state.selectedId = null; syncSidebarSelection(null); if (graph) graph.select(null);
+        state.selectedId = null; syncSidebarSelection(null); if (graph) { graph.select(null); if (state.mode === 'map' && overlayPanel()) graph.reframe(null); }
         detailOpener = null;
         if (hadFocus) restoreFocus(back);
     }
@@ -3656,6 +3694,7 @@ THIS SOFTWARE.
         const list = state.mode === 'list';
         $('list-view').hidden = !list;
         ['galaxy-viz', 'zoom-controls', 'view-toggle', 'filter-pills', 'graph-hint'].forEach(id => $(id).toggleAttribute('hidden', list));
+        $('skip-link').textContent = list ? 'Skip to the mission list' : 'Skip to the mission map';
         if (list) $('list-view').style.paddingTop = ($('map-overlay-top').offsetHeight + 40) + 'px';
         if (state.graphError) $('map-fallback').hidden = list;
         if (list) { renderList(); graph?.stopParticles(); } else { graph?.resized(); graph?.startParticles(); }
@@ -3809,7 +3848,18 @@ THIS SOFTWARE.
         qsa('.view-btn').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
         if (graph) graph.setMode(view);
     }
-    function locate(id) { if (state.mode !== 'map') showMode('map'); if (narrow.matches) sidebar(false); if (graph) { graph.select(id); graph.focusOn(id); } }
+    /* phones: the full-width panel would hide what Locate or a sector filter does to the map, so it closes and focus
+       goes to the map (v13 changed the map behind the panel, and closing it then dropped the located world's ring) */
+    function clearPhonePanel() {
+        if (!phone.matches || !$('detail-panel').classList.contains('open')) return false;
+        detailOpener = null; closeDetail(); return true;
+    }
+    function locate(id) {
+        if (state.mode !== 'map') showMode('map');
+        if (narrow.matches) sidebar(false);
+        if (clearPhonePanel()) graph?.focusNode(id);
+        if (graph) { graph.select(id); graph.focusOn(id); }
+    }
 
     function bindControls() {
         $('catalog-toggle').addEventListener('click', () => openDialog('catalog-dialog', 'catalog-search'));
@@ -3829,11 +3879,30 @@ THIS SOFTWARE.
         $('sidebar-toggle').addEventListener('click', () => sidebar(!sidebarOpen()));
         $('sidebar-scrim').addEventListener('click', () => { sidebar(false); $('sidebar-toggle').focus(); });
         narrow.addEventListener('change', () => { const had = $('sidebar').contains(document.activeElement); sidebar(!narrow.matches); if (had && narrow.matches) $('sidebar-toggle').focus({ preventScroll: true }); });
-        phone.addEventListener('change', syncOverlays);
+        phone.addEventListener('change', () => {
+            const had = $('viz-container').contains(document.activeElement); syncOverlays();
+            if (had && $('viz-container').hasAttribute('inert') && $('detail-panel').classList.contains('open')) $('panel-close').focus({ preventScroll: true });
+        });
         $('reset-view').addEventListener('click', () => { closeDetail(); setFilter('all'); if (graph) graph.resetZoom(); toast('View reset: all sectors, selection cleared.'); });
         $('fullscreen-toggle').addEventListener('click', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); });
         $('panel-close').addEventListener('click', closeDetail);
         $('fallback-list').addEventListener('click', () => showMode('list'));
+        $('skip-link').addEventListener('click', e => {
+            e.preventDefault();
+            if (narrow.matches && sidebarOpen()) sidebar(false);
+            if (phone.matches && $('detail-panel').classList.contains('open')) closeDetail();
+            (state.mode === 'list' ? $('list-search') : $('galaxy-viz')).focus();
+        });
+        /* a focused pill scrolls fully into its strip, ring included: focus() leaves a half-visible pill where it is */
+        $('filter-pills').addEventListener('focusin', e => {
+            const pill = e.target.closest('.filter-pill'), s = e.currentTarget; if (!pill || s.scrollWidth <= s.clientWidth) return;
+            const pr = pill.getBoundingClientRect(), sr = s.getBoundingClientRect(), room = 8;
+            if (pr.right > sr.right - room) s.scrollLeft += pr.right - sr.right + room;
+            else if (pr.left < sr.left + room) s.scrollLeft -= sr.left + room - pr.left;
+        });
+        /* print (v14): the page-wide print map scales the on-screen view instead of cropping it at the paper edge */
+        addEventListener('beforeprint', () => { if (graph && state.mode === 'map') graph.svg.attr('viewBox', `0 0 ${graph.w} ${graph.h}`).attr('preserveAspectRatio', 'xMidYMin meet'); });
+        addEventListener('afterprint', () => { if (graph) graph.svg.attr('viewBox', null).attr('preserveAspectRatio', null); });
         $('zoom-in').addEventListener('click', () => graph?.zoomBy(1.3));
         $('zoom-out').addEventListener('click', () => graph?.zoomBy(1 / 1.3));
         $('zoom-fit').addEventListener('click', () => graph?.fit(graph.filterIds()));
@@ -3847,9 +3916,16 @@ THIS SOFTWARE.
         document.addEventListener('click', e => {
             const b = e.target.closest('button'); if (!b) return;
             if (b.dataset.filter !== undefined && b.classList.contains('filter-pill') && b.dataset.filter) { setFilter(b.dataset.filter); return; }
-            if (b.dataset.filterSector) { setFilter(b.dataset.filterSector); if (state.mode !== 'map') showMode('map'); return; }
+            if (b.dataset.filterSector) { setFilter(b.dataset.filterSector); if (state.mode !== 'map') showMode('map'); clearPhonePanel(); return; }
             if (b.dataset.locate) { locate(b.dataset.locate); return; }
-            if (b.dataset.detail) { const dlg = b.closest('dialog'); openDetail(b.dataset.detail, { locate: state.mode === 'map' }); if (dlg) { dlg.close(); detailOpener = document.activeElement; } return; }
+            if (b.dataset.detail) {
+                const dlg = b.closest('dialog'); if (dlg) dlg.close();
+                openDetail(b.dataset.detail, { locate: state.mode === 'map' });
+                /* the picked row left with the dialog: focus moves into the panel, as when the opener is re-rendered or hidden
+                   (staying on a map node would also keep its hover emphasis over the located record) */
+                if (dlg) $('panel-close').focus({ preventScroll: true });
+                return;
+            }
             if (b.dataset.world) { openDetail(b.dataset.world, { locate: true }); return; }
             if (b.dataset.cluster) {
                 const list = $(`missions-${b.dataset.cluster}`); const open = !list.classList.contains('expanded');
