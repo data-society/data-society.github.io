@@ -129,8 +129,8 @@
         .skip-link { position: fixed; top: -80px; left: 12px; z-index: 10000; padding: 0.6rem 1rem; background: var(--cyber-blue); color: var(--space-void); border-radius: var(--radius-md); font-weight: 700; text-decoration: none; }
         .skip-link:focus { top: 12px; }
         :focus-visible { outline: 2px solid var(--cyber-blue); outline-offset: 2px; }
-        /* a row that Tab scrolls into its list keeps room for that ring */
-        .queue-row, .upgrade-row, .cluster-header, .mission-item, .mission-row, .connected-item, button.catalog-row { scroll-margin-block: 6px; }
+        /* a row or link that Tab scrolls into its list (or into the Sources body) keeps room for that ring */
+        .queue-row, .upgrade-row, .cluster-header, .mission-item, .mission-row, .connected-item, button.catalog-row, .sources-body a, .sources-body summary { scroll-margin-block: 6px; }
 
         /* ---- loading overlay ---- */
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--space-void); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease; }
@@ -158,6 +158,10 @@
         #tooltip-canvas.visible { display: block; }
         #ticker-canvas { position: fixed; top: var(--header-height); left: 0; width: 100%; height: 30px; z-index: 99; pointer-events: none; display: none; }
         #ticker-canvas.active { display: block; }
+        /* while the ticker runs the app starts below its 30px band (it painted over the panel's close button, the
+           sidebar title and the phone toolbar); screen only, so print keeps its own layout */
+        @media screen { body.ticker-on .app-container { padding-top: calc(var(--header-height) + 30px); } body.ticker-on .sidebar-scrim { top: calc(var(--header-height) + 30px); } }
+        @media screen and (max-width: 1200px) { body.ticker-on .sidebar, body.ticker-on .detail-panel { top: calc(var(--header-height) + 30px); height: calc(100vh - var(--header-height) - 30px); height: calc(100dvh - var(--header-height) - 30px); } }
         @media (prefers-reduced-motion: reduce) {
             #particle-ring-canvas { display: none; }
             body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, rgba(168, 85, 247, 0.05) 30%, transparent 70%); z-index: 0; pointer-events: none; }
@@ -574,11 +578,19 @@
             .app-container.panel-open .atlas-badge { display: none; }
             .app-container.panel-open .list-view { right: var(--panel-width); }
         }
-        /* 1201-1320px with the sidebar and the panel both open, the map is narrower than the badge plus the zoom buttons */
-        @media (min-width: 1201px) and (max-width: 1320px) { .app-container.panel-open > .sidebar:not(.collapsed) ~ .viz-container .atlas-badge { display: none; } }
-        /* short screens (landscape phones): the zoom column rose into the top bar, so a tap on + applied a sector
-           filter; the buttons sit in a row and the hint (already hidden on phones) gives way */
-        @media (max-height: 500px) { .zoom-controls { flex-direction: row; } .graph-hint { display: none; } }
+        /* 1201-1320px with the sidebar and the panel both open, the map is narrower than the badge plus the zoom buttons
+           (up to 1480px on short screens, where the four buttons sit in a row level with the badge) */
+        @media (min-width: 1201px) and (max-width: 1320px), (min-width: 1201px) and (max-width: 1480px) and (max-height: 500px) { .app-container.panel-open > .sidebar:not(.collapsed) ~ .viz-container .atlas-badge { display: none; } }
+        /* short screens (landscape phones, short windows): the zoom column rose into the top bar, so a tap on + applied
+           a sector filter. The buttons sit in a row; the toolbar takes the phone sizing, so it stays on one row beside
+           the 769-1200px panel and the row clears the pills; the hint gives way where the row moves beside the panel */
+        @media (max-height: 500px) { .zoom-controls { flex-direction: row; } .mode-btn, .view-btn { padding: 0.45rem 0.7rem; font-size: 0.78rem; } .app-container.panel-open .graph-hint { display: none; } }
+        /* landscape phones hide the hint as portrait phones do; below 410px it would run under the wrapped pill strip */
+        @media (max-height: 410px), (max-height: 500px) and (pointer: coarse) { .graph-hint { display: none; } }
+        /* placeZoom(): where the zoom column would still rise into the top bar the buttons form a row, and the badge
+           and the hint step aside wherever they would meet the buttons */
+        .viz-container.zoom-row .zoom-controls { flex-direction: row; }
+        .viz-container.zoom-badge-off .atlas-badge, .viz-container.zoom-hint-off .graph-hint { display: none; }
         @media (max-width: 768px) {
             :root { --header-height: 60px; --sidebar-width: min(360px, 88vw); --panel-width: 100%; }
             header { padding: 0 0.75rem; gap: 0.5rem; }
@@ -3032,10 +3044,15 @@ THIS SOFTWARE.
 
             this.zoom = d3.zoom().scaleExtent([0.12, 5]).on('zoom', e => { this.g.attr('transform', e.transform); if (e.sourceEvent) this.userZoomed = true; });
             svg.call(this.zoom).on('dblclick.zoom', null);
+            /* +/−, 0 and the arrows work on the map frame and on a focused world (Enter and Space stay the world's); with
+               Ctrl, Cmd or Alt they stay the browser's (page zoom, history). From a world, + and − zoom about it */
             svg.on('keydown', e => {
-                if (e.target !== this.svgEl) return;
-                if (e.key === '+' || e.key === '=') { e.preventDefault(); this.zoomBy(1.25); }
-                else if (e.key === '-' || e.key === '_') { e.preventDefault(); this.zoomBy(0.8); }
+                if (e.ctrlKey || e.metaKey || e.altKey) return;
+                const at = e.target === this.svgEl ? null : e.target.closest?.('.node');
+                if (e.target !== this.svgEl && !at) return;
+                const p = at && (t => { const d = d3.select(at).datum(); return [t.applyX(d.x), t.applyY(d.y)]; })(d3.zoomTransform(this.svgEl));
+                if (e.key === '+' || e.key === '=') { e.preventDefault(); this.zoomBy(1.25, p); }
+                else if (e.key === '-' || e.key === '_') { e.preventDefault(); this.zoomBy(0.8, p); }
                 else if (e.key === '0') { e.preventDefault(); this.fit(this.filterIds()); }
                 else if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
                     e.preventDefault();
@@ -3043,6 +3060,7 @@ THIS SOFTWARE.
                     const dx = e.key === 'ArrowLeft' ? 60 : e.key === 'ArrowRight' ? -60 : 0;
                     const dy = e.key === 'ArrowUp' ? 60 : e.key === 'ArrowDown' ? -60 : 0;
                     this.svg.call(this.zoom.translateBy, dx / t.k, dy / t.k);
+                    this.userZoomed = true;
                 }
             });
         }
@@ -3083,7 +3101,21 @@ THIS SOFTWARE.
             const inside = x >= pad && x <= vw - pad && y >= top + pad && y <= this.h - pad;
             const hit = inside ? document.elementFromPoint(box.left + x, box.top + y) : null;
             if (hit && this.svgEl.contains(hit) && !HUD.covers(box.left + x, box.top + y, pad)) return this;
-            (reduced() ? this.svg : this.svg.transition().duration(300).on('end.keep', () => this.keepInView(d))).call(this.zoom.translateTo, d.x, d.y, [vw / 2, (top + this.h) / 2]);
+            /* aim at the middle of what is left visible or, where the HUD or the zoom buttons lie there (short windows,
+               the 769-1200px panel open, landscape phones), at the nearest point clear of both */
+            const zc = document.getElementById('zoom-controls').getBoundingClientRect(), cx = vw / 2, cy = (top + this.h) / 2;
+            const clear = (px, py) => { const X = box.left + px, Y = box.top + py; return !HUD.covers(X, Y, pad) && !(zc.width && X > zc.left - pad && X < zc.right + pad && Y > zc.top - pad && Y < zc.bottom + pad); };
+            let ax = cx, ay = cy;
+            if (!clear(cx, cy)) {
+                let best = Infinity;
+                for (let i = 0; i <= 8; i++) for (let j = 0; j <= 8; j++) {
+                    const px = pad + (vw - 2 * pad) * i / 8, py = top + pad + (this.h - top - 2 * pad) * j / 8, dist = Math.hypot(px - cx, py - cy);
+                    if (dist < best && clear(px, py)) { best = dist; ax = px; ay = py; }
+                }
+            }
+            /* the end also re-checks this node when the visible width changed meanwhile (Enter mid-pan opened the
+               769-1200px panel), else the pan would finish on the panel's edge */
+            (reduced() ? this.svg : this.svg.transition().duration(300).on('end.keep', () => this.keepInView(this.visibleW(true) === vw ? d : null))).call(this.zoom.translateTo, d.x, d.y, [ax, ay]);
             this.userZoomed = true;
             return this;
         }
@@ -3159,7 +3191,10 @@ THIS SOFTWARE.
         emphasize() {
             const active = (this.hoverId && this.byId.has(this.hoverId)) ? this.hoverId : this.selectedId;
             const near = active ? this.neighbors.get(active) : null;
-            const vis = this.visible;
+            /* the open record (and a world that holds keyboard focus) stays lit and reachable even outside the sector
+               filter: Locate or a pick from another sector centred a 12% ghost, aria-hidden and out of the Tab order */
+            const f = this.svgEl.querySelector('.node:focus'), extra = [this.selectedId, f && d3.select(f).datum().id].filter(id => id && !this.visible.has(id));
+            const vis = extra.length ? new Set([...this.visible, ...extra]) : this.visible;
             this.nodeSel.style('opacity', d => { const base = vis.has(d.id) ? 1 : 0.12; return near && !near.has(d.id) ? base * 0.3 : base; })
                 .attr('aria-hidden', d => vis.has(d.id) ? null : 'true')
                 .attr('tabindex', d => vis.has(d.id) ? 0 : -1);
@@ -3188,14 +3223,15 @@ THIS SOFTWARE.
         focusOn(id) {
             const n = this.byId.get(id); if (!n) return this;
             const { h } = this.size();
-            const t = d3.zoomIdentity.translate(this.visibleW(true) / 2, (h + 40) / 2).scale(1.4).translate(-n.x, -n.y);
-            (reduced() ? this.svg : this.svg.transition().duration(650).on('end.keep', () => this.keepInView(n))).call(this.zoom.transform, t);
+            const vw = this.visibleW(true), t = d3.zoomIdentity.translate(vw / 2, (h + 40) / 2).scale(1.4).translate(-n.x, -n.y);
+            (reduced() ? this.svg : this.svg.transition().duration(650).on('end.keep', () => this.keepInView(this.visibleW(true) === vw ? n : null))).call(this.zoom.transform, t);
             this.userZoomed = true;
             return this;
         }
-        /* about the middle of the map the panel leaves visible (v13 zoomed about the whole map's middle, which lies at or
-           under the 769-1200px panel's edge, so each + slid the visible part off to the left) */
-        zoomBy(k) { this.svg.transition().duration(reduced() ? 0 : 300).call(this.zoom.scaleBy, k, [this.visibleW() / 2, this.h / 2]); this.userZoomed = true; return this; }
+        /* about p (a focused world, for + and − pressed on it) or the middle of the map the panel leaves visible (v13
+           zoomed about the whole map's middle, which lies at or under the 769-1200px panel's edge, so each + slid the
+           visible part off to the left) */
+        zoomBy(k, p) { this.svg.transition().duration(reduced() ? 0 : 300).call(this.zoom.scaleBy, k, p || [this.visibleW() / 2, this.h / 2]); this.userZoomed = true; return this; }
         resetZoom() { this.userZoomed = false; return this.fit(this.filterIds()); }
         observe() {
             this.lastSize = [this.w, this.h];
@@ -3373,7 +3409,7 @@ THIS SOFTWARE.
         },
         resize() { const dpr = Math.min(2, window.devicePixelRatio || 1); this.c.width = window.innerWidth * dpr; this.c.height = 30 * dpr; this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); },
         measure() { this.ctx.font = '12px JetBrains Mono, monospace'; this.textW = this.ctx.measureText(this.text).width || window.innerWidth; },
-        toggle() { this.active = !this.active; this.c.classList.toggle('active', this.active); if (this.active) { this.last = 0; this.raf = requestAnimationFrame(t => this.animate(t)); } else if (this.raf) { cancelAnimationFrame(this.raf); this.raf = null; } },
+        toggle() { this.active = !this.active; this.c.classList.toggle('active', this.active); document.body.classList.toggle('ticker-on', this.active); if (this.active) { this.last = 0; this.raf = requestAnimationFrame(t => this.animate(t)); } else if (this.raf) { cancelAnimationFrame(this.raf); this.raf = null; } },
         animate(now) {
             if (!this.active) return;
             const dt = this.last ? Math.min(0.1, (now - this.last) / 1000) : 0.016; this.last = now;
@@ -3477,7 +3513,7 @@ THIS SOFTWARE.
             ['completed', 'claimed', D.cubesClaimed, 'Cubes Claimed', 'Show completed missions']
         ];
         $('header-stats').innerHTML = tiles.map(([st, cls, v, label, aria]) =>
-            `<button class="stat-item ${cls}" data-list-status="${st}" aria-label="${esc(aria)}: ${v}"><div class="stat-value">${v}</div><div class="stat-label">${label}</div></button>`).join('');
+            `<button class="stat-item ${cls}" data-list-status="${st}" aria-label="${v} ${esc(label)}: ${esc(aria.toLowerCase())}"><div class="stat-value">${v}</div><div class="stat-label">${label}</div></button>`).join('');
     }
 
     function renderSidebar() {
@@ -3710,9 +3746,33 @@ THIS SOFTWARE.
         if (Math.abs(dy) >= 0.5) list.scrollTop += dy;
     }
     /* the hold gives way to the user: focus that lands elsewhere in the list (the #list-search fallback, the skip
-       link, a Tab) scrolls itself into view, and a wheel, touch, press or key there scrolls the list as asked */
+       link, a Tab) scrolls itself into view, and a wheel, touch, scrollbar press or scrolling key there scrolls the
+       list as asked. A primary press on a row (the second click of a double-click, or another row) scrolls nothing:
+       the hold moves to that row, which stays under the pointer while the >1200px slide re-wraps the rows */
     $('list-view').addEventListener('focusin', e => { if (listHold && e.target !== listHold.row) listHold = null; });
-    ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(t => $('list-view').addEventListener(t, () => { listHold = null; }, { passive: true }));
+    ['wheel', 'touchstart'].forEach(t => $('list-view').addEventListener(t, () => { listHold = null; }, { passive: true }));
+    $('list-view').addEventListener('pointerdown', e => {
+        if (!listHold) return;
+        const row = e.button === 0 && e.target.closest('.mission-row');
+        if (!row) listHold = null;
+        else if (row !== listHold.row) { listHold.row = row; listHold.top = row.getBoundingClientRect().top; }
+    }, { passive: true });
+    $('list-view').addEventListener('keydown', e => { if (listHold && (/^(Arrow|Page|Home$|End$|Tab$)/.test(e.key) || (e.key === ' ' && !e.target.closest('button')))) listHold = null; }, { passive: true });
+    /* the zoom buttons stack at the map's bottom right. Where that column would rise into the top bar (above 1200px
+       with the sidebar and the panel both open, the narrow map's pill strip wraps to several rows) they form a row,
+       and the shortcut badge and the hint step aside wherever they would meet the buttons (a click on + applied a
+       sector filter there). It runs when the map or the top bar changes size, on mode switches and on filters */
+    function placeZoom() {
+        const vz = $('viz-container'), zc = $('zoom-controls'), ov = $('map-overlay-top');
+        vz.classList.remove('zoom-row', 'zoom-badge-off', 'zoom-hint-off');
+        if (zc.hidden || !zc.offsetParent) return;
+        const R = e => e.getBoundingClientRect(), meet = (a, b) => a.left < b.right + 4 && b.left < a.right + 4 && a.top < b.bottom + 4 && b.top < a.bottom + 4;
+        if (!ov.hidden && R(zc).top < R(ov).bottom + 8) vz.classList.add('zoom-row');
+        const z = R(zc), badge = vz.querySelector('.atlas-badge'), hint = $('graph-hint');
+        if (badge && badge.offsetParent && meet(z, R(badge))) vz.classList.add('zoom-badge-off');
+        if (hint.offsetParent && meet(z, R(hint))) vz.classList.add('zoom-hint-off');
+    }
+    if (typeof ResizeObserver === 'function') { const zro = new ResizeObserver(() => placeZoom()); zro.observe($('viz-container')); zro.observe($('map-overlay-top')); }
     /* focus returns to the opener only when it is usable and actually visible; otherwise to the map or list */
     function restoreFocus(el) {
         const usable = el && el.isConnected && typeof el.focus === 'function' && el.tabIndex >= 0 && !el.closest('[inert], [hidden], [aria-hidden="true"], dialog:not([open])');
@@ -3757,6 +3817,7 @@ THIS SOFTWARE.
         const list = state.mode === 'list';
         $('list-view').hidden = !list;
         ['galaxy-viz', 'zoom-controls', 'view-toggle', 'filter-pills', 'graph-hint'].forEach(id => $(id).toggleAttribute('hidden', list));
+        placeZoom();
         $('skip-link').textContent = list ? 'Skip to the mission list' : 'Skip to the mission map';
         if (list) { const lv = $('list-view'); lv.style.paddingTop = lv.style.scrollPaddingTop = ($('map-overlay-top').offsetHeight + 40) + 'px'; }
         if (state.graphError) $('map-fallback').hidden = list;
@@ -3892,7 +3953,16 @@ THIS SOFTWARE.
             sb.classList.remove('collapsed'); sb.classList.toggle('open', open); $('sidebar-scrim').hidden = !open;
             btn.setAttribute('aria-expanded', String(open));
             syncOverlays();
-            if (open) sb.querySelector('button, a')?.focus();
+            /* keep the place the user scrolled to: focus the first control already in view with room for its ring
+               (focusing the first link scrolled the drawer back to the top). With none in view (a short screen left
+               on the summary text), the next control below the top edge, scrolled just into view */
+            if (open) {
+                const sr = sb.getBoundingClientRect(), end = sr.top + sb.clientHeight;
+                const all = [...sb.querySelectorAll('button, a')].filter(el => el.getBoundingClientRect().height);
+                const seen = all.find(el => { const r = el.getBoundingClientRect(); return r.top >= sr.top + 6 && r.bottom <= end - 6; });
+                if (seen) seen.focus({ preventScroll: true });
+                else (all.find(el => el.getBoundingClientRect().bottom > sr.top) || all[0])?.focus();
+            }
         } else {
             sb.classList.remove('open'); $('sidebar-scrim').hidden = true;
             sb.classList.toggle('collapsed', !open); btn.setAttribute('aria-expanded', String(open));
@@ -3905,6 +3975,7 @@ THIS SOFTWARE.
         qsa('.filter-pill[data-filter]').forEach(p => p.setAttribute('aria-pressed', String(p.dataset.filter === state.filter)));
         $('graph-hint').textContent = state.filter === 'all' ? 'Select a world or mission to follow its resources · drag to pan · scroll to zoom' : `${clusterLabel(state.filter)} sector in focus — shared suppliers stay lit · press 0 to refit`;
         if (graph) graph.setFilter(state.filter);
+        placeZoom();
     }
     function setView(view) {
         state.view = view;
@@ -3920,8 +3991,9 @@ THIS SOFTWARE.
     function locate(id) {
         if (state.mode !== 'map') showMode('map');
         if (narrow.matches) sidebar(false);
-        if (clearPhonePanel()) graph?.focusNode(id);
-        if (graph) { graph.select(id); graph.focusOn(id); }
+        /* select first, so a world the sector filter dims is lit and focusable when the phone path focuses it */
+        const closed = clearPhonePanel();
+        if (graph) { graph.select(id); if (closed) graph.focusNode(id); graph.focusOn(id); }
     }
 
     function bindControls() {
@@ -3946,7 +4018,13 @@ THIS SOFTWARE.
             const had = $('viz-container').contains(document.activeElement); syncOverlays();
             if (had && $('viz-container').hasAttribute('inert') && $('detail-panel').classList.contains('open')) $('panel-close').focus({ preventScroll: true });
         });
-        $('reset-view').addEventListener('click', () => { closeDetail(); setFilter('all'); if (graph) graph.resetZoom(); toast('View reset: all sectors, selection cleared.'); });
+        $('reset-view').addEventListener('click', () => {
+            closeDetail(); setFilter('all'); if (graph) graph.resetZoom();
+            /* in the list view the list's own search, status and sector filters reset too, and the list returns to its top
+               (the toast announced a reset the filtered list did not show) */
+            if (state.mode === 'list') { state.list = { q: '', status: 'all', cluster: 'all' }; $('list-search').value = ''; $('list-status').value = 'all'; $('list-cluster').value = 'all'; renderList(); $('list-view').scrollTop = 0; }
+            toast('View reset: all sectors, selection cleared.');
+        });
         $('fullscreen-toggle').addEventListener('click', () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen?.(); else document.exitFullscreen?.(); });
         $('panel-close').addEventListener('click', closeDetail);
         $('fallback-list').addEventListener('click', () => showMode('list'));
@@ -4006,7 +4084,14 @@ THIS SOFTWARE.
             }
             if (b.dataset.mission) { openDetail(b.dataset.mission, { locate: true }); return; }
             if (b.dataset.listStatus) { state.list.status = b.dataset.listStatus; state.list.q = ''; state.list.cluster = 'all'; $('list-search').value = ''; $('list-status').value = state.list.status; $('list-cluster').value = 'all'; showMode('list'); return; }
-            if (b.hasAttribute('data-reset-list')) { state.list = { q: '', status: 'all', cluster: 'all' }; $('list-search').value = ''; $('list-status').value = 'all'; $('list-cluster').value = 'all'; renderList(); return; }
+            if (b.hasAttribute('data-reset-list')) {
+                /* re-rendering removes this button, so focus moves on: to the cleared search box for a key press, to the
+                   first row for a click or tap (no soft keyboard) */
+                const key = b.matches(':focus-visible');
+                state.list = { q: '', status: 'all', cluster: 'all' }; $('list-search').value = ''; $('list-status').value = 'all'; $('list-cluster').value = 'all'; renderList();
+                (key ? $('list-search') : $('mission-list').querySelector('.mission-row'))?.focus();
+                return;
+            }
             if (b.hasAttribute('data-open-sources')) { openDialog('sources-dialog'); }
         });
         document.addEventListener('keydown', e => {
@@ -4017,7 +4102,10 @@ THIS SOFTWARE.
                 if ($('detail-panel').classList.contains('open')) { closeDetail(); return; }
             }
             if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
-            if (e.key === '/') { e.preventDefault(); openDialog('catalog-dialog', 'catalog-search'); }
+            /* behind an open dialog only / works, and it swaps Sources for the catalog instead of stacking a second modal
+               (a pick then opened the record behind Sources); H and T no longer toggle the HUD and ticker under it */
+            if (document.querySelector('dialog[open]') && e.key !== '/') return;
+            if (e.key === '/') { e.preventDefault(); if ($('sources-dialog').open) $('sources-dialog').close(); openDialog('catalog-dialog', 'catalog-search'); }
             else if (e.key === 'h' || e.key === 'H') { HUD.toggle(); graph?.keepInView(); }
             else if (e.key === 't' || e.key === 'T') Ticker.toggle();
         });
